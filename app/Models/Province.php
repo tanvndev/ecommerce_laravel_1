@@ -9,8 +9,20 @@ class Province extends Model
 {
     use HasFactory;
     protected $table = 'provinces';
+    protected $primaryKey = 'code';
+    protected $autoincrement = false;
 
     protected $fillable = [
         'name',
     ];
+
+    protected $casts = [
+        'code' => 'string',
+    ];
+
+
+    public function districts()
+    {
+        return $this->hasMany(District::class, 'province_code', 'code');
+    }
 }

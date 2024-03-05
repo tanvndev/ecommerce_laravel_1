@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('district_id', 10)->nullable();
             $table->string('ward_id', 10)->nullable();
             $table->string('address', 255)->nullable();
-            $table->dateTime('birthday')->nullable();
+            $table->date('birthday')->nullable();
             $table->string('image', 255)->nullable();
             $table->text('description',)->nullable();
             $table->string('user_agent')->nullable();

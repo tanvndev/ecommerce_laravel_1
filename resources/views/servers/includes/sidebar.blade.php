@@ -9,8 +9,16 @@
         <!-- Menu: main ul -->
         <ul class="menu-list flex-grow-1 mt-3">
 
-            <li><a class="m-link active" href="{{ route('dashboard.index') }}"><i class="icofont-home fs-5"></i>
+
+            <li><a class="m-link {{ request()->routeIs('dashboard.*') ? 'active' : ''}}"
+                    href="{{ route('dashboard.index') }}"><i class="icofont-home fs-5"></i>
                     <span>Bảng điều khiển</span></a></li>
+
+            <li><a class="m-link {{ request()->routeIs('user.*') ? 'active' : ''}}" href="{{ route('user.index') }}"><i
+                        class="icofont-user fs-5"></i>
+                    <span>QL Thành viên</span></a></li>
+
+
 
             <li class="collapsed">
                 <a class="m-link " data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
@@ -52,16 +60,7 @@
                 </ul>
             </li>
 
-            <li class="collapsed">
-                <a class="m-link " data-bs-toggle="collapse" data-bs-target="#customers-info" href="#">
-                    <i class="icofont-funky-man fs-5"></i> <span>Customers</span> <span
-                        class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                <!-- Menu: Sub menu ul -->
-                <ul class="sub-menu collapse " id="customers-info">
-                    <li><a class="ms-link " href="customers.html">Customers List</a></li>
-                    <li><a class="ms-link " href="customer-detail.html">Customers Details</a></li>
-                </ul>
-            </li>
+
 
             <li class="collapsed">
                 <a class="m-link " data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">

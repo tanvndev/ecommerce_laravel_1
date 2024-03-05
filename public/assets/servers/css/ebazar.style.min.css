@@ -11981,13 +11981,7 @@ textarea.form-control-lg {
   }
 }
 /* cyrillic-ext */
-@font-face {
-  font-family: "IcoFont";
-  src: url(https://pixelwibes.com/template/ebazar/laravel/public/fonts/icofont.eot?1ece44607007ca3ce4847045a80c164a);
-  src: url(https://pixelwibes.com/template/ebazar/laravel/public/fonts/icofont.eot?1ece44607007ca3ce4847045a80c164a?#iefix) format("embedded-opentype"), url(https://pixelwibes.com/template/ebazar/laravel/public/fonts/icofont.woff?dad3accba068281878f17175c6020940) format("woff"), url(https://pixelwibes.com/template/ebazar/laravel/public/fonts/icofont.ttf?02bfbc3c0c51f62382055eaae1606468) format("truetype"), url(https://pixelwibes.com/template/ebazar/laravel/public/fonts/icofont.svg?4f3890ffd2387f22e8214659da101360) format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
+
 [class^=icofont-], [class*=" icofont-"] {
   font-family: "IcoFont" !important;
   speak: none;

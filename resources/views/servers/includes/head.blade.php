@@ -6,4 +6,6 @@
 
 <link rel="icon" href="assets/servers/images/favicon.html" type="image/x-icon"> <!-- Favicon-->
 
+@yield('style')
+
 @include('servers.includes.style')

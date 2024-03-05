@@ -2,19 +2,15 @@
 // Trong Laravel, Repository Pattern thường được sử dụng để tạo các lớp repository, giúp tách biệt logic của ứng dụng khỏi cơ sở dữ liệu.
 namespace App\Repositories;
 
-use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\Province;
+use App\Repositories\Interfaces\ProvinceRepositoryInterface;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class ProvinceRepository extends BaseRepository implements ProvinceRepositoryInterface
 {
     protected $model;
     public function __construct(
-        User $model
+        Province $model
     ) {
         $this->model = $model;
-    }
-    function getAllPaginate()
-    {
-        return User::paginate(10);
     }
 }
