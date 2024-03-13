@@ -13,7 +13,7 @@
         "realrashid/sweet-alert": "^7.1"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "*",
+        "barryvdh/laravel-debugbar": "^3.12",
         "fakerphp/faker": "^1.9.1",
         "getsolaris/laravel-make-service": "^1.1",
         "laravel/pint": "^1.0",

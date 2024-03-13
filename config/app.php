@@ -163,6 +163,8 @@ return [
         /*
          * Application Service Providers...
          */
+        // // Debugbar::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
