@@ -6,50 +6,36 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>Tên thành viên</th>
-            <th>Email</th>
-            <th>Số điện thoại</th>
-            <th>Địa chỉ</th>
-            <th>Nhóm thành viên</th>
+            <th>Tên nhóm thành viên</th>
+            <th>Số thành viên</th>
+            <th>Mô tả</th>
             <th>Tình trạng</th>
             <th>Thực thi</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($users as $user) <tr>
+        @foreach ($userCatalogues as $userCatalogue) <tr>
             <td>
                 <div class="form-check form-table-list-check">
-                    <input class="form-check-input check-item" value="{{$user->id}}" type="checkbox">
-                </div>
-            </td>
-            <td>
-                <div class="d-flex align-items-center justify-content-start  ">
-                    <img class="avatar rounded" src="{{asset('assets/servers/images/xs/avatar1.svg')}}" alt="">
-                    <span class="fw-bold ms-1"> {{$user->fullname}}</span>
+                    <input class="form-check-input check-item" value="{{$userCatalogue->id}}" type="checkbox">
                 </div>
             </td>
 
-
             <td>
-                {{$user->email}}
+                {{ $userCatalogue->name}}
             </td>
             <td>
-                {{$user->phone}}
+                {{ $userCatalogue->users_count}} người
             </td>
             <td>
-                {{$user->address}}
-            </td>
-            <td>
-                {{$user->user_catalogues->name}}
+                {{ $userCatalogue->description}}
             </td>
             <td>
                 <div class="toggler toggler-list-check">
-                    <input class="status" id="publish-{{$user->id}}" data-field="publish" data-modelid="{{$user->id}}"
-                        data-model="User" name="publish" type="checkbox" {{$user->publish ==
-                    1 ? 'checked' :
-                    ''}}
-                    value="{{$user->publish}}">
-                    <label for="publish-{{$user->id}}">
+                    <input class="status" id="publish-{{$userCatalogue->id}}" data-field="publish"
+                        data-modelid="{{$userCatalogue->id}}" data-model="UserCatalogue" name="publish" type="checkbox"
+                        {{$userCatalogue->publish == 1 ? 'checked' : ''}} value="{{$userCatalogue->publish}}">
+                    <label for="publish-{{$userCatalogue->id}}">
                         <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 130.2 130.2">
                             <polyline class="path check" points="100.2,40.2 51.5,88.8 29.8,67.5"></polyline>
@@ -67,9 +53,9 @@
 
             <td>
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <a href="{{route('user.edit', $user->id)}}" class="btn btn-outline-secondary"><i
+                    <a href="{{route('user.catalogue.edit', $userCatalogue->id)}}" class="btn btn-outline-secondary"><i
                             class="icofont-edit text-success"></i></a>
-                    <button type="button" data-id="{{$user->id}}" class="btn btn-outline-secondary btn-delete"
+                    <button type="button" data-id="{{$userCatalogue->id}}" class="btn btn-outline-secondary btn-delete"
                         data-bs-toggle="modal" data-bs-target="#modal-delete"><i
                             class="icofont-ui-delete text-danger"></i></a>
                 </div>
@@ -101,7 +87,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 " data-bs-dismiss="modal">Huỷ
                     bỏ</button>
-                <form action="{{route('user.destroy')}}" method="post">
+                <form action="{{route('user.catalogue.destroy')}}" method="post">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="_id" id="_id">

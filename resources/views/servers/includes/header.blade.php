@@ -10,9 +10,10 @@
                     </a>
                 </div>
                 <div class="dropdown ms-3">
-                    <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+                    <button class="nav-link dropdown-toggle pulse" type="button" role="button"
+                        data-bs-toggle="dropdown">
                         <img src="{{asset('assets/servers/images/flag/GB.png')}}" alt="">
-                    </a>
+                    </button>
                     <div
                         class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                         <div class="card border-0">
@@ -47,9 +48,10 @@
                     </div>
                 </div>
                 <div class="dropdown  ms-3">
-                    <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
+                    <button class="nav-link dropdown-toggle pulse" type="button" role="button"
+                        data-bs-toggle="dropdown">
                         <i class="icofont-alarm fs-5"></i>
-                    </a>
+                    </button>
                     <div id="NotificationsDiv"
                         class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                         <div class="card border-0 w380">

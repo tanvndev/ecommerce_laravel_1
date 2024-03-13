@@ -2,7 +2,11 @@
 
 namespace App\Services\Interfaces;
 
-interface UserServiceInterface
+/**
+ * Interface UserCatalogueServiceInterface
+ * @package App\Services\Interfaces
+ */
+interface UserCatalogueServiceInterface
 {
     public function paginate();
     public function create();

@@ -166,7 +166,7 @@ $url = $config['method'] == 'create' ? route('user.store') : route('user.update'
                                         @foreach ($catalogues as $key => $catalogue)
                                         @php
                                         $key = $key+1;
-                                        $selected = $key == old('user_catalogue_id', $user->user_catalogue_id ?
+                                        $selected = $key == old('user_catalogue_id', isset($user->user_catalogue_id) ?
                                         $user->user_catalogue_id : '') ? 'selected' : ''
                                         @endphp
                                         <option {{ $selected }} value="{{$key}}">{{$catalogue}}</option>
@@ -222,7 +222,7 @@ $url = $config['method'] == 'create' ? route('user.store') : route('user.update'
 
                                         @foreach ($provinces as $province )
                                         @php
-                                        $selected = $province->code == old('province_id', $user->province_id ?
+                                        $selected = $province->code == old('province_id', isset($user->province_id) ?
                                         $user->province_id : '') ? 'selected' : ''
                                         @endphp
                                         <option {{$selected}} value="{{$province->code}}">{{$province->name}}</option>

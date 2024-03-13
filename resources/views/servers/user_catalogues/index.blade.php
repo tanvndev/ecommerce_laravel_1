@@ -9,8 +9,8 @@
                     class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
-                        <a href="{{route('user.create')}}" class="btn btn-primary btn-set-task w-sm-100">
-                            <i class="icofont-plus-circle me-2 fs-6"></i>Thêm mới thành viên </a>
+                        <a href="{{route('user.catalogue.create')}}" class="btn btn-primary btn-set-task w-sm-100">
+                            <i class="icofont-plus-circle me-2 fs-6"></i>Thêm mới nhóm thành viên </a>
                     </div>
                 </div>
             </div>
@@ -21,23 +21,23 @@
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Toolbox --}}
-                        @include('servers.includes.toolbox', ['model' =>'User'] )
+                        @include('servers.includes.toolbox', ['model' =>'UserCatalogue'] )
                     </div>
                 </div>
 
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Filter --}}
-                        @include('servers.users.blocks.filter')
+                        @include('servers.user_catalogues.blocks.filter')
                     </div>
                 </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        @include('servers.users.blocks.table')
+                        @include('servers.user_catalogues.blocks.table')
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
-                            {{ $users->links('pagination::bootstrap-5') }}
+                            {{ $userCatalogues->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
 

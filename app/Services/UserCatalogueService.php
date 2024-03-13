@@ -2,58 +2,49 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
-use App\Services\Interfaces\UserServiceInterface;
+use App\Services\Interfaces\UserCatalogueServiceInterface;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
-class UserService implements UserServiceInterface
+use Illuminate\Support\Facades\DB;
+
+class UserCatalogueService implements UserCatalogueServiceInterface
 {
-    protected $userRepository;
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    protected $userCatalogueRepository;
+    protected $UserRepository;
+    public function __construct(
+        UserCatalogueRepository $userCatalogueRepository,
+        UserRepository $UserRepository
+    ) {
+        $this->userCatalogueRepository = $userCatalogueRepository;
+        $this->UserRepository = $UserRepository;
     }
     function paginate()
     {
-        // ['users.id', 'users.email', 'users.phone', 'users.fullname', 'users.address', 'users.publish', 'w.name as ward_name', 'd.name as district_name', 'p.name as province_name'],
-        //     [],
-        //     [
-        //         'provinces as p' => ['p.code', '=', 'users.province_id'],
-        //         'districts as d' => ['d.code', '=', 'users.district_id'],
-        //         'wards as w' => ['w.code', '=', 'users.ward_id']
-        //     ]
-
         // addslashes là một hàm được sử dụng để thêm các ký tự backslashes (\) vào trước các ký tự đặc biệt trong chuỗi.
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
-        $condition['user_catalogue_id'] = request('user_catalogue_id');
+        $condition['userCatalogue_catalogue_id'] = request('userCatalogue_catalogue_id');
 
-
-
-        $users = $this->userRepository->pagination(
-            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'user_catalogue_id'],
+        $userCatalogues = $this->userCatalogueRepository->pagination(
+            ['id', 'name', 'publish', 'description'],
             $condition,
             [],
             request('perpage'),
-            ['user_catalogues']
+            ['users']
 
         );
 
-        // dd($users);
-
-        return $users;
+        return $userCatalogues;
     }
 
     function create()
     {
         DB::beginTransaction();
         try {
-            // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
-            $payload = request()->except('_token', 're_password');
-            // Hash mật khẩu 
-            $payload['password'] = Hash::make($payload['password']);
-            $create =  $this->userRepository->create($payload);
+            // Lấy ra tất cả các trường và loại bỏ trường bên dưới
+            $payload = request()->except('_token');
+            $create =  $this->userCatalogueRepository->create($payload);
 
             if (!$create) {
                 DB::rollBack();
@@ -74,7 +65,7 @@ class UserService implements UserServiceInterface
         try {
             // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
             $payload = request()->except('_token', '_method');
-            $update =  $this->userRepository->update($id, $payload);
+            $update =  $this->userCatalogueRepository->update($id, $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -94,7 +85,7 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             // Xoá mềm
-            $delete =  $this->userRepository->delete($id);
+            $delete =  $this->userCatalogueRepository->delete($id);
 
             if (!$delete) {
                 DB::rollBack();
@@ -114,9 +105,10 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->userRepository->update(request('modelId'), $payload);
+            $update =  $this->userCatalogueRepository->update(request('modelId'), $payload);
+            $changeUserStatus = $this->changeUserStatus(request()->all());
 
-            if (!$update) {
+            if (!$update || !$changeUserStatus) {
                 DB::rollBack();
                 return false;
             }
@@ -134,7 +126,41 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value');
-            $update =  $this->userRepository->updateByWhereIn('id', request('id'), $payload);
+            $update =  $this->userCatalogueRepository->updateByWhereIn('id', request('id'), $payload);
+            $changeUserStatus = $this->changeUserStatus(request()->all());
+
+            if (!$update || !$changeUserStatus) {
+                DB::rollBack();
+                return false;
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    // Hàm này thay đổi trạng thái của user khi thay đổi trạng thái user catalogue
+    private function changeUserStatus($dataPost)
+    {
+        DB::beginTransaction();
+        try {
+            $arrayId = [];
+            $value = '';
+
+            // Là một mảng thì là Chọn tất cả còn k là ngược lại chọn 1 để update publish
+            if (isset($dataPost['id'])) {
+                $arrayId = $dataPost['id'];
+                $value = $dataPost['value'];
+            } else {
+                $arrayId[] = $dataPost['modelId'];
+                $value = $dataPost['value'] == 1 ? 0 : 1;
+            }
+            $payload[$dataPost['field']] = $value;
+
+            $update = $this->UserRepository->updateByWhereIn('user_catalogue_id', $arrayId, $payload);
 
             if (!$update) {
                 DB::rollBack();

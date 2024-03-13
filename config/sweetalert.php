@@ -36,7 +36,7 @@ return [
     |
     */
 
-    'alwaysLoadJS' => env('SWEET_ALERT_ALWAYS_LOAD_JS', false),
+    'alwaysLoadJS' => env('SWEET_ALERT_ALWAYS_LOAD_JS', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -220,7 +220,7 @@ return [
 
         'timer' => env('SWEET_ALERT_MIDDLEWARE_ALERT_CLOSE_TIME', 2000),
 
-        'auto_display_error_messages' => env('SWEET_ALERT_AUTO_DISPLAY_ERROR_MESSAGES', true),
+        'auto_display_error_messages' => env('SWEET_ALERT_AUTO_DISPLAY_ERROR_MESSAGES', false),
     ],
 
     /*

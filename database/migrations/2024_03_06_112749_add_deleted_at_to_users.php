@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('user_catalogue_id')->default(2);
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

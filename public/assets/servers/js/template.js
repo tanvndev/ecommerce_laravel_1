@@ -5,13 +5,6 @@ if (typeof jQuery === "undefined") {
 $(function () {
     "use strict";
 
-    // Init select2
-    if ($(".init-select2").length > 0) {
-        $(".init-select2").each((index, element) => {
-            $(element).select2();
-        });
-    }
-
     // main sidebar toggle js
     $(".menu-toggle").on("click", function () {
         $(".sidebar").toggleClass("open");

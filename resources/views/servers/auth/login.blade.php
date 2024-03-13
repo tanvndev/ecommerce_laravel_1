@@ -16,7 +16,7 @@
 </head>
 
 <body>
-	@include('sweetalert::alert')
+
 	<div id="ebazar-layout" class="theme-blue">
 
 		<!-- main body area -->
@@ -125,6 +125,8 @@
 
 	<!-- Jquery Core Js -->
 	<script src="assets/servers/bundles/libscripts.bundle.js"></script>
+	@include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
+
 </body>
 
 

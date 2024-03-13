@@ -1,7 +1,3 @@
-<!-- plugin css file  -->
-<link rel="stylesheet" href="{{ asset('assets/servers/plugin/datatables/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/servers/plugin/datatables/dataTables.bootstrap5.min.css') }}">
-
 <!-- icon cdn -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@icon/icofont@1.0.1-alpha.1/icofont.min.css">
 

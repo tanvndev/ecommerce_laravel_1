@@ -8,15 +8,15 @@
         </a>
         <!-- Menu: main ul -->
         <ul class="menu-list flex-grow-1 mt-3">
-
-
-            <li><a class="m-link {{ request()->routeIs('dashboard.*') ? 'active' : ''}}"
-                    href="{{ route('dashboard.index') }}"><i class="icofont-home fs-5"></i>
-                    <span>Bảng điều khiển</span></a></li>
-
-            <li><a class="m-link {{ request()->routeIs('user.*') ? 'active' : ''}}" href="{{ route('user.index') }}"><i
-                        class="icofont-user fs-5"></i>
-                    <span>QL Thành viên</span></a></li>
+            @foreach (config('apps.module.module.user') as $menuItem)
+            <li>
+                <a class="m-link {{ request()->routeIs($menuItem['activeCondition']) ? 'active' : ''}}"
+                    href="{{ route($menuItem['route']) }}">
+                    <i class="{{ $menuItem['icon'] }} fs-5"></i>
+                    <span>{{ $menuItem['title'] }}</span>
+                </a>
+            </li>
+            @endforeach
 
 
 

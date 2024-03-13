@@ -1,6 +1,9 @@
 .fs-15 {
     font-size: 15px !important;
 }
+.fs-13 {
+    font-size: 13px;
+}
 .table-list-info p {
     margin-bottom: 3px;
 }
@@ -16,6 +19,25 @@
 
 .alert-danger ul {
     margin-bottom: 0;
+}
+/* .modal-custom-delete */
+
+.modal-custom-delete .modal .modal-content {
+    background-color: #fff;
+}
+
+.modal-custom-delete .modal-content {
+    border: none;
+    padding: 2px 15px;
+}
+.modal-custom-delete.modal .modal-header,
+.modal-custom-delete.modal .modal-footer {
+    border: none;
+}
+
+.modal-custom-delete .btn-outline-secondary:hover {
+    background-color: #e5e7eb !important;
+    color: #000 !important;
 }
 /* .toggler {
     width: 72px;
@@ -78,8 +100,8 @@
 .toggler label {
     display: block;
     position: relative;
-    width: 72px;
-    height: 36px;
+    width: 60px;
+    height: 30px;
     border: 1px solid #d6d6d6;
     border-radius: 36px;
     background: #e4e8e8;
@@ -105,8 +127,8 @@
     position: absolute;
     top: 50%;
     left: 25%;
-    width: 26px;
-    height: 26px;
+    width: 20px;
+    height: 20px;
     transform: translateY(-50%) translateX(-50%);
     transition: left 0.15s ease-in-out, background-color 0.2s ease-out,
         width 0.15s ease-in-out, height 0.15s ease-in-out,
