@@ -21,6 +21,12 @@ return [
                 'activeCondition' => ['user.catalogue.*']
             ],
             [
+                'route' => 'language.index',
+                'icon' => 'icofont-earth',
+                'title' => 'QL Ngôn ngữ',
+                'activeCondition' => ['language.*']
+            ],
+            [
                 'route' => 'user.index',
                 'icon' => 'icofont-newspaper',
                 'title' => 'QL Bài viết',

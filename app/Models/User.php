@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
     }
+
+    public function languages()
+    {
+        return $this->hasMany(Language::class, 'user_id', 'id');
+    }
 }

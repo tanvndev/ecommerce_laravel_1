@@ -10,7 +10,7 @@
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
                         <a href="{{route('user.create')}}" class="btn btn-primary btn-set-task w-sm-100">
-                            <i class="icofont-plus-circle me-2 fs-6"></i>Thêm mới thành viên </a>
+                            <i class="icofont-plus-circle me-2 fs-6"></i>{{$config['seo']['create']}}</a>
                     </div>
                 </div>
             </div>

@@ -65,7 +65,7 @@ class BaseRepository implements BaseRepositoryInterface
         $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
 
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('fullname', 'like', '%' . $condition['keyword'] . '%');
+                $query->where('name', 'like', '%' . $condition['keyword'] . '%');
             }
 
             if (isset($condition['publish']) && $condition['publish'] != '-1') {

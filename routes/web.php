@@ -8,6 +8,7 @@ use App\Http\Controllers\Ajax\{
 use App\Http\Controllers\Servers\{
     AuthController,
     DashboardController,
+    LanguageController,
     UserController,
     UserCatalogueController
 };
@@ -48,6 +49,16 @@ Route::prefix('user/catalogue')->name('user.catalogue.')->middleware('admin')->g
     Route::get('/{id}/edit', [UserCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
     Route::put('/{id}/update', [UserCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
     Route::delete('destroy', [UserCatalogueController::class, 'destroy'])->name('destroy');
+});
+
+// Routes for Languages
+Route::prefix('language')->name('language.')->middleware('admin')->group(function () {
+    Route::get('index', [LanguageController::class, 'index'])->name('index');
+    Route::get('create', [LanguageController::class, 'create'])->name('create');
+    Route::post('store', [LanguageController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [LanguageController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+    Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+    Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
 });
 
 

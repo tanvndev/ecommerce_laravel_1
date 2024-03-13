@@ -2,7 +2,8 @@
 return [
     'index' => [
         'title' => 'Danh sách nhóm thành viên',
-        'table' => 'Thông tin nhóm thành viên'
+        'table' => 'Thông tin nhóm thành viên',
+        'create' => 'Tạo mới nhóm thành viên'
     ],
     'create' => [
         'title' => 'Tạo mới nhóm thành viên',

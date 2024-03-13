@@ -2,14 +2,14 @@
 // Trong Laravel, Repository Pattern thường được sử dụng để tạo các lớp repository, giúp tách biệt logic của ứng dụng khỏi cơ sở dữ liệu.
 namespace App\Repositories;
 
-use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\Language;
+use App\Repositories\Interfaces\LanguageRepositoryInterface;
 
-class UserRepository extends BaseRepository implements UserRepositoryInterface
+class LanguageRepository extends BaseRepository implements LanguageRepositoryInterface
 {
     protected $model;
     public function __construct(
-        User $model
+        Language $model
     ) {
         $this->model = $model;
     }
@@ -24,16 +24,22 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
 
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('fullname', 'like', '%' . $condition['keyword'] . '%')
-                    ->orWhere('email', 'like', '%' . $condition['keyword'] . '%')
-                    ->orWhere('phone', 'like', '%' . $condition['keyword'] . '%')
-                    ->orWhere('address', 'like', '%' . $condition['keyword'] . '%');
+                $query->where('name', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('canonical', 'like', '%' . $condition['keyword'] . '%');
             }
 
             if (isset($condition['publish']) && $condition['publish'] != '-1') {
                 $query->where('publish', $condition['publish']);
             }
         })->with($relations);
+
+
+
+        if (isset($relations) && !empty($relations)) {
+            foreach ($relations as $relation) {
+                $query->withCount($relation);
+            }
+        }
 
         if (!empty($join)) {
             foreach ($join as $table => $constraints) {
