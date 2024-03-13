@@ -20,6 +20,12 @@ return [
                 'title' => 'QL Nhóm thành viên',
                 'activeCondition' => ['user.catalogue.*']
             ],
+            [
+                'route' => 'user.index',
+                'icon' => 'icofont-newspaper',
+                'title' => 'QL Bài viết',
+                'activeCondition' => ['post.*']
+            ]
         ]
 
     ],

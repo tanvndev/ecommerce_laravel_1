@@ -177,7 +177,7 @@
                 </ul>
             </li>
 
-            <li><a class="m-link " href="documentation.html"><i class="icofont-law-document fs-5"></i>
+            <li><a class="m-link " href="documentation.html"><i class="icofont-law-document  fs-5"></i>
                     <span>Documentation</span></a></li>
             <li><a class="m-link " href="changelog.html"><i class="icofont-edit fs-5"></i>
                     <span>Changelog</span> <span class="ms-auto small-14 fw-bold">v1.0.0</span></a></li>
