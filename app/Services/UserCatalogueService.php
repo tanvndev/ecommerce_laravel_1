@@ -24,7 +24,6 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         // addslashes là một hàm được sử dụng để thêm các ký tự backslashes (\) vào trước các ký tự đặc biệt trong chuỗi.
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
-        $condition['userCatalogue_catalogue_id'] = request('userCatalogue_catalogue_id');
 
         $userCatalogues = $this->userCatalogueRepository->pagination(
             ['id', 'name', 'publish', 'description'],

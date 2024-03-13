@@ -34,13 +34,6 @@ class LanguageRepository extends BaseRepository implements LanguageRepositoryInt
         })->with($relations);
 
 
-
-        if (isset($relations) && !empty($relations)) {
-            foreach ($relations as $relation) {
-                $query->withCount($relation);
-            }
-        }
-
         if (!empty($join)) {
             foreach ($join as $table => $constraints) {
                 $query->join($table, ...$constraints);
