@@ -22,12 +22,12 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-start  ">
-                    <img class="avatar rounded" src="{{asset('assets/servers/images/xs/avatar1.svg')}}" alt="">
-                    <span class="fw-bold ms-1"> {{$language->name}}</span>
+                    <img class="avatar rounded img-contain" src="{{$language->image}}" alt="{{$language->name}}">
+                    <span class="ms-2 "> {{$language->name}}</span>
                 </div>
             </td>
             <td>
-                {{$language->canonical}}
+                <span class="fw-bold ">{{$language->canonical}}</span>
             </td>
             <td>
                 {{$language->users->fullname}}

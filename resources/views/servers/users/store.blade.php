@@ -5,6 +5,10 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/ckfinder_upload.js')}}"></script>
 
 <script>
     // Lấy ra id của địa điểm để gán vào js
@@ -13,7 +17,6 @@
 </script>
 
 <script src="{{asset('assets/servers/js/library/location.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection
 
@@ -195,11 +198,12 @@ $url = $config['method'] == 'create' ? route('user.store') : route('user.update'
                                     <input type="password" name="re_password" value="" class="form-control">
                                 </div>
 
+                                @endif
                                 <div class="col-md-12">
                                     <label class="form-label">Ảnh đại diện</label>
-                                    <input type="file" name="image" value="" class="form-control">
+                                    <input readonly type="text" data-type="Images" name="image" value=""
+                                        class="form-control upload-image">
                                 </div>
-                                @endif
 
 
                             </div>

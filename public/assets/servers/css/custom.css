@@ -4,6 +4,12 @@
 .fs-13 {
     font-size: 13px;
 }
+.img-cover {
+    object-fit: cover;
+}
+.img-contain {
+    object-fit: contain;
+}
 .table-list-info p {
     margin-bottom: 3px;
 }

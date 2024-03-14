@@ -24,7 +24,7 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-start  ">
-                    <img class="avatar rounded" src="{{asset('assets/servers/images/xs/avatar1.svg')}}" alt="">
+                    <img class="avatar rounded" src="{{$user->image}}" alt="{{$user->fullname}}">
                     <span class="fw-bold ms-1"> {{$user->fullname}}</span>
                 </div>
             </td>

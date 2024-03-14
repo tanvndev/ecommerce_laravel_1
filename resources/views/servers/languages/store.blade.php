@@ -1,5 +1,10 @@
 @extends('layouts.serverLayout')
 
+@section('script')
+<script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/ckfinder_upload.js')}}"></script>
+@endsection
+
 @section('content')
 @php
 $url = $config['method'] == 'create' ? route('language.store') : route('language.update', $language->id);
@@ -60,7 +65,9 @@ $url = $config['method'] == 'create' ? route('language.store') : route('language
 
                                 <div class="col-md-12">
                                     <label class="form-label">Ảnh</label>
-                                    <input type="file" name="image" value="" class="form-control">
+                                    <input readonly type="text" name="image" data-type="Images"
+                                        value="{{old('image', $language->image ?? '')}}"
+                                        class="form-control upload-image">
                                 </div>
 
                             </div>

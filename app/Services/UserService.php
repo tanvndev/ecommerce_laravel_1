@@ -16,14 +16,6 @@ class UserService implements UserServiceInterface
     }
     function paginate()
     {
-        // ['users.id', 'users.email', 'users.phone', 'users.fullname', 'users.address', 'users.publish', 'w.name as ward_name', 'd.name as district_name', 'p.name as province_name'],
-        //     [],
-        //     [
-        //         'provinces as p' => ['p.code', '=', 'users.province_id'],
-        //         'districts as d' => ['d.code', '=', 'users.district_id'],
-        //         'wards as w' => ['w.code', '=', 'users.ward_id']
-        //     ]
-
         // addslashes là một hàm được sử dụng để thêm các ký tự backslashes (\) vào trước các ký tự đặc biệt trong chuỗi.
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
@@ -32,7 +24,7 @@ class UserService implements UserServiceInterface
 
 
         $users = $this->userRepository->pagination(
-            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'user_catalogue_id'],
+            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'user_catalogue_id', 'image'],
             $condition,
             [],
             request('perpage'),

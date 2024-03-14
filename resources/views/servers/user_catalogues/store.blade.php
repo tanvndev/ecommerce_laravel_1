@@ -1,6 +1,8 @@
 @extends('layouts.serverLayout')
 
 
+
+
 @section('content')
 @php
 $url = $config['method'] == 'create' ? route('user.catalogue.store') : route('user.catalogue.update',
