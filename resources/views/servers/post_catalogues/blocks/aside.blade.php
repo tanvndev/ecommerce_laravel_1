@@ -54,9 +54,9 @@
                 <h6 class="m-0 fw-bold">Ảnh đại diện</h6>
             </div>
             <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain"
+                <img class="img-thumbnail h-250 w-100 img-contain img-target"
                     src="{{asset('assets/servers/images/others/no-image.png')}}" alt="no-image">
-                <input type="hidden" class="image">
+                <input type="hidden" name="image" class="image">
             </div>
         </div>
         <div class="card mb-3">

@@ -6,6 +6,16 @@ $(function () {
     "use strict";
     var init = {};
 
+    init.uploadImageAvatar = () => {
+        if ($(".img-target").length > 0) {
+            $(".img-target").click(function () {
+                const input = $(this);
+                const type = "Images";
+                init.browseServerAvatar(input, type);
+            });
+        }
+    };
+
     init.setUpCkEditer = () => {
         if ($(".init-ckeditor").length > 0) {
             $(".init-ckeditor").each((index, element) => {
@@ -57,6 +67,22 @@ $(function () {
         });
     };
 
+    init.browseServerAvatar = (object, type) => {
+        if (typeof type == "undefined") {
+            type = "Images";
+        }
+        var finder = new CKFinder();
+        finder.resourceType = type;
+        finder.selectActionFunction = function (fileUrl, data) {
+            if (!fileUrl) {
+                return setToast("warning", "Có lỗi liên quan tới upload.");
+            }
+            object.attr("src", fileUrl);
+            object.siblings("input").val(fileUrl);
+        };
+        finder.popup();
+    };
+
     init.uploadImageToInput = () => {
         $(".upload-image").click(function () {
             const input = $(this);
@@ -82,5 +108,6 @@ $(function () {
     $(document).ready(function () {
         init.uploadImageToInput();
         init.setUpCkEditer();
+        init.uploadImageAvatar();
     });
 });
