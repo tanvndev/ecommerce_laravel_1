@@ -1,44 +1,69 @@
 <?php
 return [
     'module' => [
-        'user' => [
+        'sidebar' => [
             [
+                'id' => 'dashboard',
                 'route' => 'dashboard.index',
                 'icon' => 'icofont-home',
                 'title' => 'Bảng điều khiển',
-                'activeCondition' => ['dashboard.*']
+                'activeCondition' => ['dashboard.*'],
             ],
             [
-                'route' => 'user.index',
-                'icon' => 'icofont-user',
-                'title' => 'QL Thành viên',
-                'activeCondition' => ['user.index', 'user.create', 'user.edit']
-            ],
-            [
-                'route' => 'user.catalogue.index',
+                'id' => 'user',
+                'route' => '',
                 'icon' => 'icofont-users',
-                'title' => 'QL Nhóm thành viên',
-                'activeCondition' => ['user.catalogue.*']
+                'title' => 'QL Thành viên',
+                'activeCondition' => ['user.*'],
+                'subMenu' => [
+                    [
+                        'title' => 'QL Thành viên',
+                        'route' => 'user.index',
+                        'activeCondition' => ['user.index', 'user.create', 'user.edit'],
+                    ],
+                    [
+                        'title' => 'QL Nhóm thành viên',
+                        'route' => 'user.catalogue.index',
+                        'activeCondition' => ['user.catalogue.*']
+                    ],
+                ]
             ],
 
             [
-                'route' => 'language.index',
-                'icon' => 'icofont-earth',
-                'title' => 'QL Ngôn ngữ',
-                'activeCondition' => ['language.*']
-            ],
-            [
-                'route' => 'user.index',
+                'id' => 'post',
+                'route' => '',
                 'icon' => 'icofont-newspaper',
                 'title' => 'QL Bài viết',
-                'activeCondition' => ['post.*']
+                'activeCondition' => ['post.*'],
+                'subMenu' => [
+                    [
+                        'title' => 'QL Bài viết',
+                        'route' => 'user.index',
+                        'activeCondition' => ['user.index', 'user.create', 'user.edit'],
+                    ],
+                    [
+                        'title' => 'QL Nhóm bài viết',
+                        'route' => 'post.catalogue.index',
+                        'activeCondition' => ['post.catalogue.*']
+                    ],
+                ]
             ],
+
             [
-                'route' => 'post.catalogue.index',
-                'icon' => 'icofont-newsvine',
-                'title' => 'QL Nhóm bài viết',
-                'activeCondition' => ['post.catalogue.*']
+                'id' => 'generalConfig',
+                'route' => '',
+                'icon' => 'icofont-ui-settings',
+                'title' => 'Cấu hình chung',
+                'activeCondition' => ['language.*'],
+                'subMenu' => [
+                    [
+                        'title' => 'QL Ngôn ngữ',
+                        'route' => 'language.index',
+                        'activeCondition' => ['language.*']
+                    ],
+                ]
             ],
+
         ]
 
     ],

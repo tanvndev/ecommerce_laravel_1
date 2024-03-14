@@ -23306,6 +23306,8 @@ input[type=date], input[type=time] {
   list-style: none;
   position: relative;
   padding-left: 30px;
+  transition: all 0.2s ease-in-out;
+
 }
 .sidebar .menu-list .sub-menu::before {
   background-color: var(--white-color);
