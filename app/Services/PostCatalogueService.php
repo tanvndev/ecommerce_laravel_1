@@ -39,12 +39,17 @@ class PostCatalogueService implements PostCatalogueServiceInterface
         DB::beginTransaction();
         try {
             // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
-            $payload = request()->except('_token');
+            $payload = request()->only($this->payload());
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
-            $create =  $this->postCatalogueRepository->create($payload);
+            dd($payload);
+            $createPostCatalogue = $this->postCatalogueRepository->create($payload);
 
-            if (!$create) {
+            if ($createPostCatalogue->id > 0) {
+                $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
+            }
+
+            if (!$createPostCatalogue) {
                 DB::rollBack();
                 return false;
             }
@@ -136,5 +141,15 @@ class PostCatalogueService implements PostCatalogueServiceInterface
             echo $e->getMessage();
             return false;
         }
+    }
+
+    private function payload()
+    {
+        return ['parent_id', 'image', 'follow', 'publish'];
+    }
+
+    private function payloadPostCatalogueLanguage()
+    {
+        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keywords'];
     }
 }

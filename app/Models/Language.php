@@ -22,6 +22,20 @@ class Language extends Model
         'deleted_at',
     ];
 
+    public function postCatalogues()
+    {
+        // post_catalogue_language là tên bảng liên kết giũa hai bảng
+        return $this->belongsToMany(PostCatalogue::class, 'post_catalogue_language', 'post_catalogue_id', 'language_id')->withPivot(
+            'name',
+            'canonical',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+            'description',
+            'content'
+        )->withTimestamps();
+    }
+
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

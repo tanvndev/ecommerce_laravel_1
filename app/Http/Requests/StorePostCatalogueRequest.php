@@ -23,15 +23,17 @@ class StorePostCatalogueRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'description' => 'required|string',
+            'canonical' => 'required|string|unique:post_catalogue_language',
+            'parent_id' => 'required|gt:0',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tên nhóm thành viên',
-            'description' => 'Mô tả',
+            'name' => 'Tiêu đề',
+            'canonical' => 'Đường dẫn',
+            'parent_id' => 'Danh mục cha',
         ];
     }
 
@@ -46,7 +48,7 @@ class StorePostCatalogueRequest extends FormRequest
             'email' => ':attribute sai định dạng.',
             'min' => ':attribute phải tối thiểu :min ký tự.',
             'same' => ':attribute chưa khớp.',
-            'gt' => ':attribute phải lớn hơn 0.',
+            'gt' => ':attribute bắt buộc phải chọn.',
         ];
     }
 }

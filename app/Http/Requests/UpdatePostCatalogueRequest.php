@@ -46,7 +46,7 @@ class UpdatePostCatalogueRequest extends FormRequest
             'email' => ':attribute sai định dạng.',
             'min' => ':attribute phải tối thiểu :min ký tự.',
             'same' => ':attribute chưa khớp.',
-            'gt' => ':attribute phải lớn hơn 0.',
+            'gt' => ':attribute bắt buộc phải chọn.',
         ];
     }
 }

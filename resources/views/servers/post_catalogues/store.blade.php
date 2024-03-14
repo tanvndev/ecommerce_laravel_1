@@ -11,6 +11,7 @@
 <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
 <script src="{{ asset('assets/servers/plugin/ckeditor/ckeditor.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/ckfinder.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/seo.js')}}"></script>
 
 @endsection
 
@@ -43,21 +44,20 @@ $postCatalogue->id);
 
 
             <div class="row g-3 mb-3 justify-content-center ">
+
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 {{-- Aside --}}
                 @include('servers.post_catalogues.blocks.aside')
 
                 <div class="col-lg-8">
-
-                    @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
-
                     <div class="card mb-3 card-create">
                         <div class="card-header py-3 bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold ">Thông tin chung</h6>
@@ -72,7 +72,7 @@ $postCatalogue->id);
                                         class="form-control">
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label">Mô tả ngắn <span class="text-danger">(*)</span></label>
+                                    <label class="form-label">Mô tả ngắn </label>
                                     <textarea name="description" id="description" data-height="200"
                                         class="form-control init-ckeditor" cols="30" rows="5">
                                         {{old('description', $postCatalogue->description ?? '')}}
@@ -80,7 +80,7 @@ $postCatalogue->id);
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="form-label">Nội dung <span class="text-danger">(*)</span></label>
+                                    <label class="form-label">Nội dung </label>
                                     <textarea name="content" id="content" data-height="500"
                                         class="form-control init-ckeditor" cols="30" rows="5">
                                         {{old('content', $postCatalogue->content ?? '')}}

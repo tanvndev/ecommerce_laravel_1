@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->text('content');
-            $table->string('canonical');
+            $table->string('canonical')->unique();
             $table->string('meta_title');
             $table->string('meta_keyword');
             $table->text('meta_description');

@@ -4,11 +4,11 @@
         <small>Lưu ý: <span class="text-danger">(*)</span> là các trường bắt buộc.</small>
 
         <div class="seo-view">
-            <span class="link">https://example.com.vn</span>
-            <h5>Example - Ứng dụng trên Google Play</h5>
-            <p class="mb-0 ">Hãy tải ứng dụng Example chính thức dành cho điện thoại và máy tính
-                bảng Android. Khám phá nội dung thịnh hành trên thế giới – từ các video nhạc đình
-                đám ...</p>
+            <span class="link text-success meta-url">{{ url('/') . '/' . old('canonical', $postCatalogue->canonical ??
+                '/duong-dan-cua-ban')}}</span>
+            <h5 class="meta-title">{{old('meta_title', $postCatalogue->meta_title ?? 'Bạn chưa nhập tiêu đề')}}</h5>
+            <p class="meta-description" class="mb-0 ">{{old('meta_description', $postCatalogue->meta_description ?? 'Bạn
+                chưa nhập mô tả') }}</p>
         </div>
     </div>
     <div class="card-body">
@@ -20,16 +20,24 @@
             </div>
             <div class="col-md-12">
                 <label class="form-label">Từ khoá SEO </label>
-                <textarea name="meta_keyword" class="form-control" cols="30" rows="3">
-                    {{old('meta_keyword', $postCatalogue->meta_keyword ?? '')}}
-                </textarea>
+                <input type="text" name="meta_keyword"
+                    value="{{old('meta_keyword', $postCatalogue->meta_keyword ?? '')}}" class="form-control">
+
             </div>
 
             <div class="col-md-12">
                 <label class="form-label">Mô tả SEO</label>
-                <textarea name="meta_description" class="form-control" cols="30" rows="10">
-                    {{old('meta_description', $postCatalogue->meta_description ?? '')}}
-                </textarea>
+                <textarea name="meta_description" class="form-control" cols="30"
+                    rows="10">{{old('meta_description', $postCatalogue->meta_description ?? '')}}</textarea>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Đường dẫn <span class="text-danger">(*)</span></label>
+                <div class="input-group">
+                    <span class="input-group-text">{{url('/')}}/</span>
+                    <input type="text" class="form-control" name="canonical"
+                        value="{{old('canonical', $postCatalogue->canonical ?? '')}}" autocomplete="">
+                </div>
             </div>
 
         </div>
