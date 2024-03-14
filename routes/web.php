@@ -10,7 +10,8 @@ use App\Http\Controllers\Servers\{
     DashboardController,
     LanguageController,
     UserController,
-    UserCatalogueController
+    UserCatalogueController,
+    PostCatalogueController
 };
 
 
@@ -60,6 +61,19 @@ Route::prefix('language')->name('language.')->middleware('admin')->group(functio
     Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
     Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
 });
+
+
+
+// Routes for PostCatalogue
+Route::prefix('post/catalogue')->name('post.catalogue.')->middleware('admin')->group(function () {
+    Route::get('index', [PostCatalogueController::class, 'index'])->name('index');
+    Route::get('create', [PostCatalogueController::class, 'create'])->name('create');
+    Route::post('store', [PostCatalogueController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PostCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+    Route::put('/{id}/update', [PostCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+    Route::delete('destroy', [PostCatalogueController::class, 'destroy'])->name('destroy');
+});
+
 
 
 // Route for Ajax

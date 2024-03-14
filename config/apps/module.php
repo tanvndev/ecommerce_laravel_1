@@ -20,6 +20,7 @@ return [
                 'title' => 'QL Nhóm thành viên',
                 'activeCondition' => ['user.catalogue.*']
             ],
+
             [
                 'route' => 'language.index',
                 'icon' => 'icofont-earth',
@@ -31,7 +32,13 @@ return [
                 'icon' => 'icofont-newspaper',
                 'title' => 'QL Bài viết',
                 'activeCondition' => ['post.*']
-            ]
+            ],
+            [
+                'route' => 'post.catalogue.index',
+                'icon' => 'icofont-newsvine',
+                'title' => 'QL Nhóm bài viết',
+                'activeCondition' => ['post.catalogue.*']
+            ],
         ]
 
     ],

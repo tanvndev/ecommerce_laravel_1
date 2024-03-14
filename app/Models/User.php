@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Language::class, 'user_id', 'id');
     }
+
+    public function post_catalogues()
+    {
+        return $this->hasMany(PostCatalogue::class, 'user_id', 'id');
+    }
 }

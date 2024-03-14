@@ -11,17 +11,27 @@ class AppServiceProvider extends ServiceProvider
      */
     // Khai bao cac service
     protected $serviceBindings = [
+        // Base
+        'App\Repositories\Interfaces\BaseRepositoryInterface' => 'App\Repositories\BaseRepository',
+
+        // User
         'App\Services\Interfaces\UserServiceInterface' => 'App\Services\UserService',
         'App\Repositories\Interfaces\UserRepositoryInterface' => 'App\Repositories\UserRepository',
 
+        // UserCatalogue
         'App\Services\Interfaces\UserCatalogueServiceInterface' => 'App\Services\UserCatalogueService',
         'App\Repositories\Interfaces\UserCatalogueRepositoryInterface' => 'App\Repositories\UserCatalogueRepository',
 
+        // PostCatalogue
+        'App\Services\Interfaces\PostCatalogueServiceInterface' => 'App\Services\PostCatalogueService',
+        'App\Repositories\Interfaces\PostCatalogueRepositoryInterface' => 'App\Repositories\PostCatalogueRepository',
+
+        // Language
         'App\Services\Interfaces\LanguageServiceInterface' => 'App\Services\LanguageService',
         'App\Repositories\Interfaces\LanguageRepositoryInterface' => 'App\Repositories\LanguageRepository',
 
+        // Province
         'App\Repositories\Interfaces\ProvinceRepositoryInterface' => 'App\Repositories\ProvinceRepository',
-        'App\Repositories\Interfaces\BaseRepositoryInterface' => 'App\Repositories\BaseRepository',
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
     ];
     public function register(): void

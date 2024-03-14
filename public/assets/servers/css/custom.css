@@ -4,6 +4,9 @@
 .fs-13 {
     font-size: 13px;
 }
+.h-250 {
+    height: 250px;
+}
 .img-cover {
     object-fit: cover;
 }
@@ -97,6 +100,24 @@
     .select2-search--dropdown
     .select2-search__field:focus-visible {
     outline: none;
+}
+
+.seo-view {
+    margin-top: 30px;
+    background-color: #f9f9f6;
+    padding: 20px;
+    border: 1px dashed #d1d1d1;
+    border-radius: 10px;
+}
+.seo-view .link {
+    color: #202124;
+}
+.seo-view h5 {
+    color: #1a0dab;
+    padding: 2px 0 4px 0;
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 0;
 }
 
 .toggler input {

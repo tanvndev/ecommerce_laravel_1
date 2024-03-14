@@ -5,6 +5,7 @@
 <head>
     {{-- head --}}
     @include('servers.includes.head')
+
 </head>
 
 <body>

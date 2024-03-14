@@ -2,7 +2,8 @@
 
 @section('script')
 <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
-<script src="{{ asset('assets/servers/js/library/ckfinder_upload.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/ckfinder.js
+')}}"></script>
 @endsection
 
 @section('content')
