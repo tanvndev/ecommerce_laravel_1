@@ -13,6 +13,8 @@ class AppServiceProvider extends ServiceProvider
     protected $serviceBindings = [
         // Base
         'App\Repositories\Interfaces\BaseRepositoryInterface' => 'App\Repositories\BaseRepository',
+        'App\Services\Interfaces\BaseServiceInterface' => 'App\Services\BaseService',
+
 
         // User
         'App\Services\Interfaces\UserServiceInterface' => 'App\Services\UserService',

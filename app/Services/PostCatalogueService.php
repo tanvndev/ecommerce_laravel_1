@@ -2,18 +2,28 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
+use App\Classes\Nestedsetbie;
 use App\Services\Interfaces\PostCatalogueServiceInterface;
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class PostCatalogueService implements PostCatalogueServiceInterface
+class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
 {
     protected $postCatalogueRepository;
-    public function __construct(PostCatalogueRepository $postCatalogueRepository)
-    {
+    protected $nestedset;
+
+
+    public function __construct(
+        PostCatalogueRepository $postCatalogueRepository,
+    ) {
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedset = new Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => $this->currentLanguage()
+        ]);
     }
     function paginate()
     {
@@ -42,17 +52,27 @@ class PostCatalogueService implements PostCatalogueServiceInterface
             $payload = request()->only($this->payload());
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
-            dd($payload);
+            // dd($payload);
             $createPostCatalogue = $this->postCatalogueRepository->create($payload);
 
             if ($createPostCatalogue->id > 0) {
                 $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
+
+                // Lấy ra post_catalogue_id sau khi insert
+                $payloadPostCatalogueLanguage['post_catalogue_id'] = $createPostCatalogue->id;
+                // Lấy ra language_id mặc định
+                $payloadPostCatalogueLanguage['language_id'] = $this->currentLanguage();
+
+                // Tạo ra pivot vào bảng post_catalogue_language
+                $createLanguage = $this->postCatalogueRepository->createLanguagePivot($createPostCatalogue, $payloadPostCatalogueLanguage);
             }
 
-            if (!$createPostCatalogue) {
-                DB::rollBack();
-                return false;
-            }
+            // Dùng để tính toán lại các giá trị left right
+            $this->nestedset->Get('level ASC, order ASC');
+            $this->nestedset->Recursive(0, $this->nestedset->Set());
+            $this->nestedset->Action();
+
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -150,6 +170,6 @@ class PostCatalogueService implements PostCatalogueServiceInterface
 
     private function payloadPostCatalogueLanguage()
     {
-        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keywords'];
+        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
     }
 }

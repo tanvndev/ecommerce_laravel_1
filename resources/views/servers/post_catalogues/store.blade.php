@@ -66,7 +66,7 @@ $postCatalogue->id);
                         <div class="card-body">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-12">
-                                    <label class="form-label">Tiêu đề nhóm bài viết <span
+                                    <label class="form-label">Tên nhóm bài viết <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name" value="{{old('name', $postCatalogue->name ?? '')}}"
                                         class="form-control">

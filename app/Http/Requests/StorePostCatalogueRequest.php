@@ -24,7 +24,6 @@ class StorePostCatalogueRequest extends FormRequest
         return [
             'name' => 'required|string',
             'canonical' => 'required|string|unique:post_catalogue_language',
-            'parent_id' => 'required|gt:0',
         ];
     }
 
@@ -33,7 +32,6 @@ class StorePostCatalogueRequest extends FormRequest
         return [
             'name' => 'Tiêu đề',
             'canonical' => 'Đường dẫn',
-            'parent_id' => 'Danh mục cha',
         ];
     }
 

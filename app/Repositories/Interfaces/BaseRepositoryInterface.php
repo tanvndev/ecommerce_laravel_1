@@ -18,4 +18,5 @@ interface BaseRepositoryInterface
         $perPage = 20,
         $relations = []
     );
+    public function createLanguagePivot($model, $payload = []);
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Servers;
 
+use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{
@@ -18,6 +19,7 @@ class PostCatalogueController extends Controller
 {
     protected $postCatalogueService;
     protected $postCatalogueRepository;
+    protected $nestedset;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
@@ -26,6 +28,11 @@ class PostCatalogueController extends Controller
     ) {
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedset = new Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => 1
+        ]);
     }
     //
     function index()
@@ -45,8 +52,12 @@ class PostCatalogueController extends Controller
     {
         $config['seo'] = config('apps.post_catalogue')['create'];
         $config['method'] = 'create';
+        // Danh mục cha
+        $dropdown = $this->nestedset->Dropdown();
+        // dd($dropdown);
         return view('servers.post_catalogues.store', compact([
             'config',
+            'dropdown',
         ]));
     }
 

@@ -3,14 +3,15 @@
         <div class="card mb-3 card-create">
             <div class="card-header py-3 bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">Danh mục cha</h6>
-                <small class="text-danger ">*Chọn root nếu không có danh mục cha</small>
+                {{-- <small class="text-danger ">*Chọn root nếu không có danh mục cha</small> --}}
             </div>
             <div class="card-body">
-                <label class="form-label">Danh mục cha <span class="text-danger">(*)</span></label>
+                <label class="form-label">Danh mục cha</label>
                 <select class="form-select init-select2" name="parent_id">
-                    <option selected>Chọn danh mục cha </option>
-                    <option value="1">Root</option>
-                    <option value="2">...</option>
+                    @foreach ($dropdown as $key => $val)
+                    <option {{ $key==old('parent_id', isset($postCatalogue->parent_id) ?
+                        $postCatalogue->parent_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
+                    @endforeach
                 </select>
 
             </div>

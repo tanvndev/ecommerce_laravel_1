@@ -88,4 +88,10 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->paginate($perPage)->withQueryString();
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
     }
+
+    public function createLanguagePivot($model, $payload = [])
+    {
+        // attach($model->id, $payload) là phương thức được gọi để thêm một bản ghi mới vào bảng pivot.
+        return $model->languages()->attach($model->id, $payload);
+    }
 }
