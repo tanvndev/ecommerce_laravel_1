@@ -70,29 +70,32 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
     function create()
     {
+        
         DB::beginTransaction();
         try {
-            // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
             $payload = request()->only($this->payload());
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
-
+            if (isset($payload['album'])) {
+                $payload['album'] = json_encode($payload['album']);
+            }
+            
             $createPostCatalogue = $this->postCatalogueRepository->create($payload);
-
+            
             if ($createPostCatalogue->id > 0) {
                 $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
                 //Đinh dạng slug
                 $payloadPostCatalogueLanguage['canonical'] = Str::slug($payloadPostCatalogueLanguage['canonical']);
-
-
+                
+                
                 // Lấy ra post_catalogue_id sau khi insert
                 $payloadPostCatalogueLanguage['post_catalogue_id'] = $createPostCatalogue->id;
                 // Lấy ra language_id mặc định
                 $payloadPostCatalogueLanguage['language_id'] = $this->currentLanguage();
-
+                
                 // Tạo ra pivot vào bảng post_catalogue_language
                 $createLanguage = $this->postCatalogueRepository->createLanguagePivot($createPostCatalogue, $payloadPostCatalogueLanguage);
-
+                
                 // Dùng để tính toán lại các giá trị left right
                 $this->nestedset->Get('level ASC, order ASC');
                 $this->nestedset->Recursive(0, $this->nestedset->Set());
@@ -116,6 +119,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             $postCatalogue = $this->postCatalogueRepository->findById($id);
             // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
             $payload = request()->only($this->payload());
+            if (isset($payload['album'])) {
+                $payload['album'] = json_encode($payload['album']);
+            }
 
             $updatePostCatalogue =  $this->postCatalogueRepository->update($id, $payload);
 
@@ -141,9 +147,6 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $this->nestedset->Recursive(0, $this->nestedset->Set());
                 $this->nestedset->Action();
             }
-
-
-
 
             DB::commit();
             return true;
@@ -217,7 +220,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
     private function payload()
     {
-        return ['parent_id', 'image', 'follow', 'publish'];
+        return ['parent_id', 'image', 'follow', 'publish', 'album'];
     }
 
     private function payloadPostCatalogueLanguage()

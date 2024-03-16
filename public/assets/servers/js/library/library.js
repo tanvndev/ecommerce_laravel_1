@@ -7,6 +7,16 @@ $(function () {
     var init = {};
     var _token = $('meta[name="csrf-token"]').attr("content");
 
+    init.sortUI = () => {
+        if ($(".sortable").length > 0) {
+            $(".sortable").sortable();
+        }
+
+        if ($(".sortable").length > 0) {
+            $(".sortable").disableSelection();
+        }
+    };
+
     // Init select2
     init.initSelect2 = () => {
         if ($(".init-select2").length > 0) {
@@ -158,5 +168,6 @@ $(function () {
         init.checkAll();
         init.checkItem();
         init.changeStatusAll();
+        init.sortUI();
     });
 });

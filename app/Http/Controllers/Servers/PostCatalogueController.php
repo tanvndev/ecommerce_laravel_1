@@ -79,8 +79,8 @@ class PostCatalogueController extends Controller
         // Gán id vào sesson
         session(['_id' => $id]);
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueLanguageById($id, $this->currentLanguage());
-        // dd($postCatalogue);
 
+        $albums =  json_decode($postCatalogue->album);
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
         // dd($postCatalogue);
@@ -92,6 +92,7 @@ class PostCatalogueController extends Controller
         return view('servers.post_catalogues.store', compact([
             'config',
             'postCatalogue',
+            'albums',
             'dropdown',
         ]));
     }
@@ -114,7 +115,7 @@ class PostCatalogueController extends Controller
         }
         // Xoá giá trị sesson
         session()->forget('_id');
-        return redirect()->route('post.catalogue.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('post.catalogue.edit', $id)->with('toast_error', 'Có lỗi vui lòng thử lại.');
     }
 
     /**

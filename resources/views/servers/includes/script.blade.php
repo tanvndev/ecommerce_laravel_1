@@ -4,7 +4,13 @@
 <!-- plugin js file  -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
+
 <script src="{{ asset('assets/servers/bundles/libscripts.bundle.js') }}"></script>
+
+<!-- jquery ui js file  -->
+
+<script src="{{ asset('assets/servers/plugin/jquery-ui/jquery-ui.js') }}"></script>
+
 <script src="{{ asset('assets/servers/js/template.js') }}"></script>
 <script src="{{ asset('assets/servers/js/library/functions.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/library.js')}}"></script>

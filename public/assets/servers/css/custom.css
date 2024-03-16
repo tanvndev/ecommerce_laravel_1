@@ -120,6 +120,57 @@
     margin-bottom: 0;
 }
 
+.icon-delete-album {
+    cursor: pointer;
+    right: -8px;
+    top: -12px;
+    /* background-color: #fff; */
+}
+.image-album {
+    height: 90px;
+    object-fit: cover;
+    object-position: center center;
+    cursor: move;
+    width: 100%;
+}
+.icon-delete-album:hover i {
+    background-color: #d7062a;
+    border-color: transparent;
+    color: #fff;
+}
+
+.icon-delete-album i {
+    color: #d7062a;
+    border-radius: 5px;
+    padding: 6px;
+    font-size: 12px;
+    background-color: #fff;
+    border: 1px solid #d6d6d6;
+    transition: all 0.1s ease-in-out;
+    /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1); */
+}
+
+.click-to-upload{
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px dashed #d6d6d6;
+    padding: 100px 10px;
+    color: #333333;
+
+}
+.click-to-upload:hover i{
+    opacity: 1;
+}
+
+.click-to-upload i{
+    opacity: 0.8;
+    font-size: 40px;
+    transition: opacity 0.1s ease-in-out;
+
+}
+
+
 .toggler input {
     display: none;
 }

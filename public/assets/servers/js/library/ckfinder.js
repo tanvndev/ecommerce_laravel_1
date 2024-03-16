@@ -16,6 +16,29 @@ $(function () {
         }
     };
 
+    init.uploadAlbum = () => {
+        if ($(".upload-picture").length > 0) {
+            $(".upload-picture").click(function (e) {
+                e.preventDefault();
+                const type = "Images";
+
+                init.browseServerAlbum(type);
+            });
+        }
+    }
+
+    init.mutipleUploadImageCkEditor = () => {
+        if ($(".mutipleUploadImageCkEditor").length > 0) {
+            $(".mutipleUploadImageCkEditor").click(function (e) {
+                e.preventDefault();
+                const object = $(this);
+                const target = object.data("target");
+                const type = "Images";
+                init.browseServerCkEditor(object, type, target);
+            });
+        }
+    };
+
     init.setUpCkEditer = () => {
         if ($(".init-ckeditor").length > 0) {
             $(".init-ckeditor").each((index, element) => {
@@ -105,9 +128,81 @@ $(function () {
         };
         finder.popup();
     };
+
+    init.browseServerCkEditor = (object, type, target) => {
+        if (typeof type == "undefined") {
+            type = "Images";
+        }
+        var finder = new CKFinder();
+        finder.resourceType = type;
+        finder.selectActionFunction = function (fileUrl, data, allFiles) {
+            if (allFiles.length <= 0) {
+                return setToast("warning", "Có lỗi liên quan tới upload.");
+            }
+            let html = "";
+            for (var i = 0; i < allFiles.length; i++) {
+                var image = allFiles[i].url;
+                html += '<div class="image-content"><figure>';
+                html += '<img src="' + image + '" alt="' + image + '">';
+                html += "<figcaption>Nhập vào mô tả cho ảnh</figcaption>";
+                html += "</figure></div>";
+            }
+            CKEDITOR.instances[target].insertHtml(html);
+        };
+        finder.popup();
+    };
+
+    init.browseServerAlbum = (type) => {
+         if (typeof type == "undefined") {
+            type = "Images";
+        }
+        var finder = new CKFinder();
+        finder.resourceType = type;
+        finder.selectActionFunction = function (fileUrl, data, allFiles) {
+            if (allFiles.length <= 0) {
+                return setToast("warning", "Có lỗi liên quan tới upload.");
+            }
+            let html = "";
+            for (var i = 0; i < allFiles.length; i++) {
+                var image = allFiles[i].url;
+                html += `
+                <div class="col-lg-2 album-item">
+                    <div class="position-relative ">
+                        <img class="img-thumbnail image-album"
+                            src="${image}" alt="${image}">
+                        <span class="position-absolute icon-delete-album">
+                            <i class=" icofont-ui-delete"></i>
+                        </span>
+                        <input type="hidden" name="album[]" value="${image}">
+                    </div>
+                </div>
+                `
+            }
+            $('.click-to-upload-area').addClass('d-none');
+            $('.upload-image-list').removeClass('d-none');
+            $('.upload-image-list').append(html);
+        };
+        finder.popup();
+    }
+    init.deletePictureAlbum = () => {
+        $(document).on('click', '.icon-delete-album', function () {
+            $(this).parent().parent().remove();
+
+            if ($('.album-item').length <= 0) {
+                $('.click-to-upload-area').removeClass('d-none');
+                $('.upload-image-list').addClass('d-none');    
+            }
+           
+        })
+      
+    }
+
     $(document).ready(function () {
         init.uploadImageToInput();
         init.setUpCkEditer();
         init.uploadImageAvatar();
+        init.mutipleUploadImageCkEditor();
+        init.uploadAlbum()
+        init.deletePictureAlbum()
     });
 });

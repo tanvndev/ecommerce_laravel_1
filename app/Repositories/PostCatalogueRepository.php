@@ -14,8 +14,6 @@ class PostCatalogueRepository extends BaseRepository implements PostCatalogueRep
         $this->model = $model;
     }
 
-
-
     public function getPostCatalogueLanguageById($id = 0, $languageId = 0)
     {
         $select = [
