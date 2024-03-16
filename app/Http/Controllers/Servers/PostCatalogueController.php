@@ -75,6 +75,9 @@ class PostCatalogueController extends Controller
         // Gán id vào sesson
         session(['_id' => $id]);
         $postCatalogue = $this->postCatalogueRepository->findById($id);
+
+        // Danh mục cha
+        $dropdown = $this->nestedset->Dropdown();
         // dd($postCatalogue);
 
 
@@ -84,6 +87,7 @@ class PostCatalogueController extends Controller
         return view('servers.post_catalogues.store', compact([
             'config',
             'postCatalogue',
+            'dropdown',
         ]));
     }
 

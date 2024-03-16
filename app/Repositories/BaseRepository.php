@@ -60,9 +60,10 @@ class BaseRepository implements BaseRepositoryInterface
         $condition = [],
         $join = [],
         $perPage = 1,
-        $relations = []
+        $relations = [],
+        $orderBy = [],
     ) {
-        $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
+        $query = $this->model->select($column)->where(function ($query) use ($condition) {
 
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
                 $query->where('name', 'like', '%' . $condition['keyword'] . '%');
@@ -73,18 +74,32 @@ class BaseRepository implements BaseRepositoryInterface
             }
         });
 
-
         if (isset($relations) && !empty($relations)) {
             foreach ($relations as $relation) {
                 $query->withCount($relation);
             }
         }
 
+        // dd($join);
+        // 'table_name_1' => ['constraint1', 'constraint2'],
         if (!empty($join)) {
             foreach ($join as $table => $constraints) {
                 $query->join($table, ...$constraints);
             }
         }
+
+        // OrderBy
+
+        //  'name' => 'ASC',
+        //  'created_at' => 'DESC'
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $column => $direction) {
+                $query->orderBy($column, $direction);
+            }
+        } else {
+            $query->orderBy('id', 'DESC');
+        }
+
         return $query->paginate($perPage)->withQueryString();
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
     }

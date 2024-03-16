@@ -6,9 +6,7 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>Tên ngôn ngữ</th>
-            <th>Canonical</th>
-            <th>Người tạo</th>
+            <th>Tên nhóm</th>
             <th>Tình trạng</th>
             <th>Thực thi</th>
         </tr>
@@ -21,19 +19,9 @@
                 </div>
             </td>
             <td>
-                <div class="d-flex align-items-center justify-content-start  ">
-                    <img class="avatar rounded img-contain" src="{{$postCatalogue->image}}"
-                        alt="{{$postCatalogue->name}}">
-                    <span class="ms-2 "> {{$postCatalogue->name}}</span>
-                </div>
+                {{str_repeat('|-----', (($postCatalogue->level > 0) ? ($postCatalogue->level - 1) :
+                0)).$postCatalogue->name}}
             </td>
-            <td>
-                <span class="fw-bold ">{{$postCatalogue->canonical}}</span>
-            </td>
-            <td>
-                {{$postCatalogue->users->fullname}}
-            </td>
-
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$postCatalogue->id}}" data-field="publish"

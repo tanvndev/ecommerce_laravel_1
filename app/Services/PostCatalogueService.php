@@ -31,14 +31,32 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
 
+        $select = [
+            'post_catalogues.id',
+            'post_catalogues.publish',
+            'post_catalogues.image',
+            'post_catalogues.level',
+            'post_catalogues.user_id',
+            'post_catalogues.order',
+            'tb1.name',
+            'tb1.canonical',
+        ];
+        $join = [
+            'post_catalogue_language as tb1' => ['tb1.post_catalogue_id', '=', 'post_catalogues.id']
+        ];
+        $orderBy = [
+            'post_catalogues.left' => 'asc',
+            'post_catalogues.created_at' => 'desc'
+        ];
         $postCatalogues = $this->postCatalogueRepository->pagination(
-            ['id', 'name', 'image', 'publish', 'canonical', 'user_id'],
+            $select,
             $condition,
-            [],
+            $join,
             request('perpage'),
-            ['users']
-        );
+            [],
+            $orderBy
 
+        );
         // dd($postCatalogues);
 
         return $postCatalogues;

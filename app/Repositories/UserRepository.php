@@ -19,7 +19,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $condition = [],
         $join = [],
         $perPage = 1,
-        $relations = []
+        $relations = [],
+        $orderBy = []
     ) {
         $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
 

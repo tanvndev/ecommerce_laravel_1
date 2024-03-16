@@ -19,7 +19,8 @@ class LanguageRepository extends BaseRepository implements LanguageRepositoryInt
         $condition = [],
         $join = [],
         $perPage = 1,
-        $relations = []
+        $relations = [],
+        $orderBy = []
     ) {
         $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
 
