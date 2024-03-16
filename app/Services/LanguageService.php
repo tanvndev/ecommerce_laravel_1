@@ -24,12 +24,12 @@ class LanguageService implements LanguageServiceInterface
         $languages = $this->languageRepository->pagination(
             ['id', 'name', 'image', 'publish', 'canonical', 'user_id'],
             $condition,
-            [],
             request('perpage'),
+            [],
+            [],
             ['users']
         );
 
-        // dd($languages);
 
         return $languages;
     }

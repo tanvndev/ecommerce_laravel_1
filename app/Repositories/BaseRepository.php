@@ -58,10 +58,10 @@ class BaseRepository implements BaseRepositoryInterface
     public function pagination(
         $column = ['*'],
         $condition = [],
-        $join = [],
         $perPage = 1,
+        $orderBy = ['id' => 'DESC'],
+        $join = [],
         $relations = [],
-        $orderBy = [],
     ) {
         $query = $this->model->select($column)->where(function ($query) use ($condition) {
 
@@ -72,7 +72,15 @@ class BaseRepository implements BaseRepositoryInterface
             if (isset($condition['publish']) && $condition['publish'] != '-1') {
                 $query->where('publish', $condition['publish']);
             }
+
+            // 'column' => 'value',
+            if (isset($condition['where']) && !empty($condition['where'])) {
+                foreach ($condition['where'] as $column => $value) {
+                    $query->where($column, $value);
+                }
+            }
         });
+
 
         if (isset($relations) && !empty($relations)) {
             foreach ($relations as $relation) {
@@ -80,7 +88,6 @@ class BaseRepository implements BaseRepositoryInterface
             }
         }
 
-        // dd($join);
         // 'table_name_1' => ['constraint1', 'constraint2'],
         if (!empty($join)) {
             foreach ($join as $table => $constraints) {
@@ -89,10 +96,9 @@ class BaseRepository implements BaseRepositoryInterface
         }
 
         // OrderBy
-
         //  'name' => 'ASC',
         //  'created_at' => 'DESC'
-        if (!empty($orderBy)) {
+        if (!empty($orderBy) && is_array($orderBy)) {
             foreach ($orderBy as $column => $direction) {
                 $query->orderBy($column, $direction);
             }

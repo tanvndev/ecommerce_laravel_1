@@ -17,10 +17,10 @@ class LanguageRepository extends BaseRepository implements LanguageRepositoryInt
     public function pagination(
         $column = ['*'],
         $condition = [],
-        $join = [],
         $perPage = 1,
+        $orderBy = ['id' => 'DESC'],
+        $join = [],
         $relations = [],
-        $orderBy = []
     ) {
         $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
 

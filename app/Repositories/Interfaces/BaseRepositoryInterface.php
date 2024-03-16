@@ -14,10 +14,10 @@ interface BaseRepositoryInterface
     public function pagination(
         $column = ['*'],
         $condition = [],
-        $join = [],
-        $perPage = 20,
-        $relations = [],
+        $perPage = 1,
         $orderBy = [],
+        $join = [],
+        $relations = [],
     );
     public function createLanguagePivot($model, $payload = []);
 }

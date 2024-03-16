@@ -28,8 +28,9 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         $userCatalogues = $this->userCatalogueRepository->pagination(
             ['id', 'name', 'publish', 'description'],
             $condition,
-            [],
             request('perpage'),
+            [],
+            [],
             ['users']
 
         );

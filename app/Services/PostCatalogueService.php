@@ -33,6 +33,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
+        $condition['where'] = [
+            'tb2.language_id' => $this->currentLanguage
+        ];
 
         $select = [
             'post_catalogues.id',
@@ -51,19 +54,14 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             'post_catalogues.left' => 'asc',
             'post_catalogues.created_at' => 'desc'
         ];
-        $where = [
-            'tb2.language_id' => $this->currentLanguage
-        ];
 
         //////////////////////////////////////////////////////////
         $postCatalogues = $this->postCatalogueRepository->pagination(
             $select,
             $condition,
-            $join,
             request('perpage'),
-            [],
             $orderBy,
-            $where
+            $join,
         );
         // dd($postCatalogues);
 
