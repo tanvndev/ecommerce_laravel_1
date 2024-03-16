@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\{
     StorePostCatalogueRequest,
     UpdatePostCatalogueRequest,
+    DeletePostCatalogueRequest
 };
 
 use App\Services\Interfaces\PostCatalogueServiceInterface as PostCatalogueService;
@@ -119,7 +120,7 @@ class PostCatalogueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(DeletePostCatalogueRequest $request)
     {
         if ($request->_id == null) {
             return redirect()->route('post.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại');

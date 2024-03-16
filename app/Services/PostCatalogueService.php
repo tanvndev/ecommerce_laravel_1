@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogu
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
 {
@@ -82,6 +83,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
             if ($createPostCatalogue->id > 0) {
                 $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
+                //Đinh dạng slug
+                $payloadPostCatalogueLanguage['canonical'] = Str::slug($payloadPostCatalogueLanguage['canonical']);
+
 
                 // Lấy ra post_catalogue_id sau khi insert
                 $payloadPostCatalogueLanguage['post_catalogue_id'] = $createPostCatalogue->id;
@@ -119,6 +123,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
             if ($updatePostCatalogue) {
                 $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
+                //Đinh dạng slug
+                $payloadPostCatalogueLanguage['canonical'] = Str::slug($payloadPostCatalogueLanguage['canonical']);
+
 
                 // Lấy ra post_catalogue_id sau khi insert
                 $payloadPostCatalogueLanguage['post_catalogue_id'] = $id;
@@ -153,13 +160,14 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
     {
         DB::beginTransaction();
         try {
-            // Xoá mềm
-            $delete =  $this->postCatalogueRepository->delete($id);
+            // Xoá mềm hay xoá cứng chỉnh trong model
+            $delete = $this->postCatalogueRepository->delete($id);
 
-            if (!$delete) {
-                DB::rollBack();
-                return false;
-            }
+            // Dùng để tính toán lại các giá trị left right
+            $this->nestedset->Get('level ASC, order ASC');
+            $this->nestedset->Recursive(0, $this->nestedset->Set());
+            $this->nestedset->Action();
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

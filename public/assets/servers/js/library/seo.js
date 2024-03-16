@@ -18,7 +18,7 @@ $(function () {
         if ($("input[name=canonical]").length > 0) {
             $("input[name=canonical]").on("keyup", function () {
                 const _this = $(this);
-                const value = _this.val();
+                const value = convertToSlug(_this.val());
                 $(".meta-url").html(BASE_URL + "/" + value);
             });
         }

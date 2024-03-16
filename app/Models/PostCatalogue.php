@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 use Laravel\Sanctum\HasApiTokens;
 
 class PostCatalogue extends Model
@@ -47,5 +48,22 @@ class PostCatalogue extends Model
     public function post_catalogue_language()
     {
         return $this->belongsTo(PostCatalogue::class, 'post_catalogue_id', 'id');
+    }
+
+    // Hàm này giúp kiểm tra có  danh  mục con hay không.
+    public static function isChildrenNode($id = 0)
+    {
+        $postCatalogue = self::find($id);
+
+        if (empty($postCatalogue)) {
+            return false;
+        }
+
+        // Kiểm tra nếu right - left > 1 thì không có danh mục con
+        if (($postCatalogue->right - $postCatalogue->left) > 1) {
+            return false;
+        }
+
+        return true;
     }
 }

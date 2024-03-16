@@ -6,4 +6,5 @@
 
 <script src="{{ asset('assets/servers/bundles/libscripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/servers/js/template.js') }}"></script>
+<script src="{{ asset('assets/servers/js/library/functions.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/library.js')}}"></script>

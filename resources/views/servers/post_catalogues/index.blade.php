@@ -1,6 +1,17 @@
 @extends('layouts.serverLayout')
 
 @section('content')
+
+@if ($errors->any())
+@php
+$errorMessages = '';
+foreach ($errors->all() as $error) {
+$errorMessages .= $error . '<br>';
+}
+toast($errorMessages, 'error');
+@endphp
+@endif
+
 <div class="body d-flex py-3">
     <div class="container-xxl">
         <div class="row align-items-center">
@@ -32,8 +43,10 @@
                     </div>
                 </div>
 
+
                 <div class="card mb-3">
                     <div class="card-body">
+
                         @include('servers.post_catalogues.blocks.table')
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">

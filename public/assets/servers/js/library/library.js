@@ -2,42 +2,6 @@ if (typeof jQuery === "undefined") {
     throw new Error("jQuery plugins need to be before this file");
 }
 
-// Khởi tạo Toast
-var Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-    },
-});
-
-// Hàm này Chạy thông báo Toast
-const setToast = (icon, title) => {
-    Toast.fire({
-        icon: icon,
-        title: title,
-    });
-};
-
-// Hàm này sử lý thông báo
-const handleToast = (response) => {
-    if (Object.keys(response).length <= 0) {
-        return setToast("error", "Có lỗi vui lòng thử lại.");
-    }
-
-    if (response.status == 1) {
-        return setToast("success", response.message);
-    }
-
-    if (response.status == 0) {
-        return setToast("error", response.message);
-    }
-};
-
 $(function () {
     "use strict";
     var init = {};
