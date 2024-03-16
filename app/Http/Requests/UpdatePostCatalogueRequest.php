@@ -23,15 +23,15 @@ class UpdatePostCatalogueRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'description' => 'required|string',
+            'canonical' => 'required|string|unique:post_catalogue_language,canonical,' . $this->id . ',post_catalogue_id'
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tên nhóm thành viên',
-            'description' => 'Mô tả',
+            'name' => 'Tiêu đề',
+            'canonical' => 'Đường dẫn',
         ];
     }
 

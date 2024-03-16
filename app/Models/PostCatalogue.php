@@ -19,6 +19,7 @@ class PostCatalogue extends Model
         'level',
         'image',
         'icon',
+        'follow',
         'album',
         'publish',
         'order',
@@ -41,5 +42,10 @@ class PostCatalogue extends Model
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function post_catalogue_language()
+    {
+        return $this->belongsTo(PostCatalogue::class, 'post_catalogue_id', 'id');
     }
 }

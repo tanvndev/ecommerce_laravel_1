@@ -20,6 +20,8 @@ class PostCatalogueController extends Controller
     protected $postCatalogueService;
     protected $postCatalogueRepository;
     protected $nestedset;
+    protected $currentLanguage;
+
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
@@ -31,8 +33,9 @@ class PostCatalogueController extends Controller
         $this->nestedset = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
-            'language_id' => 1
+            'language_id' => $this->currentLanguage()
         ]);
+        $this->currentLanguage = $this->currentLanguage();
     }
     //
     function index()
@@ -74,7 +77,8 @@ class PostCatalogueController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $postCatalogue = $this->postCatalogueRepository->findById($id);
+        $postCatalogue = $this->postCatalogueRepository->getPostCatalogueLanguageById($id, $this->currentLanguage());
+        // dd($postCatalogue);
 
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
