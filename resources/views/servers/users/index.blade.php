@@ -34,7 +34,7 @@
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        @include('servers.users.blocks.table')
+                        @include('servers.users.blocks.table', ['model' =>'User'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
                             {{ $users->links('pagination::bootstrap-5') }}

@@ -40,7 +40,6 @@ class PostService extends BaseService implements PostServiceInterface
             'posts.id',
             'posts.publish',
             'posts.image',
-            'posts.level',
             'posts.user_id',
             'posts.order',
             'tb2.name',
@@ -49,10 +48,7 @@ class PostService extends BaseService implements PostServiceInterface
         $join = [
             'post_language as tb2' => ['tb2.post_id', '=', 'posts.id']
         ];
-        $orderBy = [
-            'posts.left' => 'asc',
-            'posts.created_at' => 'desc'
-        ];
+        $orderBy = [];
 
         //////////////////////////////////////////////////////////
         $posts = $this->postRepository->pagination(

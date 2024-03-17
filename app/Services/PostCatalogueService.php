@@ -70,7 +70,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
     function create()
     {
-        
+
         DB::beginTransaction();
         try {
             $payload = request()->only($this->payload());
@@ -79,23 +79,23 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             if (isset($payload['album'])) {
                 $payload['album'] = json_encode($payload['album']);
             }
-            
+
             $createPostCatalogue = $this->postCatalogueRepository->create($payload);
-            
+
             if ($createPostCatalogue->id > 0) {
                 $payloadPostCatalogueLanguage = request()->only($this->payloadPostCatalogueLanguage());
                 //Đinh dạng slug
                 $payloadPostCatalogueLanguage['canonical'] = Str::slug($payloadPostCatalogueLanguage['canonical']);
-                
-                
+
+
                 // Lấy ra post_catalogue_id sau khi insert
                 $payloadPostCatalogueLanguage['post_catalogue_id'] = $createPostCatalogue->id;
                 // Lấy ra language_id mặc định
                 $payloadPostCatalogueLanguage['language_id'] = $this->currentLanguage();
-                
+
                 // Tạo ra pivot vào bảng post_catalogue_language
-                $createLanguage = $this->postCatalogueRepository->createLanguagePivot($createPostCatalogue, $payloadPostCatalogueLanguage);
-                
+                $createLanguage = $this->postCatalogueRepository->createPivot($createPostCatalogue, $payloadPostCatalogueLanguage, 'languages');
+
                 // Dùng để tính toán lại các giá trị left right
                 $this->nestedset->Get('level ASC, order ASC');
                 $this->nestedset->Recursive(0, $this->nestedset->Set());
@@ -140,7 +140,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $postCatalogue->languages()->detach([$payloadPostCatalogueLanguage['language_id'], $id]);
 
                 // Tạo ra pivot vào bảng post_catalogue_language
-                $createLanguage = $this->postCatalogueRepository->createLanguagePivot($postCatalogue, $payloadPostCatalogueLanguage);
+                $createLanguage = $this->postCatalogueRepository->createPivot($postCatalogue, $payloadPostCatalogueLanguage, 'languages');
 
                 // Dùng để tính toán lại các giá trị left right
                 $this->nestedset->Get('level ASC, order ASC');

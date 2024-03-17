@@ -6,7 +6,7 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>Tên nhóm</th>
+            <th>Tên bài viết</th>
             <th>Tình trạng</th>
             <th>Thực thi</th>
         </tr>
@@ -19,13 +19,12 @@
                 </div>
             </td>
             <td>
-                {{str_repeat('|-----', (($post->level > 0) ? ($post->level - 1) :
-                0)).$post->name}}
+                {{$post->name}}
             </td>
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$post->id}}" data-field="publish" data-modelid="{{$post->id}}"
-                        data-model="Post" name="publish" type="checkbox" {{$post->publish ==
+                        data-model="{{$model}}" name="publish" type="checkbox" {{$post->publish ==
                     1 ? 'checked' :
                     ''}}
                     value="{{$post->publish}}">

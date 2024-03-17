@@ -34,7 +34,7 @@
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        @include('servers.languages.blocks.table')
+                        @include('servers.languages.blocks.table', ['model' =>'Language'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
                             {{ $languages->links('pagination::bootstrap-5') }}

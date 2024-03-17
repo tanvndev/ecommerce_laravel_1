@@ -74,6 +74,7 @@ class BaseRepository implements BaseRepositoryInterface
             }
 
             // 'column' => 'value',
+            // 'column' => ['<>', 100]
             if (isset($condition['where']) && !empty($condition['where'])) {
                 foreach ($condition['where'] as $column => $value) {
                     $query->where($column, $value);

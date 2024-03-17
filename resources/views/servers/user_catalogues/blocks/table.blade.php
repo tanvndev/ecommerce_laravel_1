@@ -33,7 +33,7 @@
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$userCatalogue->id}}" data-field="publish"
-                        data-modelid="{{$userCatalogue->id}}" data-model="UserCatalogue" name="publish" type="checkbox"
+                        data-modelid="{{$userCatalogue->id}}" data-model="{{$model}}" name="publish" type="checkbox"
                         {{$userCatalogue->publish == 1 ? 'checked' : ''}} value="{{$userCatalogue->publish}}">
                     <label for="publish-{{$userCatalogue->id}}">
                         <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg"

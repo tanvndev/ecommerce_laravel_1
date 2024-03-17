@@ -45,7 +45,7 @@
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$user->id}}" data-field="publish" data-modelid="{{$user->id}}"
-                        data-model="User" name="publish" type="checkbox" {{$user->publish ==
+                        data-model="{{$model}}" name="publish" type="checkbox" {{$user->publish ==
                     1 ? 'checked' :
                     ''}}
                     value="{{$user->publish}}">

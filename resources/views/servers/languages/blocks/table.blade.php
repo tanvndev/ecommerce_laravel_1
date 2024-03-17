@@ -36,7 +36,7 @@
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$language->id}}" data-field="publish"
-                        data-modelid="{{$language->id}}" data-model="Language" name="publish" type="checkbox"
+                        data-modelid="{{$language->id}}" data-model="{{$model}}" name="publish" type="checkbox"
                         {{$language->publish ==
                     1 ? 'checked' :
                     ''}}

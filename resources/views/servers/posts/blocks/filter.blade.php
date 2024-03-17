@@ -1,4 +1,4 @@
-<form action="{{ route('post.catalogue.index') }}" method="get" class="form-list-filter">
+<form action="{{ route('post.index') }}" method="get" class="form-list-filter">
 
     <div class="row">
         <div class="col-lg-2">

@@ -39,7 +39,7 @@ toast($errorMessages, 'error');
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Filter --}}
-                        @include('servers.posts.blocks.filter')
+                        @include('servers.posts.blocks.filter' )
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@ toast($errorMessages, 'error');
                 <div class="card mb-3">
                     <div class="card-body">
 
-                        @include('servers.posts.blocks.table')
+                        @include('servers.posts.blocks.table', ['model' =>'Post'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
                             {{ $posts->links('pagination::bootstrap-5') }}
