@@ -38,8 +38,8 @@ return [
                 'subMenu' => [
                     [
                         'title' => 'QL Bài viết',
-                        'route' => 'user.index',
-                        'activeCondition' => ['user.index', 'user.create', 'user.edit'],
+                        'route' => 'post.index',
+                        'activeCondition' => ['post.index', 'post.create', 'post.edit'],
                     ],
                     [
                         'title' => 'QL Nhóm bài viết',

@@ -11,7 +11,8 @@ use App\Http\Controllers\Servers\{
     LanguageController,
     UserController,
     UserCatalogueController,
-    PostCatalogueController
+    PostCatalogueController,
+    PostController
 };
 
 
@@ -60,6 +61,17 @@ Route::prefix('language')->name('language.')->middleware('admin')->group(functio
     Route::get('/{id}/edit', [LanguageController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
     Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
     Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
+});
+
+
+// Routes for Post
+Route::prefix('post')->name('post.')->middleware('admin')->group(function () {
+    Route::get('index', [PostController::class, 'index'])->name('index');
+    Route::get('create', [PostController::class, 'create'])->name('create');
+    Route::post('store', [PostController::class, 'store'])->name('store');
+    Route::get('/{id}/edit', [PostController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+    Route::put('/{id}/update', [PostController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+    Route::delete('destroy', [PostController::class, 'destroy'])->name('destroy');
 });
 
 
