@@ -86,6 +86,7 @@ class BaseRepository implements BaseRepositoryInterface
         if (isset($relations) && !empty($relations)) {
             foreach ($relations as $relation) {
                 $query->withCount($relation);
+                $query->with($relation);
             }
         }
 

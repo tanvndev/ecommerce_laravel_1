@@ -6,7 +6,9 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>Tên bài viết</th>
+            <th>Tiêu đề bài viết</th>
+            <th>Nhóm hiện thị</th>
+            <th>Vị trí</th>
             <th>Tình trạng</th>
             <th>Thực thi</th>
         </tr>
@@ -19,8 +21,25 @@
                 </div>
             </td>
             <td>
-                {{$post->name}}
+                <div class="d-flex align-items-center justify-content-start">
+                    <img class="avatar image-post rounded" src="{{$post->image}}" alt="{{$post->name}}">
+                    <a href="" class="fw-bold link-body-emphasis ms-2 "> {{$post->name}}</a>
+
+                </div>
             </td>
+            <td>
+                @foreach ($post->post_catalogues as $catalogue)
+                @foreach ($catalogue->post_catalogue_language as $val)
+                <a href="{{route('post.index', ['post_catalogue_id' => $catalogue->id])}}"
+                    class="post-catalgue-name link-body-emphasis"> {{$val->name}}</a>
+                @endforeach
+                @endforeach
+            </td>
+            <td class="">
+                <input type="text" class="form-control sort-order w-25" name="order" data-id="{{$post->id}}"
+                    data-model="{{$model}}" value="{{$post->order}}" />
+            </td>
+
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$post->id}}" data-field="publish" data-modelid="{{$post->id}}"

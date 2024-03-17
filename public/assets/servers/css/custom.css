@@ -133,6 +133,34 @@
     cursor: move;
     width: 100%;
 }
+.image-post {
+    width: 90px;
+    min-width: 90px;
+    height: 60px;
+}
+.post-catalgue-name {
+    position: relative;
+    display: block;
+    margin-top: 2px;
+    margin-left: 4px;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+.post-catalgue-name::after {
+    content: "-";
+    position: absolute;
+    left: -8px;
+    top: 40%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.post-catalgue-name:hover {
+    text-decoration: underline;
+}
+
 .icon-delete-album:hover i {
     background-color: #d7062a;
     border-color: transparent;
@@ -150,26 +178,23 @@
     /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.1); */
 }
 
-.click-to-upload{
+.click-to-upload {
     text-align: center;
     cursor: pointer;
     border-radius: 8px;
     border: 1px dashed #d6d6d6;
     padding: 100px 10px;
     color: #333333;
-
 }
-.click-to-upload:hover i{
+.click-to-upload:hover i {
     opacity: 1;
 }
 
-.click-to-upload i{
+.click-to-upload i {
     opacity: 0.8;
     font-size: 40px;
     transition: opacity 0.1s ease-in-out;
-
 }
-
 
 .toggler input {
     display: none;

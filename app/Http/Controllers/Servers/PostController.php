@@ -75,10 +75,11 @@ class PostController extends Controller
 
     public function edit($id)
     {
-
         // Gán id vào sesson
         session(['_id' => $id]);
         $post = $this->postRepository->getPostLanguageById($id, $this->currentLanguage());
+        // dd($post);
+
 
         $albums =  json_decode($post->album);
         // Danh mục cha
@@ -96,6 +97,7 @@ class PostController extends Controller
             'dropdown',
         ]));
     }
+
 
     /**
      * Update the specified resource in storage.

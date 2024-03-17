@@ -16,14 +16,22 @@
                     </select>
                 </div>
 
+                @php
+                $catalogues = [];
+                // Phương thức pluck được sử dụng để trích xuất một thuộc tính cụ thể từ mỗi đối tượng trong tập hợp
+                if (!empty($post->post_catalogues)) {
+                $catalogues = $post->post_catalogues->pluck('id')->toArray();
+                }
+                @endphp
+
                 <div>
                     <label class="form-label">Danh mục phụ</label>
                     <select class="form-select init-select2" multiple name="catalogue[]">
                         @foreach ($dropdown as $key => $val)
                         @php
                         $selected = '';
-                        if (is_array(old('catalogue', isset($post->catalogue) ? $post->catalogue : [])) &&
-                        in_array($key, old('catalogue', isset($post->catalogue) ? $post->catalogue : []))) {
+                        if (is_array(old('catalogue', $catalogues ?? [])) &&
+                        in_array($key, old('catalogue', $catalogues ?? []))) {
                         $selected = 'selected';
                         }
                         @endphp

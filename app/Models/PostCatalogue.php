@@ -52,7 +52,7 @@ class PostCatalogue extends Model
 
     public function post_catalogue_language()
     {
-        return $this->belongsTo(PostCatalogue::class, 'post_catalogue_id', 'id');
+        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id');
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.

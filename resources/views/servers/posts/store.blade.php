@@ -18,7 +18,7 @@
 @section('content')
 @php
 $url = $config['method'] == 'create' ? route('post.store') : route('post.update',
-$postCatalogue->id);
+$post->id);
 @endphp
 <form action="{{ $url }}" method="post" enctype="multipart/form-data">
 

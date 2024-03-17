@@ -7,13 +7,13 @@
         <div class="row g-3 align-items-center">
             <div class="col-md-12">
                 <label class="form-label">Tên bài viết <span class="text-danger">(*)</span></label>
-                <input type="text" name="name" value="{{old('name', $postCatalogue->name ?? '')}}" class="form-control">
+                <input type="text" name="name" value="{{old('name', $post->name ?? '')}}" class="form-control">
             </div>
             <div class="col-md-12">
                 <label class="form-label">Mô tả ngắn </label>
                 <textarea name="description" id="ckDescription" data-height="200" class="form-control init-ckeditor"
                     cols="30" rows="5">
-                        {{old('description', $postCatalogue->description ?? '')}}
+                        {{old('description', $post->description ?? '')}}
                     </textarea>
             </div>
 
@@ -25,7 +25,7 @@
                 </div>
                 <textarea name="content" id="ckContent" data-height="500" class="form-control init-ckeditor" cols="30"
                     rows="5">
-                        {{old('content', $postCatalogue->content ?? '')}}
+                        {{old('content', $post->content ?? '')}}
                     </textarea>
             </div>
 

@@ -18,7 +18,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     {
         $select = [
             'posts.id',
-            'posts.parent_id',
+            'posts.post_catalogue_id',
             'posts.publish',
             'posts.image',
             'posts.icon',
@@ -36,6 +36,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             ->select($select)
             ->join('post_language as tb2', 'posts.id', '=', 'tb2.post_id')
             ->where('tb2.language_id', $languageId)
+            ->with('post_catalogues')
             ->findOrFail($id);
     }
 }

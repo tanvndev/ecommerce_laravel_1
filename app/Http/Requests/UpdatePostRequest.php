@@ -23,7 +23,8 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:post_catalogue_language,canonical,' . $this->id . ',post_catalogue_id'
+            'canonical' => 'required|string|unique:post_language,canonical,' . $this->id . ',post_id',
+            'post_catalogue_id' => 'gt:0'
         ];
     }
 
@@ -32,6 +33,7 @@ class UpdatePostRequest extends FormRequest
         return [
             'name' => 'Tiêu đề',
             'canonical' => 'Đường dẫn',
+            'post_catalogue_id' => 'Danh mục cha',
         ];
     }
 

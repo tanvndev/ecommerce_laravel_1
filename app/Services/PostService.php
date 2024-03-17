@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostService extends BaseService implements PostServiceInterface
@@ -57,6 +58,7 @@ class PostService extends BaseService implements PostServiceInterface
             request('perpage'),
             $orderBy,
             $join,
+            ['post_catalogues']
         );
         // dd($posts);
 
@@ -136,7 +138,6 @@ class PostService extends BaseService implements PostServiceInterface
                 //Đinh dạng slug
                 $payloadPostLanguage['canonical'] = Str::slug($payloadPostLanguage['canonical']);
 
-
                 // Lấy ra post_id sau khi insert
                 $payloadPostLanguage['post_id'] = $id;
                 // Lấy ra language_id mặc định
@@ -145,20 +146,25 @@ class PostService extends BaseService implements PostServiceInterface
                 // Xoá bản ghi cũa một pivot
                 $post->languages()->detach([$payloadPostLanguage['language_id'], $id]);
 
-                // Tạo ra pivot vào bảng post_language
-                $createLanguage = $this->postRepository->createLanguagePivot($post, $payloadPostLanguage);
 
-                // Dùng để tính toán lại các giá trị left right
-                $this->nestedset->Get('level ASC, order ASC');
-                $this->nestedset->Recursive(0, $this->nestedset->Set());
-                $this->nestedset->Action();
+                // Tạo ra pivot vào bảng post_language
+                $createLanguage = $this->postRepository->createPivot($post, $payloadPostLanguage, 'languages');
+
+                // Lấy ra id catalogue
+                $catalogue = $this->catalogue();
+
+                // Đồng bộ hoá id catalogue với bảng post_catalogue_post
+                $post->post_catalogues()->sync($catalogue);
+                // dd($payloadPostLanguage);
             }
 
             DB::commit();
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error("message: {$e->getMessage()}");
             echo $e->getMessage();
+            die;
             return false;
         }
     }

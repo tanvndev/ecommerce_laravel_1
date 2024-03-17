@@ -30,7 +30,6 @@ class UserService implements UserServiceInterface
             [],
             [],
             ['user_catalogues']
-
         );
 
         // dd($users);
