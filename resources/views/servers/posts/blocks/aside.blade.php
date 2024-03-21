@@ -29,11 +29,12 @@
                     <select class="form-select init-select2" multiple name="catalogue[]">
                         @foreach ($dropdown as $key => $val)
                         @php
-                        $selected = '';
-                        if (is_array(old('catalogue', $catalogues ?? [])) &&
-                        in_array($key, old('catalogue', $catalogues ?? []))) {
-                        $selected = 'selected';
+                        // Bỏ lặp qua danh mục cha trùng với danh mục phụ
+                        if (isset($post) && !empty($post) && $key == $post->post_catalogue_id) {
+                        continue;
                         }
+                        $selected = (is_array(old('catalogue', $catalogues ?? [])) && in_array($key, old('catalogue',
+                        $catalogues ?? []))) ? 'selected' : '';
                         @endphp
                         <option {{ $selected }} value="{{ $key }}">{{ $val }}</option>
                         @endforeach

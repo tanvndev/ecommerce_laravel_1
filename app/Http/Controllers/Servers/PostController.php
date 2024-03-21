@@ -7,8 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{
     StorePostRequest,
-    UpdatePostRequest,
-    DeletePostRequest
+    UpdatePostRequest
 };
 
 use App\Services\Interfaces\PostServiceInterface as PostService;
@@ -123,7 +122,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeletePostRequest $request)
+    public function destroy(Request $request)
     {
         if ($request->_id == null) {
             return redirect()->route('post.index')->with('toast_error', 'Có lỗi vui lòng thử lại');

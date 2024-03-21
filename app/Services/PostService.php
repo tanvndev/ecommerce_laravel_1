@@ -70,36 +70,20 @@ class PostService extends BaseService implements PostServiceInterface
 
         DB::beginTransaction();
         try {
-            $payload = request()->only($this->payload());
-            // Lấy ra id của người dùng hiện tại.
+
+            //   Lấy ra payload và format lai
+            $payload = $this->formatPayload();
+            // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
-            if (isset($payload['album'])) {
-                $payload['album'] = json_encode($payload['album']);
-            }
 
-            $createPost = $this->postRepository->create($payload);
+            // Create post
+            $post = $this->postRepository->create($payload);
+            if ($post->id > 0) {
+                // Format lai payload language
+                $payloadPostLanguage = $this->formatPayloadLanguage($post->id);
 
-            if ($createPost->id > 0) {
-                $payloadPostLanguage = request()->only($this->payloadPostLanguage());
-
-                //Đinh dạng slug
-                $payloadPostLanguage['canonical'] = Str::slug($payloadPostLanguage['canonical']);
-
-
-                // Lấy ra post_id sau khi insert
-                $payloadPostLanguage['post_id'] = $createPost->id;
-                // Lấy ra language_id mặc định
-                $payloadPostLanguage['language_id'] = $this->currentLanguage();
-
-
-                // Tạo ra pivot vào bảng post_language
-                $createLanguage = $this->postRepository->createPivot($createPost, $payloadPostLanguage, 'languages');
-
-                // Lấy ra id catalogue
-                $catalogue = $this->catalogue();
-
-                // Đồng bộ hoá id catalogue với bảng post_catalogue_post
-                $createPost->post_catalogues()->sync($catalogue);
+                // Create pivot and sync
+                $this->createPivotAndSync($post, $payloadPostLanguage);
             }
 
             DB::commit();
@@ -107,6 +91,42 @@ class PostService extends BaseService implements PostServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
+
+
+
+
+    function update($id)
+    {
+        DB::beginTransaction();
+        try {
+            // Lấy ra dữ liệu của post hiện tại để xoá;
+            $post = $this->postRepository->findById($id);
+
+            // Lấy ra payload và format lai
+            $payload = $this->formatPayload();
+
+            // Update post
+            $updatePost = $this->postRepository->update($id, $payload);
+
+            if ($updatePost) {
+                // Format lai payload language
+                $payloadPostLanguage = $this->formatPayloadLanguage($id);
+                // Xoá bản ghi cũa một pivot
+                $post->languages()->detach([$payloadPostLanguage['language_id'], $id]);
+                // Create pivot and sync
+                $this->createPivotAndSync($post, $payloadPostLanguage);
+            }
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
             return false;
         }
     }
@@ -119,54 +139,38 @@ class PostService extends BaseService implements PostServiceInterface
         ));
     }
 
-    function update($id)
+    private function formatPayload()
     {
-        DB::beginTransaction();
-        try {
-            // Lấy ra dữ liệu của post hiện tại để xoá;
-            $post = $this->postRepository->findById($id);
-            // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
-            $payload = request()->only($this->payload());
-            if (isset($payload['album'])) {
-                $payload['album'] = json_encode($payload['album']);
-            }
-
-            $updatePost =  $this->postRepository->update($id, $payload);
-
-            if ($updatePost) {
-                $payloadPostLanguage = request()->only($this->payloadPostLanguage());
-                //Đinh dạng slug
-                $payloadPostLanguage['canonical'] = Str::slug($payloadPostLanguage['canonical']);
-
-                // Lấy ra post_id sau khi insert
-                $payloadPostLanguage['post_id'] = $id;
-                // Lấy ra language_id mặc định
-                $payloadPostLanguage['language_id'] = $this->currentLanguage();
-
-                // Xoá bản ghi cũa một pivot
-                $post->languages()->detach([$payloadPostLanguage['language_id'], $id]);
-
-
-                // Tạo ra pivot vào bảng post_language
-                $createLanguage = $this->postRepository->createPivot($post, $payloadPostLanguage, 'languages');
-
-                // Lấy ra id catalogue
-                $catalogue = $this->catalogue();
-
-                // Đồng bộ hoá id catalogue với bảng post_catalogue_post
-                $post->post_catalogues()->sync($catalogue);
-                // dd($payloadPostLanguage);
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error("message: {$e->getMessage()}");
-            echo $e->getMessage();
-            die;
-            return false;
+        // Lấy ra payload từ form
+        $payload = request()->only($this->payload());
+        if (isset($payload['album']) && !empty($payload['album'])) {
+            $payload['album'] = json_encode($payload['album']);
         }
+        return $payload;
+    }
+
+    private function formatPayloadLanguage($postId)
+    {
+        $payloadPostLanguage = request()->only($this->payloadPostLanguage());
+        //Đinh dạng slug
+        $payloadPostLanguage['canonical'] = Str::slug($payloadPostLanguage['canonical']);
+
+        // Lấy ra post_id 
+        $payloadPostLanguage['post_id'] = $postId;
+        // Lấy ra language_id mặc định
+        $payloadPostLanguage['language_id'] = $this->currentLanguage;
+        return $payloadPostLanguage;
+    }
+
+    private function createPivotAndSync($post, $payloadPostLanguage)
+    {
+        // Tạo ra pivot vào bảng post_language
+        $this->postRepository->createPivot($post, $payloadPostLanguage, 'languages');
+
+        // Lấy ra id catalogue
+        $catalogue = $this->catalogue();
+        // Đồng bộ hoá id catalogue với bảng post_catalogue_post
+        $post->post_catalogues()->sync($catalogue);
     }
 
     function destroy($id)
@@ -175,11 +179,6 @@ class PostService extends BaseService implements PostServiceInterface
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->postRepository->delete($id);
-
-            // Dùng để tính toán lại các giá trị left right
-            $this->nestedset->Get('level ASC, order ASC');
-            $this->nestedset->Recursive(0, $this->nestedset->Set());
-            $this->nestedset->Action();
 
             DB::commit();
             return true;

@@ -99,7 +99,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 " data-bs-dismiss="modal">Huỷ
                     bỏ</button>
-                <form action="{{route('post.catalogue.destroy')}}" method="post">
+                <form action="{{route('post.destroy')}}" method="post">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="_id" id="_id">
