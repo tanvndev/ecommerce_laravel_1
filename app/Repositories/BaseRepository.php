@@ -63,75 +63,22 @@ class BaseRepository implements BaseRepositoryInterface
         $join = [],
         $relations = [],
         $groupBy = [],
-        $whereRaw = [],
+        $rawQuery = [],
     ) {
-        $query = $this->model->select($column)->where(function ($query) use ($condition) {
 
-            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('name', 'like', '%' . $condition['keyword'] . '%');
-            }
-
-            if (isset($condition['publish']) && $condition['publish'] != '-1') {
-                $query->where('publish', $condition['publish']);
-            }
-
-            // 'column' => 'value',
-            // 'column' => ['<>', 100]
-            if (isset($condition['where']) && !empty($condition['where'])) {
-                foreach ($condition['where'] as $column => $value) {
-                    $query->where($column, $value);
-                }
-            }
-        });
-
-        // dd($whereRaw);
-        // $value[0] là câu truy vấn $value[1] là tham số truy vấn
-        if (isset($whereRaw['whereRaw']) && !empty($whereRaw['whereRaw'])) {
-            foreach ($whereRaw['whereRaw'] as $key => $value) {
-                $query->whereRaw($value[0], $value[1]);
-            }
-        }
-
-
-        if (isset($relations) && !empty($relations)) {
-            foreach ($relations as $relation) {
-                $query->withCount($relation);
-                $query->with($relation);
-            }
-        }
-
-        // 'table_name_1' => ['constraint1', 'constraint2'],
-        if (!empty($join)) {
-            foreach ($join as $table => $constraints) {
-                $query->join($table, ...$constraints);
-            }
-        }
-
-        // 'column1' or
-        // ['column1', 'column2']
-        if (!empty($groupBy)) {
-            if (is_array($groupBy)) {
-                foreach ($groupBy as $group) {
-                    $query->groupBy($group);
-                }
-            } else {
-                $query->groupBy($groupBy);
-            }
-        }
-
-        // OrderBy
-        //  'name' => 'ASC',
-        //  'created_at' => 'DESC'
-        if (!empty($orderBy) && is_array($orderBy)) {
-            foreach ($orderBy as $column => $direction) {
-                $query->orderBy($column, $direction);
-            }
-        } else {
-            $query->orderBy('id', 'DESC');
-        }
-
-        return $query->paginate($perPage)->withQueryString();
+        $query = $this->model->select($column);
+        $query->keyword($condition['keyword'] ?? null)
+            ->publish($condition['publish'] ?? null)
+            ->customWhere($condition['where'] ?? null)
+            ->customWhereRaw($rawQuery['whereRaw'] ?? null)
+            ->relation($relations ?? null)
+            ->relationCount($relations ?? null)
+            ->customJoin($join ?? null)
+            ->customGroupBy($groupBy ?? null)
+            ->customOrderBy($orderBy ?? null)
+            ->paginate($perPage)->withQueryString();
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
+        return $query;
     }
 
     public function createPivot($model, $payload = [], $relation = '')

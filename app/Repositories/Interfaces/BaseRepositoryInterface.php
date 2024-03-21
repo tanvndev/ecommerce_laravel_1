@@ -19,7 +19,7 @@ interface BaseRepositoryInterface
         $join = [],
         $relations = [],
         $groupBy = [],
-        $whereRaw = [],
+        $rawQuery = [],
     );
     public function createPivot($model, $payload = [], $relation = '');
 }
