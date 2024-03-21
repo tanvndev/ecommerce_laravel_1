@@ -13,34 +13,4 @@ class LanguageRepository extends BaseRepository implements LanguageRepositoryInt
     ) {
         $this->model = $model;
     }
-
-    public function pagination(
-        $column = ['*'],
-        $condition = [],
-        $perPage = 1,
-        $orderBy = ['id' => 'DESC'],
-        $join = [],
-        $relations = [],
-    ) {
-        $query = $this->model->select($column)->orderBy('id', 'desc')->where(function ($query) use ($condition) {
-
-            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $query->where('name', 'like', '%' . $condition['keyword'] . '%')
-                    ->orWhere('canonical', 'like', '%' . $condition['keyword'] . '%');
-            }
-
-            if (isset($condition['publish']) && $condition['publish'] != '-1') {
-                $query->where('publish', $condition['publish']);
-            }
-        })->with($relations);
-
-
-        if (!empty($join)) {
-            foreach ($join as $table => $constraints) {
-                $query->join($table, ...$constraints);
-            }
-        }
-        return $query->paginate($perPage)->withQueryString();
-        //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
-    }
 }

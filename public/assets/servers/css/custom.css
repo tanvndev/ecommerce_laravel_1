@@ -196,6 +196,14 @@
     transition: opacity 0.1s ease-in-out;
 }
 
+.language-item-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    margin-right: 4px;
+    border-radius: 8px;
+}
+
 .toggler input {
     display: none;
 }

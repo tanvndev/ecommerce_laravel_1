@@ -12,37 +12,27 @@
                 <div class="dropdown ms-3">
                     <button class="nav-link dropdown-toggle pulse" type="button" role="button"
                         data-bs-toggle="dropdown">
-                        <img src="{{asset('assets/servers/images/flag/GB.png')}}" alt="">
+                        @foreach ($languages as $language)
+                        @if ($language->current == 1)
+                        <img class="rounded-2 language-item-img" src="{{$language->image}}" alt="">
+                        @break
+                        @endif
+                        @endforeach
                     </button>
                     <div
                         class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                         <div class="card border-0">
-                            <ul class="list-unstyled py-2 px-3">
-                                <li>
-                                    <a href="#" class=""><img src="{{asset('assets/servers/images/flag/GB.png')}}"
-                                            alt="">
-                                        English</a>
+                            <ul class="list-unstyled py-2 px-3 mb-0 ">
+                                @foreach ($languages as $language)
+                                @if ($language->current != 1)
+                                <li class="d-flex align-items-center">
+                                    <span href="#" class="language-item-img">
+                                        <img class="language-item-img" src="{{$language->image}}" alt="">
+                                    </span>
+                                    <a class="link-body-emphasis" href="">{{$language->name}}</a>
                                 </li>
-                                <li>
-                                    <a href="#" class=""><img src="{{asset('assets/servers/images/flag/DE.png')}}"
-                                            alt="">
-                                        German</a>
-                                </li>
-                                <li>
-                                    <a href="#" class=""><img src="{{asset('assets/servers/images/flag/FR.png')}}"
-                                            alt="">
-                                        French</a>
-                                </li>
-                                <li>
-                                    <a href="#" class=""><img src="{{asset('assets/servers/images/flag/IT.png')}}"
-                                            alt="">
-                                        Italian</a>
-                                </li>
-                                <li>
-                                    <a href="#" class=""><img src="{{asset('assets/servers/images/flag/RU.png')}}"
-                                            alt="">
-                                        Russian</a>
-                                </li>
+                                @endif
+                                @endforeach
                             </ul>
                         </div>
                     </div>

@@ -75,10 +75,10 @@ class BaseRepository implements BaseRepositoryInterface
             ->relationCount($relations ?? null)
             ->customJoin($join ?? null)
             ->customGroupBy($groupBy ?? null)
-            ->customOrderBy($orderBy ?? null)
-            ->paginate($perPage)->withQueryString();
+            ->customOrderBy($orderBy ?? null);
+
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
-        return $query;
+        return $query->paginate($perPage)->withQueryString();
     }
 
     public function createPivot($model, $payload = [], $relation = '')
