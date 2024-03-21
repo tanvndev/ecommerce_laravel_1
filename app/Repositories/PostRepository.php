@@ -14,6 +14,8 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $this->model = $model;
     }
 
+
+
     public function getPostLanguageById($id = 0, $languageId = 0)
     {
         $select = [

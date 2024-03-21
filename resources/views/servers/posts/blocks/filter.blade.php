@@ -1,5 +1,6 @@
 <form action="{{ route('post.index') }}" method="get" class="form-list-filter">
 
+
     <div class="row">
         <div class="col-lg-2">
             <select class="form-select filter" name="perpage" id="">
@@ -9,17 +10,36 @@
 
             </select>
         </div>
+
         <div class="col-lg-7">
             <div class="row">
 
                 <div class="col-lg-4">
                     <select class="form-select filter" name="publish">
-                        <option selected value="-1">Chọn tình trạng</option>
+                        <option value="-1">Chọn tình trạng</option>
                         @foreach (config('apps.general.publish') as $key => $publish)
-                        <option {{ request('publish')===$key ? 'selected' : '' }} value="{{ $key }}">{{ $publish }}
+                        <option {{ request('publish')===(string)$key ? 'selected' : '' }} value="{{ $key }}">{{ $publish
+                            }}
                         </option>
                         @endforeach
                     </select>
+                </div>
+
+                <div class="col-lg-4">
+
+                    <select class="form-select filter" name="post_catalogue_id">
+
+                        <option selected value="">Chọn nhóm bài viết</option>
+
+                        @foreach ($dropdown as $key => $val)
+
+                        <option {{ request('post_catalogue_id')==(string)$key ? 'selected' : '' }} value="{{ $key }}">{{
+                            $val
+                            }}
+                        </option>
+                        @endforeach
+                    </select>
+
                 </div>
 
             </div>

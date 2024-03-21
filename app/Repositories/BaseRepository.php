@@ -62,6 +62,8 @@ class BaseRepository implements BaseRepositoryInterface
         $orderBy = ['id' => 'DESC'],
         $join = [],
         $relations = [],
+        $groupBy = [],
+        $whereRaw = [],
     ) {
         $query = $this->model->select($column)->where(function ($query) use ($condition) {
 
@@ -82,6 +84,14 @@ class BaseRepository implements BaseRepositoryInterface
             }
         });
 
+        // dd($whereRaw);
+        // $value[0] là câu truy vấn $value[1] là tham số truy vấn
+        if (isset($whereRaw['whereRaw']) && !empty($whereRaw['whereRaw'])) {
+            foreach ($whereRaw['whereRaw'] as $key => $value) {
+                $query->whereRaw($value[0], $value[1]);
+            }
+        }
+
 
         if (isset($relations) && !empty($relations)) {
             foreach ($relations as $relation) {
@@ -94,6 +104,18 @@ class BaseRepository implements BaseRepositoryInterface
         if (!empty($join)) {
             foreach ($join as $table => $constraints) {
                 $query->join($table, ...$constraints);
+            }
+        }
+
+        // 'column1' or
+        // ['column1', 'column2']
+        if (!empty($groupBy)) {
+            if (is_array($groupBy)) {
+                foreach ($groupBy as $group) {
+                    $query->groupBy($group);
+                }
+            } else {
+                $query->groupBy($groupBy);
             }
         }
 

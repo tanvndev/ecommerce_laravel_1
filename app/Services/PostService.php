@@ -33,8 +33,9 @@ class PostService extends BaseService implements PostServiceInterface
     {
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
+        $condition['post_catalogue_id'] = request('post_catalogue_id');
         $condition['where'] = [
-            'tb2.language_id' => $this->currentLanguage
+            'tb2.language_id' => $this->currentLanguage,
         ];
 
         $select = [
@@ -47,7 +48,8 @@ class PostService extends BaseService implements PostServiceInterface
             'tb2.canonical',
         ];
         $join = [
-            'post_language as tb2' => ['tb2.post_id', '=', 'posts.id']
+            'post_language as tb2' => ['tb2.post_id', '=', 'posts.id'],
+            'post_catalogue_post as tb3' => ['tb3.post_id', '=', 'posts.id'],
         ];
         $orderBy = [];
 
@@ -58,7 +60,10 @@ class PostService extends BaseService implements PostServiceInterface
             request('perpage'),
             $orderBy,
             $join,
-            ['post_catalogues']
+            ['post_catalogues'],
+            $select,
+            $this->whereRaw()
+
         );
         // dd($posts);
 
@@ -95,8 +100,6 @@ class PostService extends BaseService implements PostServiceInterface
             return false;
         }
     }
-
-
 
 
     function update($id)
@@ -171,6 +174,26 @@ class PostService extends BaseService implements PostServiceInterface
         $catalogue = $this->catalogue();
         // Đồng bộ hoá id catalogue với bảng post_catalogue_post
         $post->post_catalogues()->sync($catalogue);
+    }
+
+    private function whereRaw()
+    {
+        $rawConditions = [];
+        $post_catalogue_id = request('post_catalogue_id');
+        if ($post_catalogue_id > 0) {
+            $rawConditions['whereRaw'] = [
+                [
+                    'tb3.post_catalogue_id IN (
+                        SELECT id 
+                        FROM post_catalogues
+                        WHERE `left` >= (SELECT `left` FROM post_catalogues as pc WHERE pc.id = ?)
+                        AND `right` <= (SELECT `right` FROM post_catalogues as pc WHERE pc.id = ?)
+                    )',
+                    [$post_catalogue_id, $post_catalogue_id]
+                ]
+            ];
+        }
+        return $rawConditions;
     }
 
     function destroy($id)

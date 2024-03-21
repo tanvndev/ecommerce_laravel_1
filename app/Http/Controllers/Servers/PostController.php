@@ -44,10 +44,13 @@ class PostController extends Controller
         // dd($posts);
         $config['seo'] = config('apps.post')['index'];
 
+        // Danh mục cha
+        $dropdown = $this->nestedset->Dropdown();
 
         return view('servers.posts.index', compact([
             'posts',
-            'config'
+            'config',
+            'dropdown',
         ]));
     }
 

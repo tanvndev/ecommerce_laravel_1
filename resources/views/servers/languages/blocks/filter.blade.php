@@ -16,7 +16,8 @@
                     <select class="form-select filter" name="publish">
                         <option selected value="-1">Chọn tình trạng</option>
                         @foreach (config('apps.general.publish') as $key => $publish)
-                        <option {{ request('publish')===$key ? 'selected' : '' }} value="{{ $key }}">{{ $publish }}
+                        <option {{ request('publish')===(string)$key ? 'selected' : '' }} value="{{ $key }}">{{ $publish
+                            }}
                         </option>
                         @endforeach
                     </select>

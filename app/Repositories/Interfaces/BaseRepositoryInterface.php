@@ -18,6 +18,8 @@ interface BaseRepositoryInterface
         $orderBy = [],
         $join = [],
         $relations = [],
+        $groupBy = [],
+        $whereRaw = [],
     );
     public function createPivot($model, $payload = [], $relation = '');
 }
