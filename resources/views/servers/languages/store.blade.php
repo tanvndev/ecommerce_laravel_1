@@ -48,24 +48,27 @@ $url = $config['method'] == 'create' ? route('language.store') : route('language
 
                     <div class="card mb-3 card-create">
                         <div class="card-header py-3 bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Thông tin chung</h6>
-                            <small>Lưu ý: <span class="text-danger">(*)</span> là các trường bắt buộc.</small>
+                            <h6 class="mb-0 fw-bold ">{{__('messages.generalInfomation')}}</h6>
+                            <small>{{__('messages.noteNotice')[0]}} <span class="text-danger">(*)</span>
+                                {{__('messages.noteNotice')[1]}}</small>
                         </div>
                         <div class="card-body">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-6">
-                                    <label class="form-label">Tên ngôn ngữ <span class="text-danger">(*)</span></label>
+                                    <label class="form-label">{{__('messages.language.table.name')}} <span
+                                            class="text-danger">(*)</span></label>
                                     <input type="text" name="name" value="{{old('name', $language->name ?? '')}}"
                                         class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Canonical <span class="text-danger">(*)</span></label>
+                                    <label class="form-label">{{__('messages.canonical')}} <span
+                                            class="text-danger">(*)</span></label>
                                     <input type="text" name="canonical"
                                         value="{{old('canonical', $language->canonical ?? '')}}" class="form-control">
                                 </div>
 
                                 <div class="col-md-12">
-                                    <label class="form-label">Ảnh</label>
+                                    <label class="form-label">{{__('messages.image')}}</label>
                                     <input readonly type="text" name="image" data-type="Images"
                                         value="{{old('image', $language->image ?? '')}}"
                                         class="form-control upload-image">

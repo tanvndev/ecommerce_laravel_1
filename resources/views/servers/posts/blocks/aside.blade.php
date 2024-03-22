@@ -2,12 +2,12 @@
     <div class="sticky-lg-top">
         <div class="card mb-3 card-create">
             <div class="card-header py-3 bg-transparent border-bottom-0">
-                <h6 class="m-0 fw-bold">Danh mục cha</h6>
-                {{-- <small class="text-danger ">*Chọn root nếu không có danh mục cha</small> --}}
+                <h6 class="m-0 fw-bold">{{__('messages.parentId')}}</h6>
+                <small class="text-danger ">*{{__('messages.parentIdNotice')}}</small>
             </div>
             <div class="card-body">
                 <div class="mb-3 ">
-                    <label class="form-label">Danh mục cha</label>
+                    <label class="form-label">{{__('messages.parentId')}}</label>
                     <select class="form-select init-select2" name="post_catalogue_id">
                         @foreach ($dropdown as $key => $val)
                         <option {{ $key==old('post_catalogue_id', isset($post->post_catalogue_id) ?
@@ -25,7 +25,7 @@
                 @endphp
 
                 <div>
-                    <label class="form-label">Danh mục phụ</label>
+                    <label class="form-label">{{__('messages.catalogueSub')}}</label>
                     <select class="form-select init-select2" multiple name="catalogue[]">
                         @foreach ($dropdown as $key => $val)
                         @php
@@ -48,19 +48,17 @@
         <div class="card mb-3 card-create">
             <div
                 class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                <h6 class="m-0 fw-bold">Cấu hình nâng cao</h6>
+                <h6 class="m-0 fw-bold">{{__('messages.advance')}}</h6>
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">Tình trạng</label>
+                    <label class="form-label">{{__('messages.publish')}}</label>
 
                     <select class="form-select init-select2" name="publish">
-                        <option selected value="-1">Chọn tình trạng</option>
-                        @foreach (config('apps.general.publish') as $key => $publish)
+                        @foreach (__('messages.general.publish') as $key => $publish)
 
-                        <option {{ $key==old('publish', isset($post->publish) ?
-                            $post->publish : '') ? 'selected' : '' }} value="{{
-                            $key }}">{{
+                        <option {{ $key==old('publish', isset($postCatalogue->publish) ?
+                            $postCatalogue->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
                             $publish }}
                         </option>
                         @endforeach
@@ -68,13 +66,11 @@
                 </div>
 
                 <div>
-                    <label class="form-label">Điều hướng</label>
+                    <label class="form-label">{{__('messages.follow')}}</label>
                     <select class="form-select init-select2" name="follow">
-                        <option selected value="-1">Chọn điều hướng</option>
-                        @foreach (config('apps.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($post->follow) ?
-                            $post->follow : '') ? 'selected' : '' }} value="{{ $key
-                            }}">{{
+                        @foreach (__('messages.general.follow') as $key => $follow)
+                        <option {{ $key==old('follow', isset($postCatalogue->follow) ?
+                            $postCatalogue->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
                             $follow }}
                         </option>
                         @endforeach
@@ -86,7 +82,7 @@
         <div class="card mb-3">
             <div
                 class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                <h6 class="m-0 fw-bold">Ảnh đại diện</h6>
+                <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
             </div>
             <div class="card-body">
                 <img class="img-thumbnail h-250 w-100 img-contain img-target"

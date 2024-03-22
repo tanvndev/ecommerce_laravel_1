@@ -1,8 +1,5 @@
 @extends('layouts.serverLayout')
 
-
-
-
 @section('content')
 @php
 $url = $config['method'] == 'create' ? route('user.catalogue.store') : route('user.catalogue.update',
@@ -45,19 +42,20 @@ $userCatalogue->id);
 
                     <div class="card mb-3 card-create">
                         <div class="card-header py-3 bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Thông tin chung</h6>
-                            <small>Lưu ý: <span class="text-danger">(*)</span> là các trường bắt buộc.</small>
+                            <h6 class="mb-0 fw-bold ">{{__('messages.generalInfomation')}}</h6>
+                            <small>{{__('messages.noteNotice')[0]}} <span class="text-danger">(*)</span>
+                                {{__('messages.noteNotice')[1]}}</small>
                         </div>
                         <div class="card-body">
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-6">
-                                    <label class="form-label">Tên nhóm thành viên <span
+                                    <label class="form-label">{{__('messages.userCatalogue.table.name')}} <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name" value="{{old('name', $userCatalogue->name ?? '')}}"
                                         class="form-control">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Mô tả</label>
+                                    <label class="form-label">{{__('messages.description')}}</label>
                                     <input type="text" name="description"
                                         value="{{old('description', $userCatalogue->description ?? '')}}"
                                         class="form-control">

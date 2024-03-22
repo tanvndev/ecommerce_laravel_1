@@ -5,7 +5,7 @@
         <div class="col-lg-2">
             <select class="form-select filter" name="perpage" id="">
                 @for ($i = 20; $i <= 200; $i+=20) <option {{ request('perpage')==$i ? 'selected' : '' }} value="{{$i}}">
-                    {{$i}} bản ghi</option>
+                    {{$i}} {{__('messages.perpage')}}</option>
                     @endfor
 
             </select>
@@ -16,8 +16,7 @@
 
                 <div class="col-lg-4">
                     <select class="form-select filter" name="publish">
-                        <option value="-1">Chọn tình trạng</option>
-                        @foreach (config('apps.general.publish') as $key => $publish)
+                        @foreach (__('messages.general.publish') as $key => $publish)
                         <option {{ request('publish')===(string)$key ? 'selected' : '' }} value="{{ $key }}">{{ $publish
                             }}
                         </option>
@@ -29,7 +28,7 @@
 
                     <select class="form-select filter" name="post_catalogue_id">
 
-                        <option selected value="">Chọn nhóm bài viết</option>
+                        <option selected value="">{{__('messages.postCatalogue')}}</option>
 
                         @foreach ($dropdown as $key => $val)
 
@@ -48,7 +47,8 @@
             <div class="d-flex ">
                 <div class="w-75 ">
                     <input type="text" class="form-control" name="keyword"
-                        value="{{ request('keyword') ?: old('keyword') }}" placeholder="Tìm kiếm..." />
+                        value="{{ request('keyword') ?: old('keyword') }}"
+                        placeholder="{{__('messages.keywordPlaceholder')}}..." />
                 </div>
                 <div class="ms-2 w-25">
                     <button type="submit" class="btn btn-success w-100 text-white ">

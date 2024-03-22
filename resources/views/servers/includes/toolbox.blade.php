@@ -9,13 +9,11 @@
                 <ul class="list-unstyled py-2 px-3">
                     <li>
                         <a href="#" class="change-status-all" data-model="{{$model}}" data-value="1"
-                            data-field="publish">Xuất
-                            bản toàn bộ </a>
+                            data-field="publish">{{__('messages.publishAll')}} </a>
                     </li>
                     <li>
                         <a href="#" class="change-status-all" data-model="{{$model}}" data-value="0"
-                            data-field="publish">Huỷ
-                            xuất bản toàn bộ</a>
+                            data-field="publish">{{__('messages.unpublishAll')}}</a>
                     </li>
                 </ul>
             </div>

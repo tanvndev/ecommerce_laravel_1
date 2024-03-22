@@ -6,11 +6,11 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>Tên nhóm thành viên</th>
-            <th>Số thành viên</th>
-            <th>Mô tả</th>
-            <th>Tình trạng</th>
-            <th>Thực thi</th>
+            <th>{{__('messages.userCatalogue.table.name')}}</th>
+            <th>{{__('messages.userCatalogue.table.countUser')}}</th>
+            <th>{{__('messages.tableDescription')}}</th>
+            <th>{{__('messages.tableStatus')}}</th>
+            <th>{{__('messages.tableAction')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +25,7 @@
                 {{ $userCatalogue->name}}
             </td>
             <td>
-                {{ $userCatalogue->users_count}} người
+                {{ $userCatalogue->users_count}} {{__('messages.person')}}
             </td>
             <td>
                 {{ $userCatalogue->description}}
@@ -77,12 +77,8 @@
                 </div>
             </div>
             <div class="modal-body text-center ">
-                <h6 class="fw-bold ">Bạn có chắc không! Muốn xóa bản ghi này?
-                </h6>
-                <p class="fs-13 mb-1 mt-3 ">Bạn có thực sự muốn xóa những bản ghi này? Bạn không thể khôi phục bản ghi
-                    trong
-                    danh
-                    sách của mình nữa nếu bạn xóa!</p>
+                <h6 class="fw-bold ">{{__('messages.deleteModalTitle')}}</h6>
+                <p class="fs-13 mb-1 mt-3 ">{{__('messages.deleteModalDescription')}}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 "

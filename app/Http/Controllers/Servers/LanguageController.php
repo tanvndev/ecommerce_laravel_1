@@ -29,11 +29,10 @@ class LanguageController extends Controller
     //
     function index()
     {
+
         $languages = $this->languageService->paginate();
         // dd($languages);
         $config['seo'] = config('apps.language')['index'];
-
-
         return view('servers.languages.index', compact([
             'languages',
             'config'
@@ -51,10 +50,14 @@ class LanguageController extends Controller
 
     public function store(StoreLanguageRequest $request)
     {
+        $successMessage = $this->getLanguageMessage('success', 'create');
+        $errorMessage = $this->getLanguageMessage('error', 'create');
+
         if ($this->languageService->create()) {
-            return redirect()->route('language.index')->with('toast_success', 'Tạo ngôn ngữ mới thành công.');
+            return redirect()->route('language.index')->with('toast_success', $successMessage);
         }
-        return redirect()->route('language.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+
+        return redirect()->route('language.create')->with('toast_error', $errorMessage);
     }
 
     public function edit($id)
@@ -80,20 +83,23 @@ class LanguageController extends Controller
      */
     public function update(UpdateLanguageRequest $request, $id)
     {
+        $successMessage = $this->getLanguageMessage('success', 'update');
+        $errorMessage = $this->getLanguageMessage('error', 'update');
+
         // Lấy giá trị sesson
         $idLanguage = session('_id');
         if (empty($idLanguage)) {
-            return redirect()->route('language.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+            return redirect()->route('language.index')->with('toast_error', $errorMessage);
         }
 
         if ($this->languageService->update($idLanguage)) {
             // Xoá giá trị sesson
             session()->forget('_id');
-            return redirect()->route('language.index')->with('toast_success', 'Cập nhập ngôn ngữ thành công.');
+            return redirect()->route('language.index')->with('toast_success',  $successMessage);
         }
         // Xoá giá trị sesson
         session()->forget('_id');
-        return redirect()->route('language.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('language.create')->with('toast_error', $errorMessage);
     }
 
     /**
@@ -101,23 +107,35 @@ class LanguageController extends Controller
      */
     public function destroy(Request $request)
     {
+        $successMessage = $this->getLanguageMessage('success', 'delete');
+        $errorMessage = $this->getLanguageMessage('error', 'delete');
+
         if ($request->_id == null) {
-            return redirect()->route('language.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
+            return redirect()->route('language.index')->with('toast_error', $errorMessage);
         }
         if ($this->languageService->destroy($request->_id)) {
-            return redirect()->route('language.index')->with('toast_success', 'Xoá ngôn ngữ thành công.');
+            return redirect()->route('language.index')->with('toast_success',  $successMessage);
         }
-        return redirect()->route('language.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('language.index')->with('toast_error', $errorMessage);
+    }
+
+    private function getLanguageMessage($key, $action)
+    {
+        $configMessage = __('messages.language.' . $action);
+        return $configMessage[$key] ?? null;
     }
 
     public function switchServerLanguage($canonical)
     {
+        $successMessage = $this->getLanguageMessage('success', 'index');
+        $errorMessage = $this->getLanguageMessage('error', 'index');
+
         if ($this->languageService->switch($canonical)) {
             // Lưu giá trị 'locale' vào session để giữ trạng thái ngôn ngữ khi người dùng truy cập các trang khác rồi sẽ dùng middleware để xử lý ngôn ngữ
             session(['locale' => $canonical]);
 
-            return redirect()->back()->with('toast_success', 'Thay đổi ngôn ngữ thành công.');
+            return redirect()->back()->with('toast_success', $successMessage);
         }
-        return redirect()->back()->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->back()->with('toast_error', $errorMessage);
     }
 }

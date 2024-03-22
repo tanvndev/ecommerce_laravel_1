@@ -1,7 +1,8 @@
 <div class="card mb-3 card-create">
     <div class="card-header py-3 bg-transparent border-bottom-0">
         <h6 class="mb-0 fw-bold ">Cấu hình SEO</h6>
-        <small>Lưu ý: <span class="text-danger">(*)</span> là các trường bắt buộc.</small>
+        <small>{{__('messages.noteNotice')[0]}} <span class="text-danger">(*)</span>
+            {{__('messages.noteNotice')[1]}}</small>
 
         <div class="seo-view">
             <span class="link text-success meta-url">{{ url('/') . '/' . old('canonical', $post->canonical ??
