@@ -42,7 +42,7 @@ class PostCatalogueController extends Controller
     {
         $postCatalogues = $this->postCatalogueService->paginate();
         // dd($postCatalogues);
-        $config['seo'] = config('apps.post_catalogue')['index'];
+        $config['seo'] = __('messages.postCatalogue')['index'];
 
 
         return view('servers.post_catalogues.index', compact([
@@ -53,7 +53,7 @@ class PostCatalogueController extends Controller
 
     function create()
     {
-        $config['seo'] = config('apps.post_catalogue')['create'];
+        $config['seo'] = __('messages.postCatalogue')['create'];
         $config['method'] = 'create';
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
@@ -85,7 +85,7 @@ class PostCatalogueController extends Controller
         // dd($postCatalogue);
 
 
-        $config['seo'] = config('apps.post_catalogue')['update'];
+        $config['seo'] = __('messages.postCatalogue')['update'];
         $config['method'] = 'update';
 
         return view('servers.post_catalogues.store', compact([

@@ -23,8 +23,8 @@ $userCatalogue->id);
                     <div
                         class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                         <h3 class="fw-bold mb-0">{{$config['seo']['title']}}</h3>
-                        <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">Lưu
-                            lại</button>
+                        <button type="submit"
+                            class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}
                     </div>
                 </div>
             </div> <!-- Row end  -->

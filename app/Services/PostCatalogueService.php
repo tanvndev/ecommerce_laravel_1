@@ -34,7 +34,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
         $condition['where'] = [
-            'tb2.language_id' => $this->currentLanguage
+            'tb2.language_id' => ['=', $this->currentLanguage]
         ];
 
         $select = [

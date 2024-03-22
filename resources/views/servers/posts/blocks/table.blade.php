@@ -97,13 +97,14 @@
                     sách của mình nữa nếu bạn xóa!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary px-4 py-2 " data-bs-dismiss="modal">Huỷ
-                    bỏ</button>
+                <button type="button" class="btn btn-outline-secondary px-4 py-2 "
+                    data-bs-dismiss="modal">{{__('messages.cancelButton')}}</button>
                 <form action="{{route('post.destroy')}}" method="post">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="_id" id="_id">
-                    <button type="submit" class="btn btn-success text-white px-4 py-2">Đồng ý</button>
+                    <button type="submit"
+                        class="btn btn-success text-white px-4 py-2">{{__('messages.agreeButton')}}</button>
                 </form>
             </div>
         </div>

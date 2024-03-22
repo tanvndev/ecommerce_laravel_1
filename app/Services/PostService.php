@@ -35,7 +35,7 @@ class PostService extends BaseService implements PostServiceInterface
         $condition['publish'] = request('publish');
         $condition['post_catalogue_id'] = request('post_catalogue_id');
         $condition['where'] = [
-            'tb2.language_id' => $this->currentLanguage,
+            'tb2.language_id' => ['=', $this->currentLanguage],
         ];
 
         $select = [
