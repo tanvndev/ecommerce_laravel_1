@@ -9,7 +9,7 @@
         <!-- Menu: main ul -->
         <ul class="menu-list flex-grow-1 mt-3">
 
-            @foreach (config('apps.module.module.sidebar') as $menuItem)
+            @foreach (__('sidebar.module') as $menuItem)
             @php
             $hasSubMenu = isset($menuItem['subMenu']) && count($menuItem['subMenu']) > 0;
             $isActive = request()->routeIs($menuItem['activeCondition']);

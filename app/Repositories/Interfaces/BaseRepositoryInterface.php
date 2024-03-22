@@ -9,6 +9,7 @@ interface BaseRepositoryInterface
     public function create($payload = []);
     public function update($modelId, $payload = []);
     public function updateByWhereIn($whereInField = '', $whereIn = [], $payload = []);
+    public function updateByWhere($condition = [], $payload = []);
     public function delete($modelId);
     public function forceDelete($modelId);
     public function pagination(

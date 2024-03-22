@@ -28,70 +28,74 @@ use App\Http\Controllers\Servers\{
 */
 
 
+Route::middleware(['admin', 'locale'])->group(function () {
+    // Routes for Dashboard
+    Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // Routes for User
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('index', [UserController::class, 'index'])->name('index');
+        Route::get('create', [UserController::class, 'create'])->name('create');
+        Route::post('store', [UserController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [UserController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for UserCatalogue
+    Route::prefix('user/catalogue')->name('user.catalogue.')->group(function () {
+        Route::get('index', [UserCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [UserCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [UserCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [UserCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [UserCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [UserCatalogueController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for Languages
+    Route::prefix('language')->name('language.')->group(function () {
+        Route::get('index', [LanguageController::class, 'index'])->name('index');
+        Route::get('create', [LanguageController::class, 'create'])->name('create');
+        Route::post('store', [LanguageController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [LanguageController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
+        Route::get('{canonical}/switch', [LanguageController::class, 'switchServerLanguage'])->name('switch');
+    });
 
 
-// Routes for Admin
-Route::get('dashboard/index', [DashboardController::class, 'index'])->middleware('admin')->name('dashboard.index');
+    // Routes for Post
+    Route::prefix('post')->name('post.')->group(function () {
+        Route::get('index', [PostController::class, 'index'])->name('index');
+        Route::get('create', [PostController::class, 'create'])->name('create');
+        Route::post('store', [PostController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PostController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [PostController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [PostController::class, 'destroy'])->name('destroy');
+    });
 
-// Routes for User
-Route::prefix('user')->name('user.')->middleware('admin')->group(function () {
-    Route::get('index', [UserController::class, 'index'])->name('index');
-    Route::get('create', [UserController::class, 'create'])->name('create');
-    Route::post('store', [UserController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-    Route::put('/{id}/update', [UserController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-    Route::delete('destroy', [UserController::class, 'destroy'])->name('destroy');
+
+
+    // Routes for PostCatalogue
+    Route::prefix('post/catalogue')->name('post.catalogue.')->group(function () {
+        Route::get('index', [PostCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [PostCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [PostCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PostCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [PostCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [PostCatalogueController::class, 'destroy'])->name('destroy');
+    });
+
+
+
+    // Route for Ajax
+    Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
+    Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
+    Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
 });
 
-// Routes for UserCatalogue
-Route::prefix('user/catalogue')->name('user.catalogue.')->middleware('admin')->group(function () {
-    Route::get('index', [UserCatalogueController::class, 'index'])->name('index');
-    Route::get('create', [UserCatalogueController::class, 'create'])->name('create');
-    Route::post('store', [UserCatalogueController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [UserCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-    Route::put('/{id}/update', [UserCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-    Route::delete('destroy', [UserCatalogueController::class, 'destroy'])->name('destroy');
-});
-
-// Routes for Languages
-Route::prefix('language')->name('language.')->middleware('admin')->group(function () {
-    Route::get('index', [LanguageController::class, 'index'])->name('index');
-    Route::get('create', [LanguageController::class, 'create'])->name('create');
-    Route::post('store', [LanguageController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [LanguageController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-    Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-    Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
-});
 
 
-// Routes for Post
-Route::prefix('post')->name('post.')->middleware('admin')->group(function () {
-    Route::get('index', [PostController::class, 'index'])->name('index');
-    Route::get('create', [PostController::class, 'create'])->name('create');
-    Route::post('store', [PostController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [PostController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-    Route::put('/{id}/update', [PostController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-    Route::delete('destroy', [PostController::class, 'destroy'])->name('destroy');
-});
-
-
-
-// Routes for PostCatalogue
-Route::prefix('post/catalogue')->name('post.catalogue.')->middleware('admin')->group(function () {
-    Route::get('index', [PostCatalogueController::class, 'index'])->name('index');
-    Route::get('create', [PostCatalogueController::class, 'create'])->name('create');
-    Route::post('store', [PostCatalogueController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [PostCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-    Route::put('/{id}/update', [PostCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-    Route::delete('destroy', [PostCatalogueController::class, 'destroy'])->name('destroy');
-});
-
-
-
-// Route for Ajax
-Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->middleware('admin')->name('ajax.location.getLocation');
-Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
-Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
 
 
 // Route::post('/user/do-create', [UserController::class, 'create'])->middleware('admin')->name('user.index');

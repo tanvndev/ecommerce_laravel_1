@@ -23,11 +23,10 @@ trait QueryScopes
 
     public function scopeCustomWhere($query, $where = [])
     {
-        // 'column' => 'value',
         // 'column' => ['<>', 100]
         if (!empty($where) && is_array($where)) {
             foreach ($where as $column => $value) {
-                $query->where($column, $value);
+                $query->where($column, ...$value);
             }
         }
         return $query;

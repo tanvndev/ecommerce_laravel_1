@@ -31,8 +31,8 @@ class BaseRepository implements BaseRepositoryInterface
     }
     public function update($modelId, $payload = [])
     {
-        $update = $this->findById($modelId);
-        return $update->update($payload);
+        $model = $this->findById($modelId);
+        return $model->update($payload);
     }
 
     // Truyen vao ham updateByWhereIn (Field name, array field name, va mang data can update)
@@ -40,6 +40,12 @@ class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model->whereIn($whereInField, $whereIn)->update($payload);
     }
+    public function updateByWhere($conditions = [], $payload = [])
+    {
+        $query = $this->model->newQuery();
+        return  $query->customWhere($conditions)->update($payload);
+    }
+
 
     public function delete($modelId)
     {

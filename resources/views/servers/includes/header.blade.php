@@ -26,10 +26,11 @@
                                 @foreach ($languages as $language)
                                 @if ($language->current != 1)
                                 <li class="d-flex align-items-center">
-                                    <span href="#" class="language-item-img">
+                                    <span class="language-item-img">
                                         <img class="language-item-img" src="{{$language->image}}" alt="">
                                     </span>
-                                    <a class="link-body-emphasis" href="">{{$language->name}}</a>
+                                    <a class="link-body-emphasis"
+                                        href="{{route('language.switch', $language->canonical)}}">{{$language->name}}</a>
                                 </li>
                                 @endif
                                 @endforeach

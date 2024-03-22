@@ -11,8 +11,7 @@ use App\Http\Requests\{
 
 use App\Services\Interfaces\LanguageServiceInterface as LanguageService;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
-
-
+use Illuminate\Support\Facades\Config;
 
 class LanguageController extends Controller
 {
@@ -109,5 +108,16 @@ class LanguageController extends Controller
             return redirect()->route('language.index')->with('toast_success', 'Xoá ngôn ngữ thành công.');
         }
         return redirect()->route('language.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+    }
+
+    public function switchServerLanguage($canonical)
+    {
+        if ($this->languageService->switch($canonical)) {
+            // Lưu giá trị 'locale' vào session để giữ trạng thái ngôn ngữ khi người dùng truy cập các trang khác rồi sẽ dùng middleware để xử lý ngôn ngữ
+            session(['locale' => $canonical]);
+
+            return redirect()->back()->with('toast_success', 'Thay đổi ngôn ngữ thành công.');
+        }
+        return redirect()->back()->with('toast_error', 'Có lỗi vui lòng thử lại.');
     }
 }

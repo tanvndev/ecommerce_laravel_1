@@ -20,6 +20,7 @@ class Language extends Model
         'image',
         'publish',
         'user_id',
+        'current',
         'deleted_at',
     ];
 

@@ -6,7 +6,6 @@ use App\Services\Interfaces\LanguageServiceInterface;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class LanguageService implements LanguageServiceInterface
 {
@@ -129,6 +128,23 @@ class LanguageService implements LanguageServiceInterface
                 DB::rollBack();
                 return false;
             }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function switch($canonical)
+    {
+        DB::beginTransaction();
+        try {
+            // Update ngôn ngữ vừa chọn thành 1 và chuyển tất cả ngon ngữ còn lại thành 0
+            $this->languageRepository->updateByWhere(['canonical' => ['=', $canonical]], ['current' => 1]);
+            $this->languageRepository->updateByWhere(['canonical' => ['<>', $canonical]], ['current' => 0]);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

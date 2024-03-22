@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         // Register
         'admin' => \App\Http\Middleware\AuthenticateMiddleware::class,
         'logged' => \App\Http\Middleware\LoggedMiddleware::class,
+        'locale' => \App\Http\Middleware\SetLocale::class,
     ];
 }
