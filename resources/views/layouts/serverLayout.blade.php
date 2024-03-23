@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <div id="current-language" data-current-language="{{ app()->getLocale() }}"></div>
     <div id="ebazar-layout" class="theme-blue">
 
         <!-- sidebar -->
@@ -23,8 +24,6 @@
             @yield('content')
 
         </div>
-
-
         <!-- Modal Custom Settings-->
         @include('servers.includes.customSetting')
 

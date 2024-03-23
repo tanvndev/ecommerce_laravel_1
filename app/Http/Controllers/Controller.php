@@ -10,8 +10,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function currentLanguage()
+    protected function currentLanguage()
     {
         return 1;
+    }
+
+    protected function getPermissionMessage($key, $action)
+    {
+        $configMessage = __('messages.permission.' . $action);
+        return $configMessage[$key] ?? null;
     }
 }

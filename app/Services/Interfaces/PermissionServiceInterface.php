@@ -2,11 +2,7 @@
 
 namespace App\Services\Interfaces;
 
-/**
- * Interface UserCatalogueServiceInterface
- * @package App\Services\Interfaces
- */
-interface UserCatalogueServiceInterface
+interface PermissionServiceInterface
 {
     public function paginate();
     public function create();
@@ -14,5 +10,5 @@ interface UserCatalogueServiceInterface
     public function destroy($id);
     public function updateStatus();
     public function updateStatusAll();
-    public function setPermission();
+    public function switch($id);
 }

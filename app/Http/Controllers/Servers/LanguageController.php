@@ -11,7 +11,6 @@ use App\Http\Requests\{
 
 use App\Services\Interfaces\LanguageServiceInterface as LanguageService;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
-use Illuminate\Support\Facades\Config;
 
 class LanguageController extends Controller
 {
@@ -29,10 +28,11 @@ class LanguageController extends Controller
     //
     function index()
     {
+        $this->authorize('modules', 'language.index');
 
         $languages = $this->languageService->paginate();
         // dd($languages);
-        $config['seo'] = config('apps.language')['index'];
+        $config['seo'] = __('messages.language')['index'];
         return view('servers.languages.index', compact([
             'languages',
             'config'
@@ -41,7 +41,9 @@ class LanguageController extends Controller
 
     function create()
     {
-        $config['seo'] = config('apps.language')['create'];
+        $this->authorize('modules', 'language.create');
+
+        $config['seo'] = __('messages.language')['create'];
         $config['method'] = 'create';
         return view('servers.languages.store', compact([
             'config',
@@ -62,6 +64,7 @@ class LanguageController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('modules', 'language.edit');
 
         // Gán id vào sesson
         session(['_id' => $id]);
@@ -69,7 +72,7 @@ class LanguageController extends Controller
         // dd($language);
 
 
-        $config['seo'] = config('apps.language')['update'];
+        $config['seo'] = __('messages.language')['update'];
         $config['method'] = 'update';
 
         return view('servers.languages.store', compact([
@@ -107,6 +110,7 @@ class LanguageController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('modules', 'language.destroy');
         $successMessage = $this->getLanguageMessage('success', 'delete');
         $errorMessage = $this->getLanguageMessage('error', 'delete');
 
@@ -117,12 +121,6 @@ class LanguageController extends Controller
             return redirect()->route('language.index')->with('toast_success',  $successMessage);
         }
         return redirect()->route('language.index')->with('toast_error', $errorMessage);
-    }
-
-    private function getLanguageMessage($key, $action)
-    {
-        $configMessage = __('messages.language.' . $action);
-        return $configMessage[$key] ?? null;
     }
 
     public function switchServerLanguage($canonical)

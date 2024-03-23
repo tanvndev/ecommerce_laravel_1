@@ -9,7 +9,6 @@ use App\Http\Requests\{
     UpdatePostCatalogueRequest,
     DeletePostCatalogueRequest
 };
-
 use App\Services\Interfaces\PostCatalogueServiceInterface as PostCatalogueService;
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 
@@ -40,6 +39,8 @@ class PostCatalogueController extends Controller
     //
     function index()
     {
+        $this->authorize('modules', 'post.catalogue.index');
+
         $postCatalogues = $this->postCatalogueService->paginate();
         $config['seo'] = __('messages.postCatalogue')['index'];
 
@@ -52,6 +53,8 @@ class PostCatalogueController extends Controller
 
     function create()
     {
+        $this->authorize('modules', 'post.catalogue.create');
+
         $config['seo'] = __('messages.postCatalogue')['create'];
         $config['method'] = 'create';
         // Danh mục cha
@@ -73,6 +76,7 @@ class PostCatalogueController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('modules', 'post.catalogue.edit');
 
         // Gán id vào sesson
         session(['_id' => $id]);
@@ -121,6 +125,8 @@ class PostCatalogueController extends Controller
      */
     public function destroy(DeletePostCatalogueRequest $request)
     {
+        $this->authorize('modules', 'post.catalogue.destroy');
+
         if ($request->_id == null) {
             return redirect()->route('post.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
         }

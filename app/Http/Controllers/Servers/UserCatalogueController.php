@@ -10,27 +10,36 @@ use App\Http\Requests\{
 };
 use App\Services\Interfaces\UserCatalogueServiceInterface as UserCatalogueService;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
+use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepository;
+
 
 
 
 class UserCatalogueController extends Controller
 {
     protected $userCatalogueService;
-    protected $userRepository;
+    protected $userCatalogueRepository;
+    protected $permissionRepository;
+
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         UserCatalogueService $userCatalogueService,
-        UserCatalogueRepository $userRepository,
+        UserCatalogueRepository $userCatalogueRepository,
+        PermissionRepository $permissionRepository
+
     ) {
         $this->userCatalogueService = $userCatalogueService;
-        $this->userRepository = $userRepository;
+        $this->userCatalogueRepository = $userCatalogueRepository;
+        $this->permissionRepository = $permissionRepository;
     }
     //
     function index()
     {
+        $this->authorize('modules', 'user.catalogue.index');
+
         $userCatalogues = $this->userCatalogueService->paginate();
-        $config['seo'] = config('apps.user_catalogue')['index'];
+        $config['seo'] = __('messages.userCatalogue')['index'];
 
         return view('servers.user_catalogues.index', compact([
             'userCatalogues',
@@ -40,7 +49,9 @@ class UserCatalogueController extends Controller
 
     function create()
     {
-        $config['seo'] = config('apps.user_catalogue')['create'];
+        $this->authorize('modules', 'user.catalogue.create');
+
+        $config['seo'] = __('messages.userCatalogue')['create'];
         $config['method'] = 'create';
         return view('servers.user_catalogues.store', compact([
             'config',
@@ -58,14 +69,15 @@ class UserCatalogueController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('modules', 'user.catalogue.edit');
 
         // Gán id vào sesson
         session(['_id' => $id]);
         // Lấy ra các tỉnh thành
-        $userCatalogue = $this->userRepository->findById($id);
+        $userCatalogue = $this->userCatalogueRepository->findById($id);
         // dd($user);
 
-        $config['seo'] = config('apps.user_catalogue')['update'];
+        $config['seo'] = __('messages.userCatalogue')['update'];
         $config['method'] = 'update';
 
         return view('servers.user_catalogues.store', compact([
@@ -100,6 +112,8 @@ class UserCatalogueController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('modules', 'user.catalogue.destroy');
+
         if ($request->_id == null) {
             return redirect()->route('user.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
         }
@@ -108,5 +122,26 @@ class UserCatalogueController extends Controller
             return redirect()->route('user.catalogue.index')->with('toast_success', 'Xoá thành viên thành công.');
         }
         return redirect()->route('user.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+    }
+
+    public function permission()
+    {
+        $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
+        $permissions = $this->permissionRepository->all();
+
+        $config['seo'] = __('messages.userCatalogue')['permission'];
+
+        return view('servers.user_catalogues.permission', compact([
+            'config',
+            'userCatalogues',
+            'permissions',
+        ]));
+    }
+    public function updatePermission(Request $request)
+    {
+        if ($this->userCatalogueService->setPermission()) {
+            return redirect()->route('user.catalogue.permission')->with('toast_success', 'Cập nhập quyền thành công.');
+        }
+        return redirect()->route('user.catalogue.permission')->with('toast_error', 'Cập nhập quyền thất bại.');
     }
 }

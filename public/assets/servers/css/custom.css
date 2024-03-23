@@ -16,6 +16,10 @@
 .table-list-info p {
     margin-bottom: 3px;
 }
+.check-permission {
+    width: 2em;
+    height: 2em;
+}
 
 .form-list-filter .form-control,
 .form-list-filter .form-select {

@@ -4,6 +4,7 @@ if (typeof jQuery === "undefined") {
 
 $(function () {
     "use strict";
+
     var init = {};
     var _token = $('meta[name="csrf-token"]').attr("content");
 

@@ -16,9 +16,9 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    function all()
+    function all($relation = [])
     {
-        return $this->model->all();
+        return $this->model->relation($relation)->get();
     }
     function findById($modelId, $column = ['*'], $relation = [])
     {

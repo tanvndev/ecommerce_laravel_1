@@ -9,6 +9,7 @@ use App\Http\Controllers\Servers\{
     AuthController,
     DashboardController,
     LanguageController,
+    PermissionController,
     UserController,
     UserCatalogueController,
     PostCatalogueController,
@@ -50,6 +51,8 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [UserCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [UserCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [UserCatalogueController::class, 'destroy'])->name('destroy');
+        Route::get('permission', [UserCatalogueController::class, 'permission'])->name('permission');
+        Route::put('updatePermission', [UserCatalogueController::class, 'updatePermission'])->name('updatePermission');
     });
 
     // Routes for Languages
@@ -63,6 +66,16 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('{canonical}/switch', [LanguageController::class, 'switchServerLanguage'])->name('switch');
     });
 
+
+    // Routes for Permission
+    Route::prefix('permission')->name('permission.')->group(function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('index');
+        Route::get('create', [PermissionController::class, 'create'])->name('create');
+        Route::post('store', [PermissionController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PermissionController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [PermissionController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [PermissionController::class, 'destroy'])->name('destroy');
+    });
 
     // Routes for Post
     Route::prefix('post')->name('post.')->group(function () {
@@ -95,12 +108,6 @@ Route::middleware(['admin', 'locale'])->group(function () {
 });
 
 
-
-
-
-// Route::post('/user/do-create', [UserController::class, 'create'])->middleware('admin')->name('user.index');
-// Route::get('/user/update/{id}', [UserController::class, 'edit'])->middleware('admin')->name('user.edit');
-// Route::post('/user/do-update/{id}', [UserController::class, 'update'])->middleware('admin')->name('user.update');
 
 
 

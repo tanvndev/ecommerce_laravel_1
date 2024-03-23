@@ -142,6 +142,24 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         }
     }
 
+    public function setPermission()
+    {
+        DB::beginTransaction();
+        try {
+            $permissions = request('permission');
+            foreach ($permissions as $key => $value) {
+                $userCatalogue = $this->userCatalogueRepository->findById($key);
+                $userCatalogue->permissions()->sync($value);
+            }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     // Hàm này thay đổi trạng thái của user khi thay đổi trạng thái user catalogue
     private function changeUserStatus($dataPost)
     {

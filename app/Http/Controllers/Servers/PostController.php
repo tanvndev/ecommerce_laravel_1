@@ -40,9 +40,11 @@ class PostController extends Controller
     //
     function index()
     {
+        $this->authorize('modules', 'post.index');
+
         $posts = $this->postService->paginate();
         // dd($posts);
-        $config['seo'] = config('apps.post')['index'];
+        $config['seo'] = __('messages.post')['index'];
 
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
@@ -56,7 +58,9 @@ class PostController extends Controller
 
     function create()
     {
-        $config['seo'] = config('apps.post')['create'];
+        $this->authorize('modules', 'post.create');
+
+        $config['seo'] = __('messages.post')['create'];
         $config['method'] = 'create';
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
@@ -77,6 +81,8 @@ class PostController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('modules', 'post.edit');
+
         // Gán id vào sesson
         session(['_id' => $id]);
         $post = $this->postRepository->getPostLanguageById($id, $this->currentLanguage());
@@ -89,7 +95,7 @@ class PostController extends Controller
         // dd($post);
 
 
-        $config['seo'] = config('apps.post')['update'];
+        $config['seo'] = __('messages.post')['update'];
         $config['method'] = 'update';
 
         return view('servers.posts.store', compact([
@@ -127,6 +133,8 @@ class PostController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('modules', 'post.destroy');
+
         if ($request->_id == null) {
             return redirect()->route('post.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
         }

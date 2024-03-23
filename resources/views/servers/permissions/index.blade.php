@@ -9,10 +9,7 @@
                     class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
-                        <a href="{{route('user.catalogue.permission')}}"
-                            class="btn btn-warning btn-set-task w-sm-100 me-2 ">
-                            <i class="icofont-key me-2 fs-6"></i>{{__('messages.permissionName')}} </a>
-                        <a href="{{route('user.catalogue.create')}}" class="btn btn-primary btn-set-task w-sm-100">
+                        <a href="{{route('permission.create')}}" class="btn btn-primary btn-set-task w-sm-100">
                             <i class="icofont-plus-circle me-2 fs-6"></i>{{$config['seo']['create']}} </a>
                     </div>
                 </div>
@@ -24,23 +21,23 @@
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Toolbox --}}
-                        @include('servers.includes.toolbox', ['model' =>'UserCatalogue'] )
+                        @include('servers.includes.toolbox', ['model' =>'Permission'] )
                     </div>
                 </div>
 
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Filter --}}
-                        @include('servers.user_catalogues.blocks.filter')
+                        @include('servers.permissions.blocks.filter')
                     </div>
                 </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        @include('servers.user_catalogues.blocks.table', ['model' =>'UserCatalogue'])
+                        @include('servers.permissions.blocks.table', ['model' =>'Permission'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
-                            {{ $userCatalogues->links('pagination::bootstrap-5') }}
+                            {{ $permissions->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
 

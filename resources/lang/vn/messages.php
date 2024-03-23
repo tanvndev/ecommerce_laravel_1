@@ -74,6 +74,11 @@ return [
         'table' => [
             'name' => 'Tên nhóm thành viên',
             'countUser' => 'Số thành viên'
+        ],
+        'permission' => [
+            'title' => 'Cập nhập quyền',
+            'success' => 'Cập nhập quyền thành công.',
+            'error' => 'Cập nhập quyền thất bại.',
         ]
     ],
     'user' => [
@@ -100,6 +105,33 @@ return [
             'name' => 'Tên thành viên',
             'userGroup' => 'Nhóm thành viên',
             'userGroupSelect' => 'Chọn nhóm thành viên',
+        ]
+    ],
+
+    'permission' => [
+        'index' => [
+            'title' => 'Danh sách quyền',
+            'table' => 'Thông tin quyền',
+            'create' => 'Tạo mới quyền',
+            'success' => 'Thay đổi quyền thành công.',
+            'error' => 'Thay đổi quyền thất bại.'
+        ],
+        'create' => [
+            'title' => 'Tạo mới quyền',
+            'success' => 'Tạo mới quyền thành công.',
+            'error' => 'Tạo mới quyền thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập quyền',
+            'success' => 'Cập nhập quyền thành công.',
+            'error' => 'Cập nhập quyền thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá quyền thành công.',
+            'error' => 'Xoá quyền thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên quyền',
         ]
     ],
     'language' => [
@@ -129,10 +161,9 @@ return [
         ]
     ],
 
-
-
     'parentId' => 'Danh mục cha',
     'catalogueSub' => 'Danh mục phụ',
+    'permissionName' => 'Phân quyền',
     'parentIdNotice' => 'Chọn [Root] nếu không có danh mục cha',
     'image' => 'Chọn ảnh đại diện',
     'advance' => 'Cấu hình nâng cao',

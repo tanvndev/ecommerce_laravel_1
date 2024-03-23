@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
+
+    public function hasPermission($permissionCanonical)
+    {
+        return $this->user_catalogues()->permissions()->contains('canonical', $permissionCanonical);
+    }
 }

@@ -34,8 +34,10 @@ class UserController extends Controller
     //
     function index()
     {
+        $this->authorize('modules', 'user.index');
+
         $users = $this->userService->paginate();
-        $config['seo'] = config('apps.user')['index'];
+        $config['seo'] = __('messages.user')['index'];
 
 
         return view('servers.users.index', compact([
@@ -46,9 +48,11 @@ class UserController extends Controller
 
     function create()
     {
+        $this->authorize('modules', 'user.create');
+
         $provinces = $this->provinceRepository->all();
 
-        $config['seo'] = config('apps.user')['create'];
+        $config['seo'] = __('messages.user')['create'];
         $config['method'] = 'create';
         return view('servers.users.store', compact([
             'config',
@@ -66,6 +70,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('modules', 'user.edit');
 
         // Gán id vào sesson
         session(['_id' => $id]);
@@ -75,7 +80,7 @@ class UserController extends Controller
         // dd($user);
 
 
-        $config['seo'] = config('apps.user')['update'];
+        $config['seo'] = __('messages.user')['update'];
         $config['method'] = 'update';
 
         return view('servers.users.store', compact([
@@ -111,6 +116,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('modules', 'user.destroy');
+
         if ($request->_id == null) {
             return redirect()->route('user.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
         }

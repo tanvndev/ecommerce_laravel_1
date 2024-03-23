@@ -13,7 +13,7 @@ return [
             'route' => '',
             'icon' => 'icofont-users',
             'title' => 'QL Thành viên',
-            'activeCondition' => ['user.*'],
+            'activeCondition' => ['user.*', 'permission.*'],
             'subMenu' => [
                 [
                     'title' => 'QL Thành viên',
@@ -24,6 +24,11 @@ return [
                     'title' => 'QL Nhóm thành viên',
                     'route' => 'user.catalogue.index',
                     'activeCondition' => ['user.catalogue.*']
+                ],
+                [
+                    'title' => 'QL Quyền',
+                    'route' => 'permission.index',
+                    'activeCondition' => ['permission.*']
                 ],
             ]
         ],
@@ -64,6 +69,4 @@ return [
         ],
 
     ]
-
-
 ];
