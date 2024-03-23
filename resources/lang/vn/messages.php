@@ -23,6 +23,7 @@ return [
         ],
         'table' => [
             'name' => 'Tên nhóm',
+
         ]
     ],
     'post' => [
@@ -47,7 +48,7 @@ return [
         ],
         'table' => [
             'name' => 'Tiêu đề bài viết',
-
+            'postCatalogue' => 'Chọn nhóm bài viết',
         ]
     ],
     'userCatalogue' => [
@@ -132,7 +133,6 @@ return [
 
     'parentId' => 'Danh mục cha',
     'catalogueSub' => 'Danh mục phụ',
-    'postCatalogue' => 'Chọn nhóm bài viết',
     'parentIdNotice' => 'Chọn [Root] nếu không có danh mục cha',
     'image' => 'Chọn ảnh đại diện',
     'advance' => 'Cấu hình nâng cao',

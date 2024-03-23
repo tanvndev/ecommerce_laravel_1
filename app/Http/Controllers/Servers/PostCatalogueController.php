@@ -41,7 +41,6 @@ class PostCatalogueController extends Controller
     function index()
     {
         $postCatalogues = $this->postCatalogueService->paginate();
-        // dd($postCatalogues);
         $config['seo'] = __('messages.postCatalogue')['index'];
 
 

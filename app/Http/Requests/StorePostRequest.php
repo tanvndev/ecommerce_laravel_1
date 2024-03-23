@@ -23,7 +23,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:post_language',
+            'canonical' => 'required|string|unique:routers',
             'post_catalogue_id' => 'gt:0'
         ];
     }

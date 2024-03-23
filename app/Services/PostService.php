@@ -7,21 +7,19 @@ use App\Services\Interfaces\PostServiceInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PostService extends BaseService implements PostServiceInterface
 {
     protected $postRepository;
-    protected $nestedset;
-    protected $currentLanguage;
 
     public function __construct(
         PostRepository $postRepository,
     ) {
+        parent::__construct();
         $this->postRepository = $postRepository;
         $this->currentLanguage = $this->currentLanguage();
+        $this->controllerName = 'PostController';
 
         $this->nestedset = new Nestedsetbie([
             'table' => 'posts',
@@ -31,11 +29,14 @@ class PostService extends BaseService implements PostServiceInterface
     }
     function paginate()
     {
-        $condition['keyword'] = addslashes(request('keyword'));
-        $condition['publish'] = request('publish');
-        $condition['post_catalogue_id'] = request('post_catalogue_id');
-        $condition['where'] = [
-            'tb2.language_id' => ['=', $this->currentLanguage],
+
+        $condition = [
+            'keyword' => addslashes(request('keyword')),
+            'publish' => request('publish'),
+            'post_catalogue_id' => request('post_catalogue_id'),
+            'where' => [
+                'tb2.language_id' => ['=', $this->currentLanguage]
+            ]
         ];
 
         $select = [
@@ -77,7 +78,8 @@ class PostService extends BaseService implements PostServiceInterface
         try {
 
             //   Lấy ra payload và format lai
-            $payload = $this->formatPayload();
+            $payload = request()->only($this->payload());
+            $payload = $this->formatAlbum($payload);
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -86,9 +88,11 @@ class PostService extends BaseService implements PostServiceInterface
             if ($post->id > 0) {
                 // Format lai payload language
                 $payloadPostLanguage = $this->formatPayloadLanguage($post->id);
-
                 // Create pivot and sync
                 $this->createPivotAndSync($post, $payloadPostLanguage);
+
+                // create router
+                $this->createRouter($post);
             }
 
             DB::commit();
@@ -110,7 +114,8 @@ class PostService extends BaseService implements PostServiceInterface
             $post = $this->postRepository->findById($id);
 
             // Lấy ra payload và format lai
-            $payload = $this->formatPayload();
+            $payload = request()->only($this->payload());
+            $payload = $this->formatAlbum($payload);
 
             // Update post
             $updatePost = $this->postRepository->update($id, $payload);
@@ -122,6 +127,9 @@ class PostService extends BaseService implements PostServiceInterface
                 $post->languages()->detach([$payloadPostLanguage['language_id'], $id]);
                 // Create pivot and sync
                 $this->createPivotAndSync($post, $payloadPostLanguage);
+
+                // create router
+                $this->createRouter($post);
             }
 
             DB::commit();
@@ -142,15 +150,6 @@ class PostService extends BaseService implements PostServiceInterface
         ));
     }
 
-    private function formatPayload()
-    {
-        // Lấy ra payload từ form
-        $payload = request()->only($this->payload());
-        if (isset($payload['album']) && !empty($payload['album'])) {
-            $payload['album'] = json_encode($payload['album']);
-        }
-        return $payload;
-    }
 
     private function formatPayloadLanguage($postId)
     {

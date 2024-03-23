@@ -26,6 +26,7 @@ trait QueryScopes
         // 'column' => ['<>', 100]
         if (!empty($where) && is_array($where)) {
             foreach ($where as $column => $value) {
+                // dd($column, ...$value);
                 $query->where($column, ...$value);
             }
         }

@@ -46,7 +46,6 @@ class BaseRepository implements BaseRepositoryInterface
         return  $query->customWhere($conditions)->update($payload);
     }
 
-
     public function delete($modelId)
     {
         $delete = $this->findById($modelId);

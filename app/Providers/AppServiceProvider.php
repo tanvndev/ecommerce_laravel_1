@@ -41,6 +41,9 @@ class AppServiceProvider extends ServiceProvider
         // Province
         'App\Repositories\Interfaces\ProvinceRepositoryInterface' => 'App\Repositories\ProvinceRepository',
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
+
+        // Router
+        'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
     ];
     public function register(): void
     {

@@ -28,7 +28,7 @@
 
                     <select class="form-select filter" name="post_catalogue_id">
 
-                        <option selected value="">{{__('messages.postCatalogue')}}</option>
+                        <option selected value="">{{__('messages.post.table.postCatalogue')}}</option>
 
                         @foreach ($dropdown as $key => $val)
 
