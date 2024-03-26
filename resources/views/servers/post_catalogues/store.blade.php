@@ -46,27 +46,19 @@ $postCatalogue->id);
 
             <div class="row g-3 mb-3 justify-content-center ">
 
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
+                @include('servers.includes.messageError')
                 {{-- Aside --}}
                 @include('servers.post_catalogues.blocks.aside')
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    @include('servers.post_catalogues.blocks.main')
+                    @include('servers.includes.content', ['model'=> $postCatalogue])
 
                     {{-- Album --}}
                     @include('servers.includes.album')
 
                     {{-- Seo --}}
-                    @include('servers.post_catalogues.blocks.seo')
+                    @include('servers.includes.seo', ['model'=> $postCatalogue])
                 </div>
             </div><!-- Row end  -->
 

@@ -7,6 +7,7 @@
                 </div>
             </th>
             <th>{{__('messages.postCatalogue.table.name')}}</th>
+            @include('servers.includes.languageTableTh')
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -22,11 +23,12 @@
                 {{str_repeat('|-----', (($postCatalogue->level > 0) ? ($postCatalogue->level - 1) :
                 0)).$postCatalogue->name}}
             </td>
+            @include('servers.includes.languageTableTd', ['model' => $postCatalogue])
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$postCatalogue->id}}" data-field="publish"
-                        data-modelid="{{$postCatalogue->id}}" data-model="{{'PostCatalogue'}}" name="publish"
-                        type="checkbox" {{$postCatalogue->publish ==
+                        data-modelid="{{$postCatalogue->id}}" data-model="{{$modelName}}" name="publish" type="checkbox"
+                        {{$postCatalogue->publish ==
                     1 ? 'checked' :
                     ''}}
                     value="{{$postCatalogue->publish}}">

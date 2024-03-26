@@ -57,8 +57,8 @@
                     <select class="form-select init-select2" name="publish">
                         @foreach (__('messages.general.publish') as $key => $publish)
 
-                        <option {{ $key==old('publish', isset($postCatalogue->publish) ?
-                            $postCatalogue->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
+                        <option {{ $key==old('publish', isset($post->publish) ?
+                            $post->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
                             $publish }}
                         </option>
                         @endforeach
@@ -69,8 +69,8 @@
                     <label class="form-label">{{__('messages.follow')}}</label>
                     <select class="form-select init-select2" name="follow">
                         @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($postCatalogue->follow) ?
-                            $postCatalogue->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
+                        <option {{ $key==old('follow', isset($post->follow) ?
+                            $post->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
                             $follow }}
                         </option>
                         @endforeach

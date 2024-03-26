@@ -33,6 +33,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     // Routes for Dashboard
     Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
+
     // Routes for User
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('index', [UserController::class, 'index'])->name('index');
@@ -64,6 +65,8 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [LanguageController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [LanguageController::class, 'destroy'])->name('destroy');
         Route::get('{canonical}/switch', [LanguageController::class, 'switchServerLanguage'])->name('switch');
+        Route::get('{id}/{languageId}/{model}/translate', [LanguageController::class, 'translate'])->where(['id' => '[0-9]+', 'languageId' => '[0-9]+'])->name('translate');
+        Route::put('{id}/handleTranslate', [LanguageController::class, 'handleTranslate'])->where(['id' => '[0-9]+'])->name('handleTranslate');
     });
 
 

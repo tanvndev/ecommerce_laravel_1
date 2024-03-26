@@ -28,6 +28,7 @@ class PermissionService implements PermissionServiceInterface
 
         );
 
+
         return $permissions;
     }
 

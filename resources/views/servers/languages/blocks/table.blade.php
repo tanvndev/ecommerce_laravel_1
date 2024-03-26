@@ -14,7 +14,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($languages as $language) <tr>
+        @foreach ($languagesData as $language) <tr>
             <td>
                 <div class="form-check form-table-list-check">
                     <input class="form-check-input check-item" value="{{$language->id}}" type="checkbox">

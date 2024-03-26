@@ -20,6 +20,10 @@
     width: 2em;
     height: 2em;
 }
+.img-language-th {
+    width: 40px;
+    height: 30px;
+}
 
 .form-list-filter .form-control,
 .form-list-filter .form-select {

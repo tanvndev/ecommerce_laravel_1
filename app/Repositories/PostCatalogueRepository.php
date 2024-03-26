@@ -36,6 +36,6 @@ class PostCatalogueRepository extends BaseRepository implements PostCatalogueRep
             ->select($select)
             ->join('post_catalogue_language as tb2', 'post_catalogues.id', '=', 'tb2.post_catalogue_id')
             ->where('tb2.language_id', $languageId)
-            ->findOrFail($id);
+            ->find($id);
     }
 }

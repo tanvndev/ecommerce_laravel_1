@@ -61,6 +61,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             request('perpage'),
             $orderBy,
             $join,
+            ['languages'],
         );
         // dd($postCatalogues);
 

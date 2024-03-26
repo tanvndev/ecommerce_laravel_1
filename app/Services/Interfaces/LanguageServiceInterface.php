@@ -11,4 +11,5 @@ interface LanguageServiceInterface
     public function updateStatus();
     public function updateStatusAll();
     public function switch($id);
+    public function saveTranslate($id);
 }

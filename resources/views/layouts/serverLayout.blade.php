@@ -2,6 +2,7 @@
 <html class="no-js" lang="en" dir="ltr">
 
 
+
 <head>
     {{-- head --}}
     @include('servers.includes.head')

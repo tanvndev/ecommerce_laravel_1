@@ -16,15 +16,27 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    function all($relation = [])
+    public function all($relation = [])
     {
-        return $this->model->relation($relation)->get();
+        if (!empty($relation)) {
+            return $this->model->relation($relation)->get();
+        }
+        return $this->model->all();
     }
-    function findById($modelId, $column = ['*'], $relation = [])
+    public function findById($modelId, $column = ['*'], $relation = [])
     {
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
-    function create($payload = [])
+
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [])
+    {
+        $query = $this->model->select($column);
+        if (!empty($relation)) {
+            return $query->customWhere($conditions)->relation($relation)->first();
+        }
+        return $query->customWhere($conditions)->first();
+    }
+    public function create($payload = [])
     {
         $create = $this->model->create($payload);
         return $create->fresh();
@@ -70,7 +82,6 @@ class BaseRepository implements BaseRepositoryInterface
         $groupBy = [],
         $rawQuery = [],
     ) {
-
         $query = $this->model->select($column);
         $query->keyword($condition['keyword'] ?? null)
             ->publish($condition['publish'] ?? null)

@@ -32,7 +32,7 @@ class StoreLanguageRequest extends FormRequest
     {
         return [
             'name' => 'Tên ngôn ngữ',
-            'canonical' => 'Canonical',
+            'canonical' => 'Đường dẫn',
         ];
     }
 

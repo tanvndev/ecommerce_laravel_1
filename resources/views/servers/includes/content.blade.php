@@ -8,25 +8,26 @@
         <div class="row g-3 align-items-center">
             <div class="col-md-12">
                 <label class="form-label">{{__('messages.name')}} <span class="text-danger">(*)</span></label>
-                <input type="text" name="name" value="{{old('name', $post->name ?? '')}}" class="form-control">
+                <input type="text" name="name" value="{{old('name', $model->name ?? '')}}" {{isset($disabled)
+                    ? 'disabled' : '' }} class="form-control">
             </div>
             <div class="col-md-12">
                 <label class="form-label">{{__('messages.description')}} </label>
-                <textarea name="description" id="ckDescription" data-height="200" class="form-control init-ckeditor"
-                    cols="30" rows="5">
-                        {{old('description', $post->description ?? '')}}
+                <textarea name="description" id="ckDescription" data-height="200" {{isset($disabled) ? 'disabled' : ''
+                    }} class="form-control init-ckeditor" cols="30" rows="5">
+                        {{old('description', $model->description ?? '')}}
                     </textarea>
             </div>
 
             <div class="col-md-12 mt-3">
                 <div class="d-flex align-items-center justify-content-between ">
                     <label class="form-label">{{__('messages.content')}} </label>
-                    <a href="" class="form-label link-primary mutipleUploadImageCkEditor"
+                    <a href="" class="form-label link-primary   mutipleUploadImageCkEditor"
                         data-target="ckContent">{{__('messages.uploadMultipleImage')}}</a>
                 </div>
-                <textarea name="content" id="ckContent" data-height="500" class="form-control init-ckeditor" cols="30"
-                    rows="5">
-                        {{old('content', $post->content ?? '')}}
+                <textarea name="content" id="ckContent" data-height="500" {{isset($disabled) ? 'disabled' : '' }}
+                    class="form-control init-ckeditor" cols="30" rows="5">
+                        {{old('content', $model->content ?? '')}}
                     </textarea>
             </div>
 

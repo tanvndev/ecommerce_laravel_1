@@ -66,7 +66,6 @@ class PostService extends BaseService implements PostServiceInterface
             $this->whereRaw()
 
         );
-        // dd($posts);
 
         return $posts;
     }
@@ -108,6 +107,7 @@ class PostService extends BaseService implements PostServiceInterface
 
     function update($id)
     {
+
         DB::beginTransaction();
         try {
             // Lấy ra dữ liệu của post hiện tại để xoá;
@@ -116,7 +116,6 @@ class PostService extends BaseService implements PostServiceInterface
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
-
             // Update post
             $updatePost = $this->postRepository->update($id, $payload);
 
@@ -128,8 +127,8 @@ class PostService extends BaseService implements PostServiceInterface
                 // Create pivot and sync
                 $this->createPivotAndSync($post, $payloadPostLanguage);
 
-                // create router
-                $this->createRouter($post);
+                // update router
+                $this->updateRouter($post);
             }
 
             DB::commit();

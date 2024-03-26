@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\{
     StoreLanguageRequest,
     UpdateLanguageRequest,
+    UpdateTranslateRequest,
 };
 
 use App\Services\Interfaces\LanguageServiceInterface as LanguageService;
@@ -22,6 +23,7 @@ class LanguageController extends Controller
         LanguageService $languageService,
         LanguageRepository $languageRepository,
     ) {
+        parent::__construct();
         $this->languageService = $languageService;
         $this->languageRepository = $languageRepository;
     }
@@ -30,11 +32,11 @@ class LanguageController extends Controller
     {
         $this->authorize('modules', 'language.index');
 
-        $languages = $this->languageService->paginate();
+        $languagesData = $this->languageService->paginate();
         // dd($languages);
         $config['seo'] = __('messages.language')['index'];
         return view('servers.languages.index', compact([
-            'languages',
+            'languagesData',
             'config'
         ]));
     }
@@ -52,8 +54,8 @@ class LanguageController extends Controller
 
     public function store(StoreLanguageRequest $request)
     {
-        $successMessage = $this->getLanguageMessage('success', 'create');
-        $errorMessage = $this->getLanguageMessage('error', 'create');
+        $successMessage = 'Thành công';
+        $errorMessage = 'Thất bại';
 
         if ($this->languageService->create()) {
             return redirect()->route('language.index')->with('toast_success', $successMessage);
@@ -135,5 +137,59 @@ class LanguageController extends Controller
             return redirect()->back()->with('toast_success', $successMessage);
         }
         return redirect()->back()->with('toast_error', $errorMessage);
+    }
+
+    public function translate($id, $languageId, $modelName = '')
+    {
+
+        $this->authorize('modules', 'language.translate');
+
+        // Lây ra repository hiện tại
+        $repositoryInstance = $this->getRepositoryInstance($modelName);
+        // Lấy ra ngôn ngữ hiện tại
+        $currentLanguage = $this->languageRepository->findByWhere(['canonical' => ['=', $this->currentLanguage]]);
+
+        // Lấy ra bản dịch hiện tại
+        $methodName = 'get' . ucfirst($modelName) . 'LanguageById';
+        $modelObject = $repositoryInstance->{$methodName}($id, $currentLanguage->id);
+
+        // Lấy ra bản dịch ngôn ngữ muốn dịch
+        $modelObjectTranslate = $repositoryInstance->{$methodName}($id, $languageId);
+
+
+        $config['seo'] = __('messages.language')['update'];
+        $option = [
+            'languageId' => $languageId,
+            'model' => $modelName
+        ];
+
+        return view('servers.languages.translate', compact([
+            'config',
+            'modelObject',
+            'modelObjectTranslate',
+            'option'
+        ]));
+    }
+
+    public function handleTranslate(UpdateTranslateRequest $request, $id)
+    {
+        $successMessage = "Thành công";
+        $errorMessage = "Thất bại";
+
+
+        if ($this->languageService->saveTranslate($id)) {
+            return redirect()->back()->with('toast_success',  $successMessage);
+        }
+
+        return redirect()->back()->with('toast_error', $errorMessage);
+    }
+    private function getRepositoryInstance($modelName)
+    {
+        $repositoryInterfaceNameSpace = 'App\Repositories\Interfaces\\' . ucfirst($modelName) . 'RepositoryInterface';
+        if (interface_exists($repositoryInterfaceNameSpace)) {
+            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
+            return app($repositoryInterfaceNameSpace);
+        }
+        return null;
     }
 }

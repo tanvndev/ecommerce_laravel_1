@@ -47,7 +47,7 @@ toast($errorMessages, 'error');
                 <div class="card mb-3">
                     <div class="card-body">
 
-                        @include('servers.post_catalogues.blocks.table', ['model' =>'PostCatalogue'])
+                        @include('servers.post_catalogues.blocks.table', ['modelName' =>'PostCatalogue'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
                             {{ $postCatalogues->links('pagination::bootstrap-5') }}

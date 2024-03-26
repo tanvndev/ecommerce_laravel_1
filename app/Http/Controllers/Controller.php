@@ -10,10 +10,24 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected function currentLanguage()
+
+    protected $currentLanguage;
+
+    public function __construct()
+    {
+        $this->currentLanguage = app()->getLocale();
+    }
+
+    public function currentLanguage()
     {
         return 1;
     }
+
+    protected function getLanguageMessage()
+    {
+        return __('messages.language');
+    }
+
 
     protected function getPermissionMessage($key, $action)
     {

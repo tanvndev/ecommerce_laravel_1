@@ -35,7 +35,7 @@ class PostCatalogue extends Model
             'canonical',
             'meta_title',
             'meta_description',
-            'meta_keywords',
+            'meta_keyword',
             'description',
             'content'
         )->withTimestamps();

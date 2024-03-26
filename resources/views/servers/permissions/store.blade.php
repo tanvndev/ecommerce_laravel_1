@@ -36,15 +36,8 @@ $url = $config['method'] == 'create' ? route('permission.store') : route('permis
             <div class="row g-3 mb-3 justify-content-center ">
                 <div class="col-lg-10">
 
-                    @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
+                    @include('servers.includes.messageError')
+
 
                     <div class="card mb-3 card-create">
                         <div class="card-header py-3 bg-transparent border-bottom-0">

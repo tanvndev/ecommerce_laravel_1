@@ -68,6 +68,7 @@ class UserController extends Controller
         return redirect()->route('user.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
     }
 
+
     public function edit($id)
     {
         $this->authorize('modules', 'user.edit');
