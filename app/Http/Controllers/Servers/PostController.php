@@ -11,31 +11,41 @@ use App\Http\Requests\{
 };
 
 use App\Services\Interfaces\PostServiceInterface as PostService;
+use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
-
 
 
 class PostController extends Controller
 {
     protected $postService;
     protected $postRepository;
-    protected $nestedset;
-    protected $currentLanguage;
-
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         PostService $postService,
         PostRepository $postRepository,
     ) {
+        // Lấy ra ngôn ngữ hiện tại và gán vào session
+        $this->middleware(function ($request, $next) {
+            $languageId = app(LanguageRepository::class)->getCurrentLanguage();
+
+            $this->currentLanguage = $languageId;
+            session(['currentLanguage' => $languageId]);
+            $this->initNetedset();
+            return $next($request);
+        });
+
         $this->postService = $postService;
         $this->postRepository = $postRepository;
+    }
+
+    private function initNetedset()
+    {
         $this->nestedset = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
-            'language_id' => $this->currentLanguage()
+            'language_id' => $this->currentLanguage
         ]);
-        $this->currentLanguage = $this->currentLanguage();
     }
     //
     function index()

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\Interfaces\BaseServiceInterface;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 
@@ -15,7 +16,6 @@ use Illuminate\Support\Str;
 class BaseService implements BaseServiceInterface
 {
     protected $nestedset;
-    protected $currentLanguage;
     protected $routerRepository;
     protected $controllerName;
 
@@ -23,10 +23,8 @@ class BaseService implements BaseServiceInterface
     {
         $this->routerRepository = app(RouterRepository::class);
     }
-    public function currentLanguage()
-    {
-        return 1;
-    }
+
+
     protected function calculateNestedSet()
     {
         $this->nestedset->Get('level ASC, order ASC');
@@ -45,7 +43,6 @@ class BaseService implements BaseServiceInterface
 
     protected function formatPayloadRoute($model)
     {
-
         $router = [
             'canonical' => Str::slug(request('canonical')),
             'module_id' => $model->id,

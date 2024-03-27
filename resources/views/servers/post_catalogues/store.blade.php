@@ -52,13 +52,13 @@ $postCatalogue->id);
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    @include('servers.includes.content', ['model'=> $postCatalogue])
+                    @include('servers.includes.content', ['model'=> $postCatalogue ?? []])
 
                     {{-- Album --}}
                     @include('servers.includes.album')
 
                     {{-- Seo --}}
-                    @include('servers.includes.seo', ['model'=> $postCatalogue])
+                    @include('servers.includes.seo', ['model'=> $postCatalogue ?? []])
                 </div>
             </div><!-- Row end  -->
 

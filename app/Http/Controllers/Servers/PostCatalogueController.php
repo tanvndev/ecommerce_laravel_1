@@ -9,6 +9,7 @@ use App\Http\Requests\{
     UpdatePostCatalogueRequest,
     DeletePostCatalogueRequest
 };
+use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Services\Interfaces\PostCatalogueServiceInterface as PostCatalogueService;
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 
@@ -18,27 +19,40 @@ class PostCatalogueController extends Controller
 {
     protected $postCatalogueService;
     protected $postCatalogueRepository;
-    protected $nestedset;
-    protected $currentLanguage;
-
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         PostCatalogueService $postCatalogueService,
         PostCatalogueRepository $postCatalogueRepository,
     ) {
+        parent::__construct();
+
+        // Lấy ra ngôn ngữ hiện tại và gán vào session
+        $this->middleware(function ($request, $next) {
+            $languageId = app(LanguageRepository::class)->getCurrentLanguage();
+
+            $this->currentLanguage = $languageId;
+            session(['currentLanguage' => $languageId]);
+            $this->initNetedset();
+            return $next($request);
+        });
+
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
+    }
+
+    private function initNetedset()
+    {
         $this->nestedset = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
-            'language_id' => $this->currentLanguage()
+            'language_id' => $this->currentLanguage
         ]);
-        $this->currentLanguage = $this->currentLanguage();
     }
     //
     function index()
     {
+
         $this->authorize('modules', 'post.catalogue.index');
 
         $postCatalogues = $this->postCatalogueService->paginate();
@@ -80,7 +94,7 @@ class PostCatalogueController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $postCatalogue = $this->postCatalogueRepository->getPostCatalogueLanguageById($id, $this->currentLanguage());
+        $postCatalogue = $this->postCatalogueRepository->getPostCatalogueLanguageById($id, $this->currentLanguage);
 
         $albums =  json_decode($postCatalogue->album);
         // Danh mục cha

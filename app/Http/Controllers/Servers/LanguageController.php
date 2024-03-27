@@ -141,13 +141,12 @@ class LanguageController extends Controller
 
     public function translate($id, $languageId, $modelName = '')
     {
-
         $this->authorize('modules', 'language.translate');
 
         // Lây ra repository hiện tại
         $repositoryInstance = $this->getRepositoryInstance($modelName);
         // Lấy ra ngôn ngữ hiện tại
-        $currentLanguage = $this->languageRepository->findByWhere(['canonical' => ['=', $this->currentLanguage]]);
+        $currentLanguage = $this->languageRepository->findByWhere(['canonical' => ['=', app()->getLocale()]]);
 
         // Lấy ra bản dịch hiện tại
         $methodName = 'get' . ucfirst($modelName) . 'LanguageById';

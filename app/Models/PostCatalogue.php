@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Validation\Rule;
 use Laravel\Sanctum\HasApiTokens;
 
 class PostCatalogue extends Model
@@ -53,7 +52,7 @@ class PostCatalogue extends Model
 
     public function post_catalogue_language()
     {
-        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id');
+        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.

@@ -6,6 +6,8 @@ use App\Services\Interfaces\LanguageServiceInterface;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class LanguageService implements LanguageServiceInterface
 {
@@ -30,7 +32,8 @@ class LanguageService implements LanguageServiceInterface
         return $languages;
     }
 
-    function create()
+
+    public function create()
     {
         DB::beginTransaction();
         try {
@@ -53,7 +56,7 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    function update($id)
+    public function update($id)
     {
         DB::beginTransaction();
         try {
@@ -74,7 +77,7 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    function destroy($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
@@ -94,7 +97,7 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    function updateStatus()
+    public function updateStatus()
     {
         DB::beginTransaction();
         try {
@@ -136,6 +139,7 @@ class LanguageService implements LanguageServiceInterface
 
     public function saveTranslate($id)
     {
+
         DB::beginTransaction();
         try {
             // Lấy ra payload
@@ -188,7 +192,7 @@ class LanguageService implements LanguageServiceInterface
             'meta_title' => request('translate_meta_title'),
             'meta_keyword' => request('translate_meta_keyword'),
             'meta_description' => request('translate_meta_description'),
-            'canonical' => request('translate_canonical'),
+            'canonical' => Str::slug(request('translate_canonical')),
             $this->convertModelToId($option['model']) => $id,
             'language_id' => $option['languageId'],
         ];

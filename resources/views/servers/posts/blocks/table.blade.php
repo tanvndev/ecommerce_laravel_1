@@ -6,9 +6,10 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th>{{__('messages.post.table.name')}}</th>
+            <th style="width: 40%;">{{__('messages.post.table.name')}}</th>
+            @include('servers.includes.languageTableTh')
             <th>{{__('messages.tableDisplayGroup')}}</th>
-            <th>{{__('messages.tableOrder')}}</th>
+            <th style="width: 5%;">{{__('messages.tableOrder')}}</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -27,6 +28,7 @@
 
                 </div>
             </td>
+            @include('servers.includes.languageTableTd', ['model' => $post])
             <td>
                 @foreach ($post->post_catalogues as $catalogue)
                 @foreach ($catalogue->post_catalogue_language as $val)
@@ -36,14 +38,14 @@
                 @endforeach
             </td>
             <td class="">
-                <input type="text" class="form-control sort-order w-25" name="order" data-id="{{$post->id}}"
-                    data-model="{{$model}}" value="{{$post->order}}" />
+                <input type="text" class="form-control sort-order" name="order" data-id="{{$post->id}}"
+                    data-model="{{$modelName}}" value="{{$post->order}}" />
             </td>
 
             <td>
                 <div class="toggler toggler-list-check">
                     <input class="status" id="publish-{{$post->id}}" data-field="publish" data-modelid="{{$post->id}}"
-                        data-model="{{$model}}" name="publish" type="checkbox" {{$post->publish ==
+                        data-model="{{$modelName}}" name="publish" type="checkbox" {{$post->publish ==
                     1 ? 'checked' :
                     ''}}
                     value="{{$post->publish}}">

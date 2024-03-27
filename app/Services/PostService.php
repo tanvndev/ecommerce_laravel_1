@@ -18,14 +18,7 @@ class PostService extends BaseService implements PostServiceInterface
     ) {
         parent::__construct();
         $this->postRepository = $postRepository;
-        $this->currentLanguage = $this->currentLanguage();
         $this->controllerName = 'PostController';
-
-        $this->nestedset = new Nestedsetbie([
-            'table' => 'posts',
-            'foreignkey' => 'post_id',
-            'language_id' => $this->currentLanguage
-        ]);
     }
     function paginate()
     {
@@ -35,7 +28,7 @@ class PostService extends BaseService implements PostServiceInterface
             'publish' => request('publish'),
             'post_catalogue_id' => request('post_catalogue_id'),
             'where' => [
-                'tb2.language_id' => ['=', $this->currentLanguage]
+                'tb2.language_id' => ['=', session('currentLanguage')]
             ]
         ];
 
@@ -67,7 +60,30 @@ class PostService extends BaseService implements PostServiceInterface
 
         );
 
+        // dd($posts);
         return $posts;
+    }
+
+    private function whereRaw()
+    {
+        $rawConditions = [];
+        $post_catalogue_id = request('post_catalogue_id');
+        if ($post_catalogue_id > 0) {
+            $rawConditions['whereRaw'] = [
+                [
+                    'tb3.post_catalogue_id IN (
+                        SELECT id 
+                        FROM post_catalogues
+                        INNER JOIN post_catalogue_language as pcl ON pcl.post_catalogue_id = post_catalogues.id 
+                        WHERE `left` >= (SELECT `left` FROM post_catalogues as pc WHERE pc.id = ?)
+                        AND `right` <= (SELECT `right` FROM post_catalogues as pc WHERE pc.id = ?)
+                        AND pcl.language_id = ?
+                    )',
+                    [$post_catalogue_id, $post_catalogue_id, session('currentLanguage')]
+                ]
+            ];
+        }
+        return $rawConditions;
     }
 
     function create()
@@ -159,7 +175,7 @@ class PostService extends BaseService implements PostServiceInterface
         // Lấy ra post_id 
         $payloadPostLanguage['post_id'] = $postId;
         // Lấy ra language_id mặc định
-        $payloadPostLanguage['language_id'] = $this->currentLanguage;
+        $payloadPostLanguage['language_id'] = session('currentLanguage');
         return $payloadPostLanguage;
     }
 
@@ -174,25 +190,7 @@ class PostService extends BaseService implements PostServiceInterface
         $post->post_catalogues()->sync($catalogue);
     }
 
-    private function whereRaw()
-    {
-        $rawConditions = [];
-        $post_catalogue_id = request('post_catalogue_id');
-        if ($post_catalogue_id > 0) {
-            $rawConditions['whereRaw'] = [
-                [
-                    'tb3.post_catalogue_id IN (
-                        SELECT id 
-                        FROM post_catalogues
-                        WHERE `left` >= (SELECT `left` FROM post_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM post_catalogues as pc WHERE pc.id = ?)
-                    )',
-                    [$post_catalogue_id, $post_catalogue_id]
-                ]
-            ];
-        }
-        return $rawConditions;
-    }
+
 
     function destroy($id)
     {

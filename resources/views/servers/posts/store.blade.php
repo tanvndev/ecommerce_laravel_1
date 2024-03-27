@@ -61,13 +61,13 @@ $post->id);
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    @include('servers.includes.content', ['model'=> $post])
+                    @include('servers.includes.content', ['model'=> $post ?? []])
 
                     {{-- Album --}}
                     @include('servers.includes.album')
 
                     {{-- Seo --}}
-                    @include('servers.includes.seo', ['model'=> $post])
+                    @include('servers.includes.seo', ['model'=> $post ?? []])
                 </div>
             </div><!-- Row end  -->
 
