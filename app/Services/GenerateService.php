@@ -39,11 +39,11 @@ class GenerateService implements GenerateServiceInterface
         try {
             // $database = $this->makeDatabase();
             // $controller =  $this->makeController();
-            //$model = $this->makeModel();
+            // $model = $this->makeModel();
             // $repository = $this->makeRepository();
             // $service = $this->makeService();
+            // $provider = $this->makeProvider();
 
-            $provider = $this->makeProvider();
 
             // $this->makeRequest();
             // $this->makeView();
@@ -63,6 +63,42 @@ class GenerateService implements GenerateServiceInterface
 
     private function makeProvider()
     {
+        try {
+            $name = request('name');
+
+            $providerPaths  = [
+                'serviceProvider' =>  base_path('app/Providers/AppServiceProvider.php'),
+                'repositoryProvider' =>  base_path('app/Providers/AppRepositoryProvider.php'),
+            ];
+
+            foreach ($providerPaths as $type => $path) {
+                $content = file_get_contents($path);
+
+                if ($type === 'serviceProvider') {
+                    $newLine = "'App\Services\Interfaces\\" . ucfirst($name) . "ServiceInterface' => 'App\Services\\" . ucfirst($name) . "Service',";
+                } else {
+                    $newLine = "'App\Repositories\Interfaces\\" . ucfirst($name) . "RepositoryInterface' => 'App\Repositories\\" . ucfirst($name) . "Repository',";
+                }
+
+                // Lấy ra vị trí của vị trí cần thêm vào
+                $position = strpos($content, '];');
+
+                // Định dang lại khi ínsert vào
+                $newLine = '// ' . $name  . "\n" . $newLine . "\n";
+
+                if ($position) {
+                    $content = substr_replace($content, $newLine, $position, 0);
+                }
+
+                // Ghi lại nội dung đã cập nhật vào file
+                File::put($path, $content);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+            return false;
+        }
     }
 
     private function makeService()
