@@ -2,28 +2,28 @@
 // Trong Laravel, Repository Pattern thường được sử dụng để tạo các lớp repository, giúp tách biệt logic của ứng dụng khỏi cơ sở dữ liệu.
 namespace App\Repositories;
 
-use App\Models\Post;
-use App\Repositories\Interfaces\PostRepositoryInterface;
+use App\Models\{ModuleTemplate};
+use App\Repositories\Interfaces\{ModuleTemplate}RepositoryInterface;
 
-class PostRepository extends BaseRepository implements PostRepositoryInterface
+class {ModuleTemplate}Repository extends BaseRepository implements {ModuleTemplate}RepositoryInterface
 {
     protected $model;
     public function __construct(
-        Post $model
+        {ModuleTemplate} $model
     ) {
         $this->model = $model;
     }
 
-    public function getPostLanguageById($id = 0, $languageId = 0)
+    public function get{ModuleTemplate}LanguageById($id = 0, $languageId = 0)
     {
         $select = [
-            'posts.id',
-            'posts.post_catalogue_id',
-            'posts.publish',
-            'posts.image',
-            'posts.icon',
-            'posts.album',
-            'posts.follow',
+            '{tableName}.id',
+            '{tableName}.parent_id',
+            '{tableName}.publish',
+            '{tableName}.image',
+            '{tableName}.icon',
+            '{tableName}.album',
+            '{tableName}.follow',
             'tb2.name',
             'tb2.description',
             'tb2.content',
@@ -34,9 +34,8 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         ];
         return $this->model
             ->select($select)
-            ->join('post_language as tb2', 'posts.id', '=', 'tb2.post_id')
+            ->join('{pivotTable} as tb2', '{tableName}.id', '=', 'tb2.{foreignKey}')
             ->where('tb2.language_id', $languageId)
-            ->with('post_catalogues')
             ->find($id);
     }
 }

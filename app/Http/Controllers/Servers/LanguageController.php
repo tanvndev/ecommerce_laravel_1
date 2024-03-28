@@ -54,8 +54,8 @@ class LanguageController extends Controller
 
     public function store(StoreLanguageRequest $request)
     {
-        $successMessage = 'Thành công';
-        $errorMessage = 'Thất bại';
+        $successMessage = $this->getToastMessage('language', 'success', 'create');
+        $errorMessage = $this->getToastMessage('language', 'error', 'create');
 
         if ($this->languageService->create()) {
             return redirect()->route('language.index')->with('toast_success', $successMessage);
@@ -88,8 +88,8 @@ class LanguageController extends Controller
      */
     public function update(UpdateLanguageRequest $request, $id)
     {
-        $successMessage = $this->getLanguageMessage('success', 'update');
-        $errorMessage = $this->getLanguageMessage('error', 'update');
+        $successMessage = $this->getToastMessage('language', 'success', 'update');
+        $errorMessage = $this->getToastMessage('language', 'error', 'update');
 
         // Lấy giá trị sesson
         $idLanguage = session('_id');
@@ -113,8 +113,8 @@ class LanguageController extends Controller
     public function destroy(Request $request)
     {
         $this->authorize('modules', 'language.destroy');
-        $successMessage = $this->getLanguageMessage('success', 'delete');
-        $errorMessage = $this->getLanguageMessage('error', 'delete');
+        $successMessage = $this->getToastMessage('language', 'success', 'delete');
+        $errorMessage = $this->getToastMessage('language', 'error', 'delete');
 
         if ($request->_id == null) {
             return redirect()->route('language.index')->with('toast_error', $errorMessage);
@@ -127,8 +127,8 @@ class LanguageController extends Controller
 
     public function switchServerLanguage($canonical)
     {
-        $successMessage = $this->getLanguageMessage('success', 'index');
-        $errorMessage = $this->getLanguageMessage('error', 'index');
+        $successMessage = $this->getToastMessage('language', 'success', 'switch');
+        $errorMessage = $this->getToastMessage('language', 'error', 'switch');
 
         if ($this->languageService->switch($canonical)) {
             // Lưu giá trị 'locale' vào session để giữ trạng thái ngôn ngữ khi người dùng truy cập các trang khác rồi sẽ dùng middleware để xử lý ngôn ngữ
@@ -172,8 +172,8 @@ class LanguageController extends Controller
 
     public function handleTranslate(UpdateTranslateRequest $request, $id)
     {
-        $successMessage = "Thành công";
-        $errorMessage = "Thất bại";
+        $successMessage = $this->getToastMessage('language', 'success', 'translate');
+        $errorMessage = $this->getToastMessage('language', 'error', 'translate');
 
 
         if ($this->languageService->saveTranslate($id)) {

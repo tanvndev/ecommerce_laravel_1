@@ -18,18 +18,9 @@ class Controller extends BaseController
     {
     }
 
-
-    protected function getLanguageMessage()
+    protected function getToastMessage($module, $key, $action)
     {
-        return __('messages.language');
-    }
-
-
-
-
-    protected function getPermissionMessage($key, $action)
-    {
-        $configMessage = __('messages.permission.' . $action);
+        $configMessage = __("messages.$module.$action");
         return $configMessage[$key] ?? null;
     }
 }

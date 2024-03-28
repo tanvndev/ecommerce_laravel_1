@@ -5,6 +5,14 @@ if (typeof jQuery === "undefined") {
 $(function () {
     "use strict";
 
+    // auto expand textarea
+    $(".textarea-expand").each(function () {
+        $(this).on("input", function () {
+            $(this).css("height", "auto");
+            $(this).height(this.scrollHeight + "px");
+        });
+    });
+
     // main sidebar toggle js
     $(".menu-toggle").on("click", function () {
         $(".sidebar").toggleClass("open");

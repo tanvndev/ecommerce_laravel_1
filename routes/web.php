@@ -8,6 +8,7 @@ use App\Http\Controllers\Ajax\{
 use App\Http\Controllers\Servers\{
     AuthController,
     DashboardController,
+    GenerateController,
     LanguageController,
     PermissionController,
     UserController,
@@ -67,6 +68,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('{canonical}/switch', [LanguageController::class, 'switchServerLanguage'])->name('switch');
         Route::get('{id}/{languageId}/{model}/translate', [LanguageController::class, 'translate'])->where(['id' => '[0-9]+', 'languageId' => '[0-9]+'])->name('translate');
         Route::put('{id}/handleTranslate', [LanguageController::class, 'handleTranslate'])->where(['id' => '[0-9]+'])->name('handleTranslate');
+    });
+
+
+    // Routes for Generate
+    Route::prefix('generate')->name('generate.')->group(function () {
+        Route::get('index', [GenerateController::class, 'index'])->name('index');
+        Route::get('create', [GenerateController::class, 'create'])->name('create');
+        Route::post('store', [GenerateController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [GenerateController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [GenerateController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [GenerateController::class, 'destroy'])->name('destroy');
     });
 
 

@@ -53,8 +53,8 @@ class PermissionController extends Controller
 
     public function store(StorePermissionRequest $request)
     {
-        $successMessage = $this->getPermissionMessage('success', 'create');
-        $errorMessage = $this->getPermissionMessage('error', 'create');
+        $successMessage = $this->getToastMessage('permission', 'success', 'create');
+        $errorMessage = $this->getToastMessage('permission', 'error', 'create');
 
         if ($this->permissionService->create()) {
             return redirect()->route('permission.index')->with('toast_success', $successMessage);
@@ -87,8 +87,8 @@ class PermissionController extends Controller
      */
     public function update(UpdatePermissionRequest $request, $id)
     {
-        $successMessage = $this->getPermissionMessage('success', 'update');
-        $errorMessage = $this->getPermissionMessage('error', 'update');
+        $successMessage = $this->getToastMessage('permission', 'success', 'update');
+        $errorMessage = $this->getToastMessage('permission', 'error', 'update');
 
         // Lấy giá trị sesson
         $idPermission = session('_id');
@@ -113,8 +113,8 @@ class PermissionController extends Controller
     {
         $this->authorize('modules', 'permission.destroy');
 
-        $successMessage = $this->getPermissionMessage('success', 'delete');
-        $errorMessage = $this->getPermissionMessage('error', 'delete');
+        $successMessage = $this->getToastMessage('permission', 'success', 'delete');
+        $errorMessage = $this->getToastMessage('permission', 'error', 'delete');
 
         if ($request->_id == null) {
             return redirect()->route('permission.index')->with('toast_error', $errorMessage);
@@ -123,21 +123,5 @@ class PermissionController extends Controller
             return redirect()->route('permission.index')->with('toast_success',  $successMessage);
         }
         return redirect()->route('permission.index')->with('toast_error', $errorMessage);
-    }
-
-
-
-    public function switchServerPermission($canonical)
-    {
-        $successMessage = $this->getPermissionMessage('success', 'index');
-        $errorMessage = $this->getPermissionMessage('error', 'index');
-
-        if ($this->permissionService->switch($canonical)) {
-            // Lưu giá trị 'locale' vào session để giữ trạng thái ngôn ngữ khi người dùng truy cập các trang khác rồi sẽ dùng middleware để xử lý ngôn ngữ
-            session(['locale' => $canonical]);
-
-            return redirect()->back()->with('toast_success', $successMessage);
-        }
-        return redirect()->back()->with('toast_error', $errorMessage);
     }
 }

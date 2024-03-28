@@ -158,6 +158,40 @@ return [
         ],
         'table' => [
             'name' => 'Tên ngôn ngữ',
+        ],
+        'switch' => [
+            'success' => 'Thay đổi ngôn ngữ thành công.',
+            'error' => 'Thay đổi ngôn ngữ thất bại.',
+        ],
+        'translate' => [
+            'success' => 'Cập nhập bản dịch thành công.',
+            'error' => 'Cập nhập bản dịch thất bại.',
+        ]
+    ],
+    'generate' => [
+        'index' => [
+            'title' => 'Danh sách module',
+            'table' => 'Thông tin module',
+            'create' => 'Tạo mới module',
+            'success' => 'Thay đổi module thành công.',
+            'error' => 'Thay đổi module thất bại.'
+        ],
+        'create' => [
+            'title' => 'Tạo mới module',
+            'success' => 'Tạo mới module thành công.',
+            'error' => 'Tạo mới module thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập module',
+            'success' => 'Cập nhập module thành công.',
+            'error' => 'Cập nhập module thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá module thành công.',
+            'error' => 'Xoá module thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên module',
         ]
     ],
 

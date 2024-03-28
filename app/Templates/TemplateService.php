@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\Classes\Nestedsetbie;
-use App\Services\Interfaces\PostCatalogueServiceInterface;
-use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
+use App\Services\Interfaces\{ModuleTemplate}ServiceInterface;
+use App\Repositories\Interfaces\{ModuleTemplate}RepositoryInterface as {ModuleTemplate}Repository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
+class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}ServiceInterface
 {
-    protected $postCatalogueRepository;
+    protected ${moduleTemplate}Repository;
     public function __construct(
-        PostCatalogueRepository $postCatalogueRepository,
+        {ModuleTemplate}Repository ${moduleTemplate}Repository,
     ) {
         parent::__construct();
-        $this->postCatalogueRepository = $postCatalogueRepository;
-        $this->controllerName = 'PostCatalogueController';
+        $this->{moduleTemplate}Repository = ${moduleTemplate}Repository;
+        $this->controllerName = '{ModuleTemplate}Controller';
     }
 
 
@@ -33,34 +33,34 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         // dd($condition);
 
         $select = [
-            'post_catalogues.id',
-            'post_catalogues.publish',
-            'post_catalogues.image',
-            'post_catalogues.level',
-            'post_catalogues.user_id',
-            'post_catalogues.order',
+            '{tableName}.id',
+            '{tableName}.publish',
+            '{tableName}.image',
+            '{tableName}.level',
+            '{tableName}.user_id',
+            '{tableName}.order',
             'tb2.name',
             'tb2.canonical',
         ];
         $join = [
-            'post_catalogue_language as tb2' => ['tb2.post_catalogue_id', '=', 'post_catalogues.id']
+            '{pivotTable} as tb2' => ['tb2.{foreignKey}', '=', '{tableName}.id']
         ];
         $orderBy = [
-            'post_catalogues.left' => 'asc',
-            'post_catalogues.created_at' => 'desc'
+            '{tableName}.left' => 'asc',
+            '{tableName}.created_at' => 'desc'
         ];
 
         //////////////////////////////////////////////////////////
-        $postCatalogues = $this->postCatalogueRepository->pagination(
+        ${moduleTemplate}s = $this->{moduleTemplate}Repository->pagination(
             $select,
             $condition,
             request('perpage'),
             $orderBy,
             $join,
         );
-        // dd($postCatalogues);
+        // dd(${moduleTemplate}s);
 
-        return $postCatalogues;
+        return ${moduleTemplate}s;
     }
 
     function create()
@@ -74,19 +74,19 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
-            // Create post catalogue
-            $postCatalogue = $this->postCatalogueRepository->create($payload);
+            // Create {moduleTemplate}
+            ${moduleTemplate} = $this->{moduleTemplate}Repository->create($payload);
 
-            if ($postCatalogue->id > 0) {
+            if (${moduleTemplate}->id > 0) {
 
                 // Format payload language
-                $payloadLanguage = $this->formatPayloadLanguage($postCatalogue->id);
+                $payloadLanguage = $this->formatPayloadLanguage(${moduleTemplate}->id);
 
-                // Tạo ra pivot vào bảng post_catalogue_language
-                $this->createPivotLanguage($postCatalogue, $payloadLanguage);
+                // Tạo ra pivot vào bảng {moduleTemplate}_language
+                $this->createPivotLanguage(${moduleTemplate}, $payloadLanguage);
 
                 // create router
-                $this->createRouter($postCatalogue);
+                $this->createRouter(${moduleTemplate});
 
                 // Dùng để tính toán lại các giá trị left right
                 $this->initNetedset();
@@ -107,27 +107,27 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
     {
         DB::beginTransaction();
         try {
-            // Lấy ra dữ liệu của postCatalogue hiện tại để xoá;
-            $postCatalogue = $this->postCatalogueRepository->findById($id);
+            // Lấy ra dữ liệu của {moduleTemplate} hiện tại để xoá;
+            ${moduleTemplate} = $this->{moduleTemplate}Repository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
 
-            // Update postCatalogue
-            $updatePostCatalogue = $this->postCatalogueRepository->update($id, $payload);
+            // Update {moduleTemplate}
+            $update{ModuleTemplate} = $this->{moduleTemplate}Repository->update($id, $payload);
 
-            if ($updatePostCatalogue) {
+            if ($update{ModuleTemplate}) {
                 // Lây ra payload language và format lai
-                $payloadLanguage = $this->formatPayloadLanguage($postCatalogue->id);
+                $payloadLanguage = $this->formatPayloadLanguage(${moduleTemplate}->id);
 
                 // Xoá bản ghi cũa một pivot
-                $postCatalogue->languages()->detach([$payloadLanguage['language_id'], $id]);
+                ${moduleTemplate}->languages()->detach([$payloadLanguage['language_id'], $id]);
 
-                // Tạo ra pivot vào bảng post_catalogue_language
-                $this->createPivotLanguage($postCatalogue, $payloadLanguage);
+                // Tạo ra pivot vào bảng {privotTable}
+                $this->createPivotLanguage(${moduleTemplate}, $payloadLanguage);
 
                 // update router
-                $this->updateRouter($postCatalogue);
+                $this->updateRouter(${moduleTemplate});
 
                 // Dùng để tính toán lại các giá trị left right
                 $this->initNetedset();
@@ -144,13 +144,13 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         }
     }
 
-    private function formatPayloadLanguage($postCatalogueId)
+    private function formatPayloadLanguage(${moduleTemplate}Id)
     {
         $payloadLanguage = request()->only($this->payloadLanguage());
         //Đinh dạng slug
         $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
-        // Lấy ra post_catalogue_id
-        $payloadLanguage['post_catalogue_id'] = $postCatalogueId;
+        // Lấy ra {foreignKey}
+        $payloadLanguage['{foreignKey}'] = ${moduleTemplate}Id;
         // Lấy ra language_id mặc định
         $payloadLanguage['language_id'] = session('currentLanguage');
         return $payloadLanguage;
@@ -158,21 +158,12 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
 
 
-    private function createPivotLanguage($postCatalogue, $payloadLanguage)
+    private function createPivotLanguage(${moduleTemplate}, $payloadLanguage)
     {
-        $this->postCatalogueRepository->createPivot($postCatalogue, $payloadLanguage, 'languages');
+        $this->{moduleTemplate}Repository->createPivot(${moduleTemplate}, $payloadLanguage, 'languages');
     }
 
-    private function initNetedset()
-    {
-        $this->nestedset = new Nestedsetbie([
-            'table' => 'post_catalogues',
-            'foreignkey' => 'post_catalogue_id',
-            'language_id' => session('currentLanguage')
-        ]);
-    }
-
-
+   
     private function payload()
     {
         return ['parent_id', 'image', 'follow', 'publish', 'album'];
@@ -188,7 +179,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         DB::beginTransaction();
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
-            $delete = $this->postCatalogueRepository->delete($id);
+            $delete = $this->{moduleTemplate}Repository->delete($id);
 
             // Dùng để tính toán lại các giá trị left right
             $this->initNetedset();
@@ -203,12 +194,21 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         }
     }
 
+    private function initNetedset()
+    {
+        $this->nestedset = new Nestedsetbie([
+            'table' => '{tableName}',
+            'foreignkey' => '{foreignKey}',
+            'language_id' => session('currentLanguage')
+        ]);
+    }
+
     function updateStatus()
     {
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->postCatalogueRepository->update(request('modelId'), $payload);
+            $update =  $this->{moduleTemplate}Repository->update(request('modelId'), $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -228,7 +228,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value');
-            $update =  $this->postCatalogueRepository->updateByWhereIn('id', request('id'), $payload);
+            $update =  $this->{moduleTemplate}Repository->updateByWhereIn('id', request('id'), $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -242,4 +242,5 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             return false;
         }
     }
+
 }

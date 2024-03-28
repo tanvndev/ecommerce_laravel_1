@@ -4,12 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AppRepositoryProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      */
-    // Khai bao cac service
+
     protected $serviceBindings = [
         // Base
         'App\Repositories\Interfaces\BaseRepositoryInterface' => 'App\Repositories\BaseRepository',
@@ -53,16 +53,16 @@ class AppServiceProvider extends ServiceProvider
         // Router
         'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
     ];
+
     public function register(): void
     {
-        // 
         foreach ($this->serviceBindings as $key => $value) {
             $this->app->bind($key, $value);
         }
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      */
     public function boot(): void
     {

@@ -2,7 +2,6 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
-use App\Classes\Nestedsetbie;
 use App\Services\Interfaces\PostServiceInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use Illuminate\Support\Facades\Auth;
@@ -102,9 +101,9 @@ class PostService extends BaseService implements PostServiceInterface
             $post = $this->postRepository->create($payload);
             if ($post->id > 0) {
                 // Format lai payload language
-                $payloadPostLanguage = $this->formatPayloadLanguage($post->id);
+                $payloadLanguage = $this->formatPayloadLanguage($post->id);
                 // Create pivot and sync
-                $this->createPivotAndSync($post, $payloadPostLanguage);
+                $this->createPivotAndSync($post, $payloadLanguage);
 
                 // create router
                 $this->createRouter($post);
@@ -137,11 +136,11 @@ class PostService extends BaseService implements PostServiceInterface
 
             if ($updatePost) {
                 // Format lai payload language
-                $payloadPostLanguage = $this->formatPayloadLanguage($id);
+                $payloadLanguage = $this->formatPayloadLanguage($id);
                 // Xoá bản ghi cũa một pivot
-                $post->languages()->detach([$payloadPostLanguage['language_id'], $id]);
+                $post->languages()->detach([$payloadLanguage['language_id'], $id]);
                 // Create pivot and sync
-                $this->createPivotAndSync($post, $payloadPostLanguage);
+                $this->createPivotAndSync($post, $payloadLanguage);
 
                 // update router
                 $this->updateRouter($post);
@@ -168,21 +167,21 @@ class PostService extends BaseService implements PostServiceInterface
 
     private function formatPayloadLanguage($postId)
     {
-        $payloadPostLanguage = request()->only($this->payloadPostLanguage());
+        $payloadLanguage = request()->only($this->payloadLanguage());
         //Đinh dạng slug
-        $payloadPostLanguage['canonical'] = Str::slug($payloadPostLanguage['canonical']);
+        $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
 
         // Lấy ra post_id 
-        $payloadPostLanguage['post_id'] = $postId;
+        $payloadLanguage['post_id'] = $postId;
         // Lấy ra language_id mặc định
-        $payloadPostLanguage['language_id'] = session('currentLanguage');
-        return $payloadPostLanguage;
+        $payloadLanguage['language_id'] = session('currentLanguage');
+        return $payloadLanguage;
     }
 
-    private function createPivotAndSync($post, $payloadPostLanguage)
+    private function createPivotAndSync($post, $payloadLanguage)
     {
         // Tạo ra pivot vào bảng post_language
-        $this->postRepository->createPivot($post, $payloadPostLanguage, 'languages');
+        $this->postRepository->createPivot($post, $payloadLanguage, 'languages');
 
         // Lấy ra id catalogue
         $catalogue = $this->catalogue();
@@ -253,7 +252,7 @@ class PostService extends BaseService implements PostServiceInterface
         return ['post_catalogue_id', 'image', 'follow', 'publish', 'album'];
     }
 
-    private function payloadPostLanguage()
+    private function payloadLanguage()
     {
         return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
     }

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class PostCatalogue extends Model
+class {ModuleTemplate} extends Model
 {
     use HasFactory, SoftDeletes, QueryScopes;
-    protected $table = 'post_catalogues';
+    protected $table = '{tableName}';
     protected $fillable = [
         'parent_id',
         'left',
@@ -28,7 +28,7 @@ class PostCatalogue extends Model
 
     public function languages()
     {
-        return $this->belongsToMany(Language::class, 'post_catalogue_language', 'post_catalogue_id', 'language_id')->withPivot(
+        return $this->belongsToMany(Language::class, '{pivotTable}', '{foreignKey}', 'language_id')->withPivot(
             'name',
             'canonical',
             'meta_title',
@@ -44,27 +44,27 @@ class PostCatalogue extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function posts()
+    public function {relation}s()
     {
-        return $this->belongsToMany(Post::class, 'post_catalogue_post', 'post_catalogue_id', 'post_id');
+        return $this->belongsToMany({Relation}::class, '{relationPivot}', '{foreignKey}', '{relation}_id');
     }
 
-    public function post_catalogue_language()
+    public function {pivotTable}()
     {
-        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany({ModuleTemplate}Language::class, '{foreignKey}', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.
     public static function isChildrenNode($id = 0)
     {
-        $postCatalogue = self::find($id);
+        ${relation}Catalogue = self::find($id);
 
-        if (empty($postCatalogue)) {
+        if (empty(${relation}Catalogue)) {
             return false;
         }
 
         // Kiểm tra nếu right - left > 1 thì không có danh mục con
-        if (($postCatalogue->right - $postCatalogue->left) > 1) {
+        if ((${relation}Catalogue->right - ${relation}Catalogue->left) > 1) {
             return false;
         }
 

@@ -6,13 +6,12 @@ use App\Traits\QueryScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+
 
 class Language extends Model
 {
 
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, QueryScopes;
+    use HasFactory, SoftDeletes, QueryScopes;
     protected $table = 'languages';
     protected $fillable = [
         'name',

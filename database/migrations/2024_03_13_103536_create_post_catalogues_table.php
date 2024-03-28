@@ -26,18 +26,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-        // + id
-        // + parent_id (lưu mã danh mục cha)
-        // + left (giá trị bên trái của node)
-        // + right (giá trị bên trái của node)
-        // + level (cấp của node đó)
-        // + image (ảnh đại diện)
-        // + icon (ảnh nhỏ)
-        // + album (danh sách ảnh)
-        // + publish (trạng thái)
-        // + order (sắp xếp các danh mục)
-        // + user_id (người tạo ra danh mục)
-        // + deleted_at 
     }
 
     /**
