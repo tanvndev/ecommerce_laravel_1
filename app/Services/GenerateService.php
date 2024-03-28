@@ -44,10 +44,10 @@ class GenerateService implements GenerateServiceInterface
             // $makeService = $this->makeService();
             // $makeProvider = $this->makeProvider();
             // $makeRequest =  $this->makeRequest();
-            // $makeView =  $this->makeView();
+            $makeView =  $this->makeView();
+            // $makeRoute =  $this->makeRoute();
 
 
-            // $this->makeRoute();
             // $this->makeRule();
             // $this->makeLang();
 
@@ -61,30 +61,56 @@ class GenerateService implements GenerateServiceInterface
         }
     }
 
-    private function makeView()
+    private function makeRoute()
     {
         try {
-            $name = request('name');
+            //code...
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function makeView()
+    {
+        $payload = request()->only('name', 'module_type');
+
+        switch ($payload['module_type']) {
+            case '1':
+                // Create Template Catalogue View
+                $this->createView($payload['name'], 'catalogue');
+                break;
+            case '2':
+                // Create Template View
+                $this->createView($payload['name'], 'noCatalogue');
+                break;
+
+            default:
+                // $this->createView();
+
+                break;
+        }
+    }
+
+    private function createView($name, $templateType)
+    {
+        try {
             $moduleName = $this->convertModuleNameToTableName($name);
             $modulePath = resource_path('views/servers/' . $moduleName . 's');
+            $templateBasePath = base_path('app/Templates/views/');
 
-            // Kiểm tra có đường dẫn chưa xong tạo thư mục
-            if (!File::isDirectory($modulePath)) {
-                File::makeDirectory($modulePath, 0777, true, true);
-            }
+            // Kiểm tra và tạo thư mục nếu cần thiết
+            $this->createDirectoryIfNotExists($modulePath);
 
-            // Tạo ra thư mục blocks
-            if (!File::isDirectory($modulePath . '/blocks')) {
-                File::makeDirectory($modulePath . '/blocks', 0777, true, true);
-            }
+            // Tạo ra thư mục blocks nếu chưa tồn tại
+            $this->createDirectoryIfNotExists($modulePath . '/blocks');
 
 
-            $templatePath = [
-                'blocks/aside' => base_path('app/Templates/views/blocks/TemplateAside.php'),
-                'blocks/filter' => base_path('app/Templates/views/blocks/TemplateFilter.php'),
-                'blocks/table' => base_path('app/Templates/views/blocks/TemplateTable.php'),
-                'index' => base_path('app/Templates/views/TemplateIndex.php'),
-                'store' => base_path('app/Templates/views/TemplateStore.php'),
+            $templatePaths = [
+                'blocks/aside' => "{$templateBasePath}{$templateType}/blocks/TemplateAside.php",
+                'blocks/filter' => "{$templateBasePath}{$templateType}/blocks/TemplateFilter.php",
+                'blocks/table' => "{$templateBasePath}{$templateType}/blocks/TemplateTable.php",
+                'index' => "{$templateBasePath}{$templateType}/TemplateIndex.php",
+                'store' => "{$templateBasePath}{$templateType}/TemplateStore.php",
             ];
 
             $replace = [
@@ -95,23 +121,28 @@ class GenerateService implements GenerateServiceInterface
             ];
 
 
-            foreach ($templatePath as $fileName => $path) {
-
+            foreach ($templatePaths as $fileName => $path) {
                 $templateContent = file_get_contents($path);
 
                 // Thay thế nội dung của template
                 $requestContent = $this->formatContent($templateContent, $replace);
 
                 // Tạo đường dẫn và ghi nội dung vào file request
-
-                $path = resource_path("views/servers/{$moduleName}s/$fileName.blade.php");
-                File::put($path, $requestContent);
+                $filePath = "{$modulePath}/{$fileName}.blade.php";
+                File::put($filePath, $requestContent);
             }
-            dd($replace);
         } catch (\Exception $e) {
             throw $e;
         }
     }
+
+    private function createDirectoryIfNotExists($path)
+    {
+        if (!File::isDirectory($path)) {
+            File::makeDirectory($path, 0777, true, true);
+        }
+    }
+
 
     private function makeRequest()
     {

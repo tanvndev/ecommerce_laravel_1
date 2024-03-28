@@ -146,7 +146,7 @@
     min-width: 90px;
     height: 60px;
 }
-.post-catalgue-name {
+.post-catalogue-name {
     position: relative;
     display: block;
     margin-top: 2px;
@@ -154,7 +154,7 @@
     margin-bottom: 0;
     font-size: 13px;
 }
-.post-catalgue-name::after {
+.post-catalogue-name::after {
     content: "-";
     position: absolute;
     left: -8px;
@@ -165,7 +165,7 @@
     line-height: 1.5;
 }
 
-.post-catalgue-name:hover {
+.post-catalogue-name:hover {
     text-decoration: underline;
 }
 

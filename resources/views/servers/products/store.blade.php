@@ -17,10 +17,10 @@
 
 @section('content')
 @php
-$url = $config['method'] == 'create' ? route('post.store') : route('post.update',
-$post->id);
+$url = $config['method'] == 'create' ? route('product.store') : route('product.update',
+$product->id);
 
-// dd($post);
+// dd($product);
 @endphp
 <form action="{{ $url }}" method="post" enctype="multipart/form-data">
 
@@ -34,11 +34,9 @@ $post->id);
 
             <div class="row align-items-center">
                 <div class="border-0 mb-4">
-                    <div
-                        class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                         <h3 class="fw-bold mb-0">{{$config['seo']['title']}}</h3>
-                        <button type="submit"
-                            class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}
+                        <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}
                     </div>
                 </div>
             </div> <!-- Row end  -->
@@ -49,17 +47,17 @@ $post->id);
 
                 @include('servers.includes.messageError')
                 {{-- Aside --}}
-                @include('servers.posts.blocks.aside')
+                @include('servers.products.blocks.aside')
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    @include('servers.includes.content', ['model'=> $post ?? []])
+                    @include('servers.includes.content', ['model'=> $product ?? []])
 
                     {{-- Album --}}
                     @include('servers.includes.album')
 
                     {{-- Seo --}}
-                    @include('servers.includes.seo', ['model'=> $post ?? []])
+                    @include('servers.includes.seo', ['model'=> $product ?? []])
                 </div>
             </div><!-- Row end  -->
 
