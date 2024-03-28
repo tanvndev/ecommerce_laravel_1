@@ -1,10 +1,6 @@
 @extends('layouts.serverLayout')
 
-@section('script')
-<script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
-<script src="{{ asset('assets/servers/js/library/ckfinder.js
-')}}"></script>
-@endsection
+
 
 @section('content')
 @php
@@ -49,6 +45,19 @@ $url = $config['method'] == 'create' ? route('generate.store') : route('generate
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name" value="{{old('name', $generate->name ?? '')}}"
                                         class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{{__('messages.generate.table.module')}} <span
+                                            class="text-danger">(*)</span></label>
+                                    <input type="text" name="module" value="{{old('module', $generate->module ?? '')}}"
+                                        class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">{{__('messages.generate.table.path')}} <span
+                                            class="text-danger">(*)</span></label>
+                                    <input type="text" name="path" value="{{old('path', $generate->path ?? '')}}"
+                                        class="form-control path-route">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Loại module <span class="text-danger">(*)</span></label>

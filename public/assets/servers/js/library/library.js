@@ -8,6 +8,14 @@ $(function () {
     var init = {};
     var _token = $('meta[name="csrf-token"]').attr("content");
 
+    init.convertToPath = () => {
+        $(".path-route").on("input", function () {
+            const value = $(this).val();
+            value = value.replace(/ /g, "/");
+            $(this).val(value);
+        });
+    };
+
     init.sortUI = () => {
         if ($(".sortable").length > 0) {
             $(".sortable").sortable();

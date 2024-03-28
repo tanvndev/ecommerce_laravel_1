@@ -5,6 +5,12 @@ if (typeof jQuery === "undefined") {
 $(function () {
     "use strict";
 
+    $(".path-route").on("input", function () {
+        let value = $(this).val();
+        value = value.replace(/ /g, "/");
+        $(this).val(value);
+    });
+
     // auto expand textarea
     $(".textarea-expand").each(function () {
         $(this).on("input", function () {

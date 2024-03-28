@@ -191,7 +191,9 @@ return [
             'error' => 'Xoá module thất bại.',
         ],
         'table' => [
-            'name' => 'Tên module',
+            'name' => 'Tên model',
+            'module' => 'Tên chức năng',
+            'path' => 'Đường dẫn'
         ]
     ],
 
@@ -253,6 +255,7 @@ return [
     'cancelButton' => 'Huỷ bỏ',
     'agreeButton' => 'Đồng ý',
     'saveButton' => 'Lưu lại',
+
     'general' => [
         'publish' => [
             '-1' => 'Chọn tình trạng',

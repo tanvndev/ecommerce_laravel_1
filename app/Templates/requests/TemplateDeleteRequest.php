@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CheckPostCatalogueChildrenRule;
+use App\Rules\Check{ModuleTemplate}ChildrenRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeletePostCatalogueRequest extends FormRequest
+class Delete{ModuleTemplate}Request extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class DeletePostCatalogueRequest extends FormRequest
         $_id = request('_id');
         return [
             '_id' => [
-                new CheckPostCatalogueChildrenRule($_id),
+                new Check{ModuleTemplate}ChildrenRule($_id),
             ]
         ];
     }

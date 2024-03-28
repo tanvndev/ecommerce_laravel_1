@@ -37,16 +37,16 @@ class GenerateService implements GenerateServiceInterface
     {
         DB::beginTransaction();
         try {
-            // $database = $this->makeDatabase();
-            // $controller =  $this->makeController();
-            // $model = $this->makeModel();
-            // $repository = $this->makeRepository();
-            // $service = $this->makeService();
-            // $provider = $this->makeProvider();
+            // $makeDatabase = $this->makeDatabase();
+            // $makeController =  $this->makeController();
+            // $makeModel = $this->makeModel();
+            // $makeRepository = $this->makeRepository();
+            // $makeService = $this->makeService();
+            // $makeProvider = $this->makeProvider();
+            // $makeRequest =  $this->makeRequest();
+            // $makeView =  $this->makeView();
 
 
-            // $this->makeRequest();
-            // $this->makeView();
             // $this->makeRoute();
             // $this->makeRule();
             // $this->makeLang();
@@ -60,6 +60,104 @@ class GenerateService implements GenerateServiceInterface
             return false;
         }
     }
+
+    private function makeView()
+    {
+        try {
+            $name = request('name');
+            $moduleName = $this->convertModuleNameToTableName($name);
+            $modulePath = resource_path('views/servers/' . $moduleName . 's');
+
+            // Kiểm tra có đường dẫn chưa xong tạo thư mục
+            if (!File::isDirectory($modulePath)) {
+                File::makeDirectory($modulePath, 0777, true, true);
+            }
+
+            // Tạo ra thư mục blocks
+            if (!File::isDirectory($modulePath . '/blocks')) {
+                File::makeDirectory($modulePath . '/blocks', 0777, true, true);
+            }
+
+
+            $templatePath = [
+                'blocks/aside' => base_path('app/Templates/views/blocks/TemplateAside.php'),
+                'blocks/filter' => base_path('app/Templates/views/blocks/TemplateFilter.php'),
+                'blocks/table' => base_path('app/Templates/views/blocks/TemplateTable.php'),
+                'index' => base_path('app/Templates/views/TemplateIndex.php'),
+                'store' => base_path('app/Templates/views/TemplateStore.php'),
+            ];
+
+            $replace = [
+                'ModuleTemplate' => ucfirst($name),
+                'moduleTemplate' => lcfirst($name),
+                'moduleRoute' => str_replace('_', '.', $moduleName),
+                'moduleView' => lcfirst($moduleName) . 's',
+            ];
+
+
+            foreach ($templatePath as $fileName => $path) {
+
+                $templateContent = file_get_contents($path);
+
+                // Thay thế nội dung của template
+                $requestContent = $this->formatContent($templateContent, $replace);
+
+                // Tạo đường dẫn và ghi nội dung vào file request
+
+                $path = resource_path("views/servers/{$moduleName}s/$fileName.blade.php");
+                File::put($path, $requestContent);
+            }
+            dd($replace);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function makeRequest()
+    {
+        try {
+            $name = request('name');
+
+            $requestTypes = [
+                'Store' => true,
+                'Update' => true,
+                'Delete' => request('module_type') == 1,
+            ];
+
+            // Lấy đường dẫn template của request
+            $templatePath = [
+                'Store' => base_path('app/Templates/requests/TemplateStoreRequest.php'),
+                'Update' => base_path('app/Templates/requests/TemplateUpdateRequest.php'),
+                'Delete' => base_path('app/Templates/requests/TemplateDeleteRequest.php'),
+            ];
+
+            $replace = [
+                'ModuleTemplate' => ucfirst($name),
+            ];
+
+            foreach ($requestTypes as $type => $shouldCreate) {
+                if (!$shouldCreate) {
+                    continue;
+                }
+
+                $templateContent = file_get_contents($templatePath[$type]);
+
+                // Thay thế nội dung của template
+                $requestContent = $this->formatContent($templateContent, $replace);
+
+                // Tạo đường dẫn và ghi nội dung vào file request
+                $requestName = $type . ucfirst($name) . 'Request';
+                $path = base_path('app/Http/Requests/' . $requestName . '.php');
+                File::put($path, $requestContent);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+            return false;
+        }
+    }
+
 
     private function makeProvider()
     {
@@ -134,8 +232,8 @@ class GenerateService implements GenerateServiceInterface
     {
         try {
             // Lấy ra đường dẫn template
-            $templateLayerInterfacePath = base_path('app/Templates/Template' . ucfirst($layerName) . 'Interface.php');
-            $templateLayerPath = base_path('app/Templates/Template' . ucfirst($layerName) . '.php');
+            $templateLayerInterfacePath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . 'Interface.php');
+            $templateLayerPath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . '.php');
 
 
             // Đọc nội dung của file
@@ -143,10 +241,12 @@ class GenerateService implements GenerateServiceInterface
             $layerContent = file_get_contents($templateLayerPath);
 
 
+            // format content
             $layerInterFaceContent = $this->formatContent($layerInterFaceContent, $replace);
             $layerContent = $this->formatContent($layerContent, $replace);
 
 
+            // path of forders
             $layerInterFacePath = base_path("app/$forderName/Interfaces/" . ucfirst($name) . ucfirst($layerName) . 'Interface.php');
             $layerPath = base_path("app/$forderName/" . ucfirst($name) . ucfirst($layerName) . '.php');
 
@@ -156,8 +256,7 @@ class GenerateService implements GenerateServiceInterface
 
             return true;
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die;
+            throw $e;
             return false;
         }
     }
@@ -186,9 +285,10 @@ class GenerateService implements GenerateServiceInterface
     private function createModel($name, $templateFile)
     {
         try {
-            $templateModelPath = base_path('app/Templates/' . $templateFile . 'Model.php');
+            $templateModelPath = base_path('app/Templates/models/' . $templateFile . 'Model.php');
             // Đọc nội dung của file
             $modelContent = file_get_contents($templateModelPath);
+            dd($modelContent);
             // Các biến ở trong file template
             $replace = $this->getModelReplace($name, $templateFile);
 
@@ -253,7 +353,7 @@ class GenerateService implements GenerateServiceInterface
     private function createController($name, $templateFile)
     {
         try {
-            $templateControllerPath = base_path('app/Templates/' . $templateFile . 'Controller.php');
+            $templateControllerPath = base_path('app/Templates/controllers/' . $templateFile . 'Controller.php');
             // Đọc nội dung của file
             $controllerContent = file_get_contents($templateControllerPath);
 
