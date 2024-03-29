@@ -14,7 +14,9 @@ use App\Http\Controllers\Servers\{
     UserController,
     UserCatalogueController,
     PostCatalogueController,
-    PostController
+    PostController,
+    //@@new-controller-module@@
+
 };
 
 
@@ -113,6 +115,10 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [PostCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [PostCatalogueController::class, 'destroy'])->name('destroy');
     });
+
+
+    //@@new-route-module@@
+    // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 
 

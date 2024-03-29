@@ -35,6 +35,7 @@ class GenerateService implements GenerateServiceInterface
 
     public function create()
     {
+        $moduleType = request('module_type');
         DB::beginTransaction();
         try {
             // $makeDatabase = $this->makeDatabase();
@@ -44,11 +45,13 @@ class GenerateService implements GenerateServiceInterface
             // $makeService = $this->makeService();
             // $makeProvider = $this->makeProvider();
             // $makeRequest =  $this->makeRequest();
-            $makeView =  $this->makeView();
-            // $makeRoute =  $this->makeRoute();
+            // $makeView =  $this->makeView();
+            // if ($moduleType == 1) {
+            //     $this->makeRule();
+            // }
+            $makeRoute =  $this->makeRoute();
 
 
-            // $this->makeRule();
             // $this->makeLang();
 
             DB::commit();
@@ -61,10 +64,67 @@ class GenerateService implements GenerateServiceInterface
         }
     }
 
+
+
     private function makeRoute()
     {
         try {
-            //code...
+            $name = request('name');
+            $tableName = $this->convertModuleNameToTableName($name);
+            $prefixReplace = str_replace('_', '/', $tableName);
+            $routeReplace = str_replace('_', '.', $tableName);
+            $controllerReplace = ucfirst($name) . 'Controller';
+
+            $routePath = base_path('routes/web.php');
+            $routeGroup = <<<ROUTE
+                // Routes for {$controllerReplace}
+                Route::prefix('{$prefixReplace}')->name('{$routeReplace}.')->group(function () {
+                    Route::get('index', [{$controllerReplace}::class, 'index'])->name('index');
+                    Route::get('create', [{$controllerReplace}::class, 'create'])->name('create');
+                    Route::post('store', [{$controllerReplace}::class, 'store'])->name('store');
+                    Route::get('/{id}/edit', [{$controllerReplace}::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+                    Route::put('/{id}/update', [{$controllerReplace}::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+                    Route::delete('destroy', [{$controllerReplace}::class, 'destroy'])->name('destroy');
+                });
+            ROUTE;
+
+            $content = file_get_contents($routePath);
+            $positionController = strpos($content, '//@@new-controller-module@@');
+            $positionRoute = strpos($content, '//@@new-route-module@@');
+
+
+            $newLineController = $controllerReplace . ',' . "\n";
+            $newLineRoute = "\n" . $routeGroup . "\n";
+
+            if ($positionController !== false && $positionRoute !== false) {
+                $content = substr_replace($content, $newLineRoute, $positionRoute, 0);
+                $content = substr_replace($content, $newLineController, $positionController, 0);
+            }
+
+            File::put($routePath, $content);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    private function makeRule()
+    {
+        try {
+            $name = request('name');
+            $templatePath = base_path('app/Templates/rules/TemplateCheckChildrenRule.php');
+            // Đọc nội dung của file
+            $content = file_get_contents($templatePath);
+            // Các biến ở trong file template
+            $replace = [
+                'ModuleTemplate' => ucfirst($name),
+            ];
+
+            $content = $this->formatContent($content, $replace);
+            $modulePath = base_path('app/Rules/Check' . ucfirst($name) . 'ChildrenRule.php');
+            // Tạo file
+            File::put($modulePath, $content);
+
+            return true;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -319,7 +379,6 @@ class GenerateService implements GenerateServiceInterface
             $templateModelPath = base_path('app/Templates/models/' . $templateFile . 'Model.php');
             // Đọc nội dung của file
             $modelContent = file_get_contents($templateModelPath);
-            dd($modelContent);
             // Các biến ở trong file template
             $replace = $this->getModelReplace($name, $templateFile);
 

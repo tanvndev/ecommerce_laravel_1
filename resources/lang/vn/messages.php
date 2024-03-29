@@ -196,7 +196,7 @@ return [
             'path' => 'Đường dẫn'
         ]
     ],
-
+    'errorChildDelete' => 'Không thể xoá do vẫn còn danh mục con.',
     'parentId' => 'Danh mục cha',
     'catalogueSub' => 'Danh mục phụ',
     'permissionName' => 'Phân quyền',

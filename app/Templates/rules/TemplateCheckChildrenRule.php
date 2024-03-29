@@ -2,11 +2,11 @@
 
 namespace App\Rules;
 
-use App\Models\PostCatalogue;
+use App\Models\{ModuleTemplate};
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class CheckPostCatalogueChildrenRule implements ValidationRule
+class Check{ModuleTemplate}ChildrenRule implements ValidationRule
 {
     protected $_id;
     public function __construct($id)
@@ -20,7 +20,7 @@ class CheckPostCatalogueChildrenRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $flag = PostCatalogue::isChildrenNode($this->_id);
+        $flag = {ModuleTemplate}::isChildrenNode($this->_id);
 
         if ($flag == false) {
             $fail(__('messages.errorChildDelete'));
