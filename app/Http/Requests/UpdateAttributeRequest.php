@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateGenerateRequest extends FormRequest
+class UpdateAttributeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,20 +22,16 @@ class UpdateGenerateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:generates,name,' . $this->id,
-            'module_type' => 'required',
-            'schema' => 'required',
-            'module' => 'required',
+            'name' => 'required|string',
+            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tên module',
-            'schema' => 'Schema',
-            'module_type' => 'Loại module',
-            'module' => 'Tên chức năng'
+            'name' => 'Tiêu đề',
+            'canonical' => 'Đường dẫn',
         ];
     }
 

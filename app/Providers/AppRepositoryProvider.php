@@ -40,6 +40,10 @@ class AppRepositoryProvider extends ServiceProvider
 'App\Repositories\Interfaces\GalleryCatalogueRepositoryInterface' => 'App\Repositories\GalleryCatalogueRepository',
 // Product
 'App\Repositories\Interfaces\ProductRepositoryInterface' => 'App\Repositories\ProductRepository',
+// AttributeCatalogue
+'App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface' => 'App\Repositories\AttributeCatalogueRepository',
+// Attribute
+'App\Repositories\Interfaces\AttributeRepositoryInterface' => 'App\Repositories\AttributeRepository',
 ];
 
     public function register(): void

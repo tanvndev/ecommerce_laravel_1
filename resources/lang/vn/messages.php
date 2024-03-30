@@ -26,6 +26,59 @@ return [
 
         ]
     ],
+    'attributeCatalogue' => [
+        'index' => [
+            'title' => 'Danh sách nhóm thuộc tính',
+            'table' => 'Thông tin nhóm thuộc tính',
+            'create' => 'Tạo mới nhóm thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nhóm thuộc tính',
+            'success' => 'Tạo mới nhóm thuộc tính thành công.',
+            'error' => 'Tạo mới nhóm thuộc tính thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nhóm thuộc tính',
+            'success' => 'Cập nhập nhóm thuộc tính thành công.',
+            'error' => 'Cập nhập nhóm thuộc tính thất bại.',
+        ],
+        'delete' => [
+            'title' => 'Cập nhập nhóm thuộc tính',
+            'success' => 'Xoá nhóm thuộc tính thành công.',
+            'error' => 'Xoá nhóm thuộc tính thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên nhóm',
+
+        ]
+    ],
+
+    'attribute' => [
+        'index' => [
+            'title' => 'Danh sách thuộc tính',
+            'table' => 'Thông tin thuộc tính',
+            'create' => 'Tạo mới thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Tạo mới thuộc tính',
+            'success' => 'Tạo mới thuộc tính thành công.',
+            'error' => 'Tạo mới thuộc tính thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập thuộc tính',
+            'success' => 'Cập nhập thuộc tính thành công.',
+            'error' => 'Cập nhập thuộc tính thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá thuộc tính thành công.',
+            'error' => 'Xoá thuộc tính thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tiêu đề thuộc tính',
+            'attributeCatalogue' => 'Chọn nhóm thuộc tính',
+        ]
+    ],
+
     'productCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm sản phẩm',

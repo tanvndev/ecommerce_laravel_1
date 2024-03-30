@@ -18,6 +18,8 @@ use App\Http\Controllers\Servers\{
     ProductCatalogueController,
     GalleryCatalogueController,
 ProductController,
+AttributeCatalogueController,
+AttributeController,
 //@@new-controller-module@@
 
 };
@@ -150,6 +152,26 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [ProductController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [ProductController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for AttributeCatalogueController
+    Route::prefix('attribute/catalogue')->name('attribute.catalogue.')->group(function () {
+        Route::get('index', [AttributeCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [AttributeCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [AttributeCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AttributeCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [AttributeCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [AttributeCatalogueController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for AttributeController
+    Route::prefix('attribute')->name('attribute.')->group(function () {
+        Route::get('index', [AttributeController::class, 'index'])->name('index');
+        Route::get('create', [AttributeController::class, 'create'])->name('create');
+        Route::post('store', [AttributeController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AttributeController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [AttributeController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [AttributeController::class, 'destroy'])->name('destroy');
     });
 //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động

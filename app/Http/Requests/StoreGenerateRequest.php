@@ -25,6 +25,7 @@ class StoreGenerateRequest extends FormRequest
             'name' => 'required|unique:generates',
             'module_type' => 'required',
             'schema' => 'required',
+            'module' => 'required'
         ];
     }
 
@@ -33,7 +34,8 @@ class StoreGenerateRequest extends FormRequest
         return [
             'name' => 'Tên module',
             'schema' => 'Schema',
-            'module_type' => 'Loại module'
+            'module_type' => 'Loại module',
+            'module' => 'Tên chức năng'
         ];
     }
 

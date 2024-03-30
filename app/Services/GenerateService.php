@@ -361,7 +361,6 @@ class GenerateService implements GenerateServiceInterface
             $templateLayerPath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . '.php');
 
             if ($moduleType == 'catalogue') {
-                $templateLayerInterfacePath = base_path('app/Templates/' . lcfirst($forderName) . '/TemplateCatalogue' . ucfirst($layerName) . 'Interface.php');
                 $templateLayerPath = base_path('app/Templates/' . lcfirst($forderName) . '/TemplateCatalogue' . ucfirst($layerName) . '.php');
             }
 
