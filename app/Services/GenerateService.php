@@ -38,17 +38,17 @@ class GenerateService implements GenerateServiceInterface
         $moduleType = request('module_type');
         DB::beginTransaction();
         try {
-            // $makeDatabase = $this->makeDatabase();
-            // $makeController =  $this->makeController();
-            // $makeModel = $this->makeModel();
-            // $makeRepository = $this->makeRepository();
-            // $makeService = $this->makeService();
-            // $makeProvider = $this->makeProvider();
-            // $makeRequest =  $this->makeRequest();
-            // $makeView =  $this->makeView();
-            // if ($moduleType == 1) {
-            //     $this->makeRule();
-            // }
+            $makeDatabase = $this->makeDatabase();
+            $makeController =  $this->makeController();
+            $makeModel = $this->makeModel();
+            $makeRepository = $this->makeRepository();
+            $makeService = $this->makeService();
+            $makeProvider = $this->makeProvider();
+            $makeRequest =  $this->makeRequest();
+            $makeView =  $this->makeView();
+            if ($moduleType == 1) {
+                $this->makeRule();
+            }
             $makeRoute =  $this->makeRoute();
 
 
