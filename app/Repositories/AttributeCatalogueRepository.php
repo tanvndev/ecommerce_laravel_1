@@ -17,13 +17,13 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
     public function getAttributeCatalogueLanguageById($id = 0, $languageId = 0)
     {
         $select = [
-            'attributeCatalogues.id',
-            'attributeCatalogues.parent_id',
-            'attributeCatalogues.publish',
-            'attributeCatalogues.image',
-            'attributeCatalogues.icon',
-            'attributeCatalogues.album',
-            'attributeCatalogues.follow',
+            'attribute_catalogues.id',
+            'attribute_catalogues.parent_id',
+            'attribute_catalogues.publish',
+            'attribute_catalogues.image',
+            'attribute_catalogues.icon',
+            'attribute_catalogues.album',
+            'attribute_catalogues.follow',
             'tb2.name',
             'tb2.description',
             'tb2.content',
@@ -34,7 +34,7 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
         ];
         return $this->model
             ->select($select)
-            ->join('attributeCatalogue_language as tb2', 'attributeCatalogues.id', '=', 'tb2.attributeCatalogue_id')
+            ->join('attribute_catalogue_language as tb2', 'attribute_catalogues.id', '=', 'tb2.attribute_catalogue_id')
             ->where('tb2.language_id', $languageId)
             ->find($id);
     }

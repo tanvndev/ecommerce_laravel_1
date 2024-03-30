@@ -197,6 +197,8 @@ class PostService extends BaseService implements PostServiceInterface
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->postRepository->delete($id);
+            // Xoa router
+            $this->deleteRouter($id);
 
             DB::commit();
             return true;

@@ -198,6 +198,9 @@ class ProductService extends BaseService implements ProductServiceInterface
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->productRepository->delete($id);
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

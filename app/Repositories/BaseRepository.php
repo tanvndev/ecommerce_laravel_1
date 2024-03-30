@@ -64,11 +64,24 @@ class BaseRepository implements BaseRepositoryInterface
         return $delete->delete();
     }
 
+    public function deleteByWhere($conditions = [])
+    {
+        $query = $this->model->newQuery();
+        return  $query->customWhere($conditions)->delete();
+    }
+
+
     // Xoá cứng
     public function forceDelete($modelId)
     {
         $delete = $this->findById($modelId);
         return $delete->forceDelete();
+    }
+
+    public function forceDeleteByWhere($conditions)
+    {
+        $query = $this->model->newQuery();
+        return  $query->customWhere($conditions)->forceDelete();
     }
 
 

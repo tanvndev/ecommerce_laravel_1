@@ -12,7 +12,9 @@ interface BaseRepositoryInterface
     public function updateByWhereIn($whereInField = '', $whereIn = [], $payload = []);
     public function updateByWhere($condition = [], $payload = []);
     public function delete($modelId);
+    public function deleteByWhere($conditions = []);
     public function forceDelete($modelId);
+    public function forceDeleteByWhere($conditions);
     public function pagination(
         $column = ['*'],
         $condition = [],

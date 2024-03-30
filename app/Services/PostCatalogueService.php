@@ -190,6 +190,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->postCatalogueRepository->delete($id);
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             // Dùng để tính toán lại các giá trị left right
             $this->initNetedset();
             $this->calculateNestedSet();

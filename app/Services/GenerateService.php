@@ -43,19 +43,19 @@ class GenerateService implements GenerateServiceInterface
         $moduleType = request('module_type');
         // DB::beginTransaction();
         try {
-            // $makeDatabase = $this->makeDatabase();
-            // $makeController =  $this->makeController();
-            // $makeModel = $this->makeModel();
+            $makeDatabase = $this->makeDatabase();
+            $makeController =  $this->makeController();
+            $makeModel = $this->makeModel();
             $makeService = $this->makeService();
             $makeRepository = $this->makeRepository();
-            // $makeProvider = $this->makeProvider();
-            // $makeRequest =  $this->makeRequest();
-            // $makeView =  $this->makeView();
-            // if ($moduleType == 'catalogue') {
-            //     $this->makeRule();
-            // }
-            // $makeRoute = $this->makeRoute();
-            // $makePermission = $this->makePermission();
+            $makeProvider = $this->makeProvider();
+            $makeRequest =  $this->makeRequest();
+            $makeView =  $this->makeView();
+            if ($moduleType == 'catalogue') {
+                $this->makeRule();
+            }
+            $makeRoute = $this->makeRoute();
+            $makePermission = $this->makePermission();
 
 
             // $this->makeLang();
@@ -329,7 +329,6 @@ class GenerateService implements GenerateServiceInterface
     private function makeService()
     {
         $name = request('name');
-        $moduleType = request('module_type');
         $tableName = $this->convertModuleNameToTableName($name);
         $replace = [
             'ModuleTemplate' => ucfirst($name),
@@ -345,10 +344,12 @@ class GenerateService implements GenerateServiceInterface
     private function makeRepository()
     {
         $name = request('name');
-        $moduleType = request('module_type');
+        $tableName = $this->convertModuleNameToTableName($name);
+        $tableName = explode('_', $tableName);
         $replace = [
             'ModuleTemplate' => ucfirst($name),
             'moduleTemplate' => lcfirst($name),
+            'table' => lcfirst($tableName[0]),
         ];
 
         return $this->initialzeServiceLayer($name, 'Repository', 'Repositories', $replace);

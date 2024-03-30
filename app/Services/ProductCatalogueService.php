@@ -179,6 +179,8 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->productCatalogueRepository->delete($id);
+            // Xoa router
+            $this->deleteRouter($id);
 
             // Dùng để tính toán lại các giá trị left right
             $this->initNetedset();

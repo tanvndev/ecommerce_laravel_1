@@ -54,31 +54,11 @@ return [
         ],
 
         [
-            'id' => 'attribute',
-            'route' => '',
-            'icon' => 'icofont-company',
-            'title' => 'QL Thuộc tính',
-            'activeCondition' => ['attribute.*'],
-            'subMenu' => [
-                [
-                    'title' => 'QL Thuộc tính',
-                    'route' => 'attribute.index',
-                    'activeCondition' => ['attribute.index', 'attribute.create', 'attribute.edit'],
-                ],
-                [
-                    'title' => 'QL Nhóm thuộc tính',
-                    'route' => 'attribute.catalogue.index',
-                    'activeCondition' => ['attribute.catalogue.*']
-                ],
-            ]
-        ],
-
-        [
             'id' => 'product',
             'route' => '',
             'icon' => 'icofont-box',
             'title' => 'QL Sản phẩm',
-            'activeCondition' => ['product.*'],
+            'activeCondition' => ['product.*', 'attribute.*'],
             'subMenu' => [
                 [
                     'title' => 'QL Sản phẩm',
@@ -89,6 +69,16 @@ return [
                     'title' => 'QL Nhóm sản phẩm',
                     'route' => 'product.catalogue.index',
                     'activeCondition' => ['product.catalogue.*']
+                ],
+                [
+                    'title' => 'QL Thuộc tính',
+                    'route' => 'attribute.index',
+                    'activeCondition' => ['attribute.index', 'attribute.create', 'attribute.edit'],
+                ],
+                [
+                    'title' => 'QL Nhóm thuộc tính',
+                    'route' => 'attribute.catalogue.index',
+                    'activeCondition' => ['attribute.catalogue.*']
                 ],
             ]
         ],

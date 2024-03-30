@@ -197,7 +197,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
     private function initNetedset()
     {
         $this->nestedset = new Nestedsetbie([
-            'table' => '{tablePivotName}',
+            'table' => '{tableName}',
             'foreignkey' => '{foreignKey}',
             'language_id' => session('currentLanguage')
         ]);

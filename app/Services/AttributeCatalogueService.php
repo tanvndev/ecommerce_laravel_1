@@ -74,6 +74,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
+
             // Create attributeCatalogue
             $attributeCatalogue = $this->attributeCatalogueRepository->create($payload);
 
@@ -97,7 +98,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
+            throw $e;
             return false;
         }
     }
@@ -163,7 +164,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         $this->attributeCatalogueRepository->createPivot($attributeCatalogue, $payloadLanguage, 'languages');
     }
 
-   
+
     private function payload()
     {
         return ['parent_id', 'image', 'follow', 'publish', 'album'];
@@ -181,6 +182,9 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->attributeCatalogueRepository->delete($id);
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             // Dùng để tính toán lại các giá trị left right
             $this->initNetedset();
             $this->calculateNestedSet();
@@ -197,7 +201,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
     private function initNetedset()
     {
         $this->nestedset = new Nestedsetbie([
-            'table' => '{tablePivotName}',
+            'table' => 'attribute_catalogues',
             'foreignkey' => 'attribute_catalogue_id',
             'language_id' => session('currentLanguage')
         ]);
@@ -242,5 +246,4 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             return false;
         }
     }
-
 }

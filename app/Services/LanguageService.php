@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 
-class LanguageService implements LanguageServiceInterface
+class LanguageService extends BaseService implements LanguageServiceInterface
 {
     protected $languageRepository;
     public function __construct(LanguageRepository $languageRepository)
     {
+        parent::__construct();
         $this->languageRepository = $languageRepository;
     }
     function paginate()
@@ -146,6 +147,7 @@ class LanguageService implements LanguageServiceInterface
             $option = request('option');
             $payloadLanguage = $this->payloadLanguage($option, $id);
 
+
             // Lấy ra đối tượng repository tương ứng
             $repositoryInstance = $this->getRepositoryInstance($option['model']);
 
@@ -153,6 +155,23 @@ class LanguageService implements LanguageServiceInterface
             $model = $repositoryInstance->findById($id);
             // Xoá và tạo ra pivot
             $this->detachAndCreatePivot($model, $repositoryInstance, $option, $payloadLanguage);
+
+
+            // Xoá router cũ
+            $this->routerRepository->forceDeleteByWhere([
+                'module_id' => ['=', $id],
+                'controllers' => ['=', 'App\Http\Controllers\Clients\\' . ucfirst($option['model']) . 'Controller'],
+                'language_id' => ['=', $option['languageId']]
+            ]);
+            // Thêm router mới
+            $router = [
+                'canonical' => Str::slug(request('translate_canonical')),
+                'module_id' => $id,
+                'language_id' => $option['languageId'],
+                'controllers' => 'App\Http\Controllers\Clients\\' . ucfirst($option['model']) . 'Controller'
+            ];
+
+            $this->routerRepository->create($router);
 
 
             DB::commit();

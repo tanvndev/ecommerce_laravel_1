@@ -17,13 +17,13 @@ class {ModuleTemplate}Repository extends BaseRepository implements {ModuleTempla
     public function get{ModuleTemplate}LanguageById($id = 0, $languageId = 0)
     {
         $select = [
-            '{moduleTemplate}s.id',
-            '{moduleTemplate}s.parent_id',
-            '{moduleTemplate}s.publish',
-            '{moduleTemplate}s.image',
-            '{moduleTemplate}s.icon',
-            '{moduleTemplate}s.album',
-            '{moduleTemplate}s.follow',
+            '{table}_catalogues.id',
+            '{table}_catalogues.parent_id',
+            '{table}_catalogues.publish',
+            '{table}_catalogues.image',
+            '{table}_catalogues.icon',
+            '{table}_catalogues.album',
+            '{table}_catalogues.follow',
             'tb2.name',
             'tb2.description',
             'tb2.content',
@@ -34,7 +34,7 @@ class {ModuleTemplate}Repository extends BaseRepository implements {ModuleTempla
         ];
         return $this->model
             ->select($select)
-            ->join('{moduleTemplate}_language as tb2', '{moduleTemplate}s.id', '=', 'tb2.{moduleTemplate}_id')
+            ->join('{table}_catalogue_language as tb2', '{table}_catalogues.id', '=', 'tb2.{table}_catalogue_id')
             ->where('tb2.language_id', $languageId)
             ->find($id);
     }

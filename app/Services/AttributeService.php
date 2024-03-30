@@ -198,6 +198,9 @@ class AttributeService extends BaseService implements AttributeServiceInterface
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->attributeRepository->delete($id);
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Services\Interfaces\BaseServiceInterface;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 
@@ -46,6 +45,7 @@ class BaseService implements BaseServiceInterface
         $router = [
             'canonical' => Str::slug(request('canonical')),
             'module_id' => $model->id,
+            'language_id' => session('currentLanguage'),
             'controllers' => 'App\Http\Controllers\Clients\\' . $this->controllerName
         ];
         return $router;
@@ -65,5 +65,15 @@ class BaseService implements BaseServiceInterface
             'controllers' => ['=', 'App\Http\Controllers\Clients\\' . $this->controllerName]
         ];
         return $this->routerRepository->updateByWhere($condition, $payloadRoute);
+    }
+
+    protected function deleteRouter($id)
+    {
+        $condition = [
+            'module_id' => ['=', $id],
+            'controllers' => ['=', 'App\Http\Controllers\Clients\\' . $this->controllerName]
+        ];
+
+        return $this->routerRepository->deleteByWhere($condition);
     }
 }
