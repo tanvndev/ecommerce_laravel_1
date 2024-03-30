@@ -74,6 +74,26 @@ return [
         ],
 
         [
+            'id' => 'gallery',
+            'route' => '',
+            'icon' => 'icofont-image',
+            'title' => 'QL hình ảnh',
+            'activeCondition' => ['gallery.*'],
+            'subMenu' => [
+                // [
+                //     'title' => 'QL Bài viết',
+                //     'route' => 'post.index',
+                //     'activeCondition' => ['post.index', 'post.create', 'post.edit'],
+                // ],
+                [
+                    'title' => 'QL Nhóm hình ảnh',
+                    'route' => 'gallery.catalogue.index',
+                    'activeCondition' => ['gallery.catalogue.*']
+                ],
+            ]
+        ],
+
+        [
             'id' => 'generalConfig',
             'route' => '',
             'icon' => 'icofont-ui-settings',

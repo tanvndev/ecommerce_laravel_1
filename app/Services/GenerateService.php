@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\Interfaces\GenerateServiceInterface;
 use App\Repositories\Interfaces\GenerateRepositoryInterface as GenerateRepository;
+use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -12,9 +13,13 @@ use Illuminate\Support\Facades\File;
 class GenerateService implements GenerateServiceInterface
 {
     protected $generateRepository;
-    public function __construct(GenerateRepository $generateRepository)
-    {
+    protected $permissionRepository;
+    public function __construct(
+        GenerateRepository $generateRepository,
+        PermissionRepository $permissionRepository
+    ) {
         $this->generateRepository = $generateRepository;
+        $this->permissionRepository = $permissionRepository;
     }
     function paginate()
     {
@@ -49,7 +54,8 @@ class GenerateService implements GenerateServiceInterface
             if ($moduleType == 1) {
                 $this->makeRule();
             }
-            $makeRoute =  $this->makeRoute();
+            $makeRoute = $this->makeRoute();
+            $makePermission = $this->makePermission();
 
 
             // $this->makeLang();
@@ -64,7 +70,37 @@ class GenerateService implements GenerateServiceInterface
         }
     }
 
+    private function makePermission()
+    {
+        $name = request('name');
+        $moduleName = lcfirst(request('module'));
+        $tableName = $this->convertModuleNameToTableName($name);
+        $tableName = str_replace('_', '.', $tableName);
+        try {
+            DB::beginTransaction();
 
+            $routes = [
+                'index' => "Xem danh sách {$moduleName}",
+                'create' => "Tạo mới {$moduleName}",
+                'edit' => "Cập nhập {$moduleName}",
+                'destroy' => "Xóa {$moduleName}",
+            ];
+
+            foreach ($routes as $route => $nameRoute) {
+                $this->permissionRepository->create([
+                    'name' => $nameRoute,
+                    'canonical' => $tableName . '.' . $route
+                ]);
+            }
+
+            DB::commit();
+            return true;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+            return false;
+        }
+    }
 
     private function makeRoute()
     {
@@ -491,7 +527,10 @@ class GenerateService implements GenerateServiceInterface
             $tableName = $this->convertModuleNameToTableName($payload['name']) . 's';
             $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table';
             $migrationPath = database_path('migrations/' . $migrationFileName . '.php');
-            $migrationTemplate = $this->createMigrationFile($payload);
+            $migrationTemplate = $this->createMigrationFile([
+                'schema' => $payload['schema'],
+                'name' => $tableName,
+            ]);
 
             // Tạo file migration
             File::put($migrationPath, $migrationTemplate);
@@ -500,7 +539,7 @@ class GenerateService implements GenerateServiceInterface
                 $foreignKey = $this->convertModuleNameToTableName($payload['name']) . '_id';
                 $pivotTableName = substr($tableName, 0, -1) . '_language';
                 // Tạo ra pivot schema table
-                $pivotSchema = $this->pivotSchema($foreignKey, $pivotTableName, $tableName);
+                $pivotSchema = $this->pivotSchema($foreignKey, $tableName);
 
                 // Lấy ra tên file và path migration
                 $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table';
@@ -508,7 +547,7 @@ class GenerateService implements GenerateServiceInterface
 
                 $migrationPivotTemplate = $this->createMigrationFile([
                     'schema' => $pivotSchema,
-                    'name' => $tableName,
+                    'name' => $pivotTableName,
                 ]);
 
                 File::put($migrationPivotPath, $migrationPivotTemplate);
@@ -524,10 +563,9 @@ class GenerateService implements GenerateServiceInterface
     }
 
 
-    private function pivotSchema($foreignKey = '', $pivotTableName = '', $foreignTableName = '')
+    private function pivotSchema($foreignKey = '', $foreignTableName = '')
     {
         $pivotSchema = <<<SCHEMA
-Schema::create('{$pivotTableName}', function (Blueprint \$table) {
     \$table->foreignId('{$foreignKey}')->constrained('{$foreignTableName}')->onDelete('cascade');
     \$table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
     \$table->string('name');
@@ -539,8 +577,6 @@ Schema::create('{$pivotTableName}', function (Blueprint \$table) {
     \$table->text('meta_description')->nullable();
     \$table->softDeletes();
     \$table->timestamps();
-    
-});
 SCHEMA;
         return $pivotSchema;
     }

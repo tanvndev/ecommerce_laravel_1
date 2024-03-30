@@ -16,6 +16,7 @@ use App\Http\Controllers\Servers\{
     PostCatalogueController,
     PostController,
     ProductCatalogueController,
+    GalleryCatalogueController,
 //@@new-controller-module@@
 
 };
@@ -118,7 +119,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     });
 
 
-    
+
     // Routes for ProductCatalogueController
     Route::prefix('product/catalogue')->name('product.catalogue.')->group(function () {
         Route::get('index', [ProductCatalogueController::class, 'index'])->name('index');
@@ -127,6 +128,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [ProductCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [ProductCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [ProductCatalogueController::class, 'destroy'])->name('destroy');
+    });
+
+    
+    // Routes for GalleryCatalogueController
+    Route::prefix('gallery/catalogue')->name('gallery.catalogue.')->group(function () {
+        Route::get('index', [GalleryCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [GalleryCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [GalleryCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [GalleryCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [GalleryCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [GalleryCatalogueController::class, 'destroy'])->name('destroy');
     });
 //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động

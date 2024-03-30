@@ -1,5 +1,31 @@
 <?php
 return [
+    'galleryCatalogue' => [
+        'index' => [
+            'title' => 'Danh sách nhóm hình ảnh',
+            'table' => 'Thông tin nhóm hình ảnh',
+            'create' => 'Tạo mới nhóm hình ảnh'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nhóm hình ảnh',
+            'success' => 'Tạo mới nhóm hình ảnh thành công.',
+            'error' => 'Tạo mới nhóm hình ảnh thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nhóm hình ảnh',
+            'success' => 'Cập nhập nhóm hình ảnh thành công.',
+            'error' => 'Cập nhập nhóm hình ảnh thất bại.',
+        ],
+        'delete' => [
+            'title' => 'Cập nhập nhóm hình ảnh',
+            'success' => 'Xoá nhóm hình ảnh thành công.',
+            'error' => 'Xoá nhóm hình ảnh thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên nhóm',
+
+        ]
+    ],
     'productCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm sản phẩm',
