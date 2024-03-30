@@ -2,22 +2,22 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
-use App\Services\Interfaces\{ModuleTemplate}ServiceInterface;
-use App\Repositories\Interfaces\{ModuleTemplate}RepositoryInterface as {ModuleTemplate}Repository;
+use App\Services\Interfaces\ProductServiceInterface;
+use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}ServiceInterface
+class ProductService extends BaseService implements ProductServiceInterface
 {
-    protected ${moduleTemplate}Repository;
+    protected $productRepository;
 
     public function __construct(
-        {ModuleTemplate}Repository ${moduleTemplate}Repository,
+        ProductRepository $productRepository,
     ) {
         parent::__construct();
-        $this->{moduleTemplate}Repository = ${moduleTemplate}Repository;
-        $this->controllerName = '{ModuleTemplate}Controller';
+        $this->productRepository = $productRepository;
+        $this->controllerName = 'ProductController';
     }
     function paginate()
     {
@@ -25,60 +25,60 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         $condition = [
             'keyword' => addslashes(request('keyword')),
             'publish' => request('publish'),
-            '{moduleTemplate}_catalogue_id' => request('{moduleTemplate}_catalogue_id'),
+            'product_catalogue_id' => request('product_catalogue_id'),
             'where' => [
                 'tb2.language_id' => ['=', session('currentLanguage')]
             ]
         ];
 
         $select = [
-            '{moduleTemplate}s.id',
-            '{moduleTemplate}s.publish',
-            '{moduleTemplate}s.image',
-            '{moduleTemplate}s.user_id',
-            '{moduleTemplate}s.order',
+            'products.id',
+            'products.publish',
+            'products.image',
+            'products.user_id',
+            'products.order',
             'tb2.name',
             'tb2.canonical',
         ];
         $join = [
-            '{moduleTemplate}_language as tb2' => ['tb2.{moduleTemplate}_id', '=', '{moduleTemplate}s.id'],
-            '{moduleTemplate}_catalogue_{moduleTemplate} as tb3' => ['tb3.{moduleTemplate}_id', '=', '{moduleTemplate}s.id'],
+            'product_language as tb2' => ['tb2.product_id', '=', 'products.id'],
+            'product_catalogue_product as tb3' => ['tb3.product_id', '=', 'products.id'],
         ];
         $orderBy = [];
 
         //////////////////////////////////////////////////////////
-        ${moduleTemplate}s = $this->{moduleTemplate}Repository->pagination(
+        $products = $this->productRepository->pagination(
             $select,
             $condition,
             request('perpage'),
             $orderBy,
             $join,
-            ['{moduleTemplate}_catalogues'],
+            ['product_catalogues'],
             $select,
             $this->whereRaw()
 
         );
 
-        // dd(${moduleTemplate}s);
-        return ${moduleTemplate}s;
+        // dd($products);
+        return $products;
     }
 
     private function whereRaw()
     {
         $rawConditions = [];
-        ${moduleTemplate}_catalogue_id = request('{moduleTemplate}_catalogue_id');
-        if (${moduleTemplate}_catalogue_id > 0) {
+        $product_catalogue_id = request('product_catalogue_id');
+        if ($product_catalogue_id > 0) {
             $rawConditions['whereRaw'] = [
                 [
-                    'tb3.{moduleTemplate}_catalogue_id IN (
+                    'tb3.product_catalogue_id IN (
                         SELECT id 
-                        FROM {moduleTemplate}_catalogues
-                        INNER JOIN {moduleTemplate}_catalogue_language as pcl ON pcl.{moduleTemplate}_catalogue_id = {moduleTemplate}_catalogues.id 
-                        WHERE `left` >= (SELECT `left` FROM {moduleTemplate}_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM {moduleTemplate}_catalogues as pc WHERE pc.id = ?)
+                        FROM product_catalogues
+                        INNER JOIN product_catalogue_language as pcl ON pcl.product_catalogue_id = product_catalogues.id 
+                        WHERE `left` >= (SELECT `left` FROM product_catalogues as pc WHERE pc.id = ?)
+                        AND `right` <= (SELECT `right` FROM product_catalogues as pc WHERE pc.id = ?)
                         AND pcl.language_id = ?
                     )',
-                    [${moduleTemplate}_catalogue_id, ${moduleTemplate}_catalogue_id, session('currentLanguage')]
+                    [$product_catalogue_id, $product_catalogue_id, session('currentLanguage')]
                 ]
             ];
         }
@@ -97,16 +97,16 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
-            // Create {moduleTemplate}
-            ${moduleTemplate} = $this->{moduleTemplate}Repository->create($payload);
-            if (${moduleTemplate}->id > 0) {
+            // Create product
+            $product = $this->productRepository->create($payload);
+            if ($product->id > 0) {
                 // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage(${moduleTemplate}->id);
+                $payloadLanguage = $this->formatPayloadLanguage($product->id);
                 // Create pivot and sync
-                $this->createPivotAndSync(${moduleTemplate}, $payloadLanguage);
+                $this->createPivotAndSync($product, $payloadLanguage);
 
                 // create router
-                $this->createRouter(${moduleTemplate});
+                $this->createRouter($product);
             }
 
             DB::commit();
@@ -125,25 +125,25 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
         DB::beginTransaction();
         try {
-            // Lấy ra dữ liệu của {moduleTemplate} hiện tại để xoá;
-            ${moduleTemplate} = $this->{moduleTemplate}Repository->findById($id);
+            // Lấy ra dữ liệu của product hiện tại để xoá;
+            $product = $this->productRepository->findById($id);
 
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
-            // Update {moduleTemplate}
-            $update{ModuleTemplate} = $this->{moduleTemplate}Repository->update($id, $payload);
+            // Update product
+            $updateProduct = $this->productRepository->update($id, $payload);
 
-            if ($update{ModuleTemplate}) {
+            if ($updateProduct) {
                 // Format lai payload language
                 $payloadLanguage = $this->formatPayloadLanguage($id);
                 // Xoá bản ghi cũa một pivot
-                ${moduleTemplate}->languages()->detach([$payloadLanguage['language_id'], $id]);
+                $product->languages()->detach([$payloadLanguage['language_id'], $id]);
                 // Create pivot and sync
-                $this->createPivotAndSync(${moduleTemplate}, $payloadLanguage);
+                $this->createPivotAndSync($product, $payloadLanguage);
 
                 // update router
-                $this->updateRouter(${moduleTemplate});
+                $this->updateRouter($product);
             }
 
             DB::commit();
@@ -160,33 +160,33 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
     {
         return array_unique(array_merge(
             request('catalogue'),
-            [request('{moduleTemplate}_catalogue_id')],
+            [request('product_catalogue_id')],
         ));
     }
 
 
-    private function formatPayloadLanguage(${moduleTemplate}Id)
+    private function formatPayloadLanguage($productId)
     {
         $payloadLanguage = request()->only($this->payloadLanguage());
         //Đinh dạng slug
         $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
 
-        // Lấy ra {moduleTemplate}_id 
-        $payloadLanguage['{moduleTemplate}_id'] = ${moduleTemplate}Id;
+        // Lấy ra product_id 
+        $payloadLanguage['product_id'] = $productId;
         // Lấy ra language_id mặc định
         $payloadLanguage['language_id'] = session('currentLanguage');
         return $payloadLanguage;
     }
 
-    private function createPivotAndSync(${moduleTemplate}, $payloadLanguage)
+    private function createPivotAndSync($product, $payloadLanguage)
     {
-        // Tạo ra pivot vào bảng {moduleTemplate}_language
-        $this->{moduleTemplate}Repository->createPivot(${moduleTemplate}, $payloadLanguage, 'languages');
+        // Tạo ra pivot vào bảng product_language
+        $this->productRepository->createPivot($product, $payloadLanguage, 'languages');
 
         // Lấy ra id catalogue
         $catalogue = $this->catalogue();
-        // Đồng bộ hoá id catalogue với bảng {moduleTemplate}_catalogue_{moduleTemplate}
-        ${moduleTemplate}->{moduleTemplate}_catalogues()->sync($catalogue);
+        // Đồng bộ hoá id catalogue với bảng product_catalogue_product
+        $product->product_catalogues()->sync($catalogue);
     }
 
 
@@ -196,7 +196,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         DB::beginTransaction();
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
-            $delete = $this->{moduleTemplate}Repository->delete($id);
+            $delete = $this->productRepository->delete($id);
 
             DB::commit();
             return true;
@@ -212,7 +212,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->{moduleTemplate}Repository->update(request('modelId'), $payload);
+            $update =  $this->productRepository->update(request('modelId'), $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -232,7 +232,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         DB::beginTransaction();
         try {
             $payload[request('field')] = request('value');
-            $update =  $this->{moduleTemplate}Repository->updateByWhereIn('id', request('id'), $payload);
+            $update =  $this->productRepository->updateByWhereIn('id', request('id'), $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -249,7 +249,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
     private function payload()
     {
-        return ['{moduleTemplate}_catalogue_id', 'image', 'follow', 'publish', 'album'];
+        return ['product_catalogue_id', 'image', 'follow', 'publish', 'album'];
     }
 
     private function payloadLanguage()

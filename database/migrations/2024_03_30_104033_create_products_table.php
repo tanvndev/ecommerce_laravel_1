@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('post_catalogue_id')->default(0);
+            $table->integer('product_catalogue_id')->default(0);
             $table->string('image')->nullable();
             $table->string('album')->nullable();
             $table->string('icon')->nullable();
@@ -22,17 +22,8 @@ return new class extends Migration
             $table->tinyInteger('follow')->default(0);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->softDeletes();
-            $table->timestamps();
+            $table->timestamps();;
         });
-        // + id
-        // + post_catalogue_id
-        // + image
-        // + album
-        // + icon
-        // + order
-        // + publish
-        // + user_id
-        // + deleted_at
     }
 
     /**
@@ -40,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('products');
     }
 };

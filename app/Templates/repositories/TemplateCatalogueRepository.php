@@ -18,7 +18,7 @@ class {ModuleTemplate}Repository extends BaseRepository implements {ModuleTempla
     {
         $select = [
             '{moduleTemplate}s.id',
-            '{moduleTemplate}s.{moduleTemplate}_catalogue_id',
+            '{moduleTemplate}s.parent_id',
             '{moduleTemplate}s.publish',
             '{moduleTemplate}s.image',
             '{moduleTemplate}s.icon',
@@ -36,7 +36,6 @@ class {ModuleTemplate}Repository extends BaseRepository implements {ModuleTempla
             ->select($select)
             ->join('{moduleTemplate}_language as tb2', '{moduleTemplate}s.id', '=', 'tb2.{moduleTemplate}_id')
             ->where('tb2.language_id', $languageId)
-            ->with('{moduleTemplate}_catalogues')
             ->find($id);
     }
 }

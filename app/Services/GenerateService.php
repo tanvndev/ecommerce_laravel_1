@@ -46,8 +46,8 @@ class GenerateService implements GenerateServiceInterface
             $makeDatabase = $this->makeDatabase();
             $makeController =  $this->makeController();
             $makeModel = $this->makeModel();
-            $makeRepository = $this->makeRepository();
             $makeService = $this->makeService();
+            $makeRepository = $this->makeRepository();
             $makeProvider = $this->makeProvider();
             $makeRequest =  $this->makeRequest();
             $makeView =  $this->makeView();
@@ -344,23 +344,26 @@ class GenerateService implements GenerateServiceInterface
     private function makeRepository()
     {
         $name = request('name');
-        $tableName = $this->convertModuleNameToTableName($name);
+        $moduleType = request('module_type');
         $replace = [
             'ModuleTemplate' => ucfirst($name),
-            'tableName' => $tableName . 's',
-            'pivotTable' => $tableName . '_language',
-            'foreignKey' => $tableName . '_id',
+            'moduleTemplate' => lcfirst($name),
         ];
 
-        return $this->initialzeServiceLayer($name, 'Repository', 'Repositories', $replace);
+        return $this->initialzeServiceLayer($name, 'Repository', 'Repositories', $replace, $moduleType);
     }
 
-    private function initialzeServiceLayer($name = '', $layerName = '', $forderName, $replace = [])
+    private function initialzeServiceLayer($name = '', $layerName = '', $forderName, $replace = [], $moduleType = '')
     {
         try {
             // Lấy ra đường dẫn template
             $templateLayerInterfacePath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . 'Interface.php');
             $templateLayerPath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . '.php');
+
+            if ($moduleType == 'catalogue') {
+                $templateLayerInterfacePath = base_path('app/Templates/' . lcfirst($forderName) . '/TemplateCatalogue' . ucfirst($layerName) . 'Interface.php');
+                $templateLayerPath = base_path('app/Templates/' . lcfirst($forderName) . '/TemplateCatalogue' . ucfirst($layerName) . '.php');
+            }
 
 
             // Đọc nội dung của file
@@ -538,6 +541,7 @@ class GenerateService implements GenerateServiceInterface
             $basePath = database_path('migrations/');
 
             // Tạo ra bảng chính
+
             $migrationData[] = [
                 'schema' => $payload['schema'],
                 'name' => $tableName . 's',

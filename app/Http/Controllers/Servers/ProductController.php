@@ -99,7 +99,7 @@ class ProductController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $product = $this->productRepository->getProductLanguageById($id, $this->currentLanguage());
+        $product = $this->productRepository->getProductLanguageById($id, $this->currentLanguage);
         // dd($product);
 
 

@@ -99,7 +99,7 @@ class {ModuleTemplate}Controller extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        ${moduleTemplate} = $this->{moduleTemplate}Repository->get{ModuleTemplate}LanguageById($id, $this->currentLanguage());
+        ${moduleTemplate} = $this->{moduleTemplate}Repository->get{ModuleTemplate}LanguageById($id, $this->currentLanguage);
         // dd(${moduleTemplate});
 
 

@@ -60,11 +60,11 @@ return [
             'title' => 'QL Sản phẩm',
             'activeCondition' => ['product.*'],
             'subMenu' => [
-                // [
-                //     'title' => 'QL Bài viết',
-                //     'route' => 'post.index',
-                //     'activeCondition' => ['post.index', 'post.create', 'post.edit'],
-                // ],
+                [
+                    'title' => 'QL Sản phẩm',
+                    'route' => 'product.index',
+                    'activeCondition' => ['product.index', 'product.create', 'product.edit'],
+                ],
                 [
                     'title' => 'QL Nhóm sản phẩm',
                     'route' => 'product.catalogue.index',

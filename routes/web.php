@@ -17,6 +17,7 @@ use App\Http\Controllers\Servers\{
     PostController,
     ProductCatalogueController,
     GalleryCatalogueController,
+ProductController,
 //@@new-controller-module@@
 
 };
@@ -139,6 +140,16 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [GalleryCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [GalleryCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [GalleryCatalogueController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for ProductController
+    Route::prefix('product')->name('product.')->group(function () {
+        Route::get('index', [ProductController::class, 'index'])->name('index');
+        Route::get('create', [ProductController::class, 'create'])->name('create');
+        Route::post('store', [ProductController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ProductController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [ProductController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [ProductController::class, 'destroy'])->name('destroy');
     });
 //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động

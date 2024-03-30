@@ -135,8 +135,8 @@
     /* background-color: #fff; */
 }
 .image-album {
-    height: 90px;
-    object-fit: cover;
+    height: 150px;
+    object-fit: contain;
     object-position: center center;
     cursor: move;
     width: 100%;

@@ -52,6 +52,31 @@ return [
 
         ]
     ],
+    'product' => [
+        'index' => [
+            'title' => 'Danh sách sản phẩm',
+            'table' => 'Thông tin sản phẩm',
+            'create' => 'Tạo mới sản phẩm'
+        ],
+        'create' => [
+            'title' => 'Tạo mới sản phẩm',
+            'success' => 'Tạo mới sản phẩm thành công.',
+            'error' => 'Tạo mới sản phẩm thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập sản phẩm',
+            'success' => 'Cập nhập sản phẩm thành công.',
+            'error' => 'Cập nhập sản phẩm thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá sản phẩm thành công.',
+            'error' => 'Xoá sản phẩm thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tiêu đề sản phẩm',
+            'productCatalogue' => 'Chọn nhóm sản phẩm',
+        ]
+    ],
     'postCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm bài viết',
@@ -75,7 +100,6 @@ return [
         ],
         'table' => [
             'name' => 'Tên nhóm',
-
         ]
     ],
     'post' => [

@@ -33,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
     // GalleryCatalogue
 'App\Services\Interfaces\GalleryCatalogueServiceInterface' => 'App\Services\GalleryCatalogueService',
+// Product
+'App\Services\Interfaces\ProductServiceInterface' => 'App\Services\ProductService',
 ];
     public function register(): void
     {

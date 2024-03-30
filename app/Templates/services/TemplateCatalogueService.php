@@ -2,6 +2,7 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
+use App\Classes\Nestedsetbie;
 use App\Services\Interfaces\{ModuleTemplate}ServiceInterface;
 use App\Repositories\Interfaces\{ModuleTemplate}RepositoryInterface as {ModuleTemplate}Repository;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,6 @@ use Illuminate\Support\Str;
 class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}ServiceInterface
 {
     protected ${moduleTemplate}Repository;
-
     public function __construct(
         {ModuleTemplate}Repository ${moduleTemplate}Repository,
     ) {
@@ -19,32 +19,36 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         $this->{moduleTemplate}Repository = ${moduleTemplate}Repository;
         $this->controllerName = '{ModuleTemplate}Controller';
     }
-    function paginate()
-    {
 
+
+    public function paginate()
+    {
         $condition = [
             'keyword' => addslashes(request('keyword')),
             'publish' => request('publish'),
-            '{moduleTemplate}_catalogue_id' => request('{moduleTemplate}_catalogue_id'),
             'where' => [
                 'tb2.language_id' => ['=', session('currentLanguage')]
             ]
         ];
+        // dd($condition);
 
         $select = [
-            '{moduleTemplate}s.id',
-            '{moduleTemplate}s.publish',
-            '{moduleTemplate}s.image',
-            '{moduleTemplate}s.user_id',
-            '{moduleTemplate}s.order',
+            '{tableName}.id',
+            '{tableName}.publish',
+            '{tableName}.image',
+            '{tableName}.level',
+            '{tableName}.user_id',
+            '{tableName}.order',
             'tb2.name',
             'tb2.canonical',
         ];
         $join = [
-            '{moduleTemplate}_language as tb2' => ['tb2.{moduleTemplate}_id', '=', '{moduleTemplate}s.id'],
-            '{moduleTemplate}_catalogue_{moduleTemplate} as tb3' => ['tb3.{moduleTemplate}_id', '=', '{moduleTemplate}s.id'],
+            '{pivotTable} as tb2' => ['tb2.{foreignKey}', '=', '{tableName}.id']
         ];
-        $orderBy = [];
+        $orderBy = [
+            '{tableName}.left' => 'asc',
+            '{tableName}.created_at' => 'desc'
+        ];
 
         //////////////////////////////////////////////////////////
         ${moduleTemplate}s = $this->{moduleTemplate}Repository->pagination(
@@ -53,36 +57,10 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             request('perpage'),
             $orderBy,
             $join,
-            ['{moduleTemplate}_catalogues'],
-            $select,
-            $this->whereRaw()
-
         );
-
         // dd(${moduleTemplate}s);
-        return ${moduleTemplate}s;
-    }
 
-    private function whereRaw()
-    {
-        $rawConditions = [];
-        ${moduleTemplate}_catalogue_id = request('{moduleTemplate}_catalogue_id');
-        if (${moduleTemplate}_catalogue_id > 0) {
-            $rawConditions['whereRaw'] = [
-                [
-                    'tb3.{moduleTemplate}_catalogue_id IN (
-                        SELECT id 
-                        FROM {moduleTemplate}_catalogues
-                        INNER JOIN {moduleTemplate}_catalogue_language as pcl ON pcl.{moduleTemplate}_catalogue_id = {moduleTemplate}_catalogues.id 
-                        WHERE `left` >= (SELECT `left` FROM {moduleTemplate}_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM {moduleTemplate}_catalogues as pc WHERE pc.id = ?)
-                        AND pcl.language_id = ?
-                    )',
-                    [${moduleTemplate}_catalogue_id, ${moduleTemplate}_catalogue_id, session('currentLanguage')]
-                ]
-            ];
-        }
-        return $rawConditions;
+        return ${moduleTemplate}s;
     }
 
     function create()
@@ -90,23 +68,29 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
         DB::beginTransaction();
         try {
-
-            //   Lấy ra payload và format lai
+            // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
-            // Lấy ra id người dùng hiện tại
+            // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
             // Create {moduleTemplate}
             ${moduleTemplate} = $this->{moduleTemplate}Repository->create($payload);
+
             if (${moduleTemplate}->id > 0) {
-                // Format lai payload language
+
+                // Format payload language
                 $payloadLanguage = $this->formatPayloadLanguage(${moduleTemplate}->id);
-                // Create pivot and sync
-                $this->createPivotAndSync(${moduleTemplate}, $payloadLanguage);
+
+                // Tạo ra pivot vào bảng {moduleTemplate}_language
+                $this->createPivotLanguage(${moduleTemplate}, $payloadLanguage);
 
                 // create router
                 $this->createRouter(${moduleTemplate});
+
+                // Dùng để tính toán lại các giá trị left right
+                $this->initNetedset();
+                $this->calculateNestedSet();
             }
 
             DB::commit();
@@ -114,7 +98,6 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         } catch (\Exception $e) {
             DB::rollBack();
             echo $e->getMessage();
-            die;
             return false;
         }
     }
@@ -122,28 +105,33 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
     function update($id)
     {
-
         DB::beginTransaction();
         try {
             // Lấy ra dữ liệu của {moduleTemplate} hiện tại để xoá;
             ${moduleTemplate} = $this->{moduleTemplate}Repository->findById($id);
-
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
+
             // Update {moduleTemplate}
             $update{ModuleTemplate} = $this->{moduleTemplate}Repository->update($id, $payload);
 
             if ($update{ModuleTemplate}) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($id);
+                // Lây ra payload language và format lai
+                $payloadLanguage = $this->formatPayloadLanguage(${moduleTemplate}->id);
+
                 // Xoá bản ghi cũa một pivot
                 ${moduleTemplate}->languages()->detach([$payloadLanguage['language_id'], $id]);
-                // Create pivot and sync
-                $this->createPivotAndSync(${moduleTemplate}, $payloadLanguage);
+
+                // Tạo ra pivot vào bảng {privotTable}
+                $this->createPivotLanguage(${moduleTemplate}, $payloadLanguage);
 
                 // update router
                 $this->updateRouter(${moduleTemplate});
+
+                // Dùng để tính toán lại các giá trị left right
+                $this->initNetedset();
+                $this->calculateNestedSet();
             }
 
             DB::commit();
@@ -156,40 +144,35 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         }
     }
 
-    private function catalogue()
-    {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('{moduleTemplate}_catalogue_id')],
-        ));
-    }
-
-
     private function formatPayloadLanguage(${moduleTemplate}Id)
     {
         $payloadLanguage = request()->only($this->payloadLanguage());
         //Đinh dạng slug
         $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
-
-        // Lấy ra {moduleTemplate}_id 
-        $payloadLanguage['{moduleTemplate}_id'] = ${moduleTemplate}Id;
+        // Lấy ra {foreignKey}
+        $payloadLanguage['{foreignKey}'] = ${moduleTemplate}Id;
         // Lấy ra language_id mặc định
         $payloadLanguage['language_id'] = session('currentLanguage');
         return $payloadLanguage;
     }
 
-    private function createPivotAndSync(${moduleTemplate}, $payloadLanguage)
-    {
-        // Tạo ra pivot vào bảng {moduleTemplate}_language
-        $this->{moduleTemplate}Repository->createPivot(${moduleTemplate}, $payloadLanguage, 'languages');
 
-        // Lấy ra id catalogue
-        $catalogue = $this->catalogue();
-        // Đồng bộ hoá id catalogue với bảng {moduleTemplate}_catalogue_{moduleTemplate}
-        ${moduleTemplate}->{moduleTemplate}_catalogues()->sync($catalogue);
+
+    private function createPivotLanguage(${moduleTemplate}, $payloadLanguage)
+    {
+        $this->{moduleTemplate}Repository->createPivot(${moduleTemplate}, $payloadLanguage, 'languages');
     }
 
+   
+    private function payload()
+    {
+        return ['parent_id', 'image', 'follow', 'publish', 'album'];
+    }
 
+    private function payloadLanguage()
+    {
+        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+    }
 
     function destroy($id)
     {
@@ -198,6 +181,10 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->{moduleTemplate}Repository->delete($id);
 
+            // Dùng để tính toán lại các giá trị left right
+            $this->initNetedset();
+            $this->calculateNestedSet();
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -205,6 +192,15 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             echo $e->getMessage();
             return false;
         }
+    }
+
+    private function initNetedset()
+    {
+        $this->nestedset = new Nestedsetbie([
+            'table' => '{tablePivotName}',
+            'foreignkey' => '{foreignKey}',
+            'language_id' => session('currentLanguage')
+        ]);
     }
 
     function updateStatus()
@@ -247,13 +243,4 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         }
     }
 
-    private function payload()
-    {
-        return ['{moduleTemplate}_catalogue_id', 'image', 'follow', 'publish', 'album'];
-    }
-
-    private function payloadLanguage()
-    {
-        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
-    }
 }

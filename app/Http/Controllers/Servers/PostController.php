@@ -95,7 +95,7 @@ class PostController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $post = $this->postRepository->getPostLanguageById($id, $this->currentLanguage());
+        $post = $this->postRepository->getPostLanguageById($id, $this->currentLanguage);
         // dd($post);
 
 
