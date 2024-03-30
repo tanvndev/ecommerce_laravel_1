@@ -44,18 +44,18 @@ class GenerateService implements GenerateServiceInterface
         // DB::beginTransaction();
         try {
             $makeDatabase = $this->makeDatabase();
-            // $makeController =  $this->makeController();
-            // $makeModel = $this->makeModel();
-            // $makeRepository = $this->makeRepository();
-            // $makeService = $this->makeService();
-            // $makeProvider = $this->makeProvider();
-            // $makeRequest =  $this->makeRequest();
-            // $makeView =  $this->makeView();
-            // if ($moduleType == 'catalogue') {
-            //     $this->makeRule();
-            // }
-            // $makeRoute = $this->makeRoute();
-            // $makePermission = $this->makePermission();
+            $makeController =  $this->makeController();
+            $makeModel = $this->makeModel();
+            $makeRepository = $this->makeRepository();
+            $makeService = $this->makeService();
+            $makeProvider = $this->makeProvider();
+            $makeRequest =  $this->makeRequest();
+            $makeView =  $this->makeView();
+            if ($moduleType == 'catalogue') {
+                $this->makeRule();
+            }
+            $makeRoute = $this->makeRoute();
+            $makePermission = $this->makePermission();
 
 
             // $this->makeLang();
@@ -403,7 +403,7 @@ class GenerateService implements GenerateServiceInterface
                 break;
 
             default:
-                // $this->createController();
+                // $this->createModel();
 
                 break;
         }
@@ -413,10 +413,18 @@ class GenerateService implements GenerateServiceInterface
     {
         try {
             $templateModelPath = base_path('app/Templates/models/' . $templateFile . 'Model.php');
-            // Đọc nội dung của file
-            $modelContent = file_get_contents($templateModelPath);
+
             // Các biến ở trong file template
             $replace = $this->getModelReplace($name, $templateFile);
+            // Đọc nội dung của file
+            $modelContent = file_get_contents($templateModelPath);
+
+            // Sẽ tạo thêm ...CatalogueLanguage
+            if ($templateFile == 'TemplateCatalogue') {
+                $modelPivotContent = file_get_contents(base_path('app/Templates/models/TemplatePivotModel.php'));
+                $modelPivotPath = base_path('app/Models/' . ucfirst($name) . 'CatalogueLanguage.php');
+                File::put($modelPivotPath, $this->formatContent($modelPivotContent, $replace));
+            }
 
             $modelContent = $this->formatContent($modelContent, $replace);
             $modelPath = base_path('app/Models/' . ucfirst($name) . '.php');
@@ -446,9 +454,10 @@ class GenerateService implements GenerateServiceInterface
         ];
 
         if ($templateFile == 'Template') {
-            $replace['tableName'] = $tableName . '_catalogues';
-            $replace['foreignKey'] = $tableName . '_catalogue_id';
-            unset($replace['moduleView']);
+            $replace = [
+                'ModuleTemplate' => ucfirst($name),
+                'moduleTemplate' => lcfirst($name),
+            ];
         }
 
         return $replace;
@@ -562,7 +571,6 @@ class GenerateService implements GenerateServiceInterface
                 $migrationTemplate = $this->createMigrationFile($data);
                 File::put($data['path'], $migrationTemplate);
             }
-            dd($migrationData);
 
             Artisan::call('migrate');
             return true;
