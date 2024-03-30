@@ -23,7 +23,7 @@ class StoreGenerateRequest extends FormRequest
     {
         return [
             'name' => 'required|unique:generates',
-            'module_type' => 'gt:0',
+            'module_type' => 'required',
             'schema' => 'required',
         ];
     }

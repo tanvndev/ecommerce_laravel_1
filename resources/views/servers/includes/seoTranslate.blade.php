@@ -5,11 +5,14 @@
             {{__('messages.noteNotice')[1]}}</small>
 
         <div class="seo-view">
-            <span class="link text-success meta-url">{{ url('/') . '/' . old('translate_canonical', $model->canonical ??
+            <span class="link text-success translate-meta-url meta-url">{{ url('/') . '/' . old('translate_canonical',
+                $model->canonical ??
                 __('messages.seoExample')[0])}}</span>
-            <h5 class="meta-title">{{old('translate_meta_title', $model->meta_title ?? __('messages.seoExample')[1])}}
+            <h5 class="translate-meta-title meta-title">{{old('translate_meta_title', $model->meta_title ??
+                __('messages.seoExample')[1])}}
             </h5>
-            <p class="meta-description" class="mb-0 ">{{old('translate_meta_description', $model->meta_description ??
+            <p class="translate-meta-description meta-description" class="mb-0 ">{{old('translate_meta_description',
+                $model->meta_description ??
                 __('messages.seoExample')[2]) }}</p>
         </div>
     </div>

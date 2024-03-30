@@ -23,7 +23,7 @@ class UpdateGenerateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:generates,name,' . $this->id,
-            'module_type' => 'gt:0',
+            'module_type' => 'required',
             'schema' => 'required',
         ];
     }

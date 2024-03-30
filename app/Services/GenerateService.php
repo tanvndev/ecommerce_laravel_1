@@ -44,18 +44,18 @@ class GenerateService implements GenerateServiceInterface
         // DB::beginTransaction();
         try {
             $makeDatabase = $this->makeDatabase();
-            $makeController =  $this->makeController();
-            $makeModel = $this->makeModel();
-            $makeRepository = $this->makeRepository();
-            $makeService = $this->makeService();
-            $makeProvider = $this->makeProvider();
-            $makeRequest =  $this->makeRequest();
-            $makeView =  $this->makeView();
-            if ($moduleType == 1) {
-                $this->makeRule();
-            }
-            $makeRoute = $this->makeRoute();
-            $makePermission = $this->makePermission();
+            // $makeController =  $this->makeController();
+            // $makeModel = $this->makeModel();
+            // $makeRepository = $this->makeRepository();
+            // $makeService = $this->makeService();
+            // $makeProvider = $this->makeProvider();
+            // $makeRequest =  $this->makeRequest();
+            // $makeView =  $this->makeView();
+            // if ($moduleType == 'catalogue') {
+            //     $this->makeRule();
+            // }
+            // $makeRoute = $this->makeRoute();
+            // $makePermission = $this->makePermission();
 
 
             // $this->makeLang();
@@ -171,13 +171,13 @@ class GenerateService implements GenerateServiceInterface
         $payload = request()->only('name', 'module_type');
 
         switch ($payload['module_type']) {
-            case '1':
+            case 'catalogue':
                 // Create Template Catalogue View
                 $this->createView($payload['name'], 'catalogue');
                 break;
-            case '2':
+            case 'detail':
                 // Create Template View
-                $this->createView($payload['name'], 'noCatalogue');
+                $this->createView($payload['name'], 'detail');
                 break;
 
             default:
@@ -248,7 +248,7 @@ class GenerateService implements GenerateServiceInterface
             $requestTypes = [
                 'Store' => true,
                 'Update' => true,
-                'Delete' => request('module_type') == 1,
+                'Delete' => request('module_type') == 'catalogue',
             ];
 
             // Lấy đường dẫn template của request
@@ -393,11 +393,11 @@ class GenerateService implements GenerateServiceInterface
         $payload = request()->only('name', 'module_type');
 
         switch ($payload['module_type']) {
-            case '1':
+            case 'catalogue':
                 // Create Template Catalogue Model
                 $this->createModel($payload['name'], 'TemplateCatalogue');
                 break;
-            case '2':
+            case 'detail':
                 // Create Template Model
                 $this->createModel($payload['name'], 'Template');
                 break;
@@ -459,11 +459,11 @@ class GenerateService implements GenerateServiceInterface
         $payload = request()->only('name', 'module_type');
 
         switch ($payload['module_type']) {
-            case '1':
+            case 'catalogue':
                 // Create Template Catalogue Controller
                 $this->createController($payload['name'], 'TemplateCatalogue');
                 break;
-            case '2':
+            case 'detail':
                 // Create Template Controller
                 $this->createController($payload['name'], 'Template');
                 break;
@@ -524,49 +524,72 @@ class GenerateService implements GenerateServiceInterface
         try {
             $payload = request()->only('schema', 'name', 'module_type');
             // Lấy ra tên file và path migration
-            $tableName = $this->convertModuleNameToTableName($payload['name']) . 's';
-            $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table';
-            $migrationPath = database_path('migrations/' . $migrationFileName . '.php');
-            $migrationTemplate = $this->createMigrationFile([
+            $tableName = $this->convertModuleNameToTableName($payload['name']);
+            $migrationData = [];
+            $basePath = database_path('migrations/');
+
+            // Tạo ra bảng chính
+            $migrationData[] = [
                 'schema' => $payload['schema'],
-                'name' => $tableName,
-            ]);
+                'name' => $tableName . 's',
+                'path' => $basePath . date('Y_m_d_His') . '_create_' . $tableName . 's' . '_table.php'
+            ];
 
             // Tạo file migration
-            File::put($migrationPath, $migrationTemplate);
+            if ($payload['module_type'] != 'different') {
+                $pivotTableName = $tableName . '_language';
 
-            if ($payload['module_type'] != 3) {
-                $foreignKey = $this->convertModuleNameToTableName($payload['name']) . '_id';
-                $pivotTableName = substr($tableName, 0, -1) . '_language';
-                // Tạo ra pivot schema table
-                $pivotSchema = $this->pivotSchema($foreignKey, $tableName);
-
-                // Lấy ra tên file và path migration
-                $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table';
-                $migrationPivotPath = database_path('migrations/' . $migrationPivotFileName . '.php');
-
-                $migrationPivotTemplate = $this->createMigrationFile([
-                    'schema' => $pivotSchema,
+                // Tạo ra pivot language table 
+                $migrationData[] = [
+                    'schema' => $this->pivotSchema($tableName),
                     'name' => $pivotTableName,
-                ]);
+                    'path' => $basePath . date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table.php'
+                ];
 
-                File::put($migrationPivotPath, $migrationPivotTemplate);
+                // Tạo ra relation table
+                if ($payload['module_type'] == 'detail') {
+                    $relationTableName = $tableName . '_catalogue_' . $tableName;
+
+                    $migrationData[] = [
+                        'schema' => $this->relationSchema($tableName),
+                        'name' => $relationTableName,
+                        'path' => $basePath . date('Y_m_d_His', time() + 30) . '_create_' . $relationTableName . '_table.php'
+                    ];
+                }
             }
+
+            foreach ($migrationData as $data) {
+                $migrationTemplate = $this->createMigrationFile($data);
+                File::put($data['path'], $migrationTemplate);
+            }
+            dd($migrationData);
 
             Artisan::call('migrate');
             return true;
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die;
+            throw $e;
             return false;
         }
     }
 
 
-    private function pivotSchema($foreignKey = '', $foreignTableName = '')
+    private function relationSchema($table)
+    {
+        $relationSchema = <<<SCHEMA
+            \$table->unsignedBigInteger('{$table}_catalogue_id');
+            \$table->unsignedBigInteger('{$table}_id');
+            \$table->foreign('{$table}_catalogue_id')->references('id')->on('{$table}_catalogues')->onDelete('cascade');
+            \$table->foreign('{$table}_id')->references('id')->on('{$table}s')->onDelete('cascade');
+        SCHEMA;
+
+        return $relationSchema;
+    }
+
+
+    private function pivotSchema($table = '')
     {
         $pivotSchema = <<<SCHEMA
-    \$table->foreignId('{$foreignKey}')->constrained('{$foreignTableName}')->onDelete('cascade');
+    \$table->foreignId('{$table}_id')->constrained('{$table}s')->onDelete('cascade');
     \$table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
     \$table->string('name');
     \$table->text('description')->nullable();

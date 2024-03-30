@@ -64,9 +64,9 @@ $url = $config['method'] == 'create' ? route('generate.store') : route('generate
 
                                     <select class="form-select form-select-lg" name="module_type" id="">
                                         <option selected>Chọn loại module</option>
-                                        <option value="1">Module danh mục</option>
-                                        <option value="2">Module chi tiết</option>
-                                        <option value="3">Module khác</option>
+                                        <option value="catalogue">Module danh mục</option>
+                                        <option value="detail">Module chi tiết</option>
+                                        <option value="different">Module khác</option>
                                     </select>
 
                                 </div>

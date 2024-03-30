@@ -7,28 +7,36 @@ $(function () {
     var init = {};
 
     init.seoPreview = () => {
-        if ($("input[name=meta_title]").length > 0) {
-            $("input[name=meta_title]").on("keyup", function () {
-                const _this = $(this);
-                const value = _this.val();
-                $(".meta-title").html(value);
-            });
+        function updatePreview(selector, value) {
+            $(selector).html(value);
         }
 
-        if ($("input[name=canonical]").length > 0) {
-            $("input[name=canonical]").on("keyup", function () {
-                const _this = $(this);
-                const value = convertToSlug(_this.val());
-                $(".meta-url").html(BASE_URL + "/" + value);
-            });
+        function handleInputChange(inputName, previewSelector, isSlug = false) {
+            const inputField = $(
+                `input[name=${inputName}], textarea[name=${inputName}]`
+            );
+            if (inputField.length > 0) {
+                inputField.on("keyup", function () {
+                    const _this = $(this);
+                    let value = _this.val();
+                    if (isSlug) {
+                        value = convertToSlug(value);
+                        value = BASE_URL + "/" + value;
+                    }
+                    updatePreview(previewSelector, value);
+                });
+            }
         }
-        if ($("textarea[name=meta_description]").length > 0) {
-            $("textarea[name=meta_description]").on("keyup", function () {
-                const _this = $(this);
-                const value = _this.val();
-                $(".meta-description").html(value);
-            });
-        }
+
+        handleInputChange("meta_title", ".meta-title");
+        handleInputChange("canonical", ".meta-url", true);
+        handleInputChange("meta_description", ".meta-description");
+        handleInputChange("translate_meta_title", ".translate-meta-title");
+        handleInputChange("translate_canonical", ".translate-meta-url", true);
+        handleInputChange(
+            "translate_meta_description",
+            ".translate-meta-description"
+        );
     };
 
     $(document).ready(function () {

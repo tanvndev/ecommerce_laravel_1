@@ -22,7 +22,8 @@
             <div class="col-md-12 mt-3">
                 <div class="d-flex align-items-center justify-content-between ">
                     <label class="form-label">{{__('messages.content')}} </label>
-                    <a href="" class="form-label link-primary   mutipleUploadImageCkEditor"
+                    <a href=""
+                        class="form-label link-primary {{isset($disabled) ? 'd-none' : '' }} mutipleUploadImageCkEditor"
                         data-target="ckContent">{{__('messages.uploadMultipleImage')}}</a>
                 </div>
                 <textarea name="content" id="ckContent" data-height="500" {{isset($disabled) ? 'disabled' : '' }}
