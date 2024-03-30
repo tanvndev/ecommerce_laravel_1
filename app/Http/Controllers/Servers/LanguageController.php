@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{
     StoreLanguageRequest,
+    TranslateRequest,
     UpdateLanguageRequest,
     UpdateTranslateRequest,
 };
@@ -141,6 +142,7 @@ class LanguageController extends Controller
 
     public function translate($id, $languageId, $modelName = '')
     {
+
         $this->authorize('modules', 'language.translate');
 
         // Lây ra repository hiện tại

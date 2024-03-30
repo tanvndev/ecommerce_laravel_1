@@ -198,6 +198,9 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->{moduleTemplate}Repository->delete($id);
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

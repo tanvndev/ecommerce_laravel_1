@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class UpdateTranslateRequest extends FormRequest
 {
@@ -23,8 +24,20 @@ class UpdateTranslateRequest extends FormRequest
     {
         return [
             'translate_name' => 'required|string',
-            'translate_canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id',
-
+            'translate_canonical' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    // dd($value, $this->input('option')['languageId'], $this->id);
+                    $flag = DB::table('routers')
+                        ->where('canonical', $value)
+                        ->where('language_id', '<>', $this->input('option')['languageId'])
+                        ->where('module_id', '=', $this->id)
+                        ->exists();
+                    if ($flag) {
+                        $fail(':attribute đã tồn tại.');
+                    }
+                }
+            ]
         ];
     }
 

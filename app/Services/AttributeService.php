@@ -87,7 +87,6 @@ class AttributeService extends BaseService implements AttributeServiceInterface
 
     function create()
     {
-
         DB::beginTransaction();
         try {
 
@@ -158,10 +157,13 @@ class AttributeService extends BaseService implements AttributeServiceInterface
 
     private function catalogue()
     {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('attribute_catalogue_id')],
-        ));
+        if (!empty(request('catalogue'))) {
+            return array_unique(array_merge(
+                request('catalogue'),
+                [request('attribute_catalogue_id')],
+            ));
+        }
+        return [request('attribute_catalogue_id')];
     }
 
 

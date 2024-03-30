@@ -185,6 +185,9 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             $this->initNetedset();
             $this->calculateNestedSet();
 
+            // Xoa router
+            $this->deleteRouter($id);
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

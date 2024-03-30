@@ -178,8 +178,6 @@ class LanguageService extends BaseService implements LanguageServiceInterface
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
-            die;
             return false;
         }
     }

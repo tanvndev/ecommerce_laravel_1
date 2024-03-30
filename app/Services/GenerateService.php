@@ -426,8 +426,10 @@ class GenerateService implements GenerateServiceInterface
 
             // Sẽ tạo thêm ...CatalogueLanguage
             if ($templateFile == 'TemplateCatalogue') {
+                $tableName = $this->convertModuleNameToTableName($name);
+                $tableName = explode('_', $tableName);
                 $modelPivotContent = file_get_contents(base_path('app/Templates/models/TemplatePivotModel.php'));
-                $modelPivotPath = base_path('app/Models/' . ucfirst($name) . 'CatalogueLanguage.php');
+                $modelPivotPath = base_path('app/Models/' . ucfirst($tableName[0]) . 'CatalogueLanguage.php');
                 File::put($modelPivotPath, $this->formatContent($modelPivotContent, $replace));
             }
 
@@ -450,6 +452,7 @@ class GenerateService implements GenerateServiceInterface
 
         $replace = [
             'ModuleTemplate' => ucfirst($name),
+            'moduleTemplate' => lcfirst($name),
             'tableName' => $tableName . 's',
             'foreignKey' => $tableName . '_id',
             'pivotTable' => $tableName . '_language',
