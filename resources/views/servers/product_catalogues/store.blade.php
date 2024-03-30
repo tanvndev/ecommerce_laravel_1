@@ -17,10 +17,8 @@
 
 @section('content')
 @php
-$url = $config['method'] == 'create' ? route('product.store') : route('product.update',
-$product->id);
-
-// dd($product);
+$url = $config['method'] == 'create' ? route('product.catalogue.store') : route('product.catalogue.update',
+$productCatalogue->id);
 @endphp
 <form action="{{ $url }}" method="post" enctype="multipart/form-data">
 
@@ -36,10 +34,11 @@ $product->id);
                 <div class="border-0 mb-4">
                     <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                         <h3 class="fw-bold mb-0">{{$config['seo']['title']}}</h3>
-                        <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}
+                        <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}</button>
                     </div>
                 </div>
             </div> <!-- Row end  -->
+
 
 
 
@@ -47,17 +46,17 @@ $product->id);
 
                 @include('servers.includes.messageError')
                 {{-- Aside --}}
-                @include('servers.products.blocks.aside')
+                @include('servers.product_catalogues.blocks.aside')
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    @include('servers.includes.content', ['model'=> $product ?? []])
+                    @include('servers.includes.content', ['model'=> $productCatalogue ?? []])
 
                     {{-- Album --}}
                     @include('servers.includes.album')
 
                     {{-- Seo --}}
-                    @include('servers.includes.seo', ['model'=> $product ?? []])
+                    @include('servers.includes.seo', ['model'=> $productCatalogue ?? []])
                 </div>
             </div><!-- Row end  -->
 

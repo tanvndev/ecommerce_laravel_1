@@ -54,6 +54,26 @@ return [
         ],
 
         [
+            'id' => 'product',
+            'route' => '',
+            'icon' => 'icofont-box',
+            'title' => 'QL Sản phẩm',
+            'activeCondition' => ['product.*'],
+            'subMenu' => [
+                // [
+                //     'title' => 'QL Bài viết',
+                //     'route' => 'post.index',
+                //     'activeCondition' => ['post.index', 'post.create', 'post.edit'],
+                // ],
+                [
+                    'title' => 'QL Nhóm sản phẩm',
+                    'route' => 'product.catalogue.index',
+                    'activeCondition' => ['product.catalogue.*']
+                ],
+            ]
+        ],
+
+        [
             'id' => 'generalConfig',
             'route' => '',
             'icon' => 'icofont-ui-settings',

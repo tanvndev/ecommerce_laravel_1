@@ -29,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
         // Permission
         'App\Services\Interfaces\PermissionServiceInterface' => 'App\Services\PermissionService',
 
-    ];
+    // ProductCatalogue
+'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
+];
     public function register(): void
     {
         // 

@@ -15,7 +15,8 @@ use App\Http\Controllers\Servers\{
     UserCatalogueController,
     PostCatalogueController,
     PostController,
-    //@@new-controller-module@@
+    ProductCatalogueController,
+//@@new-controller-module@@
 
 };
 
@@ -117,7 +118,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
     });
 
 
-    //@@new-route-module@@
+    
+    // Routes for ProductCatalogueController
+    Route::prefix('product/catalogue')->name('product.catalogue.')->group(function () {
+        Route::get('index', [ProductCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [ProductCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [ProductCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ProductCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [ProductCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [ProductCatalogueController::class, 'destroy'])->name('destroy');
+    });
+//@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 

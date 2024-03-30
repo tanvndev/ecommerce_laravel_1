@@ -1,5 +1,31 @@
 <?php
 return [
+    'productCatalogue' => [
+        'index' => [
+            'title' => 'Danh sách nhóm sản phẩm',
+            'table' => 'Thông tin nhóm sản phẩm',
+            'create' => 'Tạo mới nhóm sản phẩm'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nhóm sản phẩm',
+            'success' => 'Tạo mới nhóm sản phẩm thành công.',
+            'error' => 'Tạo mới nhóm sản phẩm thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nhóm sản phẩm',
+            'success' => 'Cập nhập nhóm sản phẩm thành công.',
+            'error' => 'Cập nhập nhóm sản phẩm thất bại.',
+        ],
+        'delete' => [
+            'title' => 'Cập nhập nhóm sản phẩm',
+            'success' => 'Xoá nhóm sản phẩm thành công.',
+            'error' => 'Xoá nhóm sản phẩm thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên nhóm',
+
+        ]
+    ],
     'postCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm bài viết',

@@ -36,7 +36,7 @@ class GenerateService implements GenerateServiceInterface
     public function create()
     {
         $moduleType = request('module_type');
-        DB::beginTransaction();
+        // DB::beginTransaction();
         try {
             $makeDatabase = $this->makeDatabase();
             $makeController =  $this->makeController();
@@ -54,10 +54,10 @@ class GenerateService implements GenerateServiceInterface
 
             // $this->makeLang();
 
-            DB::commit();
+            // DB::commit();
             return true;
         } catch (\Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
             echo $e->getMessage();
             die;
             return false;
@@ -508,7 +508,7 @@ class GenerateService implements GenerateServiceInterface
 
                 $migrationPivotTemplate = $this->createMigrationFile([
                     'schema' => $pivotSchema,
-                    'name' => $pivotTableName,
+                    'name' => $tableName,
                 ]);
 
                 File::put($migrationPivotPath, $migrationPivotTemplate);
@@ -523,13 +523,6 @@ class GenerateService implements GenerateServiceInterface
         }
     }
 
-    private function formatContent($content, $replace)
-    {
-        foreach ($replace as $key => $value) {
-            $content = str_replace('{' . $key . '}', $value, $content);
-        }
-        return $content;
-    }
 
     private function pivotSchema($foreignKey = '', $pivotTableName = '', $foreignTableName = '')
     {
@@ -538,12 +531,15 @@ Schema::create('{$pivotTableName}', function (Blueprint \$table) {
     \$table->foreignId('{$foreignKey}')->constrained('{$foreignTableName}')->onDelete('cascade');
     \$table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
     \$table->string('name');
-    \$table->text('description');
-    \$table->text('content');
+    \$table->text('description')->nullable();
+    \$table->text('content')->nullable();
     \$table->string('canonical');
-    \$table->string('meta_title');
-    \$table->string('meta_keyword');
-    \$table->text('meta_description');
+    \$table->string('meta_title')->nullable();
+    \$table->string('meta_keyword')->nullable();
+    \$table->text('meta_description')->nullable();
+    \$table->softDeletes();
+    \$table->timestamps();
+    
 });
 SCHEMA;
         return $pivotSchema;
@@ -565,7 +561,9 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('{$payload['name']}', function (Blueprint \$table) {
         {$payload['schema']};
+        });
     }
 
     /**
@@ -573,7 +571,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('{$this->convertModuleNameToTableName($payload['name'])}');
+        Schema::dropIfExists('{$payload['name']}');
     }
 };
 MIGRATION;
@@ -584,6 +582,14 @@ MIGRATION;
     {
         $temp = strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $name));
         return  $temp;
+    }
+
+    private function formatContent($content, $replace)
+    {
+        foreach ($replace as $key => $value) {
+            $content = str_replace('{' . $key . '}', $value, $content);
+        }
+        return $content;
     }
 
     public function update($id)

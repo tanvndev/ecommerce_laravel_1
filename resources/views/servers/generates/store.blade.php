@@ -86,8 +86,22 @@ $url = $config['method'] == 'create' ? route('generate.store') : route('generate
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-12">
                                     <label class="form-label">Schema <span class="text-danger">(*)</span></label>
-                                    <textarea class="form-control textarea-expand" name="schema"
-                                        rows="10">{{old('schema', $generate->schema ?? '')}}</textarea>
+                                    <textarea class="form-control textarea-expand " name="schema" rows="15">{{ old('schema', $generate->schema ?? trim('
+$table->id();
+$table->integer(\'parent_id\')->default(0);
+$table->integer(\'left\')->default(0);
+$table->integer(\'right\')->default(0);
+$table->integer(\'level\')->default(0);
+$table->string(\'image\')->nullable();
+$table->string(\'icon\')->nullable();
+$table->text(\'album\')->nullable();
+$table->tinyInteger(\'publish\')->default(1);
+$table->tinyInteger(\'follow\')->default(0);
+$table->integer(\'order\')->default(0);
+$table->foreignId(\'user_id\')->constrained(\'users\')->onDelete(\'cascade\');
+$table->softDeletes();
+$table->timestamps();')) }}</textarea>
+
 
                                 </div>
                                 {{-- <div class="col-md-12">

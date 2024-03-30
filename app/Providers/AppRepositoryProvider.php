@@ -34,7 +34,9 @@ class AppRepositoryProvider extends ServiceProvider
         // Router
         'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
 
-    ];
+    // ProductCatalogue
+'App\Repositories\Interfaces\ProductCatalogueRepositoryInterface' => 'App\Repositories\ProductCatalogueRepository',
+];
 
     public function register(): void
     {

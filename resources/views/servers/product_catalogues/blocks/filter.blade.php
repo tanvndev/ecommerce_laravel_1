@@ -1,5 +1,4 @@
-<form action="{{ route('product.index') }}" method="get" class="form-list-filter">
-
+<form action="{{ route('product.catalogue.index') }}" method="get" class="form-list-filter">
 
     <div class="row">
         <div class="col-lg-2">
@@ -10,7 +9,6 @@
 
             </select>
         </div>
-
         <div class="col-lg-7">
             <div class="row">
 
@@ -22,23 +20,6 @@
                         </option>
                         @endforeach
                     </select>
-                </div>
-
-                <div class="col-lg-4">
-
-                    <select class="form-select filter" name="product_catalogue_id">
-
-                        <option selected value="">{{__('messages.product.table.productCatalogue')}}</option>
-
-                        @foreach ($dropdown as $key => $val)
-
-                        <option {{ request('product_catalogue_id')==(string)$key ? 'selected' : '' }} value="{{ $key }}">{{
-                            $val
-                            }}
-                        </option>
-                        @endforeach
-                    </select>
-
                 </div>
 
             </div>

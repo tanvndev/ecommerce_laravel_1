@@ -6,46 +6,30 @@
                     <input class="form-check-input" type="checkbox" id="check-all">
                 </div>
             </th>
-            <th style="width: 40%;">{{__('messages.product.table.name')}}</th>
+            <th>{{__('messages.productCatalogue.table.name')}}</th>
             @include('servers.includes.languageTableTh')
-            <th>{{__('messages.tableDisplayGroup')}}</th>
-            <th style="width: 5%;">{{__('messages.tableOrder')}}</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($products as $product) <tr>
+        @foreach ($productCatalogues as $productCatalogue) <tr>
             <td>
                 <div class="form-check form-table-list-check">
-                    <input class="form-check-input check-item" value="{{$product->id}}" type="checkbox">
+                    <input class="form-check-input check-item" value="{{$productCatalogue->id}}" type="checkbox">
                 </div>
             </td>
             <td>
-                <div class="d-flex align-items-center justify-content-start">
-                    <img class="avatar image-post rounded" src="{{$product->image}}" alt="{{$product->name}}">
-                    <a href="" class="fw-bold link-body-emphasis ms-2 "> {{$product->name}}</a>
-
-                </div>
+                {{str_repeat('|-----', (($productCatalogue->level > 0) ? ($productCatalogue->level - 1) :
+                0)).$productCatalogue->name}}
             </td>
-            @include('servers.includes.languageTableTd', ['model' => $product])
-            <td>
-                @foreach ($product->product_catalogues as $catalogue)
-                @foreach ($catalogue->product_catalogue_language as $val)
-                <a href="{{route('product.index', ['product_catalogue_id' => $catalogue->id])}}" class="post-catalogue-name link-body-emphasis"> {{$val->name}}</a>
-                @endforeach
-                @endforeach
-            </td>
-            <td class="">
-                <input type="text" class="form-control sort-order" name="order" data-id="{{$product->id}}" data-model="{{$modelName}}" value="{{$product->order}}" />
-            </td>
-
+            @include('servers.includes.languageTableTd', ['model' => $productCatalogue])
             <td>
                 <div class="toggler toggler-list-check">
-                    <input class="status" id="publish-{{$product->id}}" data-field="publish" data-modelid="{{$product->id}}" data-model="{{$modelName}}" name="publish" type="checkbox" {{$product->publish ==
+                    <input class="status" id="publish-{{$productCatalogue->id}}" data-field="publish" data-modelid="{{$productCatalogue->id}}" data-model="{{$modelName}}" name="publish" type="checkbox" {{$productCatalogue->publish ==
                     1 ? 'checked' :
-                    ''}} value="{{$product->publish}}">
-                    <label for="publish-{{$product->id}}">
+                    ''}} value="{{$productCatalogue->publish}}">
+                    <label for="publish-{{$productCatalogue->id}}">
                         <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
                             <polyline class="path check" points="100.2,40.2 51.5,88.8 29.8,67.5"></polyline>
                         </svg>
@@ -61,8 +45,8 @@
 
             <td>
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <a href="{{route('product.edit', $product->id)}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                    <button type="button" data-id="{{$product->id}}" class="btn btn-outline-secondary btn-delete" data-bs-toggle="modal" data-bs-target="#modal-delete"><i class="icofont-ui-delete text-danger"></i></a>
+                    <a href="{{route('product.catalogue.edit', $productCatalogue->id)}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                    <button type="button" data-id="{{$productCatalogue->id}}" class="btn btn-outline-secondary btn-delete" data-bs-toggle="modal" data-bs-target="#modal-delete"><i class="icofont-ui-delete text-danger"></i></a>
                 </div>
             </td>
         </tr>
@@ -86,7 +70,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 " data-bs-dismiss="modal">{{__('messages.cancelButton')}}</button>
-                <form action="{{route('product.destroy')}}" method="post">
+                <form action="{{route('product.catalogue.destroy')}}" method="post">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="_id" id="_id">

@@ -19,7 +19,7 @@ toast($errorMessages, 'error');
                 <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
-                        <a href="{{route('product.create')}}" class="btn btn-primary btn-set-task w-sm-100">
+                        <a href="{{route('product.catalogue.create')}}" class="btn btn-primary btn-set-task w-sm-100">
                             <i class="icofont-plus-circle me-2 fs-6"></i>{{$config['seo']['create']}} </a>
                     </div>
                 </div>
@@ -31,14 +31,14 @@ toast($errorMessages, 'error');
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Toolbox --}}
-                        @include('servers.includes.toolbox', ['model' =>'Product'] )
+                        @include('servers.includes.toolbox', ['model' =>'ProductCatalogue'] )
                     </div>
                 </div>
 
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Filter --}}
-                        @include('servers.products.blocks.filter' )
+                        @include('servers.product_catalogues.blocks.filter')
                     </div>
                 </div>
 
@@ -46,10 +46,10 @@ toast($errorMessages, 'error');
                 <div class="card mb-3">
                     <div class="card-body">
 
-                        @include('servers.products.blocks.table', ['modelName' =>'Product'])
+                        @include('servers.product_catalogues.blocks.table', ['modelName' =>'ProductCatalogue'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
-                            {{ $products->links('pagination::bootstrap-5') }}
+                            {{ $productCatalogues->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
 
