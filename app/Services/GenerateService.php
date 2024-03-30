@@ -43,19 +43,19 @@ class GenerateService implements GenerateServiceInterface
         $moduleType = request('module_type');
         // DB::beginTransaction();
         try {
-            $makeDatabase = $this->makeDatabase();
-            $makeController =  $this->makeController();
-            $makeModel = $this->makeModel();
+            // $makeDatabase = $this->makeDatabase();
+            // $makeController =  $this->makeController();
+            // $makeModel = $this->makeModel();
             $makeService = $this->makeService();
             $makeRepository = $this->makeRepository();
-            $makeProvider = $this->makeProvider();
-            $makeRequest =  $this->makeRequest();
-            $makeView =  $this->makeView();
-            if ($moduleType == 'catalogue') {
-                $this->makeRule();
-            }
-            $makeRoute = $this->makeRoute();
-            $makePermission = $this->makePermission();
+            // $makeProvider = $this->makeProvider();
+            // $makeRequest =  $this->makeRequest();
+            // $makeView =  $this->makeView();
+            // if ($moduleType == 'catalogue') {
+            //     $this->makeRule();
+            // }
+            // $makeRoute = $this->makeRoute();
+            // $makePermission = $this->makePermission();
 
 
             // $this->makeLang();
@@ -329,6 +329,7 @@ class GenerateService implements GenerateServiceInterface
     private function makeService()
     {
         $name = request('name');
+        $moduleType = request('module_type');
         $tableName = $this->convertModuleNameToTableName($name);
         $replace = [
             'ModuleTemplate' => ucfirst($name),
@@ -350,11 +351,12 @@ class GenerateService implements GenerateServiceInterface
             'moduleTemplate' => lcfirst($name),
         ];
 
-        return $this->initialzeServiceLayer($name, 'Repository', 'Repositories', $replace, $moduleType);
+        return $this->initialzeServiceLayer($name, 'Repository', 'Repositories', $replace);
     }
 
-    private function initialzeServiceLayer($name = '', $layerName = '', $forderName, $replace = [], $moduleType = '')
+    private function initialzeServiceLayer($name = '', $layerName = '', $forderName, $replace = [])
     {
+        $moduleType = request('module_type');
         try {
             // Lấy ra đường dẫn template
             $templateLayerInterfacePath = base_path('app/Templates/' . lcfirst($forderName) . '/Template' . ucfirst($layerName) . 'Interface.php');

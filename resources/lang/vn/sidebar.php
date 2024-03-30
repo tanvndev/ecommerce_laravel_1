@@ -54,6 +54,26 @@ return [
         ],
 
         [
+            'id' => 'attribute',
+            'route' => '',
+            'icon' => 'icofont-company',
+            'title' => 'QL Thuộc tính',
+            'activeCondition' => ['attribute.*'],
+            'subMenu' => [
+                [
+                    'title' => 'QL Thuộc tính',
+                    'route' => 'attribute.index',
+                    'activeCondition' => ['attribute.index', 'attribute.create', 'attribute.edit'],
+                ],
+                [
+                    'title' => 'QL Nhóm thuộc tính',
+                    'route' => 'attribute.catalogue.index',
+                    'activeCondition' => ['attribute.catalogue.*']
+                ],
+            ]
+        ],
+
+        [
             'id' => 'product',
             'route' => '',
             'icon' => 'icofont-box',

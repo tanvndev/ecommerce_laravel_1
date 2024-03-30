@@ -2,6 +2,7 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
+use App\Classes\Nestedsetbie;
 use App\Services\Interfaces\AttributeCatalogueServiceInterface;
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,6 @@ use Illuminate\Support\Str;
 class AttributeCatalogueService extends BaseService implements AttributeCatalogueServiceInterface
 {
     protected $attributeCatalogueRepository;
-
     public function __construct(
         AttributeCatalogueRepository $attributeCatalogueRepository,
     ) {
@@ -19,32 +19,36 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         $this->attributeCatalogueRepository = $attributeCatalogueRepository;
         $this->controllerName = 'AttributeCatalogueController';
     }
-    function paginate()
-    {
 
+
+    public function paginate()
+    {
         $condition = [
             'keyword' => addslashes(request('keyword')),
             'publish' => request('publish'),
-            'attributeCatalogue_catalogue_id' => request('attributeCatalogue_catalogue_id'),
             'where' => [
                 'tb2.language_id' => ['=', session('currentLanguage')]
             ]
         ];
+        // dd($condition);
 
         $select = [
-            'attributeCatalogues.id',
-            'attributeCatalogues.publish',
-            'attributeCatalogues.image',
-            'attributeCatalogues.user_id',
-            'attributeCatalogues.order',
+            'attribute_catalogues.id',
+            'attribute_catalogues.publish',
+            'attribute_catalogues.image',
+            'attribute_catalogues.level',
+            'attribute_catalogues.user_id',
+            'attribute_catalogues.order',
             'tb2.name',
             'tb2.canonical',
         ];
         $join = [
-            'attributeCatalogue_language as tb2' => ['tb2.attributeCatalogue_id', '=', 'attributeCatalogues.id'],
-            'attributeCatalogue_catalogue_attributeCatalogue as tb3' => ['tb3.attributeCatalogue_id', '=', 'attributeCatalogues.id'],
+            'attribute_catalogue_language as tb2' => ['tb2.attribute_catalogue_id', '=', 'attribute_catalogues.id']
         ];
-        $orderBy = [];
+        $orderBy = [
+            'attribute_catalogues.left' => 'asc',
+            'attribute_catalogues.created_at' => 'desc'
+        ];
 
         //////////////////////////////////////////////////////////
         $attributeCatalogues = $this->attributeCatalogueRepository->pagination(
@@ -53,36 +57,10 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             request('perpage'),
             $orderBy,
             $join,
-            ['attributeCatalogue_catalogues'],
-            $select,
-            $this->whereRaw()
-
         );
-
         // dd($attributeCatalogues);
-        return $attributeCatalogues;
-    }
 
-    private function whereRaw()
-    {
-        $rawConditions = [];
-        $attributeCatalogue_catalogue_id = request('attributeCatalogue_catalogue_id');
-        if ($attributeCatalogue_catalogue_id > 0) {
-            $rawConditions['whereRaw'] = [
-                [
-                    'tb3.attributeCatalogue_catalogue_id IN (
-                        SELECT id 
-                        FROM attributeCatalogue_catalogues
-                        INNER JOIN attributeCatalogue_catalogue_language as pcl ON pcl.attributeCatalogue_catalogue_id = attributeCatalogue_catalogues.id 
-                        WHERE `left` >= (SELECT `left` FROM attributeCatalogue_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM attributeCatalogue_catalogues as pc WHERE pc.id = ?)
-                        AND pcl.language_id = ?
-                    )',
-                    [$attributeCatalogue_catalogue_id, $attributeCatalogue_catalogue_id, session('currentLanguage')]
-                ]
-            ];
-        }
-        return $rawConditions;
+        return $attributeCatalogues;
     }
 
     function create()
@@ -90,23 +68,29 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
 
         DB::beginTransaction();
         try {
-
-            //   Lấy ra payload và format lai
+            // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
-            // Lấy ra id người dùng hiện tại
+            // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
             // Create attributeCatalogue
             $attributeCatalogue = $this->attributeCatalogueRepository->create($payload);
+
             if ($attributeCatalogue->id > 0) {
-                // Format lai payload language
+
+                // Format payload language
                 $payloadLanguage = $this->formatPayloadLanguage($attributeCatalogue->id);
-                // Create pivot and sync
-                $this->createPivotAndSync($attributeCatalogue, $payloadLanguage);
+
+                // Tạo ra pivot vào bảng attributeCatalogue_language
+                $this->createPivotLanguage($attributeCatalogue, $payloadLanguage);
 
                 // create router
                 $this->createRouter($attributeCatalogue);
+
+                // Dùng để tính toán lại các giá trị left right
+                $this->initNetedset();
+                $this->calculateNestedSet();
             }
 
             DB::commit();
@@ -114,7 +98,6 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         } catch (\Exception $e) {
             DB::rollBack();
             echo $e->getMessage();
-            die;
             return false;
         }
     }
@@ -122,28 +105,33 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
 
     function update($id)
     {
-
         DB::beginTransaction();
         try {
             // Lấy ra dữ liệu của attributeCatalogue hiện tại để xoá;
             $attributeCatalogue = $this->attributeCatalogueRepository->findById($id);
-
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);
+
             // Update attributeCatalogue
             $updateAttributeCatalogue = $this->attributeCatalogueRepository->update($id, $payload);
 
             if ($updateAttributeCatalogue) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($id);
+                // Lây ra payload language và format lai
+                $payloadLanguage = $this->formatPayloadLanguage($attributeCatalogue->id);
+
                 // Xoá bản ghi cũa một pivot
                 $attributeCatalogue->languages()->detach([$payloadLanguage['language_id'], $id]);
-                // Create pivot and sync
-                $this->createPivotAndSync($attributeCatalogue, $payloadLanguage);
+
+                // Tạo ra pivot vào bảng {privotTable}
+                $this->createPivotLanguage($attributeCatalogue, $payloadLanguage);
 
                 // update router
                 $this->updateRouter($attributeCatalogue);
+
+                // Dùng để tính toán lại các giá trị left right
+                $this->initNetedset();
+                $this->calculateNestedSet();
             }
 
             DB::commit();
@@ -156,40 +144,35 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         }
     }
 
-    private function catalogue()
-    {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('attributeCatalogue_catalogue_id')],
-        ));
-    }
-
-
     private function formatPayloadLanguage($attributeCatalogueId)
     {
         $payloadLanguage = request()->only($this->payloadLanguage());
         //Đinh dạng slug
         $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
-
-        // Lấy ra attributeCatalogue_id 
-        $payloadLanguage['attributeCatalogue_id'] = $attributeCatalogueId;
+        // Lấy ra attribute_catalogue_id
+        $payloadLanguage['attribute_catalogue_id'] = $attributeCatalogueId;
         // Lấy ra language_id mặc định
         $payloadLanguage['language_id'] = session('currentLanguage');
         return $payloadLanguage;
     }
 
-    private function createPivotAndSync($attributeCatalogue, $payloadLanguage)
-    {
-        // Tạo ra pivot vào bảng attributeCatalogue_language
-        $this->attributeCatalogueRepository->createPivot($attributeCatalogue, $payloadLanguage, 'languages');
 
-        // Lấy ra id catalogue
-        $catalogue = $this->catalogue();
-        // Đồng bộ hoá id catalogue với bảng attributeCatalogue_catalogue_attributeCatalogue
-        $attributeCatalogue->attributeCatalogue_catalogues()->sync($catalogue);
+
+    private function createPivotLanguage($attributeCatalogue, $payloadLanguage)
+    {
+        $this->attributeCatalogueRepository->createPivot($attributeCatalogue, $payloadLanguage, 'languages');
     }
 
+   
+    private function payload()
+    {
+        return ['parent_id', 'image', 'follow', 'publish', 'album'];
+    }
 
+    private function payloadLanguage()
+    {
+        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+    }
 
     function destroy($id)
     {
@@ -198,6 +181,10 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->attributeCatalogueRepository->delete($id);
 
+            // Dùng để tính toán lại các giá trị left right
+            $this->initNetedset();
+            $this->calculateNestedSet();
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -205,6 +192,15 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             echo $e->getMessage();
             return false;
         }
+    }
+
+    private function initNetedset()
+    {
+        $this->nestedset = new Nestedsetbie([
+            'table' => '{tablePivotName}',
+            'foreignkey' => 'attribute_catalogue_id',
+            'language_id' => session('currentLanguage')
+        ]);
     }
 
     function updateStatus()
@@ -247,13 +243,4 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         }
     }
 
-    private function payload()
-    {
-        return ['attributeCatalogue_catalogue_id', 'image', 'follow', 'publish', 'album'];
-    }
-
-    private function payloadLanguage()
-    {
-        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
-    }
 }
