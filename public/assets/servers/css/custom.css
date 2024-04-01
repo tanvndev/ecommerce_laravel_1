@@ -4,6 +4,19 @@
 .fs-13 {
     font-size: 13px;
 }
+.mt-25 {
+    margin-top: 25px;
+}
+
+.px-8 {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.py-11 {
+    padding-top: 11px;
+    padding-bottom: 11px;
+}
 .h-250 {
     height: 250px;
 }
@@ -23,6 +36,26 @@
 .img-language-th {
     width: 40px;
     height: 30px;
+}
+
+.transition {
+    transition: all 0.3s linear;
+}
+
+.border-style-dashed {
+    border-style: dashed;
+}
+
+.variant-body .nice-select {
+    height: 40px;
+    line-height: 38px;
+}
+.variant-body .form-label {
+    font-weight: normal;
+}
+
+.variant-item {
+    margin-bottom: 25px;
 }
 
 .form-list-filter .form-control,

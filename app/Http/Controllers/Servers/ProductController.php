@@ -9,7 +9,7 @@ use App\Http\Requests\{
     StoreProductRequest,
     UpdateProductRequest
 };
-
+use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use App\Services\Interfaces\ProductServiceInterface as ProductService;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
@@ -19,11 +19,13 @@ class ProductController extends Controller
 {
     protected $productService;
     protected $productRepository;
+    protected $attributeCatalogueRepository;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         ProductService $productService,
         ProductRepository $productRepository,
+        AttributeCatalogueRepository $attributeCatalogueRepository,
     ) {
         // Lấy ra ngôn ngữ hiện tại và gán vào session
         $this->middleware(function ($request, $next) {
@@ -37,6 +39,7 @@ class ProductController extends Controller
 
         $this->productService = $productService;
         $this->productRepository = $productRepository;
+        $this->attributeCatalogueRepository = $attributeCatalogueRepository;
     }
 
     private function initNetedset()
@@ -74,10 +77,13 @@ class ProductController extends Controller
         $config['method'] = 'create';
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
+
+        $attributeCatalogues = $this->attributeCatalogueRepository->getAll($this->currentLanguage);
         // dd($dropdown);
         return view('servers.products.store', compact([
             'config',
             'dropdown',
+            'attributeCatalogues'
         ]));
     }
 

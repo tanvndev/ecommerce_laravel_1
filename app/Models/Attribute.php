@@ -50,4 +50,9 @@ class Attribute extends Model
     {
         return $this->belongsTo(AttributeCatalogue::class, 'attribute_catalogue_id', 'id');
     }
+
+    public function attribute_language()
+    {
+        return $this->hasMany(AttributeLanguage::class, 'attribute_id', 'id');
+    }
 }

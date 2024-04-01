@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ajax\{
     LocationController,
-    DashboardController as AjaxDashboardController
+    DashboardController as AjaxDashboardController,
+    AttributeController as AjaxAttributeController
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -17,10 +18,10 @@ use App\Http\Controllers\Servers\{
     PostController,
     ProductCatalogueController,
     GalleryCatalogueController,
-ProductController,
-AttributeCatalogueController,
-AttributeController,
-//@@new-controller-module@@
+    ProductController,
+    AttributeCatalogueController,
+    AttributeController,
+    //@@new-controller-module@@
 
 };
 
@@ -133,7 +134,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::delete('destroy', [ProductCatalogueController::class, 'destroy'])->name('destroy');
     });
 
-    
+
     // Routes for GalleryCatalogueController
     Route::prefix('gallery/catalogue')->name('gallery.catalogue.')->group(function () {
         Route::get('index', [GalleryCatalogueController::class, 'index'])->name('index');
@@ -173,7 +174,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [AttributeController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [AttributeController::class, 'destroy'])->name('destroy');
     });
-//@@new-route-module@@
+    //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 
@@ -182,6 +183,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
+    Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->middleware('admin')->name('ajax.attribute.getAttribute');
 });
 
 

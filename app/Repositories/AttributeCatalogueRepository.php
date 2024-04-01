@@ -38,4 +38,12 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
             ->where('tb2.language_id', $languageId)
             ->find($id);
     }
+
+    public function getAll($languageId = 0)
+    {
+        $query = $this->model->select();
+        return $query->with(['attribute_catalogue_language' => function ($query) use ($languageId) {
+            $query->where('language_id', $languageId);
+        }])->get();
+    }
 }
