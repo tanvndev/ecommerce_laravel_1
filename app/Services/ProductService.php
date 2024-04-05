@@ -90,7 +90,7 @@ class ProductService extends BaseService implements ProductServiceInterface
 
         DB::beginTransaction();
         try {
-
+            dd(request()->all());
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatAlbum($payload);

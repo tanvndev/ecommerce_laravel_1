@@ -14,15 +14,18 @@
 <script src="{{ asset('assets/servers/plugin/ckeditor/ckeditor.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/ckfinder.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/seo.js')}}"></script>
-<script src="{{ asset('assets/servers/js/library/variant.js')}}"></script>
 
 <script>
     var attributeCatalogues = @json($attributeCatalogues->map(function ($item) {
         $name = $item->attribute_catalogue_language->first()->name;
         return ['id' => $item->id, 'name' => $name];
     }));
+
+    var attributeForm = @json(isset($product->attribute) ? $product->attribute : old('attribute'));
+    var variantForm = @json(isset($product->variant) ? $product->variant : old('variant'));
 </script>
 
+<script src="{{ asset('assets/servers/js/library/variant.js')}}"></script>
 @endsection
 
 @section('content')
@@ -59,56 +62,20 @@ $product->id);
 
                 @include('servers.includes.messageError')
                 {{-- Aside --}}
+                @include('servers.products.blocks.aside')
 
                 <div class="col-lg-8">
                     {{-- Main --}}
-                    {{-- @include('servers.includes.content', ['model'=> $product ?? []]) --}}
+                    @include('servers.includes.content', ['model'=> $product ?? []])
 
                     {{-- Album --}}
-                    {{-- @include('servers.includes.album') --}}
+                    @include('servers.includes.album')
+
+                    {{-- Variant --}}
+                    @include('servers.products.blocks.variant')
 
                     {{-- Seo --}}
-                    {{-- @include('servers.includes.seo', ['model'=> $product ?? []]) --}}
-
-
-                    <div class="card mb-3 card-create">
-                        <div class="card-header py-3 bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">{{__('messages.generalInfomation')}}</h6>
-                            <small>{{__('messages.noteNotice')[0]}} <span class="text-danger">(*)</span>
-                                {{__('messages.noteNotice')[1]}}</small>
-                        </div>
-                        <div class="card-body">
-
-                        </div>
-                    </div>
-
-                    <div class="card mb-3 card-create">
-                        <div class="card-header py-3 bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold ">Sản phẩm có nhiều phiên bản</h6>
-                            <small>Cho phép nhiều phiên bản khác nhau của sản phẩm. Mỗi phiên bản sẽ là một dòng trong
-                                mục danh sách phiên bản sản phẩm</small>
-                        </div>
-
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input turn-on-variant" type="checkbox"
-                                    id="check-box-variant-220" />
-                                <label class="form-check-label" for="check-box-variant-220"> Sản phẩm này có nhiều biến
-                                    thể. Ví dụ như màu
-                                    sắc, kích thước,... </label>
-                            </div>
-                        </div>
-                        <div class="card-body variant-wrap">
-                            <div class="variant-body">
-                            </div>
-                            <div class="col-md-4 mt-4 btn-add-variant-wrap">
-                                <button type="button"
-                                    class="btn btn-outline-info w-100 border-style-dashed add-variant">Tạo phiên bản
-                                    mới</button>
-                            </div>
-                        </div>
-
-                    </div>
+                    @include('servers.includes.seo', ['model'=> $product ?? []])
                 </div>
             </div><!-- Row end  -->
 

@@ -36,6 +36,29 @@ class AttributeController extends Controller
             ];
         });
 
-        return response()->json(['items' => $attributeMapped]);
+        return response()->json(array('items' => $attributeMapped));
+    }
+
+    public function loadAttribute(Request $request)
+    {
+        // dd($request->all());
+        $payload['attribute'] = $request->attribute;
+        $payload['attributeCatalogueId'] = $request->attributeCatalogueId;
+
+        $attributeArray = $request->attribute[$request->attributeCatalogueId];
+        if (!empty($attributeArray)) {
+            $attribute = $this->attributeRepository->findAttributeByIdArray($attributeArray, $this->currentLanguage);
+        }
+
+        $variants = [];
+        if (!empty($attribute)) {
+            foreach ($attribute as $value) {
+                $variants[] = [
+                    'id' => $value->id,
+                    'text' => $value->attribute_language->first()->name
+                ];
+            }
+        }
+        return response()->json($variants);
     }
 }

@@ -365,7 +365,7 @@ return [
     'notes' => 'Ghi chú',
     'canonical' => 'Canonical',
     'contactInfo' => 'Thông tin liên hệ',
-    'albumNotice' => 'Sử dụng nút chọn ảnh hoặc chọn vào đây để thêm hình ảnh',
+    'albumNotice' => 'Sử dụng nút chọn ảnh hoặc chọn vào đây để thêm hình ảnh.',
     'tableStatus' => 'Tình trạng',
     'tableAction' => 'Thực thi',
     'tableOrder' => 'Vị trí',

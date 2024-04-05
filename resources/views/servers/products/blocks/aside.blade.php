@@ -11,7 +11,8 @@
                     <select class="form-select init-select2" name="product_catalogue_id">
                         @foreach ($dropdown as $key => $val)
                         <option {{ $key==old('product_catalogue_id', isset($product->product_catalogue_id) ?
-                            $product->product_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
+                            $product->product_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -45,8 +46,49 @@
 
 
         </div>
+
         <div class="card mb-3 card-create">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                <h6 class="m-0 fw-bold">{{__('messages.generalInfomation')}}</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Mã sản phẩm</label>
+                    <input type="text" class="form-control" name="sku"
+                        value="{{old('sku', $product->sku ?? time())}}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Xuất sứ</label>
+                    <input type="text" class="form-control" name="origin"
+                        value="{{old('origin', $product->origin ?? '')}}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Giá bán sản phẩm</label>
+                    <input type="text" class="form-control int" name="price"
+                        value="{{old('price', $product->price ?? '')}}" />
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
+            </div>
+            <div class="card-body">
+                <img class="img-thumbnail h-250 w-100 img-contain img-target"
+                    src="{{ (old('image', $product->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
+                    alt="no-image">
+                <input type="hidden" name="image" value="{{old('image', $product->image ?? '')}}" class="image">
+            </div>
+        </div>
+
+        <div class="card mb-3 card-create">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">{{__('messages.advance')}}</h6>
             </div>
             <div class="card-body">
@@ -75,16 +117,6 @@
                         @endforeach
                     </select>
                 </div>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
-            </div>
-            <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', $product->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}" alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', $product->image ?? '')}}" class="image">
             </div>
         </div>
 

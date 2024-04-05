@@ -16,6 +16,13 @@ $(function () {
         });
     };
 
+    init.convertToCommas = () => {
+        $(document).on("input", ".int", function () {
+            let format = formatToCommas($(this).val());
+            $(this).val(format);
+        });
+    };
+
     init.sortUI = () => {
         if ($(".sortable").length > 0) {
             $(".sortable").sortable();
@@ -178,5 +185,6 @@ $(function () {
         init.checkItem();
         init.changeStatusAll();
         init.sortUI();
+        init.convertToCommas();
     });
 });

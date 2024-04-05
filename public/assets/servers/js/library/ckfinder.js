@@ -25,7 +25,7 @@ $(function () {
                 init.browseServerAlbum(type);
             });
         }
-    }
+    };
 
     init.mutipleUploadImageCkEditor = () => {
         if ($(".mutipleUploadImageCkEditor").length > 0) {
@@ -153,7 +153,7 @@ $(function () {
     };
 
     init.browseServerAlbum = (type) => {
-         if (typeof type == "undefined") {
+        if (typeof type == "undefined") {
             type = "Images";
         }
         var finder = new CKFinder();
@@ -176,33 +176,31 @@ $(function () {
                         <input type="hidden" name="album[]" value="${image}">
                     </div>
                 </div>
-                `
+                `;
             }
-            $('.click-to-upload-area').addClass('d-none');
-            $('.upload-image-list').removeClass('d-none');
-            $('.upload-image-list').append(html);
+            $(".click-to-upload-area").addClass("d-none");
+            $(".upload-image-list").removeClass("d-none");
+            $(".upload-image-list").append(html);
         };
         finder.popup();
-    }
+    };
     init.deletePictureAlbum = () => {
-        $(document).on('click', '.icon-delete-album', function () {
+        $(document).on("click", ".icon-delete-album", function () {
             $(this).parent().parent().remove();
 
-            if ($('.album-item').length <= 0) {
-                $('.click-to-upload-area').removeClass('d-none');
-                $('.upload-image-list').addClass('d-none');    
+            if ($(".album-item").length <= 0) {
+                $(".click-to-upload-area").removeClass("d-none");
+                $(".upload-image-list").addClass("d-none");
             }
-           
-        })
-      
-    }
+        });
+    };
 
     $(document).ready(function () {
         init.uploadImageToInput();
         init.setUpCkEditer();
         init.uploadImageAvatar();
         init.mutipleUploadImageCkEditor();
-        init.uploadAlbum()
-        init.deletePictureAlbum()
+        init.uploadAlbum();
+        init.deletePictureAlbum();
     });
 });

@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gallery_catalogue_language', function (Blueprint $table) {
-            $table->foreignId('gallery_catalogue_id')->constrained('gallery_catalogues')->onDelete('cascade');
+        Schema::create('product_variant_language', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_variant_id')->constrained('product_variants')->onDelete('cascade');
             $table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
             $table->string('name');
-            $table->text('description')->nullable();
-            $table->text('content')->nullable();
-            $table->string('canonical');
-            $table->string('meta_title')->nullable();
-            $table->string('meta_keyword')->nullable();
-            $table->text('meta_description')->nullable();
             $table->softDeletes();
             $table->timestamps();;
         });
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gallery_catalogue_language');
+        Schema::dropIfExists('product_variant_language');
     }
 };
