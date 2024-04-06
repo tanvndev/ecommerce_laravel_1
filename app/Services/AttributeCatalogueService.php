@@ -70,7 +70,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
         try {
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
@@ -112,7 +112,7 @@ class AttributeCatalogueService extends BaseService implements AttributeCatalogu
             $attributeCatalogue = $this->attributeCatalogueRepository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
 
             // Update attributeCatalogue
             $updateAttributeCatalogue = $this->attributeCatalogueRepository->update($id, $payload);

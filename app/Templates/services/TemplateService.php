@@ -93,7 +93,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -130,7 +130,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
 
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Update {moduleTemplate}
             $update{ModuleTemplate} = $this->{moduleTemplate}Repository->update($id, $payload);
 
@@ -157,12 +157,15 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
     }
 
     private function catalogue()
-    {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('{moduleTemplate}_catalogue_id')],
-        ));
-    }
+        {
+            if (!empty(request('catalogue'))) {
+                return array_unique(array_merge(
+                    request('catalogue'),
+                    [request('{moduleTemplate}_catalogue_id')],
+                ));
+            }
+            return [request('{moduleTemplate}_catalogue_id')];
+        }
 
 
     private function formatPayloadLanguage(${moduleTemplate}Id)

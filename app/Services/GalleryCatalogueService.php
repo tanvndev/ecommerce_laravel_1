@@ -70,7 +70,7 @@ class GalleryCatalogueService extends BaseService implements GalleryCatalogueSer
         try {
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
@@ -111,7 +111,7 @@ class GalleryCatalogueService extends BaseService implements GalleryCatalogueSer
             $galleryCatalogue = $this->galleryCatalogueRepository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
 
             // Update galleryCatalogue
             $updateGalleryCatalogue = $this->galleryCatalogueRepository->update($id, $payload);
@@ -163,7 +163,7 @@ class GalleryCatalogueService extends BaseService implements GalleryCatalogueSer
         $this->galleryCatalogueRepository->createPivot($galleryCatalogue, $payloadLanguage, 'languages');
     }
 
-   
+
     private function payload()
     {
         return ['parent_id', 'image', 'follow', 'publish', 'album'];
@@ -242,5 +242,4 @@ class GalleryCatalogueService extends BaseService implements GalleryCatalogueSer
             return false;
         }
     }
-
 }

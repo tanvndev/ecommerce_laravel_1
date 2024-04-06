@@ -261,37 +261,37 @@ $(function () {
                     {
                         name: "variant[quantity][]",
                         class: "variant_quantity",
-                        value: variantForm.quantity[index],
+                        value: variantForm?.quantity[index],
                     },
                     {
                         name: "variant[sku][]",
                         class: "variant_sku",
-                        value: variantForm.sku[index],
+                        value: variantForm?.sku[index],
                     },
                     {
                         name: "variant[price][]",
                         class: "variant_price",
-                        value: variantForm.price[index],
+                        value: variantForm?.price[index],
                     },
                     {
                         name: "variant[barcode][]",
                         class: "variant_barcode",
-                        value: variantForm.barcode[index],
+                        value: variantForm?.barcode[index],
                     },
                     {
                         name: "variant[file_name][]",
                         class: "variant_filename",
-                        value: variantForm.file_name[index],
+                        value: variantForm?.file_name[index],
                     },
                     {
                         name: "variant[file_url][]",
                         class: "variant_fileurl",
-                        value: variantForm.file_url[index],
+                        value: variantForm?.file_url[index],
                     },
                     {
                         name: "variant[album][]",
                         class: "variant_album",
-                        value: variantForm.album[index],
+                        value: variantForm?.album[index],
                     },
                 ];
                 let albumArr = variantForm?.album[index]?.split(",");
@@ -304,10 +304,10 @@ $(function () {
 
                 _this
                     .find(".td-quantity")
-                    .text(formatToCommas(variantForm.quantity[index]));
+                    .text(formatToCommas(variantForm.quantity[index] ?? "-"));
                 _this
                     .find(".td-price")
-                    .text(formatToCommas(variantForm.price[index]));
+                    .text(formatToCommas(variantForm.price[index] ?? "-"));
                 _this.find(".td-sku").text(variantForm.sku[index]);
 
                 _this
@@ -857,7 +857,7 @@ $(function () {
                 : "https://www.eclosio.ong/wp-content/uploads/2018/08/default.png",
         };
         $.each(option, function (key, value) {
-            $(`.variant-row.active .td-${key}`).text(value);
+            $(`.variant-row.active .td-${key}`).text(value ?? "");
         });
         $(`.variant-row.active .img-variant-src`).attr("src", option.image);
     };

@@ -19,8 +19,13 @@ class Product extends Model
         'publish',
         'order',
         'user_id',
-        'product_catalogue_id'
-
+        'product_catalogue_id',
+        'attributeCatalogue',
+        'attribute',
+        'variant',
+        'price',
+        'code',
+        'origin'
     ];
 
     public function languages()
@@ -49,5 +54,10 @@ class Product extends Model
     public function product_catalogue_language()
     {
         return $this->belongsTo(ProductCatalogue::class, 'product_catalogue_id', 'id');
+    }
+
+    public function product_variants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id');
     }
 }

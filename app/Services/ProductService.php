@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Services\Interfaces\ProductServiceInterface;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
+use App\Repositories\Interfaces\ProductVariantLanguageRepositoryInterface as ProductVariantLanguageRepository;
+use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as ProductVariantAttributeRepository;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -11,12 +14,18 @@ use Illuminate\Support\Str;
 class ProductService extends BaseService implements ProductServiceInterface
 {
     protected $productRepository;
+    protected $productVariantLanguageRepository;
+    protected $productVariantAttributeRepository;
 
     public function __construct(
         ProductRepository $productRepository,
+        ProductVariantLanguageRepository $productVariantLanguageRepository,
+        ProductVariantAttributeRepository $productVariantAttributeRepository,
     ) {
         parent::__construct();
         $this->productRepository = $productRepository;
+        $this->productVariantLanguageRepository = $productVariantLanguageRepository;
+        $this->productVariantAttributeRepository = $productVariantAttributeRepository;
         $this->controllerName = 'ProductController';
     }
     function paginate()
@@ -90,12 +99,13 @@ class ProductService extends BaseService implements ProductServiceInterface
 
         DB::beginTransaction();
         try {
-            dd(request()->all());
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatPayloadtoJson($payload);
+            $payload['price'] = $this->convertPrice($payload['price']);
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
+
 
             // Create product
             $product = $this->productRepository->create($payload);
@@ -107,6 +117,9 @@ class ProductService extends BaseService implements ProductServiceInterface
 
                 // create router
                 $this->createRouter($product);
+
+                // Tạo ra nhiều phiên bản
+                $this->createVariant($product);
             }
 
             DB::commit();
@@ -118,7 +131,103 @@ class ProductService extends BaseService implements ProductServiceInterface
             return false;
         }
     }
+    private function formatPayloadtoJson($payload)
+    {
+        $payload = $this->formatJson($payload, 'album');
+        $payload = $this->formatJson($payload, 'attributeCatalogue');
+        $payload = $this->formatJson($payload, 'attribute');
+        $payload = $this->formatJson($payload, 'variant');
+        return $payload;
+    }
 
+    private function createVariant($product)
+    {
+        $payload = request()->only(['variant', 'productVariant', 'attribute']);
+        $variantPayload = $this->formatPayloadVariant($payload);
+
+        // Tạo ra bản ghi cho product_variant
+        $variants = $product->product_variants()->createMany($variantPayload);
+
+        $productVariantLangue = [];
+        $variantAttribute = [];
+        // Lấy ra id các bản ghi product_variant
+        $productVariantId = $variants->pluck('id');
+        // Lấy ra kết hợp attribute
+        $attributeCombine = $this->combineAttribute(array_values($payload['attribute']));
+
+        if (count($productVariantId) > 0) {
+            $productVariantLangue = [];
+            foreach ($productVariantId as $key => $value) {
+                $productVariantLangue[] = [
+                    'product_variant_id' => $value,
+                    'language_id' => session('currentLanguage'),
+                    'name' => $payload['productVariant']['name'][$key] ?? '',
+                ];
+
+                if (count($attributeCombine) > 0) {
+                    foreach ($attributeCombine[$key] as $keyAttr => $valueAttr) {
+                        $variantAttribute[] = [
+                            'product_variant_id' => $value,
+                            'attribute_id' => $valueAttr,
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Tạo ra bản ghi cho variant_language
+        $variantLanguage = $this->productVariantLanguageRepository->createBatch($productVariantLangue);
+
+        // Tạo ra bản ghi cho product_variant_attribute
+        $this->productVariantAttributeRepository->createBatch($variantAttribute);
+    }
+
+    private function combineAttribute($attribute, $index = 0)
+    {
+        // Nếu chỉ số index đã vượt qua chỉ số lớn nhất của mảng
+        if ($index >= count($attribute)) {
+            return [[]];
+        }
+
+        // Lấy mảng con ứng với chỉ số index hiện tại
+        $currentAttribute = $attribute[$index];
+        // Lấy kết quả của các mảng con tiếp theo
+        $nextCombinations = $this->combineAttribute($attribute, $index + 1);
+
+        // Tạo mảng kết quả mới
+        $result = [];
+        // Lặp qua từng phần tử trong mảng con hiện tại
+        foreach ($currentAttribute as $item) {
+            // Lặp qua từng kết hợp trong kết quả của các mảng con tiếp theo
+            foreach ($nextCombinations as $combination) {
+                // Thêm phần tử của mảng con hiện tại vào mảng kết hợp và thêm vào mảng kết quả
+                $result[] = array_merge([$item], $combination);
+            }
+        }
+
+        return $result;
+    }
+
+    private function formatPayloadVariant($payload)
+    {
+        $variantPayload = [];
+        if (isset($payload['variant']['sku']) && count($payload['variant']['sku']) > 0) {
+            foreach ($payload['variant']['sku'] as $key => $value) {
+                $variantPayload[] = [
+                    'code' => $payload['productVariant']['id'][$key] ?? '',
+                    'quantity' => $this->convertPrice($payload['variant']['quantity'][$key] ?? 0),
+                    'price' => $this->convertPrice($payload['variant']['price'][$key] ?? 0),
+                    'sku' => $value ?? '',
+                    'barcode' => $payload['variant']['barcode'][$key] ?? '',
+                    'file_name' => $payload['variant']['file_name'][$key] ?? '',
+                    'file_url' => $payload['variant']['file_url'][$key] ?? '',
+                    'album' => $payload['variant']['album'][$key] ?? '',
+                    'user_id' => Auth::id(),
+                ];
+            }
+        }
+        return $variantPayload;
+    }
 
     function update($id)
     {
@@ -130,7 +239,7 @@ class ProductService extends BaseService implements ProductServiceInterface
 
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Update product
             $updateProduct = $this->productRepository->update($id, $payload);
 
@@ -144,6 +253,17 @@ class ProductService extends BaseService implements ProductServiceInterface
 
                 // update router
                 $this->updateRouter($product);
+
+
+                // Xoa cac bản ghi của của sản phẩm đó
+                $product->product_variants()->each(function ($variant) {
+                    $variant->attributes()->detach();
+                    $variant->languages()->detach();
+                    $variant->delete();
+                });
+
+                // Tạo ra nhiều phiên bản
+                $this->createVariant($product);
             }
 
             DB::commit();
@@ -158,10 +278,13 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function catalogue()
     {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('product_catalogue_id')],
-        ));
+        if (!empty(request('catalogue'))) {
+            return array_unique(array_merge(
+                request('catalogue'),
+                [request('product_catalogue_id')],
+            ));
+        }
+        return [request('product_catalogue_id')];
     }
 
 
@@ -188,6 +311,8 @@ class ProductService extends BaseService implements ProductServiceInterface
         // Đồng bộ hoá id catalogue với bảng product_catalogue_product
         $product->product_catalogues()->sync($catalogue);
     }
+
+
 
 
 
@@ -252,11 +377,19 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function payload()
     {
-        return ['product_catalogue_id', 'image', 'follow', 'publish', 'album'];
+        return ['product_catalogue_id', 'image', 'follow', 'publish', 'album', 'attributeCatalogue', 'attribute', 'variant', 'sku', 'price', 'origin'];
     }
 
     private function payloadLanguage()
     {
         return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+    }
+
+    private function convertPrice($priceString)
+    {
+        $priceWithoutDots = str_replace('.', '', $priceString);
+        // Chuyển đổi chuỗi thành số nguyên
+        $price = intval($priceWithoutDots);
+        return $price;
     }
 }

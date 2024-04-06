@@ -70,7 +70,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         try {
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
@@ -111,7 +111,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             $postCatalogue = $this->postCatalogueRepository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
 
             // Update postCatalogue
             $updatePostCatalogue = $this->postCatalogueRepository->update($id, $payload);

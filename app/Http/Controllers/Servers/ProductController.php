@@ -108,6 +108,7 @@ class ProductController extends Controller
         $product = $this->productRepository->getProductLanguageById($id, $this->currentLanguage);
         // dd($product);
 
+        $attributeCatalogues = $this->attributeCatalogueRepository->getAll($this->currentLanguage);
 
         $albums =  json_decode($product->album);
         // Danh mục cha
@@ -122,6 +123,7 @@ class ProductController extends Controller
             'config',
             'product',
             'albums',
+            'attributeCatalogues',
             'dropdown',
         ]));
     }

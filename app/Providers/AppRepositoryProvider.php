@@ -33,18 +33,23 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
         // Router
         'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
-
         // ProductCatalogue
         'App\Repositories\Interfaces\ProductCatalogueRepositoryInterface' => 'App\Repositories\ProductCatalogueRepository',
-    // GalleryCatalogue
-'App\Repositories\Interfaces\GalleryCatalogueRepositoryInterface' => 'App\Repositories\GalleryCatalogueRepository',
-// Product
-'App\Repositories\Interfaces\ProductRepositoryInterface' => 'App\Repositories\ProductRepository',
-// AttributeCatalogue
-'App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface' => 'App\Repositories\AttributeCatalogueRepository',
-// Attribute
-'App\Repositories\Interfaces\AttributeRepositoryInterface' => 'App\Repositories\AttributeRepository',
-];
+        // GalleryCatalogue
+        'App\Repositories\Interfaces\GalleryCatalogueRepositoryInterface' => 'App\Repositories\GalleryCatalogueRepository',
+        // Product
+        'App\Repositories\Interfaces\ProductRepositoryInterface' => 'App\Repositories\ProductRepository',
+        // AttributeCatalogue
+        'App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface' => 'App\Repositories\AttributeCatalogueRepository',
+        // Attribute
+        'App\Repositories\Interfaces\AttributeRepositoryInterface' => 'App\Repositories\AttributeRepository',
+        // ProductVariant
+        'App\Repositories\Interfaces\ProductVariantRepositoryInterface' => 'App\Repositories\ProductVariantRepository',
+        // ProductVariantLanguage
+        'App\Repositories\Interfaces\ProductVariantLanguageRepositoryInterface' => 'App\Repositories\ProductVariantLanguageRepository',
+        // ProductVariantAttribute
+        'App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface' => 'App\Repositories\ProductVariantAttributeRepository',
+    ];
 
     public function register(): void
     {

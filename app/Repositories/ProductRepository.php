@@ -18,12 +18,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $select = [
             'products.id',
-            'products.parent_id',
+            'products.product_catalogue_id',
             'products.publish',
             'products.image',
             'products.icon',
             'products.album',
             'products.follow',
+            'products.price',
+            'products.sku',
+            'products.origin',
+            'products.attributeCatalogue',
+            'products.attribute',
+            'products.variant',
             'tb2.name',
             'tb2.description',
             'tb2.content',
@@ -36,7 +42,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->select($select)
             ->join('product_language as tb2', 'products.id', '=', 'tb2.product_id')
             ->where('tb2.language_id', $languageId)
-            ->with('product_catalogues')
+            ->with([
+                'product_catalogues',
+                'product_variants.attributes.languages' => function ($query) use ($languageId) {
+                    $query->where('language_id', $languageId);
+                }
+            ]) //Lấy từ product_variants.attributes.languages để lấy những attribute có trong product
             ->find($id);
     }
 }

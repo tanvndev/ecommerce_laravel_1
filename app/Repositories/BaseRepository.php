@@ -41,6 +41,18 @@ class BaseRepository implements BaseRepositoryInterface
         $create = $this->model->create($payload);
         return $create->fresh();
     }
+
+    public function createBatch($payload = [])
+    {
+        return $this->model->insert($payload);
+    }
+
+    public function createPivot($model, $payload = [], $relation = '')
+    {
+        // attach($model->id, $payload) là phương thức được gọi để thêm một bản ghi mới vào bảng pivot.
+        return $model->{$relation}()->attach($model->id, $payload);
+    }
+
     public function update($modelId, $payload = [])
     {
         $model = $this->findById($modelId);
@@ -108,11 +120,5 @@ class BaseRepository implements BaseRepositoryInterface
 
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
         return $query->paginate($perPage)->withQueryString();
-    }
-
-    public function createPivot($model, $payload = [], $relation = '')
-    {
-        // attach($model->id, $payload) là phương thức được gọi để thêm một bản ghi mới vào bảng pivot.
-        return $model->{$relation}()->attach($model->id, $payload);
     }
 }

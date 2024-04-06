@@ -28,18 +28,19 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\GenerateServiceInterface' => 'App\Services\GenerateService',
         // Permission
         'App\Services\Interfaces\PermissionServiceInterface' => 'App\Services\PermissionService',
-
         // ProductCatalogue
         'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
-    // GalleryCatalogue
-'App\Services\Interfaces\GalleryCatalogueServiceInterface' => 'App\Services\GalleryCatalogueService',
-// Product
-'App\Services\Interfaces\ProductServiceInterface' => 'App\Services\ProductService',
-// AttributeCatalogue
-'App\Services\Interfaces\AttributeCatalogueServiceInterface' => 'App\Services\AttributeCatalogueService',
-// Attribute
-'App\Services\Interfaces\AttributeServiceInterface' => 'App\Services\AttributeService',
-];
+        // GalleryCatalogue
+        'App\Services\Interfaces\GalleryCatalogueServiceInterface' => 'App\Services\GalleryCatalogueService',
+        // Product
+        'App\Services\Interfaces\ProductServiceInterface' => 'App\Services\ProductService',
+        // AttributeCatalogue
+        'App\Services\Interfaces\AttributeCatalogueServiceInterface' => 'App\Services\AttributeCatalogueService',
+        // Attribute
+        'App\Services\Interfaces\AttributeServiceInterface' => 'App\Services\AttributeService',
+
+
+    ];
     public function register(): void
     {
         // 

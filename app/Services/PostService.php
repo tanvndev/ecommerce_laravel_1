@@ -93,7 +93,7 @@ class PostService extends BaseService implements PostServiceInterface
 
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -130,7 +130,7 @@ class PostService extends BaseService implements PostServiceInterface
 
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Update post
             $updatePost = $this->postRepository->update($id, $payload);
 
@@ -158,10 +158,13 @@ class PostService extends BaseService implements PostServiceInterface
 
     private function catalogue()
     {
-        return array_unique(array_merge(
-            request('catalogue'),
-            [request('post_catalogue_id')],
-        ));
+        if (!empty(request('catalogue'))) {
+            return array_unique(array_merge(
+                request('catalogue'),
+                [request('post_catalogue_id')],
+            ));
+        }
+        return [request('post_catalogue_id')];
     }
 
 

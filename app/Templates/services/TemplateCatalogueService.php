@@ -70,7 +70,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         try {
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
@@ -111,7 +111,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
             ${moduleTemplate} = $this->{moduleTemplate}Repository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
 
             // Update {moduleTemplate}
             $update{ModuleTemplate} = $this->{moduleTemplate}Repository->update($id, $payload);

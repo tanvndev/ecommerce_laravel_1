@@ -92,7 +92,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
 
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -129,7 +129,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
 
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Update attribute
             $updateAttribute = $this->attributeRepository->update($id, $payload);
 

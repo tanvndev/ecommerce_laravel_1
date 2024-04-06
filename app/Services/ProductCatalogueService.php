@@ -70,7 +70,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
         try {
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
             // Lấy ra id của người dùng hiện tại.
             $payload['user_id'] = Auth::id();
 
@@ -110,7 +110,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
             $productCatalogue = $this->productCatalogueRepository->findById($id);
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
-            $payload = $this->formatAlbum($payload);
+            $payload = $this->formatJson($payload, 'album');
 
             // Update productCatalogue
             $updateProductCatalogue = $this->productCatalogueRepository->update($id, $payload);

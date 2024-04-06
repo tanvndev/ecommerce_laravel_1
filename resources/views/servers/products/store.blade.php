@@ -21,8 +21,10 @@
         return ['id' => $item->id, 'name' => $name];
     }));
 
-    var attributeForm = @json(isset($product->attribute) ? $product->attribute : old('attribute'));
-    var variantForm = @json(isset($product->variant) ? $product->variant : old('variant'));
+    var attributeForm = @json(old('attribute', isset($product->attribute) ? json_decode($product->attribute, true) : []));
+ 
+    var variantForm = @json(old('variant', isset($product->variant) ? json_decode($product->variant, true) : []));
+
 </script>
 
 <script src="{{ asset('assets/servers/js/library/variant.js')}}"></script>

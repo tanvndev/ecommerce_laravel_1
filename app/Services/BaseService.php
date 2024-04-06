@@ -31,11 +31,12 @@ class BaseService implements BaseServiceInterface
         $this->nestedset->Action();
     }
 
-    protected function formatAlbum($payload)
+
+    protected function formatJson($payload, $inputName)
     {
         // Lấy ra payload từ form
-        if (isset($payload['album']) && !empty($payload['album'])) {
-            $payload['album'] = json_encode($payload['album']);
+        if (isset($payload[$inputName]) && !empty($payload[$inputName])) {
+            $payload[$inputName] = json_encode($payload[$inputName]);
         }
         return $payload;
     }

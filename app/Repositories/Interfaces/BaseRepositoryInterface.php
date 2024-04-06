@@ -8,6 +8,7 @@ interface BaseRepositoryInterface
     public function findById($modelId, $column = ['*'], $relation = []);
     public function findByWhere($conditions = [], $column = ['*'], $relation = []);
     public function create($payload = []);
+    public function createBatch($payload = []);
     public function update($modelId, $payload = []);
     public function updateByWhereIn($whereInField = '', $whereIn = [], $payload = []);
     public function updateByWhere($condition = [], $payload = []);
