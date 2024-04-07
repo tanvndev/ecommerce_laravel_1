@@ -35,8 +35,6 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
         // ProductCatalogue
         'App\Repositories\Interfaces\ProductCatalogueRepositoryInterface' => 'App\Repositories\ProductCatalogueRepository',
-        // GalleryCatalogue
-        'App\Repositories\Interfaces\GalleryCatalogueRepositoryInterface' => 'App\Repositories\GalleryCatalogueRepository',
         // Product
         'App\Repositories\Interfaces\ProductRepositoryInterface' => 'App\Repositories\ProductRepository',
         // AttributeCatalogue

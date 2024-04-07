@@ -30,8 +30,6 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\PermissionServiceInterface' => 'App\Services\PermissionService',
         // ProductCatalogue
         'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
-        // GalleryCatalogue
-        'App\Services\Interfaces\GalleryCatalogueServiceInterface' => 'App\Services\GalleryCatalogueService',
         // Product
         'App\Services\Interfaces\ProductServiceInterface' => 'App\Services\ProductService',
         // AttributeCatalogue

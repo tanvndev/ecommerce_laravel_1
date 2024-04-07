@@ -17,7 +17,6 @@ use App\Http\Controllers\Servers\{
     PostCatalogueController,
     PostController,
     ProductCatalogueController,
-    GalleryCatalogueController,
     ProductController,
     AttributeCatalogueController,
     AttributeController,
@@ -134,16 +133,6 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::delete('destroy', [ProductCatalogueController::class, 'destroy'])->name('destroy');
     });
 
-
-    // Routes for GalleryCatalogueController
-    Route::prefix('gallery/catalogue')->name('gallery.catalogue.')->group(function () {
-        Route::get('index', [GalleryCatalogueController::class, 'index'])->name('index');
-        Route::get('create', [GalleryCatalogueController::class, 'create'])->name('create');
-        Route::post('store', [GalleryCatalogueController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [GalleryCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-        Route::put('/{id}/update', [GalleryCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-        Route::delete('destroy', [GalleryCatalogueController::class, 'destroy'])->name('destroy');
-    });
 
     // Routes for ProductController
     Route::prefix('product')->name('product.')->group(function () {
