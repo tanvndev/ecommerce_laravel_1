@@ -19,33 +19,33 @@
     <div class="card-body">
         <div class="row g-3 align-items-center">
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['title']}} </label>
-                <input type="text" name="translate_meta_title"
-                    value="{{old('translate_meta_title', $model->meta_title ?? '')}}" class="form-control">
+                {!! Form::label('translate_meta_title', __('messages.seo')['title'], ['class' => 'form-label']) !!}
+                {!! Form::text('translate_meta_title', old('translate_meta_title', $model->meta_title ?? ''), ['class'
+                => 'form-control']) !!}
             </div>
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['keyword']}} </label>
-                <input type="text" name="translate_meta_keyword"
-                    value="{{old('translate_meta_keyword', $model->meta_keyword ?? '')}}" class="form-control">
-
-            </div>
-
-            <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['description']}}</label>
-                <textarea name="translate_meta_description" class="form-control" cols="30"
-                    rows="10">{{old('translate_meta_description', $model->meta_description ?? '')}}</textarea>
+                {!! Form::label('translate_meta_keyword', __('messages.seo')['keyword'], ['class' => 'form-label']) !!}
+                {!! Form::text('translate_meta_keyword', old('translate_meta_keyword', $model->meta_keyword ?? ''),
+                ['class' => 'form-control']) !!}
             </div>
 
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['canonical']}} <span
-                        class="text-danger">(*)</span></label>
+                {!! Form::label('translate_meta_description', __('messages.seo')['description'], ['class' =>
+                'form-label']) !!}
+                {!! Form::textarea('translate_meta_description', old('translate_meta_description',
+                $model->meta_description ?? ''), ['class' => 'form-control', 'cols' => 30, 'rows' => 10]) !!}
+            </div>
+
+            <div class="col-md-12">
+                {!! Form::label('translate_canonical', __('messages.seo')['canonical'], ['class' => 'form-label'])
+                !!} <span class="text-danger">(*)</span>
                 <div class="input-group">
-                    <span class="input-group-text">{{url('/')}}/</span>
-                    <input type="text" class="form-control" name="translate_canonical"
-                        value="{{old('translate_canonical', $model->canonical ?? '')}}" autocomplete="">
+                    <span class="input-group-text">{{ url('/') }}/</span>
+                    {!! Form::text('translate_canonical', old('translate_canonical', $model->canonical ?? ''), ['class'
+                    => 'form-control', 'autocomplete' => '']) !!}
                 </div>
             </div>
-
         </div>
+
     </div>
 </div>

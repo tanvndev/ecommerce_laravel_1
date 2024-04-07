@@ -7,38 +7,23 @@
             </div>
             <div class="card-body">
                 <div class="mb-3 ">
-                    <label class="form-label">{{__('messages.parentId')}}</label>
-                    <select class="form-select init-select2" name="post_catalogue_id">
-                        @foreach ($dropdown as $key => $val)
-                        <option {{ $key==old('post_catalogue_id', isset($post->post_catalogue_id) ?
-                            $post->post_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('post_catalogue_id', $dropdown, old('post_catalogue_id', $post->post_catalogue_id
+                    ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 @php
-                $catalogues = [];
-                // Phương thức pluck được sử dụng để trích xuất một thuộc tính cụ thể từ mỗi đối tượng trong tập hợp
                 if (!empty($post->post_catalogues)) {
                 $catalogues = $post->post_catalogues->pluck('id')->toArray();
+                // Tạo một bản sao của mảng $dropdown và loại bỏ phần tử có key là post_catalogue_id
+                $filteredDropdown = array_diff_key($dropdown, [$post->post_catalogue_id]);
                 }
                 @endphp
 
                 <div>
-                    <label class="form-label">{{__('messages.catalogueSub')}}</label>
-                    <select class="form-select init-select2" multiple name="catalogue[]">
-                        @foreach ($dropdown as $key => $val)
-                        @php
-                        // Bỏ lặp qua danh mục cha trùng với danh mục phụ
-                        if (isset($post) && !empty($post) && $key == $post->post_catalogue_id) {
-                        continue;
-                        }
-                        $selected = (is_array(old('catalogue', $catalogues ?? [])) && in_array($key, old('catalogue',
-                        $catalogues ?? []))) ? 'selected' : '';
-                        @endphp
-                        <option {{ $selected }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('catalogue', __('messages.catalogueSub'), ['class' => 'form-label']) !!}
+                    {!! Form::select('catalogue[]', $filteredDropdown ?? $dropdown, old('catalogue', $catalogues ?? []),
+                    ['class' =>
+                    'form-select init-select2', 'multiple']) !!}
                 </div>
 
             </div>

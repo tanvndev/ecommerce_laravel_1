@@ -16,33 +16,32 @@
     <div class="card-body">
         <div class="row g-3 align-items-center">
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['title']}} </label>
-                <input type="text" name="meta_title" {{isset($disabled) ? 'disabled' : '' }}
-                    value="{{old('meta_title', $model->meta_title ?? '')}}" class="form-control">
+                {!! Form::label('meta_title', __('messages.seo')['title'], ['class' => 'form-label']) !!}
+                {!! Form::text('meta_title', old('meta_title', $model->meta_title ?? ''), ['class' => 'form-control',
+                isset($disabled) ? 'disabled' : '']) !!}
             </div>
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['keyword']}} </label>
-                <input type="text" name="meta_keyword" {{isset($disabled) ? 'disabled' : '' }}
-                    value="{{old('meta_keyword', $model->meta_keyword ?? '')}}" class="form-control">
-
-            </div>
-
-            <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['description']}}</label>
-                <textarea name="meta_description" {{isset($disabled) ? 'disabled' : '' }} class="form-control" cols="30"
-                    rows="10">{{old('meta_description', $model->meta_description ?? '')}}</textarea>
+                {!! Form::label('meta_keyword', __('messages.seo')['keyword'], ['class' => 'form-label']) !!}
+                {!! Form::text('meta_keyword', old('meta_keyword', $model->meta_keyword ?? ''), ['class' =>
+                'form-control', isset($disabled) ? 'disabled' : '']) !!}
             </div>
 
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.seo')['canonical']}} <span
-                        class="text-danger">(*)</span></label>
+                {!! Form::label('meta_description', __('messages.seo')['description'], ['class' => 'form-label']) !!}
+                {!! Form::textarea('meta_description', old('meta_description', $model->meta_description ?? ''), ['class'
+                => 'form-control', isset($disabled) ? 'disabled' : '', 'cols' => 30, 'rows' => 10]) !!}
+            </div>
+
+            <div class="col-md-12">
+                {!! Form::label('canonical', __('messages.seo')['canonical'] , ['class' => 'form-label']) !!} <span
+                    class="text-danger">(*)</span>
                 <div class="input-group">
-                    <span class="input-group-text">{{url('/')}}/</span>
-                    <input type="text" class="form-control" {{isset($disabled) ? 'disabled' : '' }} name="canonical"
-                        value="{{old('canonical', $model->canonical ?? '')}}" autocomplete="">
+                    <span class="input-group-text">{{ url('/') }}/</span>
+                    {!! Form::text('canonical', old('canonical', $model->canonical ?? ''), ['class' => 'form-control',
+                    isset($disabled) ? 'disabled' : '', 'autocomplete' => '']) !!}
                 </div>
             </div>
-
         </div>
+
     </div>
 </div>

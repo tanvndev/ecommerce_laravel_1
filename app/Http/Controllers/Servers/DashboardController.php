@@ -10,9 +10,9 @@ class DashboardController extends Controller
     function index()
     {
 
-        $title = 'Bảng điều khiển';
+        $config['seo'] = __('messages.dashboard')['index'];
         return view('servers.dashboard.index', compact([
-            'title'
+            'config'
         ]));
     }
 }

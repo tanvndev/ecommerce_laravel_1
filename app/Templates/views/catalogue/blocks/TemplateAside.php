@@ -5,15 +5,11 @@
                 <h6 class="m-0 fw-bold">{{__('messages.parentId')}}</h6>
                 <small class="text-danger ">*{{__('messages.parentIdNotice')}}</small>
             </div>
-            <div class="card-body">
-                <label class="form-label">{{__('messages.parentId')}}</label>
-                <select class="form-select init-select2" name="parent_id">
-                    @foreach ($dropdown as $key => $val)
-                    <option {{ $key==old('parent_id', isset(${moduleTemplate}->parent_id) ?
-                        ${moduleTemplate}->parent_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                    @endforeach
-                </select>
 
+            <div class="card-body">
+                {!! Form::label('parent_id', __('messages.parentId'), ['class' => 'form-label']) !!}
+                {!! Form::select('parent_id', $dropdown, old('parent_id', ${moduleTemplate}->parent_id ?? ''),
+                ['class' => 'form-select init-select2']) !!}
             </div>
         </div>
         <div class="card mb-3 card-create">
@@ -22,29 +18,15 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">{{__('messages.publish')}}</label>
-
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset(${moduleTemplate}->publish) ?
-                            ${moduleTemplate}->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('publish', __('messages.publish'), ['class' => 'form-label']) !!}
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish',
+                    ${moduleTemplate}->publish ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
-                    <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset(${moduleTemplate}->follow) ?
-                            ${moduleTemplate}->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('follow', __('messages.follow'), ['class' => 'form-label']) !!}
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', ${moduleTemplate}->follow
+                    ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>
         </div>

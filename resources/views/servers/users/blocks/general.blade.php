@@ -7,59 +7,55 @@
     <div class="card-body">
         <div class="row g-3 align-items-center">
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.email')}} <span class="text-danger">(*)</span></label>
-                <input type="email" name="email" value="{{old('email', $user->email ?? '')}}" class="form-control">
+                {!! Form::label('email', __('messages.email') , ['class' => 'form-label']) !!}
+                <span class="text-danger">(*)</span>
+                {!! Form::email('email', old('email', $user->email ?? ''), ['class' => 'form-control']) !!}
             </div>
+
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.fullname')}} <span class="text-danger">(*)</span></label>
-                <input type="text" name="fullname" value="{{old('fullname', $user->fullname ?? '')}}"
-                    class="form-control">
+                {!! Form::label('fullname', __('messages.fullname') , ['class' => 'form-label']) !!}<span
+                    class="text-danger">(*)</span>
+                {!! Form::text('fullname', old('fullname', $user->fullname ?? ''), ['class' => 'form-control']) !!}
             </div>
             @php
             $catalogues = [
-            'Quản trị viên',
-            'Cộng tác viên'
-            ]
+            1 => 'Quản trị viên',
+            2 => 'Cộng tác viên'
+            ];
+            // dd($user);
             @endphp
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.user.table.userGroup')}} <span
-                        class="text-danger">(*)</span></label>
-                <select class="form-select init-select2" name="user_catalogue_id">
-                    <option disabled selected>[{{__('messages.user.table.userGroupSelect')}}]</option>
-                    @empty(!$catalogues)
-                    @foreach ($catalogues as $key => $catalogue)
-                    @php
-                    $key = $key+1;
-                    $selected = $key == old('user_catalogue_id', isset($user->user_catalogue_id) ?
-                    $user->user_catalogue_id : '') ? 'selected' : ''
-                    @endphp
-                    <option {{ $selected }} value="{{$key}}">{{$catalogue}}</option>
-
-                    @endforeach
-                    @endempty
-
-                </select>
+                {!! Form::label('user_catalogue_id', __('messages.user.table.userGroup'), ['class' => 'form-label']) !!}
+                <span class="text-danger">(*)</span>
+                {!! Form::select('user_catalogue_id', ['' => __('messages.user.table.userGroupSelect')] + $catalogues,
+                old('user_catalogue_id', $user->user_catalogue_id ?? ''), ['class' => 'form-select init-select2']) !!}
             </div>
+
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.birthday')}}</label>
-                <input type="date" name="birthday" value="{{old('birthday', $user->birthday ?? '')}}"
-                    class="form-control">
+                {!! Form::label('birthday', __('messages.birthday'), ['class' => 'form-label']) !!}
+                {!! Form::input('date', 'birthday', old('birthday', $user->birthday ?? ''), ['class' => 'form-control'])
+                !!}
             </div>
+
             @if (request()->routeIs('user.create'))
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.password')}} <span class="text-danger">(*)</span></label>
-                <input type="password" name="password" value="" class="form-control">
+                {!! Form::label('password', __('messages.password'), ['class'
+                => 'form-label']) !!} <span class="text-danger">(*)</span>
+
+                {!! Form::password('password', ['class' => 'form-control']) !!}
             </div>
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.rePassword')}} <span class="text-danger">(*)</span></label>
-                <input type="password" name="re_password" value="" class="form-control">
+                {!! Form::label('re_password', __('messages.rePassword'),
+                ['class' => 'form-label']) !!}<span class="text-danger">(*)</span>
+                {!! Form::password('re_password', ['class' => 'form-control']) !!}
             </div>
-
             @endif
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.image')}}</label>
-                <input readonly type="text" data-type="Images" name="image" value="" class="form-control upload-image">
+                {!! Form::label('image', __('messages.image'), ['class' => 'form-label']) !!}
+                {!! Form::text('image', old('image', $user->image ?? ''), ['readonly', 'data-type' => 'Images', 'class'
+                => 'form-control upload-image']) !!}
             </div>
+
 
 
         </div>

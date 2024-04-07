@@ -8,37 +8,26 @@
             <div class="card-body">
                 <div class="mb-3 ">
                     <label class="form-label">{{__('messages.parentId')}}</label>
-                    <select class="form-select init-select2" name="attribute_catalogue_id">
-                        @foreach ($dropdown as $key => $val)
-                        <option {{ $key==old('attribute_catalogue_id', isset($attribute->attribute_catalogue_id) ?
-                            $attribute->attribute_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('attribute_catalogue_id', $dropdown, null, [
+                    'class' => 'form-select init-select2',
+                    'placeholder' => __('messages.parentId')
+                    ]) !!}
                 </div>
 
+
                 @php
-                $catalogues = [];
-                // Phương thức pluck được sử dụng để trích xuất một thuộc tính cụ thể từ mỗi đối tượng trong tập hợp
                 if (!empty($attribute->attribute_catalogues)) {
                 $catalogues = $attribute->attribute_catalogues->pluck('id')->toArray();
+                // Tạo một bản sao của mảng $dropdown và loại bỏ phần tử có key là attribute_catalogue_id
+                $filteredDropdown = array_diff_key($dropdown, [$attribute->attribute_catalogue_id]);
                 }
                 @endphp
 
                 <div>
-                    <label class="form-label">{{__('messages.catalogueSub')}}</label>
-                    <select class="form-select init-select2" multiple name="catalogue[]">
-                        @foreach ($dropdown as $key => $val)
-                        @php
-                        // Bỏ lặp qua danh mục cha trùng với danh mục phụ
-                        if (isset($attribute) && !empty($attribute) && $key == $attribute->attribute_catalogue_id) {
-                        continue;
-                        }
-                        $selected = (is_array(old('catalogue', $catalogues ?? [])) && in_array($key, old('catalogue',
-                        $catalogues ?? []))) ? 'selected' : '';
-                        @endphp
-                        <option {{ $selected }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('catalogue', __('messages.catalogueSub'), ['class' => 'form-label']) !!}
+                    {!! Form::select('catalogue[]', $filteredDropdown ?? $dropdown, old('catalogue', $catalogues ?? []),
+                    ['class' =>
+                    'form-select init-select2', 'multiple']) !!}
                 </div>
 
             </div>
@@ -46,45 +35,39 @@
 
         </div>
         <div class="card mb-3 card-create">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">{{__('messages.advance')}}</h6>
             </div>
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">{{__('messages.publish')}}</label>
-
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset($attribute->publish) ?
-                            $attribute->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish', $attribute->publish ??
+                    ''), [
+                    'class' => 'form-select init-select2',
+                    ]) !!}
                 </div>
 
                 <div>
                     <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($attribute->follow) ?
-                            $attribute->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $attribute->follow ?? ''), [
+                    'class' => 'form-select init-select2',
+                    ]) !!}
                 </div>
+
             </div>
         </div>
 
         <div class="card mb-3">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
             </div>
             <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', $attribute->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}" alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', $attribute->image ?? '')}}" class="image">
+                <img class="img-thumbnail h-250 w-100 img-contain img-target"
+                    src="{{ (old('image', $attribute->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
+                    alt="no-image">
+                {!! Form::hidden('image', old('image', $attribute->image ?? ''), ['class' => 'image']) !!}
             </div>
         </div>
 

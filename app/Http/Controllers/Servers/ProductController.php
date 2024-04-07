@@ -56,6 +56,7 @@ class ProductController extends Controller
         $this->authorize('modules', 'product.index');
 
         $products = $this->productService->paginate();
+
         // dd($products);
         $config['seo'] = __('messages.product')['index'];
 

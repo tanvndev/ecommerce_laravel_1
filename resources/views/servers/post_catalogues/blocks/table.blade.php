@@ -3,7 +3,9 @@
         <tr>
             <th class="fs-15">
                 <div class="form-check form-table-list-check">
-                    <input class="form-check-input" type="checkbox" id="check-all">
+                    {!! Form::checkbox('check-all', null, null, ['class' => 'form-check-input', 'id' => 'check-all'])
+                    !!}
+
                 </div>
             </th>
             <th>{{__('messages.postCatalogue.table.name')}}</th>
@@ -26,12 +28,11 @@
             @include('servers.includes.languageTableTd', ['model' => $postCatalogue])
             <td>
                 <div class="toggler toggler-list-check">
-                    <input class="status" id="publish-{{$postCatalogue->id}}" data-field="publish"
-                        data-modelid="{{$postCatalogue->id}}" data-model="{{$modelName}}" name="publish" type="checkbox"
-                        {{$postCatalogue->publish ==
-                    1 ? 'checked' :
-                    ''}}
-                    value="{{$postCatalogue->publish}}">
+                    {!! Form::checkbox('publish', $postCatalogue->publish, $postCatalogue->publish == 1, ['id' =>
+                    "publish-{$postCatalogue->id}",
+                    'class' => 'status', 'data-field' => 'publish', 'data-modelid' => $postCatalogue->id, 'data-model'
+                    =>
+                    $modelName]) !!}
                     <label for="publish-{{$postCatalogue->id}}">
                         <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 130.2 130.2">
@@ -39,17 +40,15 @@
                         </svg>
                         <svg class="toggler-off" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 130.2 130.2">
-                            <line class="path line" x1="34.4" y1="34.4" x2="95.8" y2="95.8">
-                            </line>
-                            <line class="path line" x1="95.8" y1="34.4" x2="34.4" y2="95.8">
-                            </line>
+                            <line class="path line" x1="34.4" y1="34.4" x2="95.8" y2="95.8"></line>
+                            <line class="path line" x1="95.8" y1="34.4" x2="34.4" y2="95.8"></line>
                         </svg>
                     </label>
                 </div>
             </td>
 
             <td>
-                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <div class="btn-group" role="group">
                     <a href="{{route('post.catalogue.edit', $postCatalogue->id)}}" class="btn btn-outline-secondary"><i
                             class="icofont-edit text-success"></i></a>
                     <button type="button" data-id="{{$postCatalogue->id}}" class="btn btn-outline-secondary btn-delete"
@@ -80,13 +79,11 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 "
                     data-bs-dismiss="modal">{{__('messages.cancelButton')}}</button>
-                <form action="{{route('post.catalogue.destroy')}}" method="post">
-                    @csrf
-                    @method('delete')
-                    <input type="hidden" name="_id" id="_id">
-                    <button type="submit"
-                        class="btn btn-success text-white px-4 py-2">{{__('messages.agreeButton')}}</button>
-                </form>
+                {!! Form::open(['route' => 'post.catalogue.destroy', 'method' => 'delete']) !!}
+                {!! Form::hidden('_id', null, ['id' => '_id']) !!}
+                {!! Form::button(__('messages.agreeButton'), ['type' => 'submit', 'class' => 'btn btn-success text-white
+                px-4 py-2']) !!}
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

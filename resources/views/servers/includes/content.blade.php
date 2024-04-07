@@ -7,30 +7,33 @@
     <div class="card-body">
         <div class="row g-3 align-items-center">
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.name')}} <span class="text-danger">(*)</span></label>
-                <input type="text" name="name" value="{{old('name', $model->name ?? '')}}" {{isset($disabled)
-                    ? 'disabled' : '' }} class="form-control">
-            </div>
-            <div class="col-md-12">
-                <label class="form-label">{{__('messages.description')}} </label>
-                <textarea name="description" id="ckDescription" data-height="200" {{isset($disabled) ? 'disabled' : ''
-                    }} class="form-control init-ckeditor" cols="30" rows="5">
-                        {{old('description', $model->description ?? '')}}
-                    </textarea>
+                {!! Form::label('name', __('messages.name') , ['class' =>
+                'form-label']) !!}
+                {!! Form::text('name', old('name', $model->name ?? ''), ['class' => 'form-control', isset($disabled) ?
+                'disabled' : '']) !!}
             </div>
 
+
+            <div class="col-md-12">
+                {!! Form::label('description', __('messages.description'), ['class' => 'form-label']) !!}
+                {!! Form::textarea('description', old('description', $model->description ?? ''), ['id' =>
+                'ckDescription', 'class' => 'form-control init-ckeditor', 'cols' => 30, 'rows' => 5, isset($disabled) ?
+                'disabled' : '']) !!}
+            </div>
+
+
             <div class="col-md-12 mt-3">
-                <div class="d-flex align-items-center justify-content-between ">
-                    <label class="form-label">{{__('messages.content')}} </label>
+                <div class="d-flex align-items-center justify-content-between">
+                    <label class="form-label">{{__('messages.content')}}</label>
                     <a href=""
                         class="form-label link-primary {{isset($disabled) ? 'd-none' : '' }} mutipleUploadImageCkEditor"
                         data-target="ckContent">{{__('messages.uploadMultipleImage')}}</a>
                 </div>
-                <textarea name="content" id="ckContent" data-height="500" {{isset($disabled) ? 'disabled' : '' }}
-                    class="form-control init-ckeditor" cols="30" rows="5">
-                        {{old('content', $model->content ?? '')}}
-                    </textarea>
+                {!! Form::textarea('content', old('content', $model->content ?? ''), ['id' => 'ckContent', 'data-height'
+                => '500', isset($disabled) ? 'disabled' : '', 'class' => 'form-control init-ckeditor', 'cols' => 30,
+                'rows' => 5]) !!}
             </div>
+
 
         </div>
     </div>

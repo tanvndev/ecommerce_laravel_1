@@ -16,52 +16,53 @@
 @endsection
 
 @section('content')
+
 @php
-$url = $config['method'] == 'create' ? route('{moduleRoute}.store') : route('{moduleRoute}.update',
-${moduleTemplate}->id);
+$url = $config['method'] == 'create' ? route('{moduleRoute}.store') : route('{moduleRoute}.update', ${moduleTemplate}->id);
+$method = $config['method'] == 'create' ? 'POST' : 'PUT';
 @endphp
-<form action="{{ $url }}" method="post" enctype="multipart/form-data">
 
-    @csrf
-    @if ($config['method'] == 'update')
-    @method('PUT')
-    @endif
-    <div class="body d-flex py-3">
+{!! Form::open(['method' => $method, 'url' => $url, 'files' => true]) !!}
 
-        <div class="container-xxl">
+<div class="body d-flex py-3">
 
-            <div class="row align-items-center">
-                <div class="border-0 mb-4">
-                    <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                        <h3 class="fw-bold mb-0">{{$config['seo']['title']}}</h3>
-                        <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}</button>
-                    </div>
+    <div class="container-xxl">
+
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">{{$config['seo']['title']}}</h3>
+                    <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">{{__('messages.saveButton')}}</button>
                 </div>
-            </div> <!-- Row end  -->
+            </div>
+        </div> <!-- Row end  -->
 
 
 
 
-            <div class="row g-3 mb-3 justify-content-center ">
+        <div class="row g-3 mb-3 justify-content-center ">
 
-                @include('servers.includes.messageError')
-                {{-- Aside --}}
-                @include('servers.{moduleView}.blocks.aside')
+            @include('servers.includes.messageError')
+            {{-- Aside --}}
+            @include('servers.{moduleView}.blocks.aside')
 
-                <div class="col-lg-8">
-                    {{-- Main --}}
-                    @include('servers.includes.content', ['model'=> ${moduleTemplate} ?? []])
+            <div class="col-lg-8">
+                {{-- Main --}}
+                @include('servers.includes.content', ['model'=> ${moduleTemplate} ?? []])
 
-                    {{-- Album --}}
-                    @include('servers.includes.album')
+                {{-- Album --}}
+                @include('servers.includes.album')
 
-                    {{-- Seo --}}
-                    @include('servers.includes.seo', ['model'=> ${moduleTemplate} ?? []])
-                </div>
-            </div><!-- Row end  -->
+                {{-- Seo --}}
+                @include('servers.includes.seo', ['model'=> ${moduleTemplate} ?? []])
+            </div>
+        </div><!-- Row end  -->
 
-        </div>
     </div>
-</form>
+</div>
+
+{!! Form::close() !!}
+
+
 
 @endsection

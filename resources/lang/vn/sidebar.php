@@ -87,7 +87,7 @@ return [
             'route' => '',
             'icon' => 'icofont-ui-settings',
             'title' => 'Cấu hình chung',
-            'activeCondition' => ['language.*', 'generate.*'],
+            'activeCondition' => ['language.*', 'generate.*', 'system.*'],
             'subMenu' => [
                 [
                     'title' => 'QL Ngôn ngữ',
@@ -98,6 +98,11 @@ return [
                     'title' => 'QL Module',
                     'route' => 'generate.index',
                     'activeCondition' => ['generate.*']
+                ],
+                [
+                    'title' => 'Cấu hình hệ thống',
+                    'route' => 'system.index',
+                    'activeCondition' => ['system.*']
                 ],
             ]
         ],

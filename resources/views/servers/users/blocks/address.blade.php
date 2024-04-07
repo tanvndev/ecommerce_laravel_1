@@ -7,50 +7,40 @@
     <div class="card-body">
         <div class="row g-3 align-items-center">
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.cities')}}</label>
-                <select class="form-select init-select2 locations provinces" name="province_id" data-target="districts">
-                    <option disabled selected>[{{__('messages.cities')}}]</option>
-                    @empty(!$provinces)
-
-                    @foreach ($provinces as $province )
-                    @php
-                    $selected = $province->code == old('province_id', isset($user->province_id) ?
-                    $user->province_id : '') ? 'selected' : ''
-                    @endphp
-                    <option {{$selected}} value="{{$province->code}}">{{$province->name}}</option>
-
-                    @endforeach
-                    @endempty
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">{{__('messages.districts')}}</label>
-                <select class="form-select init-select2 locations districts" name="district_id" data-target="wards">
-                    <option selected disabled>[{{__('messages.districts')}}]</option>
-
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">{{__('messages.wards')}}</label>
-                <select class="form-select init-select2 wards" name="ward_id">
-                    <option selected>[{{__('messages.wards')}}]</option>
-
-                </select>
+                {!! Form::label('province_id', __('messages.cities'), ['class' => 'form-label']) !!}
+                {!! Form::select('province_id',
+                ['' => __('messages.cities')] + $provinces->pluck('name', 'code')->toArray(), old('province_id',
+                $user->province_id ?? ''),
+                ['class' => 'form-select init-select2 locations provinces', 'data-target' => 'districts']) !!}
             </div>
 
             <div class="col-md-6">
-                <label class="form-label">{{__('messages.phone')}}</label>
-                <input type="tel" name="phone" value="{{old('phone', $user->phone ?? '')}}" class="form-control">
+                {!! Form::label('district_id', __('messages.districts'), ['class' => 'form-label']) !!}
+                {!! Form::select('district_id', ['' => __('messages.districts')], null, ['class' => 'form-select
+                init-select2 locations districts', 'data-target' => 'wards']) !!}
+            </div>
+            <div class="col-md-6">
+                {!! Form::label('ward_id', __('messages.wards'), ['class' => 'form-label']) !!}
+                {!! Form::select('ward_id', ['' => __('messages.wards')], null, ['class' => 'form-select init-select2
+                wards']) !!}
+            </div>
+
+
+            <div class="col-md-6">
+                {!! Form::label('phone', __('messages.phone'), ['class' => 'form-label']) !!}
+                {!! Form::text('phone', old('phone', $user->phone ?? ''), ['class' => 'form-control', 'type' => 'tel'])
+                !!}
             </div>
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.address')}}</label>
-                <input type="text" name="address" value="{{old('address', $user->address ?? '')}}" class="form-control">
+                {!! Form::label('address', __('messages.address'), ['class' => 'form-label']) !!}
+                {!! Form::text('address', old('address', $user->address ?? ''), ['class' => 'form-control']) !!}
             </div>
             <div class="col-md-12">
-                <label class="form-label">{{__('messages.notes')}}</label>
-                <input type="text" name="description" value="{{old('description', $user->description ?? '')}}"
-                    class="form-control">
+                {!! Form::label('description', __('messages.notes'), ['class' => 'form-label']) !!}
+                {!! Form::text('description', old('description', $user->description ?? ''), ['class' => 'form-control'])
+                !!}
             </div>
+
 
         </div>
     </div>

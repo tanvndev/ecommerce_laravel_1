@@ -6,41 +6,29 @@
                 <small class="text-danger ">*{{__('messages.parentIdNotice')}}</small>
             </div>
             <div class="card-body">
-                <div class="mb-3 ">
-                    <label class="form-label">{{__('messages.parentId')}}</label>
-                    <select class="form-select init-select2" name="product_catalogue_id">
-                        @foreach ($dropdown as $key => $val)
-                        <option {{ $key==old('product_catalogue_id', isset($product->product_catalogue_id) ?
-                            $product->product_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}
-                        </option>
-                        @endforeach
-                    </select>
+                <div class="mb-3">
+                    {!! Form::label('product_catalogue_id', __('messages.parentId'), ['class' => 'form-label']) !!}
+                    {!! Form::select('product_catalogue_id', $dropdown, old('product_catalogue_id',
+                    $product->product_catalogue_id ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 @php
-                $catalogues = [];
-                // Phương thức pluck được sử dụng để trích xuất một thuộc tính cụ thể từ mỗi đối tượng trong tập hợp
                 if (!empty($product->product_catalogues)) {
                 $catalogues = $product->product_catalogues->pluck('id')->toArray();
+                // Tạo một bản sao của mảng $dropdown và loại bỏ phần tử có key là product_catalogue_id
+                $filteredDropdown = array_diff_key($dropdown, [$product->product_catalogue_id]);
                 }
+
+                // dd($catalogues);
                 @endphp
 
                 <div>
-                    <label class="form-label">{{__('messages.catalogueSub')}}</label>
-                    <select class="form-select init-select2" multiple name="catalogue[]">
-                        @foreach ($dropdown as $key => $val)
-                        @php
-                        // Bỏ lặp qua danh mục cha trùng với danh mục phụ
-                        if (isset($product) && !empty($product) && $key == $product->product_catalogue_id) {
-                        continue;
-                        }
-                        $selected = (is_array(old('catalogue', $catalogues ?? [])) && in_array($key, old('catalogue',
-                        $catalogues ?? []))) ? 'selected' : '';
-                        @endphp
-                        <option {{ $selected }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('catalogue', __('messages.catalogueSub'), ['class' => 'form-label']) !!}
+                    {!! Form::select('catalogue[]', $filteredDropdown ?? $dropdown, old('catalogue', $catalogues ?? []),
+                    ['class' =>
+                    'form-select init-select2', 'multiple']) !!}
                 </div>
+
 
             </div>
 
@@ -54,22 +42,20 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">Mã sản phẩm</label>
-                    <input type="text" class="form-control" name="sku"
-                        value="{{old('sku', $product->sku ?? time())}}" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Xuất sứ</label>
-                    <input type="text" class="form-control" name="origin"
-                        value="{{old('origin', $product->origin ?? '')}}" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Giá bán sản phẩm</label>
-                    <input type="text" class="form-control int" name="price"
-                        value="{{old('price', $product->price ?? '')}}" />
-
+                    {!! Form::label('sku', 'Mã sản phẩm', ['class' => 'form-label']) !!}
+                    {!! Form::text('sku', old('sku', $product->sku ?? time()), ['class' => 'form-control']) !!}
                 </div>
 
+                <div class="mb-3">
+                    {!! Form::label('origin', 'Xuất sứ', ['class' => 'form-label']) !!}
+                    {!! Form::text('origin', old('origin', $product->origin ?? ''), ['class' => 'form-control']) !!}
+                </div>
+
+                <div class="mb-3">
+                    {!! Form::label('price', 'Giá bán sản phẩm', ['class' => 'form-label']) !!}
+                    {!! Form::text('price', formatToCommas(old('price', $product->price ?? '')), ['class' =>
+                    'form-control int']) !!}
+                </div>
             </div>
         </div>
 
@@ -82,7 +68,7 @@
                 <img class="img-thumbnail h-250 w-100 img-contain img-target"
                     src="{{ (old('image', $product->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
                     alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', $product->image ?? '')}}" class="image">
+                {!! Form::hidden('image', old('image', $product->image ?? ''), ['class' => 'image']) !!}
             </div>
         </div>
 
@@ -93,29 +79,17 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">{{__('messages.publish')}}</label>
+                    {!! Form::label('publish', __('messages.publish'), ['class' => 'form-label']) !!}
 
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset($product->publish) ?
-                            $product->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish', $product->publish ?? ''),
+                    ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
-                    <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($product->follow) ?
-                            $product->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('follow', __('messages.follow'), ['class' => 'form-label']) !!}
+
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $product->follow ?? ''),
+                    ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>
         </div>

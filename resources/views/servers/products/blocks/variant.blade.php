@@ -7,14 +7,13 @@
 
     <div class="card-body">
         <div class="form-check">
-            <input class="form-check-input turn-on-variant" value="1" name="accept" type="checkbox"
-                id="check-box-variant-accept" {{old('accept') ? 'checked' : (isset($product) &&
-                count($product->product_variants) > 0
-            ?
-            'checked' : '')}} />
-            <label class="form-check-label" for="check-box-variant-accept"> Sản phẩm này có nhiều biến thể. Ví dụ như
-                màu sắc, kích thước,... </label>
+            {!! Form::checkbox('accept', '1', old('accept') ? true : (isset($product) &&
+            count($product->product_variants) > 0 ? true : false), ['class' => 'form-check-input turn-on-variant', 'id'
+            => 'check-box-variant-accept']) !!}
+            {!! Form::label('check-box-variant-accept', __('Sản phẩm này có nhiều biến thể. Ví dụ như màu sắc, kích
+            thước,...'), ['class' => 'form-check-label']) !!}
         </div>
+
     </div>
     <div class="card-body variant-wrap">
         <div class="variant-body">

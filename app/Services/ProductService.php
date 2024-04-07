@@ -46,6 +46,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             'products.image',
             'products.user_id',
             'products.order',
+            'products.price',
             'tb2.name',
             'tb2.canonical',
         ];
@@ -102,7 +103,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatPayloadtoJson($payload);
-            $payload['price'] = $this->convertPrice($payload['price']);
+            $payload['price'] = convertPrice($payload['price']);
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -215,8 +216,8 @@ class ProductService extends BaseService implements ProductServiceInterface
             foreach ($payload['variant']['sku'] as $key => $value) {
                 $variantPayload[] = [
                     'code' => $payload['productVariant']['id'][$key] ?? '',
-                    'quantity' => $this->convertPrice($payload['variant']['quantity'][$key] ?? 0),
-                    'price' => $this->convertPrice($payload['variant']['price'][$key] ?? 0),
+                    'quantity' => convertPrice($payload['variant']['quantity'][$key] ?? 0),
+                    'price' => convertPrice($payload['variant']['price'][$key] ?? 0),
                     'sku' => $value ?? '',
                     'barcode' => $payload['variant']['barcode'][$key] ?? '',
                     'file_name' => $payload['variant']['file_name'][$key] ?? '',
@@ -383,13 +384,5 @@ class ProductService extends BaseService implements ProductServiceInterface
     private function payloadLanguage()
     {
         return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
-    }
-
-    private function convertPrice($priceString)
-    {
-        $priceWithoutDots = str_replace('.', '', $priceString);
-        // Chuyển đổi chuỗi thành số nguyên
-        $price = intval($priceWithoutDots);
-        return $price;
     }
 }

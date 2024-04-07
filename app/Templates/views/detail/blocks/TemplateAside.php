@@ -8,37 +8,25 @@
             <div class="card-body">
                 <div class="mb-3 ">
                     <label class="form-label">{{__('messages.parentId')}}</label>
-                    <select class="form-select init-select2" name="{moduleTemplate}_catalogue_id">
-                        @foreach ($dropdown as $key => $val)
-                        <option {{ $key==old('{moduleTemplate}_catalogue_id', isset(${moduleTemplate}->{moduleTemplate}_catalogue_id) ?
-                            ${moduleTemplate}->{moduleTemplate}_catalogue_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('{moduleTemplate}_catalogue_id', $dropdown, null, [
+                    'class' => 'form-select init-select2',
+                    'placeholder' => __('messages.parentId')
+                    ]) !!}
                 </div>
 
                 @php
-                $catalogues = [];
-                // Phương thức pluck được sử dụng để trích xuất một thuộc tính cụ thể từ mỗi đối tượng trong tập hợp
                 if (!empty(${moduleTemplate}->{moduleTemplate}_catalogues)) {
                 $catalogues = ${moduleTemplate}->{moduleTemplate}_catalogues->pluck('id')->toArray();
+                // Tạo một bản sao của mảng $dropdown và loại bỏ phần tử có key là {moduleTemplate}_catalogue_id
+                $filteredDropdown = array_diff_key($dropdown, [${moduleTemplate}->{moduleTemplate}_catalogue_id]);
                 }
                 @endphp
 
                 <div>
-                    <label class="form-label">{{__('messages.catalogueSub')}}</label>
-                    <select class="form-select init-select2" multiple name="catalogue[]">
-                        @foreach ($dropdown as $key => $val)
-                        @php
-                        // Bỏ lặp qua danh mục cha trùng với danh mục phụ
-                        if (isset(${moduleTemplate}) && !empty(${moduleTemplate}) && $key == ${moduleTemplate}->{moduleTemplate}_catalogue_id) {
-                        continue;
-                        }
-                        $selected = (is_array(old('catalogue', $catalogues ?? [])) && in_array($key, old('catalogue',
-                        $catalogues ?? []))) ? 'selected' : '';
-                        @endphp
-                        <option {{ $selected }} value="{{ $key }}">{{ $val }}</option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('catalogue', __('messages.catalogueSub'), ['class' => 'form-label']) !!}
+                    {!! Form::select('catalogue[]', $filteredDropdown ?? $dropdown, old('catalogue', $catalogues ?? []),
+                    ['class' =>
+                    'form-select init-select2', 'multiple']) !!}
                 </div>
 
             </div>
@@ -52,29 +40,19 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">{{__('messages.publish')}}</label>
-
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset(${moduleTemplate}->publish) ?
-                            ${moduleTemplate}->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish', ${moduleTemplate}->publish ??
+                    ''), [
+                    'class' => 'form-select init-select2',
+                    ]) !!}
                 </div>
 
                 <div>
                     <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset(${moduleTemplate}->follow) ?
-                            ${moduleTemplate}->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', ${moduleTemplate}->follow ?? ''), [
+                    'class' => 'form-select init-select2',
+                    ]) !!}
                 </div>
+
             </div>
         </div>
 
@@ -84,9 +62,8 @@
             </div>
             <div class="card-body">
                 <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', ${moduleTemplate}->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}" alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', ${moduleTemplate}->image ?? '')}}" class="image">
+                {!! Form::hidden('image', old('image', ${moduleTemplate}->image ?? ''), ['class' => 'image']) !!}
             </div>
-        </div>
 
+        </div>
     </div>
-</div>

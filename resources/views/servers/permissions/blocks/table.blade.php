@@ -3,7 +3,9 @@
         <tr>
             <th class="fs-15">
                 <div class="form-check form-table-list-check">
-                    <input class="form-check-input" type="checkbox" id="check-all">
+                    {!! Form::checkbox('check-all', null, null, ['class' => 'form-check-input', 'id' => 'check-all'])
+                    !!}
+
                 </div>
             </th>
             <th>{{__('messages.permission.table.name')}}</th>
@@ -27,7 +29,7 @@
 
 
             <td>
-                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                <div class="btn-group" role="group">
                     <a href="{{route('permission.edit', $permission->id)}}" class="btn btn-outline-secondary"><i
                             class="icofont-edit text-success"></i></a>
                     <button type="button" data-id="{{$permission->id}}" class="btn btn-outline-secondary btn-delete"
@@ -58,13 +60,11 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary px-4 py-2 "
                     data-bs-dismiss="modal">{{__('messages.cancelButton')}}</button>
-                <form action="{{route('permission.destroy')}}" method="post">
-                    @csrf
-                    @method('delete')
-                    <input type="hidden" name="_id" id="_id">
-                    <button type="submit"
-                        class="btn btn-success text-white px-4 py-2">{{__('messages.agreeButton')}}</button>
-                </form>
+                {!! Form::open(['route' => 'permission.destroy', 'method' => 'delete']) !!}
+                {!! Form::hidden('_id', null, ['id' => '_id']) !!}
+                {!! Form::button(__('messages.agreeButton'), ['type' => 'submit', 'class' => 'btn btn-success text-white
+                px-4 py-2']) !!}
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

@@ -6,14 +6,8 @@
                 <small class="text-danger ">*{{__('messages.parentIdNotice')}}</small>
             </div>
             <div class="card-body">
-                <label class="form-label">{{__('messages.parentId')}}</label>
-                <select class="form-select init-select2" name="parent_id">
-                    @foreach ($dropdown as $key => $val)
-                    <option {{ $key==old('parent_id', isset($postCatalogue->parent_id) ?
-                        $postCatalogue->parent_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                    @endforeach
-                </select>
-
+                {!! Form::select('parent_id', $dropdown, old('parent_id', $postCatalogue->parent_id ?? ''), ['class' =>
+                'form-select init-select2']) !!}
             </div>
         </div>
         <div class="card mb-3 card-create">
@@ -24,28 +18,14 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">{{__('messages.publish')}}</label>
-
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset($postCatalogue->publish) ?
-                            $postCatalogue->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish', $postCatalogue->publish
+                    ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
                     <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($postCatalogue->follow) ?
-                            $postCatalogue->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $postCatalogue->follow ??
+                    ''), ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>
         </div>
@@ -59,7 +39,7 @@
                 <img class="img-thumbnail h-250 w-100 img-contain img-target"
                     src="{{ (old('image', $postCatalogue->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
                     alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', $postCatalogue->image ?? '')}}" class="image">
+                {!! Form::hidden('image', old('image', $postCatalogue->image ?? ''), ['class' => 'image']) !!}
             </div>
         </div>
 

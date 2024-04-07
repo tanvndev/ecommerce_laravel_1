@@ -6,56 +6,46 @@
                 <small class="text-danger ">*{{__('messages.parentIdNotice')}}</small>
             </div>
             <div class="card-body">
-                <label class="form-label">{{__('messages.parentId')}}</label>
-                <select class="form-select init-select2" name="parent_id">
-                    @foreach ($dropdown as $key => $val)
-                    <option {{ $key==old('parent_id', isset($productCatalogue->parent_id) ?
-                        $productCatalogue->parent_id : '') ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                    @endforeach
-                </select>
+                {!! Form::label('parent_id', __('messages.parentId'), ['class' => 'form-label']) !!}
+
+                {!! Form::select('parent_id', $dropdown, old('parent_id', $productCatalogue->parent_id ?? ''), ['class'
+                => 'form-select init-select2']) !!}
 
             </div>
         </div>
         <div class="card mb-3 card-create">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">{{__('messages.advance')}}</h6>
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label">{{__('messages.publish')}}</label>
+                    {!! Form::label('publish', __('messages.publish'), ['class' => 'form-label']) !!}
 
-                    <select class="form-select init-select2" name="publish">
-                        @foreach (__('messages.general.publish') as $key => $publish)
-
-                        <option {{ $key==old('publish', isset($productCatalogue->publish) ?
-                            $productCatalogue->publish : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $publish }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::select('publish', __('messages.general.publish'), old('publish',
+                    $productCatalogue->publish ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
-                    <label class="form-label">{{__('messages.follow')}}</label>
-                    <select class="form-select init-select2" name="follow">
-                        @foreach (__('messages.general.follow') as $key => $follow)
-                        <option {{ $key==old('follow', isset($productCatalogue->follow) ?
-                            $productCatalogue->follow : '') ? 'selected' : '' }} value="{{$key}}">{{
-                            $follow }}
-                        </option>
-                        @endforeach
-                    </select>
+                    {!! Form::label('follow', __('messages.follow'), ['class' => 'form-label']) !!}
+
+                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $productCatalogue->follow ??
+                    ''), ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>
         </div>
 
         <div class="card mb-3">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+            <div
+                class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
                 <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
             </div>
             <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', $productCatalogue->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}" alt="no-image">
-                <input type="hidden" name="image" value="{{old('image', $productCatalogue->image ?? '')}}" class="image">
+                <img class="img-thumbnail h-250 w-100 img-contain img-target"
+                    src="{{ (old('image', $productCatalogue->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
+                    alt="no-image">
+                {!! Form::hidden('image', old('image', $productCatalogue->image ?? ''), ['class' => 'image']) !!}
+
             </div>
         </div>
 

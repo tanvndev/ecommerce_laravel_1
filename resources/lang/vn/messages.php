@@ -1,8 +1,13 @@
 <?php
 return [
-    'galleryCatalogue' => [
+    'dashboard' => [
         'index' => [
-            'title' => 'Danh sách nhóm hình ảnh',
+            'title' => 'Bảng điều khiển',
+        ],
+    ],
+    'system' => [
+        'index' => [
+            'title' => 'Cài đặt cấu hình hệ thống',
             'table' => 'Thông tin nhóm hình ảnh',
             'create' => 'Tạo mới nhóm hình ảnh'
         ],
