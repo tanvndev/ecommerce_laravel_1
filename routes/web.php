@@ -92,11 +92,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     // Routes for System
     Route::prefix('system')->name('system.')->group(function () {
         Route::get('index', [SystemController::class, 'index'])->name('index');
-        // Route::get('create', [GenerateController::class, 'create'])->name('create');
-        // Route::post('store', [GenerateController::class, 'store'])->name('store');
-        // Route::get('/{id}/edit', [GenerateController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
-        // Route::put('/{id}/update', [GenerateController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
-        // Route::delete('destroy', [GenerateController::class, 'destroy'])->name('destroy');
+        Route::post('store', [SystemController::class, 'store'])->name('store');
     });
 
 

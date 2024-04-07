@@ -45,7 +45,7 @@ $method = $config['method'] == 'create' ? 'POST' : 'PUT';
                     <div class="card-body">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-6">
-                                {!! Form::label('name', __('messages.permission.table.name') ['class' => 'form-label'])
+                                {!! Form::label('name', __('messages.permission.table.name'), ['class' => 'form-label'])
                                 !!}<span class="text-danger">(*)</span>
                                 {!! Form::text('name', old('name', $permission->name ?? ''), ['class' =>
                                 'form-control']) !!}

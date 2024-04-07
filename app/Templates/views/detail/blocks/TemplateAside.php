@@ -61,7 +61,7 @@
                 <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
             </div>
             <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', ${moduleTemplate}->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}" alt="no-image">
+                <img class="img-thumbnail h-250 w-100 img-contain img-target" src="{{ (old('image', ${moduleTemplate}->image ?? asset('assets/servers/images/others/upload-photo.png'))) ?? asset('assets/servers/images/others/upload-photo.png') }}" alt="upload-photo">
                 {!! Form::hidden('image', old('image', ${moduleTemplate}->image ?? ''), ['class' => 'image']) !!}
             </div>
 

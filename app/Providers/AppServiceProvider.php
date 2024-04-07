@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\AttributeCatalogueServiceInterface' => 'App\Services\AttributeCatalogueService',
         // Attribute
         'App\Services\Interfaces\AttributeServiceInterface' => 'App\Services\AttributeService',
+        // System
+        'App\Services\Interfaces\SystemServiceInterface' => 'App\Services\SystemService',
 
 
     ];

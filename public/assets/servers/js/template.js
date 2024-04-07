@@ -11,6 +11,10 @@ $(function () {
         $(this).val(value);
     });
 
+    if ($(".init-nice-select").length > 0) {
+        $(".init-nice-select").niceSelect();
+    }
+
     // auto expand textarea
     $(".textarea-expand").each(function () {
         $(this).on("input", function () {

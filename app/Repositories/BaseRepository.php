@@ -28,14 +28,18 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [])
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false)
     {
         $query = $this->model->select($column);
         if (!empty($relation)) {
-            return $query->customWhere($conditions)->relation($relation)->first();
+            $query->customWhere($conditions)->relation($relation);
+        } else {
+            $query->customWhere($conditions);
         }
-        return $query->customWhere($conditions)->first();
+
+        return $all ? $query->get() : $query->first();
     }
+
     public function create($payload = [])
     {
         $create = $this->model->create($payload);
@@ -68,6 +72,11 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $query = $this->model->newQuery();
         return  $query->customWhere($conditions)->update($payload);
+    }
+
+    public function updateOrInsert($payload = [], $conditions = [])
+    {
+        $this->model->updateOrInsert($conditions, $payload);
     }
 
     public function delete($modelId)

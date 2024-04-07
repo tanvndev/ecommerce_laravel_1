@@ -37,8 +37,8 @@
             </div>
             <div class="card-body">
                 <img class="img-thumbnail h-250 w-100 img-contain img-target"
-                    src="{{ (old('image', $postCatalogue->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
-                    alt="no-image">
+                    src="{{ (old('image', $postCatalogue->image ?? asset('assets/servers/images/others/upload-photo.png'))) ?? asset('assets/servers/images/others/upload-photo.png') }}"
+                    alt="upload-photo">
                 {!! Form::hidden('image', old('image', $postCatalogue->image ?? ''), ['class' => 'image']) !!}
             </div>
         </div>

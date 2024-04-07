@@ -32,6 +32,9 @@
 .img-contain {
     object-fit: contain;
 }
+.cursor-pointer {
+    cursor: pointer;
+}
 .table-list-info p {
     margin-bottom: 3px;
 }
@@ -50,6 +53,16 @@
 
 .border-style-dashed {
     border-style: dashed;
+}
+.img-target {
+    transition: all 0.2s cubic-bezier(0.47, 0, 0.745, 0.715);
+    position: relative;
+}
+
+.img-target:hover {
+    cursor: pointer;
+    border-color: var(--primary-color);
+    opacity: 0.9;
 }
 
 .variant-body .nice-select {

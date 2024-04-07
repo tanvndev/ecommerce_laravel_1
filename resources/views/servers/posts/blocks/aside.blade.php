@@ -71,8 +71,8 @@
             </div>
             <div class="card-body">
                 <img class="img-thumbnail h-250 w-100 img-contain img-target"
-                    src="{{ (old('image', $post->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
-                    alt="no-image">
+                    src="{{ (old('image', $post->image ?? asset('assets/servers/images/others/upload-photo.png'))) ?? asset('assets/servers/images/others/upload-photo.png') }}"
+                    alt="upload-photo">
                 <input type="hidden" name="image" value="{{old('image', $post->image ?? '')}}" class="image">
             </div>
         </div>

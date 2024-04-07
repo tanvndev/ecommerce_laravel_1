@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\{
     StoreGenerateRequest,
     UpdateGenerateRequest,
-    UpdateTranslateRequest,
 };
 
 use App\Services\Interfaces\GenerateServiceInterface as GenerateService;

@@ -39,10 +39,10 @@
                 <h6 class="m-0 fw-bold">{{__('messages.image')}}</h6>
             </div>
             <div class="card-body">
-                <img class="img-thumbnail h-250 w-100 img-contain img-target"
-                    src="{{ (old('image', $attributeCatalogue->image ?? asset('assets/servers/images/others/no-image.png'))) ?? asset('assets/servers/images/others/no-image.png') }}"
-                    alt="no-image">
-                {!! Form::hidden('image', old('image', $attributeCatalogue->image ?? ''), ['class' => 'image']) !!}
+                <img class="img-thumbnail h-250 w-100 img-contain cursor-pointer img-target"
+                    src="{{ (old('image', $attributeCatalogue->image ?? asset('assets/servers/images/others/click-add-image.png'))) ?? asset('assets/servers/images/others/click-add-image.png') }}"
+                    alt="upload-photo">
+                {!! Form::hidden('image', old('image', $attributeCatalogue->image ?? '')) !!}
 
             </div>
         </div>
