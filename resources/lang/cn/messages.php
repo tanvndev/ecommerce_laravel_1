@@ -48,16 +48,5 @@ return [
     'cancelButton' => '取消',
     'agreeButton' => '同意',
     'saveButton' => '保存',
-    'general' => [
-        'publish' => [
-            '-1' => '選擇發佈狀態',
-            '0' => '未發佈',
-            '1' => '已發佈',
-        ],
-        'follow' => [
-            '-1' => '選擇追蹤狀態',
-            '0' => 'Nofollow',
-            '1' => 'Follow',
-        ],
-    ]
+
 ];

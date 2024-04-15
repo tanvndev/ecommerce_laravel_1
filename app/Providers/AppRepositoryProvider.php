@@ -49,6 +49,10 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface' => 'App\Repositories\ProductVariantAttributeRepository',
         // System
         'App\Repositories\Interfaces\SystemRepositoryInterface' => 'App\Repositories\SystemRepository',
+        // Menu
+        'App\Repositories\Interfaces\MenuRepositoryInterface' => 'App\Repositories\MenuRepository',
+        // Menu
+        'App\Repositories\Interfaces\MenuCatalogueRepositoryInterface' => 'App\Repositories\MenuCatalogueRepository',
     ];
 
     public function register(): void

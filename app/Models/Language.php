@@ -105,6 +105,14 @@ class Language extends Model
         )->withTimestamps();
     }
 
+    // public function menus()
+    // {
+    //     return $this->belongsToMany(Menu::class, 'menu_language', 'language_id', 'menu_id')->withPivot(
+    //         'name',
+    //         'canonical',
+    //     )->withTimestamps();
+    // }
+
     public function product_variants()
     {
         return $this->belongsToMany(ProductVariant::class, 'product_variant_language', 'language_id', 'product_variant_id')->withPivot(

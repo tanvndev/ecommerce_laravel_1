@@ -20,7 +20,6 @@ class Post extends Model
         'order',
         'user_id',
         'post_catalogue_id'
-
     ];
 
     public function languages()

@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attributes', function (Blueprint $table) {
-        $table->id();
-$table->integer('attribute_catalogue_id')->default(0);
-$table->string('image')->nullable();
-$table->string('album')->nullable();
-$table->string('icon')->nullable();
-$table->integer('order')->default(0);
-$table->tinyInteger('publish')->default(0);
-$table->tinyInteger('follow')->default(0);
-$table->foreignId('user_id')->constrained()->onDelete('cascade');
-$table->softDeletes();
-$table->timestamps();;
+            $table->id();
+            $table->integer('attribute_catalogue_id')->default(0);
+            $table->string('image')->nullable();
+            $table->string('album')->nullable();
+            $table->string('icon')->nullable();
+            $table->integer('order')->default(0);
+            $table->tinyInteger('publish')->default(0);
+            $table->tinyInteger('follow')->default(0);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();;
         });
     }
 

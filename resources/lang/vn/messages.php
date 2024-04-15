@@ -28,6 +28,68 @@ return [
         ],
 
     ],
+
+    'menu' => [
+        'index' => [
+            'table' => 'Thông tin menu',
+            'create' => 'Tạo mới menu'
+        ],
+        'show' => [
+            'title' => 'Danh sách menu',
+            'success' => 'Cập nhập danh sách menu thành công.',
+            'error' => 'Cập nhập danh sách menu thất bại.',
+
+        ],
+        'create' => [
+            'title' => 'Tạo mới menu',
+            'success' => 'Tạo mới menu thành công.',
+            'error' => 'Tạo mới menu thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập menu cấp 1',
+            'success' => 'Cập nhập menu thành công.',
+            'error' => 'Cập nhập menu thất bại.',
+        ],
+        'children' => [
+            'title' => 'Cập nhập menu con cho mục',
+            'success' => 'Cập nhập menu con thành công.',
+            'error' => 'Cập nhập menu con thất bại.',
+        ],
+        'translate' => [
+            'title' => 'Cập nhật bản dịch cho menu',
+            'success' => 'Cập nhập bản dịch thành công.',
+            'error' => 'Cập nhập bản dịch thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá menu thành công.',
+            'error' => 'Xoá menu thất bại.',
+        ],
+
+    ],
+    'menuCatalogue' => [
+        'index' => [
+            'table' => 'Thông tin nhóm menu',
+            'create' => 'Tạo mới nhóm menu'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nhóm menu',
+            'success' => 'Tạo mới nhóm menu thành công.',
+            'error' => 'Tạo mới nhóm menu thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nhóm menu',
+            'success' => 'Cập nhập nhóm menu thành công.',
+            'error' => 'Cập nhập nhóm menu thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá nhóm menu thành công.',
+            'error' => 'Xoá nhóm menu thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên nhóm menu',
+        ]
+
+    ],
     'attributeCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm thuộc tính',
@@ -45,14 +107,14 @@ return [
             'error' => 'Cập nhập nhóm thuộc tính thất bại.',
         ],
         'delete' => [
-            'title' => 'Cập nhập nhóm thuộc tính',
             'success' => 'Xoá nhóm thuộc tính thành công.',
             'error' => 'Xoá nhóm thuộc tính thất bại.',
         ],
         'table' => [
             'name' => 'Tên nhóm',
+            'keyword' => 'Từ khoá '
+        ],
 
-        ]
     ],
 
     'attribute' => [
@@ -386,19 +448,5 @@ return [
     'cancelButton' => 'Huỷ bỏ',
     'agreeButton' => 'Đồng ý',
     'saveButton' => 'Lưu lại',
-
-    'general' => [
-        'publish' => [
-            '-1' => 'Chọn tình trạng',
-            '0' => 'Chưa xuất bản',
-            '1' => 'Đã xuất bản',
-        ],
-        'follow' => [
-            '-1' => 'Chọn điều hướng',
-            '0' => 'Nofollow',
-            '1' => 'Follow',
-        ],
-    ]
-
 
 ];

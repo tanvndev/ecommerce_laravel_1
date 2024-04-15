@@ -42,7 +42,7 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">{{__('messages.publish')}}</label>
-                    {!! Form::select('publish', __('messages.general.publish'), old('publish', $attribute->publish ??
+                    {!! Form::select('publish', __('general.publish'), old('publish', $attribute->publish ??
                     ''), [
                     'class' => 'form-select init-select2',
                     ]) !!}
@@ -50,7 +50,7 @@
 
                 <div>
                     <label class="form-label">{{__('messages.follow')}}</label>
-                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $attribute->follow ?? ''), [
+                    {!! Form::select('follow', __('general.follow'), old('follow', $attribute->follow ?? ''), [
                     'class' => 'form-select init-select2',
                     ]) !!}
                 </div>

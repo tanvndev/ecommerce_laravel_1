@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class UserService implements UserServiceInterface
+class UserService extends BaseService implements UserServiceInterface
 {
     protected $userRepository;
     public function __construct(UserRepository $userRepository)
@@ -89,46 +89,6 @@ class UserService implements UserServiceInterface
             $delete =  $this->userRepository->delete($id);
 
             if (!$delete) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->userRepository->update(request('modelId'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->userRepository->updateByWhereIn('id', request('id'), $payload);
-
-            if (!$update) {
                 DB::rollBack();
                 return false;
             }

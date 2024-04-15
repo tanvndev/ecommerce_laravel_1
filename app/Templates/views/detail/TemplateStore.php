@@ -17,7 +17,7 @@
 
 @section('content')
 @php
-$url = $config['method'] == 'create' ? route('{moduleRoute}.store') : route('{moduleRoute}.update', $moduleTemplate->id);
+$url = $config['method'] == 'create' ? route('{moduleRoute}.store') : route('{moduleRoute}.update', ${moduleTemplate}->id);
 $method = $config['method'] == 'create' ? 'POST' : 'PUT';
 @endphp
 

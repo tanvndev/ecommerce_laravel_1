@@ -15,13 +15,7 @@ class AttributeController extends Controller
         AttributeRepository $attributeRepository,
     ) {
         // Lấy ra ngôn ngữ hiện tại và gán vào session
-        $this->middleware(function ($request, $next) {
-            $languageId = app(LanguageRepository::class)->getCurrentLanguage();
-
-            $this->currentLanguage = $languageId;
-            session(['currentLanguage' => $languageId]);
-            return $next($request);
-        });
+        parent::__construct();
         $this->attributeRepository = $attributeRepository;
     }
 

@@ -22,14 +22,14 @@
                 <div class="mb-3">
                     {!! Form::label('publish', __('messages.publish'), ['class' => 'form-label']) !!}
 
-                    {!! Form::select('publish', __('messages.general.publish'), old('publish',
+                    {!! Form::select('publish', __('general.publish'), old('publish',
                     $productCatalogue->publish ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
                     {!! Form::label('follow', __('messages.follow'), ['class' => 'form-label']) !!}
 
-                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $productCatalogue->follow ??
+                    {!! Form::select('follow', __('general.follow'), old('follow', $productCatalogue->follow ??
                     ''), ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>

@@ -98,45 +98,6 @@ class LanguageService extends BaseService implements LanguageServiceInterface
         }
     }
 
-    public function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->languageRepository->update(request('modelId'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->languageRepository->updateByWhereIn('id', request('id'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
 
     public function saveTranslate($id)
     {

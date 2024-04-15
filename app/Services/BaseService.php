@@ -4,9 +4,8 @@ namespace App\Services;
 
 use App\Services\Interfaces\BaseServiceInterface;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
-
 
 /**
  * Class BaseService
@@ -76,5 +75,41 @@ class BaseService implements BaseServiceInterface
         ];
 
         return $this->routerRepository->deleteByWhere($condition);
+    }
+
+    public function updateStatus()
+    {
+        DB::beginTransaction();
+        try {
+            $modelName = lcfirst(request('model')) . 'Repository';
+
+            $payload[request('field')] = request('value') == 1 ? 0 : 1;
+            $update =  $this->{$modelName}->update(request('modelId'), $payload);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function updateStatusAll()
+    {
+        DB::beginTransaction();
+        try {
+            $modelName = lcfirst(request('model')) . 'Repository';
+
+            $payload[request('field')] = request('value');
+            $update =  $this->{$modelName}->updateByWhereIn('id', request('id'), $payload);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
     }
 }

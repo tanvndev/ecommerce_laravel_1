@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('product_language', function (Blueprint $table) {
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-    $table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
-    $table->string('name');
-    $table->text('description')->nullable();
-    $table->text('content')->nullable();
-    $table->string('canonical');
-    $table->string('meta_title')->nullable();
-    $table->string('meta_keyword')->nullable();
-    $table->text('meta_description')->nullable();
-    $table->softDeletes();
-    $table->timestamps();;
+            $table->foreignId('language_id')->constrained('languages')->onDelete('cascade');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->text('content')->nullable();
+            $table->string('canonical');
+            $table->string('meta_title')->nullable();
+            $table->string('meta_keyword')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->softDeletes();
+            $table->timestamps();;
         });
     }
 

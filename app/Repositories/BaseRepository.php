@@ -28,7 +28,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false)
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = [])
     {
         $query = $this->model->select($column);
         if (!empty($relation)) {
@@ -36,6 +36,20 @@ class BaseRepository implements BaseRepositoryInterface
         } else {
             $query->customWhere($conditions);
         }
+        $query->customOrderBy($orderBy ?? null);
+
+        return $all ? $query->get() : $query->first();
+    }
+
+    public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false)
+    {
+
+        $query = $this->model->select($column);
+        $query->whereHas($relation, function ($query) use ($condition, $alias) {
+            foreach ($condition as $key => $value) {
+                $query->where($alias . '.' . $key, $value);
+            }
+        });
 
         return $all ? $query->get() : $query->first();
     }
@@ -61,6 +75,14 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $model = $this->findById($modelId);
         return $model->update($payload);
+    }
+
+    public function save($modelId, $payload = [])
+    {
+        $model = $this->findById($modelId);
+        $model->fill($payload);
+        $model->save();
+        return $model;
     }
 
     // Truyen vao ham updateByWhereIn (Field name, array field name, va mang data can update)

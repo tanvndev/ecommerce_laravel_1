@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ajax\{
     LocationController,
     DashboardController as AjaxDashboardController,
-    AttributeController as AjaxAttributeController
+    AttributeController as AjaxAttributeController,
+    MenuController as AjaxMenuController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -21,6 +22,7 @@ use App\Http\Controllers\Servers\{
     AttributeCatalogueController,
     AttributeController,
     SystemController,
+    MenuController,
     //@@new-controller-module@@
 
 };
@@ -171,6 +173,22 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [AttributeController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [AttributeController::class, 'destroy'])->name('destroy');
     });
+
+    // Routes for MenuController
+    Route::prefix('menu')->name('menu.')->group(function () {
+        Route::get('index', [MenuController::class, 'index'])->name('index');
+        Route::get('create', [MenuController::class, 'create'])->name('create');
+        Route::post('store', [MenuController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [MenuController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::get('/{id}/editMenu', [MenuController::class, 'editMenu'])->where(['id' => '[0-9]+'])->name('editMenu');
+        Route::put('/{id}/update', [MenuController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [MenuController::class, 'destroy'])->name('destroy');
+        Route::get('{id}/children', [MenuController::class, 'children'])->name('children');
+        Route::put('{id}/saveChildren', [MenuController::class, 'saveChildren'])->name('save.children');
+        Route::get('{id}/{languageId}/translate', [MenuController::class, 'translate'])->where(['languageId' => '[0-9]+', 'id' => '[0-9]+'])->name('translate');
+        Route::put('{languageId}/saveTranslate', [MenuController::class, 'saveTranslate'])->where(['languageId' => '[0-9]+'])->name('save.translate');
+    });
+
     //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
@@ -180,8 +198,11 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
+    Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->middleware('admin')->name('ajax.dashboard.getMenu');
     Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->middleware('admin')->name('ajax.attribute.getAttribute');
     Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->middleware('admin')->name('ajax.attribute.loadAttribute');
+    Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');
+    Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->middleware('admin')->name('ajax.menu.drag');
 });
 
 

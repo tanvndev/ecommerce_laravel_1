@@ -315,8 +315,6 @@ class ProductService extends BaseService implements ProductServiceInterface
 
 
 
-
-
     function destroy($id)
     {
         DB::beginTransaction();
@@ -336,45 +334,6 @@ class ProductService extends BaseService implements ProductServiceInterface
         }
     }
 
-    function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->productRepository->update(request('modelId'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->productRepository->updateByWhereIn('id', request('id'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
 
     private function payload()
     {

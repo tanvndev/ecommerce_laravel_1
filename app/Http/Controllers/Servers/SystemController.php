@@ -18,17 +18,7 @@ class SystemController extends Controller
         System $systemLibrary,
         SystemService $systemService
     ) {
-
-        // Lấy ra ngôn ngữ hiện tại và gán vào session
-        $this->middleware(function ($request, $next) {
-            $languageId = app(LanguageRepository::class)->getCurrentLanguage();
-
-            $this->currentLanguage = $languageId;
-            session(['currentLanguage' => $languageId]);
-            return $next($request);
-        });
-
-
+        parent::__construct();
         $this->systemLibrary = $systemLibrary;
         $this->systemService = $systemService;
     }

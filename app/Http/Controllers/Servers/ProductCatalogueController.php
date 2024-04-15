@@ -29,10 +29,6 @@ class ProductCatalogueController extends Controller
 
         // Lấy ra ngôn ngữ hiện tại và gán vào session
         $this->middleware(function ($request, $next) {
-            $languageId = app(LanguageRepository::class)->getCurrentLanguage();
-
-            $this->currentLanguage = $languageId;
-            session(['currentLanguage' => $languageId]);
             $this->initNetedset();
             return $next($request);
         });

@@ -18,13 +18,13 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label class="form-label">{{__('messages.publish')}}</label>
-                    {!! Form::select('publish', __('messages.general.publish'), old('publish', $postCatalogue->publish
+                    {!! Form::select('publish', __('general.publish'), old('publish', $postCatalogue->publish
                     ?? ''), ['class' => 'form-select init-select2']) !!}
                 </div>
 
                 <div>
                     <label class="form-label">{{__('messages.follow')}}</label>
-                    {!! Form::select('follow', __('messages.general.follow'), old('follow', $postCatalogue->follow ??
+                    {!! Form::select('follow', __('general.follow'), old('follow', $postCatalogue->follow ??
                     ''), ['class' => 'form-select init-select2']) !!}
                 </div>
             </div>

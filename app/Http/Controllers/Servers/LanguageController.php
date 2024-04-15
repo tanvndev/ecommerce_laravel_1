@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{
     StoreLanguageRequest,
-    TranslateRequest,
     UpdateLanguageRequest,
     UpdateTranslateRequest,
 };
@@ -183,14 +182,5 @@ class LanguageController extends Controller
         }
 
         return redirect()->back()->with('toast_error', $errorMessage);
-    }
-    private function getRepositoryInstance($modelName)
-    {
-        $repositoryInterfaceNameSpace = 'App\Repositories\Interfaces\\' . ucfirst($modelName) . 'RepositoryInterface';
-        if (interface_exists($repositoryInterfaceNameSpace)) {
-            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
-            return app($repositoryInterfaceNameSpace);
-        }
-        return null;
     }
 }

@@ -50,7 +50,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
         $attributes = $this->attributeRepository->pagination(
             $select,
             $condition,
-            request('perpage'),
+            1,
             $orderBy,
             $join,
             ['attribute_catalogues'],
@@ -203,46 +203,6 @@ class AttributeService extends BaseService implements AttributeServiceInterface
             // Xoa router
             $this->deleteRouter($id);
 
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->attributeRepository->update(request('modelId'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->attributeRepository->updateByWhereIn('id', request('id'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
             DB::commit();
             return true;
         } catch (\Exception $e) {

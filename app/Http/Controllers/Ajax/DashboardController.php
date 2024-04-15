@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\ajax;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class DashboardController extends Controller
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function changeStatus(Request $request)
     {
         // Lấy ra service tương ứng
@@ -47,13 +55,45 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getServiceInstance($modelName)
+    public function getMenu(Request $request)
     {
-        $serviceInterfaceNameSpace = 'App\Services\Interfaces\\' . ucfirst($modelName) . 'ServiceInterface';
-        if (interface_exists($serviceInterfaceNameSpace)) {
-            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
-            return app($serviceInterfaceNameSpace);
+        $modelName = $request->model;
+        $keyword = addslashes($request->keyword ?? '');
+        $repositoryInstance = $this->getRepositoryInstance($modelName);
+        $agrument = $this->paginationAgrument($modelName, $keyword);
+        $object = $repositoryInstance->pagination(...array_values($agrument));
+        return response()->json($object);
+    }
+
+    private function paginationAgrument($modelName = '', $keyword = '')
+    {
+
+        $modelName = Str::snake($modelName);
+        $join = [
+            "{$modelName}_language as tb2" => ["tb2.{$modelName}_id", '=', "{$modelName}s.id"],
+        ];
+
+        $condition = [
+            'keyword' => $keyword,
+            'where' => [
+                'language_id' => ['=', session('currentLanguage')]
+            ]
+        ];
+
+        // Kiểm tra xem $modelName có chứa '_catalogue' hay không
+        if (strpos($modelName, '_catalogue') === false) {
+            $join["{$modelName}_catalogue_{$modelName} as tb3"] = ["tb3.{$modelName}_id", '=', "{$modelName}s.id"];
         }
-        return null;
+        $select = ['id', 'name', 'canonical'];
+
+        return [
+            'select' =>  $select,
+            'condition' => $condition,
+            'perpage' => 10,
+            'orderBy' => ["{$modelName}s.id" => 'desc'],
+            'join' => $join,
+            'relations' => [],
+            'groupBy' =>  $select,
+        ];
     }
 }

@@ -83,6 +83,21 @@ return [
             ]
         ],
         [
+            'id' => 'menu',
+            'route' => '',
+            'icon' => 'icofont-ui-settings',
+            'title' => 'QL menu',
+            'activeCondition' => ['menu.*'],
+            'subMenu' => [
+                [
+                    'title' => 'Cài đặt menu',
+                    'route' => 'menu.index',
+                    'activeCondition' => ['menu.*']
+                ],
+
+            ]
+        ],
+        [
             'id' => 'generalConfig',
             'route' => '',
             'icon' => 'icofont-ui-settings',

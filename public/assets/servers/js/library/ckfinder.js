@@ -171,7 +171,7 @@ $(function () {
                         <img class="img-thumbnail image-album"
                             src="${image}" alt="${image}">
                         <span class="position-absolute icon-delete-album">
-                            <i class=" icofont-ui-delete"></i>
+                            <i class="icofont-ui-close"></i>
                         </span>
                         <input type="hidden" name="album[]" value="${image}">
                     </div>

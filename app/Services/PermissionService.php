@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepos
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class PermissionService implements PermissionServiceInterface
+class PermissionService extends BaseService implements PermissionServiceInterface
 {
     protected $permissionRepository;
     public function __construct(PermissionRepository $permissionRepository)
@@ -90,45 +90,6 @@ class PermissionService implements PermissionServiceInterface
         }
     }
 
-    function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->permissionRepository->update(request('modelId'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->permissionRepository->updateByWhereIn('id', request('id'), $payload);
-
-            if (!$update) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
 
     public function switch($canonical)
     {

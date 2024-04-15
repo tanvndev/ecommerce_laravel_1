@@ -8,7 +8,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 
 use Illuminate\Support\Facades\DB;
 
-class UserCatalogueService implements UserCatalogueServiceInterface
+class UserCatalogueService extends BaseService implements UserCatalogueServiceInterface
 {
     protected $userCatalogueRepository;
     protected $UserRepository;
@@ -100,47 +100,6 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         }
     }
 
-    function updateStatus()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value') == 1 ? 0 : 1;
-            $update =  $this->userCatalogueRepository->update(request('modelId'), $payload);
-            $changeUserStatus = $this->changeUserStatus(request()->all());
-
-            if (!$update || !$changeUserStatus) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    public function updateStatusAll()
-    {
-        DB::beginTransaction();
-        try {
-            $payload[request('field')] = request('value');
-            $update =  $this->userCatalogueRepository->updateByWhereIn('id', request('id'), $payload);
-            $changeUserStatus = $this->changeUserStatus(request()->all());
-
-            if (!$update || !$changeUserStatus) {
-                DB::rollBack();
-                return false;
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            return false;
-        }
-    }
 
     public function setPermission()
     {

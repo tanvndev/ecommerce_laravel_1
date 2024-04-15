@@ -6,10 +6,12 @@ interface BaseRepositoryInterface
 {
     public function all($relation = []);
     public function findById($modelId, $column = ['*'], $relation = []);
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false);
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = []);
+    public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false);
     public function create($payload = []);
     public function createBatch($payload = []);
     public function update($modelId, $payload = []);
+    public function save($modelId, $payload = []);
     public function updateByWhereIn($whereInField = '', $whereIn = [], $payload = []);
     public function updateByWhere($condition = [], $payload = []);
     public function delete($modelId);

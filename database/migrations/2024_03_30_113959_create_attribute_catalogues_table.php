@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attribute_catalogues', function (Blueprint $table) {
-        $table->id();
-$table->integer('parent_id')->default(0);
-$table->integer('left')->default(0);
-$table->integer('right')->default(0);
-$table->integer('level')->default(0);
-$table->string('image')->nullable();
-$table->string('icon')->nullable();
-$table->text('album')->nullable();
-$table->tinyInteger('publish')->default(1);
-$table->tinyInteger('follow')->default(0);
-$table->integer('order')->default(0);
-$table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-$table->softDeletes();
-$table->timestamps();;
+            $table->id();
+            $table->integer('parent_id')->default(0);
+            $table->integer('left')->default(0);
+            $table->integer('right')->default(0);
+            $table->integer('level')->default(0);
+            $table->string('image')->nullable();
+            $table->string('icon')->nullable();
+            $table->text('album')->nullable();
+            $table->tinyInteger('publish')->default(1);
+            $table->tinyInteger('follow')->default(0);
+            $table->integer('order')->default(0);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();;
         });
     }
 

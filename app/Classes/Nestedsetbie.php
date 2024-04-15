@@ -27,12 +27,28 @@ class Nestedsetbie
 
 		$moduleExtract = explode('_', $this->params['table']);
 
+		$isMenu = isset($this->params['isMenu']) && $this->params['isMenu'] == true;
+		$catalogue = $isMenu ? '' : '_catalogue';
+		$join = $isMenu ? substr($moduleExtract[0], 0, -1) : $moduleExtract[0];
+
+		$columns = [
+			'tb1.id', 'tb2.name', 'tb1.parent_id', 'tb1.left', 'tb1.right', 'tb1.level', 'tb1.order'
+		];
+
+		if ($isMenu) {
+			$columns[] = 'tb1.menu_catalogue_id';
+		}
+
 		$result = DB::table($this->params['table'] . ' as tb1')
-			->select('tb1.id', 'tb2.name', 'tb1.parent_id', 'tb1.left', 'tb1.right', 'tb1.level', 'tb1.order')
-			->join($moduleExtract[0] . '_catalogue_language as tb2', 'tb1.id', '=', 'tb2.' . $foreignkey . '')
-			->where('tb2.language_id', '=', $this->params['language_id'])->whereNull('tb1.deleted_at')
-			->orderBy('tb1.left', 'asc')->get()->toArray();
+			->select($columns)
+			->join($join . $catalogue . '_language as tb2', 'tb1.id', '=', 'tb2.' . $foreignkey . '')
+			->where('tb2.language_id', '=', $this->params['language_id'])
+			->whereNull('tb1.deleted_at')
+			->orderBy('tb1.left', 'asc')
+			->get()
+			->toArray();
 		$this->data = $result;
+		// dd($result);
 	}
 
 	public function Set()
@@ -70,17 +86,25 @@ class Nestedsetbie
 	{
 		if (isset($this->level) && is_array($this->level) && isset($this->left) && is_array($this->left) && isset($this->right) && is_array($this->right)) {
 
-			$data = NULL;
+			$data = [];
 			foreach ($this->level as $key => $val) {
 				if ($key == 0) continue;
-				$data[] = array(
+
+				$item = [
 					'id' => $key,
 					'level' => $val,
 					'left' => $this->left[$key],
 					'right' => $this->right[$key],
 					'user_id' => Auth::id(),
-				);
+				];
+
+				if (isset($this->params['isMenu']) && $this->params['isMenu'] == true) {
+					$item['menu_catalogue_id'] = $this->data[0]->menu_catalogue_id;
+				}
+
+				$data[] = $item;
 			}
+
 			if (isset($data) && is_array($data) && count($data)) {
 				DB::table($this->params['table'])->upsert($data, 'id', ['level', 'left', 'right']);
 			}

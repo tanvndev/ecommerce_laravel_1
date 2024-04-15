@@ -38,8 +38,10 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\AttributeServiceInterface' => 'App\Services\AttributeService',
         // System
         'App\Services\Interfaces\SystemServiceInterface' => 'App\Services\SystemService',
-
-
+        // Menu
+        'App\Services\Interfaces\MenuServiceInterface' => 'App\Services\MenuService',
+        // Menu
+        'App\Services\Interfaces\MenuCatalogueServiceInterface' => 'App\Services\MenuCatalogueService',
     ];
     public function register(): void
     {

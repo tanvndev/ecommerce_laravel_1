@@ -11,6 +11,12 @@ $(function () {
         $(this).val(value);
     });
 
+    $(".convert-to-slug").on("input", function () {
+        let value = $(this).val();
+        value = value.replace(/ /g, "-");
+        $(this).val(value);
+    });
+
     if ($(".init-nice-select").length > 0) {
         $(".init-nice-select").niceSelect();
     }

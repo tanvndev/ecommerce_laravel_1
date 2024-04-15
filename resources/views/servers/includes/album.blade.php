@@ -28,7 +28,7 @@
                 <div class="position-relative ">
                     <img class="img-thumbnail image-album" src="{{ $album }}" alt="{{ $album }}">
                     <span class="position-absolute icon-delete-album">
-                        <i class="icofont-ui-delete"></i>
+                        <i class="icofont-ui-close"></i>
                     </span>
                     <input type="hidden" name="album[]" value="{{ $album }}">
                 </div>

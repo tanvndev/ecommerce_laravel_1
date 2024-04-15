@@ -48,16 +48,5 @@ return [
     'cancelButton' => 'Cancel',
     'agreeButton' => 'Agree',
     'saveButton' => 'Save',
-    'general' => [
-        'publish' => [
-            '-1' => 'Select status',
-            '0' => 'Unpublished',
-            '1' => 'Published',
-        ],
-        'follow' => [
-            '-1' => 'Select follow',
-            '0' => 'Nofollow',
-            '1' => 'Follow',
-        ],
-    ]
+
 ];
