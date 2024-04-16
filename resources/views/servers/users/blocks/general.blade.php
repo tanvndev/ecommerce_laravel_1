@@ -17,17 +17,12 @@
                     class="text-danger">(*)</span>
                 {!! Form::text('fullname', old('fullname', $user->fullname ?? ''), ['class' => 'form-control']) !!}
             </div>
-            @php
-            $catalogues = [
-            1 => 'Quản trị viên',
-            2 => 'Cộng tác viên'
-            ];
-            // dd($user);
-            @endphp
+
             <div class="col-md-6">
                 {!! Form::label('user_catalogue_id', __('messages.user.table.userGroup'), ['class' => 'form-label']) !!}
                 <span class="text-danger">(*)</span>
-                {!! Form::select('user_catalogue_id', ['' => __('messages.user.table.userGroupSelect')] + $catalogues,
+                {!! Form::select('user_catalogue_id', ['' => __('messages.user.table.userGroupSelect')] +
+                $userCatalogues->pluck('name', 'id')->toArray(),
                 old('user_catalogue_id', $user->user_catalogue_id ?? ''), ['class' => 'form-select init-select2']) !!}
             </div>
 

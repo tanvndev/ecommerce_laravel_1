@@ -33,6 +33,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     ->orWhere('address', 'like', '%' . $condition['keyword'] . '%');
             }
 
+            if (isset($condition['user_catalogue_id']) && $condition['user_catalogue_id'] != '') {
+                $query->where('user_catalogue_id', $condition['user_catalogue_id']);
+            }
+
             if (isset($condition['publish']) && $condition['publish'] != '-1') {
                 $query->where('publish', $condition['publish']);
             }

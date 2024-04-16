@@ -71,4 +71,4 @@
 
 </table>
 
-@include('servers.includes.modalDelete', ['routeModalDelete' => '{muduleRoute}.destroy'])
+@include('servers.includes.modalDelete', ['routeModalDelete' => '{moduleRoute}.destroy'])

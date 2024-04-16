@@ -23,6 +23,7 @@ use App\Http\Controllers\Servers\{
     AttributeController,
     SystemController,
     MenuController,
+    SlideController,
     //@@new-controller-module@@
 
 };
@@ -189,6 +190,15 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('{languageId}/saveTranslate', [MenuController::class, 'saveTranslate'])->where(['languageId' => '[0-9]+'])->name('save.translate');
     });
 
+    // Routes for SlideController
+    Route::prefix('slide')->name('slide.')->group(function () {
+        Route::get('index', [SlideController::class, 'index'])->name('index');
+        Route::get('create', [SlideController::class, 'create'])->name('create');
+        Route::post('store', [SlideController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SlideController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [SlideController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [SlideController::class, 'destroy'])->name('destroy');
+    });
     //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 

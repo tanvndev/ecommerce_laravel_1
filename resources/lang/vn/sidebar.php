@@ -83,6 +83,21 @@ return [
             ]
         ],
         [
+            'id' => 'slide',
+            'route' => '',
+            'icon' => 'icofont-image',
+            'title' => 'QL Slide & Banner',
+            'activeCondition' => ['slide.*'],
+            'subMenu' => [
+                [
+                    'title' => 'Cài đặt slide',
+                    'route' => 'slide.index',
+                    'activeCondition' => ['slide.*'],
+                ],
+
+            ]
+        ],
+        [
             'id' => 'menu',
             'route' => '',
             'icon' => 'icofont-ui-settings',

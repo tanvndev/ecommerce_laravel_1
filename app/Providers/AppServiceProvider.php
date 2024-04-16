@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\MenuServiceInterface' => 'App\Services\MenuService',
         // Menu
         'App\Services\Interfaces\MenuCatalogueServiceInterface' => 'App\Services\MenuCatalogueService',
+
+        // Slide
+        'App\Services\Interfaces\SlideServiceInterface' => 'App\Services\SlideService',
     ];
     public function register(): void
     {

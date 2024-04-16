@@ -28,7 +28,6 @@ return [
         ],
 
     ],
-
     'menu' => [
         'index' => [
             'table' => 'Thông tin menu',
@@ -387,6 +386,31 @@ return [
             'name' => 'Tên model',
             'module' => 'Tên chức năng',
             'path' => 'Đường dẫn'
+        ]
+    ],
+    'slide' => [
+        'index' => [
+            'title' => 'Danh sách slide & banner',
+            'table' => 'Thông tin slide & banner',
+            'create' => 'Tạo mới slide & banner'
+        ],
+        'create' => [
+            'title' => 'Tạo mới slide & banner',
+            'success' => 'Tạo mới slide & banner thành công.',
+            'error' => 'Tạo mới slide & banner thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập slide & banner',
+            'success' => 'Cập nhập slide & banner thành công.',
+            'error' => 'Cập nhập slide & banner thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá slide & banner thành công.',
+            'error' => 'Xoá slide & banner thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tiêu đề slide & banner',
+            'attributeCatalogue' => 'Chọn nhóm slide & banner',
         ]
     ],
     'errorChildDelete' => 'Không thể xoá do vẫn còn danh mục con.',

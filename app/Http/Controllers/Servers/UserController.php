@@ -12,6 +12,7 @@ use App\Http\Requests\{
 use App\Services\Interfaces\UserServiceInterface as UserService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 
 
 
@@ -20,29 +21,36 @@ class UserController extends Controller
     protected $userService;
     protected $provinceRepository;
     protected $userRepository;
+    protected $userCatalogueRepository;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         UserService $userService,
         ProvinceRepository $provinceRepository,
         UserRepository $userRepository,
+        UserCatalogueRepository $userCatalogueRepository,
     ) {
         $this->userService = $userService;
         $this->provinceRepository = $provinceRepository;
         $this->userRepository = $userRepository;
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
     //
     function index()
     {
         $this->authorize('modules', 'user.index');
 
+
         $users = $this->userService->paginate();
+        $userCatalogues = $this->userCatalogueRepository->all();
         $config['seo'] = __('messages.user')['index'];
+
 
 
         return view('servers.users.index', compact([
             'users',
-            'config'
+            'config',
+            'userCatalogues'
         ]));
     }
 
@@ -51,12 +59,14 @@ class UserController extends Controller
         $this->authorize('modules', 'user.create');
 
         $provinces = $this->provinceRepository->all();
+        $userCatalogues = $this->userCatalogueRepository->all();
 
         $config['seo'] = __('messages.user')['create'];
         $config['method'] = 'create';
         return view('servers.users.store', compact([
             'config',
-            'provinces'
+            'provinces',
+            'userCatalogues'
         ]));
     }
 
@@ -77,6 +87,7 @@ class UserController extends Controller
         session(['_id' => $id]);
         // Lấy ra các tỉnh thành
         $provinces = $this->provinceRepository->all();
+        $userCatalogue = $this->userCatalogueRepository->all();
         $user = $this->userRepository->findById($id);
         // dd($user);
 
@@ -88,6 +99,7 @@ class UserController extends Controller
             'config',
             'provinces',
             'user',
+            'userCatalogue',
         ]));
     }
 
