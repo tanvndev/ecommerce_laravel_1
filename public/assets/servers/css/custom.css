@@ -1,3 +1,6 @@
+.fs-12 {
+    font-size: 12px;
+}
 .fs-13 {
     font-size: 13px;
 }
@@ -7,6 +10,9 @@
 
 .w-10 {
     width: 10%;
+}
+.w-55 {
+    width: 55%;
 }
 
 .fs-14 {
@@ -43,6 +49,9 @@
 .cursor-pointer {
     cursor: pointer;
 }
+.cursor-move {
+    cursor: move;
+}
 /*  */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -63,6 +72,32 @@ select::placeholder {
 
 .table-list-info p {
     margin-bottom: 3px;
+}
+.slide-banner-inner .form-label-custom {
+    width: 140px;
+    margin-bottom: 0;
+}
+.slide-item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--border-color);
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.image-slide-table {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    cursor: move;
+}
+.slide-item:first-child {
+    padding-top: 0;
+}
+.slide-item:last-child {
+    border-bottom: none !important;
 }
 .check-permission {
     width: 2em;
@@ -90,7 +125,7 @@ select::placeholder {
     border-color: var(--primary-color);
     opacity: 0.9;
 }
-
+.slide-banner-inner .nice-select,
 .variant-body .nice-select {
     height: 40px;
     line-height: 38px;
@@ -121,6 +156,13 @@ select::placeholder {
 
 .alert-danger ul {
     margin-bottom: 0;
+}
+.form-check-label,
+.form-check-input {
+    cursor: pointer;
+}
+.form-check-input:active {
+    outline: none;
 }
 
 .menu-list-wrap .form-check-label {
@@ -372,7 +414,7 @@ table.table-variant thead .table-dark {
     cursor: move;
 }
 .ui-sortable-placeholder {
-    border: 1px dashed #1a0dab !important;
+    border: 1px dashed #0071e2 !important;
     visibility: visible !important;
     background: #f5f5f5;
     border-radius: 8px;

@@ -100,7 +100,7 @@ return [
         [
             'id' => 'menu',
             'route' => '',
-            'icon' => 'icofont-ui-settings',
+            'icon' => 'icofont-chart-flow',
             'title' => 'QL menu',
             'activeCondition' => ['menu.*'],
             'subMenu' => [

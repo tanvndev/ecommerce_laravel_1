@@ -15,11 +15,16 @@ class Slide extends Model
     protected $fillable = [
         'name',
         'keyword',
-        'description',
+        'publish',
+        'setting',
         'item',
+        'short_code',
     ];
 
-
+    protected $casts = [
+        'setting' => 'json',
+        'item' => 'json',
+    ];
 
     public function users()
     {

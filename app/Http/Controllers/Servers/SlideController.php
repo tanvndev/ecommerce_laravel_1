@@ -27,7 +27,6 @@ class SlideController extends Controller
         parent::__construct();
         // Khởi tạo new Nestedsetbie
         $this->middleware(function ($request, $next) {
-            $this->initNetedset();
             return $next($request);
         });
 
@@ -35,15 +34,7 @@ class SlideController extends Controller
         $this->slideRepository = $slideRepository;
     }
 
-    private function initNetedset()
-    {
-        $this->nestedset = new Nestedsetbie([
-            'table' => 'slide_catalogues',
-            'foreignkey' => 'slide_catalogue_id',
-            'language_id' => $this->currentLanguage
-        ]);
-    }
-    //
+
     function index()
     {
         $this->authorize('modules', 'slide.index');
@@ -65,18 +56,13 @@ class SlideController extends Controller
 
         $config['seo'] = __('messages.slide')['create'];
         $config['method'] = 'create';
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
-        // dd($dropdown);
         return view('servers.slides.store', compact([
             'config',
-            'dropdown',
         ]));
     }
 
     public function store(StoreSlideRequest $request)
     {
-
         $successMessage = $this->getToastMessage('slide', 'success', 'create');
         $errorMessage = $this->getToastMessage('slide', 'error', 'create');
 
@@ -92,24 +78,15 @@ class SlideController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $slide = $this->slideRepository->getSlideLanguageById($id, $this->currentLanguage);
-        // dd($slide);
-
-
-        $albums =  json_decode($slide->album);
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
-        // dd($slide);
-
-
+        $slide = $this->slideRepository->findById($id);
+        $slideItem = $this->slideService->convertSlidesToArray($slide->item[$this->currentLanguage] ?? []);
         $config['seo'] = __('messages.slide')['update'];
         $config['method'] = 'update';
 
         return view('servers.slides.store', compact([
             'config',
             'slide',
-            'albums',
-            'dropdown',
+            'slideItem',
         ]));
     }
 

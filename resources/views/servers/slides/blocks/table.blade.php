@@ -8,10 +8,9 @@
 
                 </div>
             </th>
-            <th style="width: 40%;">{{__('messages.slide.table.name')}}</th>
-            @include('servers.includes.languageTableTh')
-            <th>{{__('messages.tableDisplayGroup')}}</th>
-            <th style="width: 5%;">{{__('messages.tableOrder')}}</th>
+            <th>Tên nhóm</th>
+            <th>Từ khoá</th>
+            <th>Danh sách hình ảnh</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -24,24 +23,20 @@
                 </div>
             </td>
             <td>
-                <div class="d-flex align-items-center justify-content-start">
-                    <img class="avatar image-post rounded" src="{{$slide->image}}" alt="{{$slide->name}}">
-                    <a href="" class="fw-bold link-body-emphasis ms-2 "> {{$slide->name}}</a>
-
-                </div>
-            </td>
-            @include('servers.includes.languageTableTd', ['model' => $slide])
-            <td>
-                @foreach ($slide->slide_catalogues as $catalogue)
-                @foreach ($catalogue->slide_catalogue_language as $val)
-                <a href="{{route('slide.index', ['slide_catalogue_id' => $catalogue->id])}}"
-                    class="post-catalogue-name link-body-emphasis"> {{$val->name}}</a>
-                @endforeach
-                @endforeach
+                {{$slide->name}}
             </td>
             <td class="">
-                <input type="text" class="form-control sort-order" name="order" data-id="{{$slide->id}}"
-                    data-model="{{$modelName}}" value="{{$slide->order}}" />
+                {{$slide->keyword}}
+            </td>
+            <td class="">
+                <div id="sortable-slide" class="d-flex align-items-center gx-3 " data-id="{{$slide->id}}">
+                    @foreach ($slide->item[1] as $item)
+                    <div class="p-1 rounded-2 sortable-item">
+                        <img class="img-thumbnail image-slide-table" src="{{$item['image']}}" alt="{{$slide->name}}">
+                        <input type="hidden" name="image[]" value="{{$item['image']}}">
+                    </div>
+                    @endforeach
+                </div>
             </td>
 
             <td>
@@ -49,7 +44,7 @@
                     {!! Form::checkbox('publish', $slide->publish, $slide->publish == 1, ['id' =>
                     "publish-{$slide->id}",
                     'class' => 'status', 'data-field' => 'publish', 'data-modelid' => $slide->id, 'data-model' =>
-                    $model]) !!}
+                    $modelName]) !!}
                     <label for="publish-{{$slide->id}}">
                         <svg class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 130.2 130.2">

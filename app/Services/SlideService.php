@@ -32,8 +32,8 @@ class SlideService extends BaseService implements SlideServiceInterface
             'id',
             'name',
             'keyword',
-            'description',
-
+            'publish',
+            'item'
         ];
 
         //////////////////////////////////////////////////////////
@@ -47,138 +47,84 @@ class SlideService extends BaseService implements SlideServiceInterface
         return $slides;
     }
 
-    private function whereRaw()
+    public function convertSlidesToArray($slides = [])
     {
-        $rawConditions = [];
-        $slide_catalogue_id = request('slide_catalogue_id');
-        if ($slide_catalogue_id > 0) {
-            $rawConditions['whereRaw'] = [
-                [
-                    'tb3.slide_catalogue_id IN (
-                        SELECT id 
-                        FROM slide_catalogues
-                        INNER JOIN slide_catalogue_language as pcl ON pcl.slide_catalogue_id = slide_catalogues.id 
-                        WHERE `left` >= (SELECT `left` FROM slide_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM slide_catalogues as pc WHERE pc.id = ?)
-                        AND pcl.language_id = ?
-                    )',
-                    [$slide_catalogue_id, $slide_catalogue_id, session('currentLanguage')]
-                ]
+        $fields = ['image', 'description', 'canonical', 'window', 'name', 'alt'];
+        $slide = array_fill_keys($fields, []);
+
+        foreach ($fields as $field) {
+            $slide[$field] = array_column($slides, $field);
+        }
+        return $slide;
+    }
+
+
+
+    public function create()
+    {
+        DB::beginTransaction();
+        try {
+            //   Lấy ra payload và format lai
+            $payload = request()->only('name', 'keyword', 'setting', 'short_code');
+            $payload['keyword'] = Str::slug($payload['keyword']);
+            $payload['item'] = $this->handleSildeItem(request('slide'));
+
+            $this->slideRepository->create($payload);
+            // dd($payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
+
+
+    public function update($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            //   Lấy ra payload và format lai
+            $slide = $this->slideRepository->findById($id);
+            $slideItem = $slide->item;
+            unset($slideItem[session('currentLanguage')]);
+
+            $payload = request()->only('name', 'keyword', 'setting', 'short_code');
+            $payload['keyword'] = Str::slug($payload['keyword']);
+            $payload['item'] = $this->handleSildeItem(request('slide')) + $slideItem;
+
+            $this->slideRepository->update($id, $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
+
+    private function handleSildeItem($slides = [])
+    {
+        $payload = [];
+        foreach ($slides['image'] as $key => $value) {
+            $payload[session('currentLanguage')][] = [
+                'image' => $value,
+                'description' => $slides['description'][$key],
+                'canonical' => $slides['canonical'][$key],
+                'window' => $slides['window'][$key] ?? '',
+                'name' => $slides['name'][$key],
+                'alt' => $slides['alt'][$key],
             ];
         }
-        return $rawConditions;
-    }
-
-    function create()
-    {
-
-        DB::beginTransaction();
-        try {
-
-            //   Lấy ra payload và format lai
-            $payload = request()->only($this->payload());
-            $payload = $this->formatJson($payload, 'album');
-            // Lấy ra id người dùng hiện tại
-            $payload['user_id'] = Auth::id();
-
-            // Create slide
-            $slide = $this->slideRepository->create($payload);
-            if ($slide->id > 0) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($slide->id);
-                // Create pivot and sync
-                $this->createPivotAndSync($slide, $payloadLanguage);
-
-                // create router
-                $this->createRouter($slide);
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            die;
-            return false;
-        }
+        return $payload;
     }
 
 
-    function update($id)
-    {
-
-        DB::beginTransaction();
-        try {
-            // Lấy ra dữ liệu của slide hiện tại để xoá;
-            $slide = $this->slideRepository->findById($id);
-
-            // Lấy ra payload và format lai
-            $payload = request()->only($this->payload());
-            $payload = $this->formatJson($payload, 'album');
-            // Update slide
-            $updateSlide = $this->slideRepository->update($id, $payload);
-
-            if ($updateSlide) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($id);
-                // Xoá bản ghi cũa một pivot
-                $slide->languages()->detach([$payloadLanguage['language_id'], $id]);
-                // Create pivot and sync
-                $this->createPivotAndSync($slide, $payloadLanguage);
-
-                // update router
-                $this->updateRouter($slide);
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            die;
-            return false;
-        }
-    }
-
-    private function catalogue()
-    {
-        if (!empty(request('catalogue'))) {
-            return array_unique(array_merge(
-                request('catalogue'),
-                [request('slide_catalogue_id')],
-            ));
-        }
-        return [request('slide_catalogue_id')];
-    }
-
-
-    private function formatPayloadLanguage($slideId)
-    {
-        $payloadLanguage = request()->only($this->payloadLanguage());
-        //Đinh dạng slug
-        $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
-
-        // Lấy ra slide_id 
-        $payloadLanguage['slide_id'] = $slideId;
-        // Lấy ra language_id mặc định
-        $payloadLanguage['language_id'] = session('currentLanguage');
-        return $payloadLanguage;
-    }
-
-    private function createPivotAndSync($slide, $payloadLanguage)
-    {
-        // Tạo ra pivot vào bảng slide_language
-        $this->slideRepository->createPivot($slide, $payloadLanguage, 'languages');
-
-        // Lấy ra id catalogue
-        $catalogue = $this->catalogue();
-        // Đồng bộ hoá id catalogue với bảng slide_catalogue_slide
-        $slide->slide_catalogues()->sync($catalogue);
-    }
-
-
-
-    function destroy($id)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
@@ -197,13 +143,38 @@ class SlideService extends BaseService implements SlideServiceInterface
         }
     }
 
-    private function payload()
+    public function dragUpdate($data = [])
     {
-        return ['slide_catalogue_id', 'image', 'follow', 'publish', 'album'];
-    }
+        DB::beginTransaction();
+        try {
+            //   Lấy ra data và format lai
+            $id = $data['id'];
+            $currentLanguage = session('currentLanguage');
 
-    private function payloadLanguage()
-    {
-        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+            $slide = $this->slideRepository->findById($id);
+            $slideItem = $slide->item[$currentLanguage];
+
+            // Cập nhật các ảnh mới vào mục của slide
+            foreach ($data['image'] as $key => $image) {
+                $slideItem[$key]['image'] = $image;
+            }
+            // dd($slideItem);
+
+            $payload = [
+                'item' => [
+                    $currentLanguage => $slideItem + $slide->item
+                ]
+            ];
+
+            // Thực hiện cập nhật slide
+            $this->slideRepository->update($id, $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
     }
 }

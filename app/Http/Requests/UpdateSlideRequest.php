@@ -22,16 +22,18 @@ class UpdateSlideRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
+            'name' => 'required',
+            'keyword' => 'required|unique:slides,keyword,' . $this->id,
+            'slide.image' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên slide',
+            'keyword' => 'Từ khoá',
+            'slide.image' => 'Ảnh slide',
         ];
     }
 

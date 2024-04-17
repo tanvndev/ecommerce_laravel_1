@@ -22,16 +22,18 @@ class StoreSlideRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers',
+            'name' => 'required',
+            'keyword' => 'required|unique:slides',
+            'slide.image' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên slide',
+            'keyword' => 'Từ khoá',
+            'slide.image' => 'Ảnh slide',
         ];
     }
 

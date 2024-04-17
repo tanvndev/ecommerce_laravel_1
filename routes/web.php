@@ -6,6 +6,7 @@ use App\Http\Controllers\Ajax\{
     DashboardController as AjaxDashboardController,
     AttributeController as AjaxAttributeController,
     MenuController as AjaxMenuController,
+    SlideController as AjaxSlideController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -213,6 +214,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->middleware('admin')->name('ajax.attribute.loadAttribute');
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');
     Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->middleware('admin')->name('ajax.menu.drag');
+    Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->middleware('admin')->name('ajax.slide.drag');
 });
 
 

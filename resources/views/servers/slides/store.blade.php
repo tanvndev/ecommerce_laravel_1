@@ -2,16 +2,18 @@
 
 @section('style')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="{{asset('assets/servers/plugin/nice-select/nice-select.css')}}" rel="stylesheet" />
+
 @endsection
 
 
 @section('script')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('assets/servers/plugin/nice-select/jquery.nice-select.min.js') }}"></script>
 
 <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
-<script src="{{ asset('assets/servers/plugin/ckeditor/ckeditor.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/ckfinder.js')}}"></script>
-<script src="{{ asset('assets/servers/js/library/seo.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/slide.js')}}"></script>
 
 @endsection
 
@@ -40,20 +42,13 @@ $method = $config['method'] == 'create' ? 'POST' : 'PUT';
 
 
         <div class="row g-3 mb-3 justify-content-center ">
-
             @include('servers.includes.messageError')
+
             {{-- Aside --}}
-            {{-- @include('servers.slides.blocks.aside') --}}
+            @include('servers.slides.blocks.aside')
 
-            <div class="col-lg-8">
-                {{-- Main --}}
-                @include('servers.includes.content', ['model'=> $slide ?? []])
-
-                {{-- Album --}}
-                @include('servers.includes.album')
-
-                {{-- Seo --}}
-                @include('servers.includes.seo', ['model'=> $slide ?? []])
+            <div class="col-lg-9">
+                @include('servers.slides.blocks.list')
             </div>
         </div><!-- Row end  -->
 

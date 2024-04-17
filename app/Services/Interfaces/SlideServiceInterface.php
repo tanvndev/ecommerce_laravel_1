@@ -10,4 +10,6 @@ interface SlideServiceInterface
     public function destroy($id);
     public function updateStatus();
     public function updateStatusAll();
+    public function convertSlidesToArray($slides = []);
+    public function dragUpdate($data = []);
 }

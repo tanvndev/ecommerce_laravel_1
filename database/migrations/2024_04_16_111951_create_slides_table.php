@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('keyword')->unique();
-            $table->text('description')->unique();
-            $table->text('item');
+            $table->json('item');
+            $table->json('setting');
+            $table->tinyInteger('publish')->default(0);
+            $table->string('short_code');
             $table->softDeletes();
             $table->timestamps();
         });
