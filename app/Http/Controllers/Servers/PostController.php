@@ -96,7 +96,7 @@ class PostController extends Controller
         // dd($post);
 
 
-        $albums =  json_decode($post->album);
+        $albums = json_decode($post->album);
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
         // dd($post);

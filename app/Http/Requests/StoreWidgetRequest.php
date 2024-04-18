@@ -22,16 +22,18 @@ class StoreWidgetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers',
+            'name' => 'required',
+            'keyword' => 'required|unique:widgets',
+            'short_code' => 'required|unique:widgets',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên widget',
+            'keyword' => 'Từ khoá',
+            'short_code' => 'Shortcode',
         ];
     }
 

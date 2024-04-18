@@ -210,6 +210,8 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [WidgetController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [WidgetController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [WidgetController::class, 'destroy'])->name('destroy');
+        Route::get('{id}/{languageId}/translate', [WidgetController::class, 'translate'])->where(['id' => '[0-9]+', 'languageId' => '[0-9]+'])->name('translate');
+        Route::put('saveTranslate', [WidgetController::class, 'saveTranslate'])->name('saveTranslate');
     });
     //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động

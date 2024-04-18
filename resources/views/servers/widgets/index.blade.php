@@ -16,7 +16,8 @@ toast($errorMessages, 'error');
     <div class="container-xxl">
         <div class="row align-items-center">
             <div class="border-0 mb-4">
-                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
                         <a href="{{route('widget.create')}}" class="btn btn-primary btn-set-task w-sm-100">

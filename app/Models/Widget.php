@@ -22,4 +22,10 @@ class Widget extends Model
         'model_id',
         'short_code'
     ];
+
+    protected $casts = [
+        'model_id' => 'json',
+        'album' => 'json',
+        'description' => 'json',
+    ];
 }

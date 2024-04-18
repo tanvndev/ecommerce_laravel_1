@@ -28,19 +28,27 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = [])
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = null, $whereInParams = [])
     {
         $query = $this->model->select($column);
+
         if (!empty($relation)) {
-            $query->customWhere($conditions);
             $query->relation($relation);
-        } else {
-            $query->customWhere($conditions);
         }
-        $query->customOrderBy($orderBy ?? null);
+
+        $query->customWhere($conditions);
+
+        if (!empty($whereInParams)) {
+            $query->whereIn($whereInParams['field'], $whereInParams['value']);
+        }
+
+        if (!is_null($orderBy)) {
+            $query->customOrderBy($orderBy);
+        }
 
         return $all ? $query->get() : $query->first();
     }
+
 
 
     public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false)

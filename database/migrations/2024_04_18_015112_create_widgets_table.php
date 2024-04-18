@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('keyword')->unique();
-            $table->text('description')->nullable();
+            $table->json('description')->nullable();
             $table->json('album')->nullable();
-            $table->tinyInteger('publish')->default(0);
             $table->json('model_id');
+            $table->tinyInteger('publish')->default(0);
             $table->string('model');
-            $table->string('short_code')->nullable();
+            $table->string('short_code')->unique();
             $table->softDeletes();
             $table->timestamps();
         });

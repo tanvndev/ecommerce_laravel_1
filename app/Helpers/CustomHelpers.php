@@ -87,3 +87,26 @@ if (!function_exists('buildMenu')) {
         return $output;
     }
 }
+
+if (!function_exists('convertArrayByKey')) {
+    function convertArrayByKey($data = null, $fields)
+    {
+        $outputs = [];
+
+        foreach ($data as $key => $value) {
+            foreach ($fields as $field) {
+                if (is_array($data)) {
+                    $outputs[$field][] = $value[$field] ?? null;
+                } else {
+                    $extract = explode('.', $field);
+                    if (count($extract) == 2) {
+                        $outputs[$extract[0]][] = $value->{$extract[1]}->first()->pivot->{$extract[0]};
+                    } else {
+                        $outputs[$field][] = $value->{$field} ?? null;
+                    }
+                }
+            }
+        }
+        return $outputs;
+    }
+}

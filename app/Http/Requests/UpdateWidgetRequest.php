@@ -23,15 +23,17 @@ class UpdateWidgetRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
+            'keyword' => 'required|string|unique:widgets,keyword,' . $this->id,
+            'short_code' => 'required|string|unique:widgets,short_code,' . $this->id
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên widget',
+            'keyword' => 'Từ khoá',
+            'short_code' => 'Shortcode',
         ];
     }
 

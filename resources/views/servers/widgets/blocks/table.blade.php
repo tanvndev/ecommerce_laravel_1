@@ -9,8 +9,9 @@
                 </div>
             </th>
             <th>{{__('messages.widget.table.name')}}</th>
+            @include('servers.includes.languageTableTh')
             <th>{{__('messages.keyword')}}</th>
-            <th>Model</th>
+            <th>Shortcode</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -25,11 +26,24 @@
             <td>
                 {{$widget->name}}
             </td>
+            @foreach ($languages as $language)
+            @if ($language->canonical == app()->getLocale())
+            @continue
+            @endif
+            @php
+            $translated = in_array($language->id, array_keys($widget->description));
+            @endphp
+            <td class="text-center ">
+                <a class="btn btn-link {{$translated ? 'text-success' : 'text-danger'}}"
+                    href="{{route('widget.translate', [$widget->id, $language->id])}}">{{$translated
+                    ? 'Đã dịch' : 'Chưa dịch'}}</a>
+            </td>
+            @endforeach
             <td>
                 {{$widget->keyword}}
             </td>
             <td>
-                -
+                {{$widget->short_code ?? '-'}}
             </td>
 
             <td>

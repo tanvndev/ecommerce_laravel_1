@@ -26,9 +26,10 @@ $(function () {
 
             if (html) {
                 resultContainer.html(html);
+                init.checkChooseModel();
             } else {
                 resultContainer.html(`
-                    <div class="search-widget-item">
+                    <div class="search-widget-item disabled">
                         <span class="search-widget-title">
                             Không tìm thấy kết quả.
                         </span>
@@ -47,7 +48,7 @@ $(function () {
             let _this = $(this);
             let model = _this
                 .parents(".widget-search-wrap")
-                .find("select[name='module']")
+                .find("select[name='model']")
                 .val();
             let option = {
                 _token,
@@ -58,7 +59,7 @@ $(function () {
             clearTimeout(typingTimeout);
 
             typingTimeout = setTimeout(function () {
-                if (!model) {
+                if (!model || model == 0) {
                     _this.val("");
                     return setToast("warning", "Vui lòng lựa chọn module.");
                 }
@@ -69,11 +70,11 @@ $(function () {
 
     // Hàm này khi chọn model sẽ gửi ajax
     init.chooseModel = () => {
-        $(document).on("change", "select[name='module']", function () {
+        $(document).on("change", "select[name='model']", function () {
             $(".search-model-result").empty();
             let _this = $(this);
             let model = _this.val();
-            if (!model) {
+            if (!model || model == 0) {
                 $(".search-widget-result").hide();
                 return setToast("warning", "Vui lòng lựa chọn module.");
             }
@@ -95,8 +96,9 @@ $(function () {
                     if (item.languages.length > 0) {
                         let name = item?.languages[0]?.pivot?.name;
                         let canonical = item?.languages[0]?.pivot?.canonical;
+
                         return /*html*/ `
-                            <div class="search-widget-item ${canonical}" 
+                            <div class="search-widget-item" 
                                 data-id="${item.id}" 
                                 data-title="${name}" 
                                 data-image="${item.image}" 
@@ -157,11 +159,16 @@ $(function () {
     // Ham nay render html model
     init.renderModelHtml = (data) => {
         let html = /*html*/ `
-            <div class="border-bottom search-model-item" data-modelid="${data.id}" data-canonical="${data.canonical}">
+            <div class="border-bottom search-model-item" data-modelid="${data.id}">
                 <div>
                     <img src="${data.image}"
                         alt="${data.title}">
                     <span>${data.title}</span>
+                    
+                    <input type="hidden" name="modelItem[id][]" value="${data.id}">
+                    <input type="hidden" name="modelItem[name][]" value="${data.title}">
+                    <input type="hidden" name="modelItem[image][]" value="${data.image}">
+                    <input type="hidden" name="modelItem[canonical][]" value="${data.canonical}">
                 </div>
                 <button type="button" class="btn-close delete-model-item" aria-label="Close"></button>
             </div>
@@ -170,10 +177,10 @@ $(function () {
     };
 
     // Kiểm model đã chưa khi đã có trong list
-    init.checkChooseMenu = () => {
-        if ($('input[name="menu[canonical][]"]').length > 0) {
-            $('input[name="menu[canonical][]"]').each(function () {
-                $(`[value="${$(this).val()}"]`).prop("checked", true);
+    init.checkChooseModel = () => {
+        if ($(".search-model-item").length > 0) {
+            $("input[name='modelItem[canonical][]']").each(function () {
+                $(`[data-canonical="${$(this).val()}"]`).addClass("active");
             });
         }
     };

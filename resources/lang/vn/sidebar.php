@@ -96,17 +96,10 @@ return [
         ],
         [
             'id' => 'widget',
-            'route' => '',
+            'route' => 'widget.index',
             'icon' => 'icofont-multimedia',
             'title' => 'QL widget',
             'activeCondition' => ['widget.*'],
-            'subMenu' => [
-                [
-                    'title' => 'QL widget',
-                    'route' => 'widget.index',
-                    'activeCondition' => ['widget.*'],
-                ],
-            ]
         ],
         [
             'id' => 'generalConfig',

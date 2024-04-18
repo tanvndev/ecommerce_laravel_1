@@ -45,7 +45,12 @@ $method = $config['method'] == 'create' ? 'POST' : 'PUT';
             {{-- Aside --}}
             @include('servers.widgets.blocks.aside')
             <div class="col-lg-9">
+                {{-- Main --}}
                 @include('servers.widgets.blocks.content', ['model'=> $widget ?? []])
+
+                {{-- Album --}}
+                @include('servers.includes.album')
+
             </div>
         </div><!-- Row end  -->
 

@@ -437,6 +437,11 @@ return [
             'success' => 'Xoá widget thành công.',
             'error' => 'Xoá widget thất bại.',
         ],
+        'translate' => [
+            'title' => 'Tạo bản dịch cho widget',
+            'success' => 'Cập nhập bản dịch thành công.',
+            'error' => 'Cập nhập bản dịch thất bại.',
+        ],
         'table' => [
             'name' => 'Tên widget',
         ]

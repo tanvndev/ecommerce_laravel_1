@@ -216,7 +216,7 @@ select::placeholder {
     background-color: #f3f4f6;
 }
 .search-widget-result .search-widget-item .icon-widget-check {
-    color: var(--primary-color);
+    color: #4dca88;
     visibility: hidden;
 }
 
@@ -229,7 +229,13 @@ select::placeholder {
     display: block;
     width: 100%;
 }
-
+.search-widget-item.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.search-widget-item.disabled:hover {
+    background-color: #fff;
+}
 .search-model-result {
     /* display: none; */
     padding: 0px 15px;

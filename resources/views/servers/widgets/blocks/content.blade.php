@@ -16,6 +16,7 @@
     </div>
 </div>
 
+
 <div class="card mb-3 card-create">
     <div class="card-header py-3 bg-transparent border-bottom-0">
         <h6 class="mb-0 fw-bold ">{{__('messages.contentConfiguration')}}</h6>
@@ -25,12 +26,13 @@
     <div class="card-body">
         <div class="row g-3 align-items-center widget-search-wrap">
             <div class="col-md-12">
-                {!! Form::label('description', __('messages.selectModule'), ['class' => 'form-label']) !!}
-                <select class="form-select init-select2" name="module">
-                    <option selected value="">{{__('messages.selectModule')}}</option>
-                    <option value="Post">Post</option>
-                    <option value="PostCatalogue">PostCatalogue</option>
-                </select>
+                {!! Form::label('model', __('messages.selectModule'), ['class' => 'form-label']) !!}
+
+                {!! Form::select('model', [__('messages.selectModule')] + __('module.model') , old('model',
+                $model->model ?? ''), ['class' =>
+                'form-select init-select2'])
+                !!}
+
             </div>
 
             <div class="col-md-12">
@@ -50,16 +52,31 @@
                 </div>
                 <div class="col-md-12">
                     <div class="search-model-result mt-3 ">
-                        {{-- <div class="search-model-item border-bottom ">
+                        @php
+                        $moduleItems = old('modelItem', $widgetItem ?? []);
+                        @endphp
+                        @if (isset($moduleItems) && !empty($moduleItems))
+                        @foreach ($moduleItems['id'] as $key => $value)
+                        <div class="border-bottom search-model-item" data-modelid="{{$value}}">
                             <div>
-                                <img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
-                                    alt="">
-                                <span>HINH THUC THANH TOAN DAT HANG ONLINE</span>
+                                <img src="{{$moduleItems['image'][$key]}}" alt="{{$moduleItems['name'][$key]}}">
+                                <span>{{$moduleItems['name'][$key]}}</span>
+
+                                <input type="hidden" name="modelItem[id][]" value="{{$value}}">
+                                <input type="hidden" name="modelItem[name][]" value="{{$moduleItems['name'][$key]}}">
+                                <input type="hidden" name="modelItem[image][]" value="{{$moduleItems['image'][$key]}}">
+                                <input type="hidden" name="modelItem[canonical][]"
+                                    value="{{$moduleItems['canonical'][$key]}}">
                             </div>
-                            <button type="button" class="btn-close" aria-label="Close"></button>
-                        </div> --}}
+                            <button type="button" class="btn-close delete-model-item" aria-label="Close"></button>
+                        </div>
+
+                        @endforeach
+                        @endif
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

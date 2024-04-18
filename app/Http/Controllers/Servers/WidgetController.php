@@ -79,6 +79,14 @@ class WidgetController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
+        $widget = $this->widgetRepository->findById($id);
+        $albums = $widget->album;
+        $widget->description = $widget->description[$this->currentLanguage] ?? null;
+
+        $repositoryInstance = $this->getRepositoryInstance($widget->model);
+        $widgetItem = convertArrayByKey($repositoryInstance->findByWhere(
+            ...array_values($this->menuItemAgrument($widget->model_id))
+        ), ['id', 'image', 'name.languages', 'canonical.languages']);
 
 
         $config['seo'] = __('messages.widget')['update'];
@@ -87,7 +95,29 @@ class WidgetController extends Controller
         return view('servers.widgets.store', compact([
             'config',
             'widget',
+            'albums',
+            'widgetItem',
         ]));
+    }
+
+    private function menuItemAgrument($whereIn)
+    {
+        return [
+            'condition' => [],
+            'column' => ['*'],
+            'relation' => [
+                ['languages' => function ($query) {
+                    $query->where('language_id', $this->currentLanguage);
+                }]
+            ],
+            'all' => true,
+            'orderBy' => [],
+            'params' => [
+                'field' => 'id',
+                'value' => $whereIn
+
+            ],
+        ];
     }
 
 
@@ -131,5 +161,32 @@ class WidgetController extends Controller
             return redirect()->route('widget.index')->with('toast_success', $successMessage);
         }
         return redirect()->route('widget.index')->with('toast_error', $errorMessage);
+    }
+
+    public function translate($id, $languageId)
+    {
+        $this->authorize('modules', 'widget.translate');
+
+        $widget = $this->widgetRepository->findById($id);
+        $baseDescription = $widget->description;
+
+        $widget->description = $baseDescription[$this->currentLanguage] ?? null;
+        $widget->translateDescription = $baseDescription[$languageId] ?? null;
+
+        $config['seo'] = __('messages.widget')['translate'];
+
+        return view('servers.widgets.translate', compact('config', 'widget'));
+    }
+
+
+    public function saveTranslate()
+    {
+        $successMessage = $this->getToastMessage('widget', 'success', 'translate');
+        $errorMessage = $this->getToastMessage('widget', 'error', 'translate');
+
+        if ($this->widgetService->saveTranslate()) {
+            return redirect()->route('widget.index')->with('toast_success', $successMessage);
+        }
+        return redirect()->back()->with('toast_error', $errorMessage);
     }
 }

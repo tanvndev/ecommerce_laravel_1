@@ -27,13 +27,14 @@ class WidgetService extends BaseService implements WidgetServiceInterface
             'publish' => request('publish'),
 
         ];
-
         $select = [
             'id',
             'name',
             'keyword',
             'model',
-            'publish'
+            'publish',
+            'short_code',
+            'description'
         ];
 
         //////////////////////////////////////////////////////////
@@ -47,51 +48,19 @@ class WidgetService extends BaseService implements WidgetServiceInterface
         return $widgets;
     }
 
-    private function whereRaw()
+    public function create()
     {
-        $rawConditions = [];
-        $widget_catalogue_id = request('widget_catalogue_id');
-        if ($widget_catalogue_id > 0) {
-            $rawConditions['whereRaw'] = [
-                [
-                    'tb3.widget_catalogue_id IN (
-                        SELECT id 
-                        FROM widget_catalogues
-                        INNER JOIN widget_catalogue_language as pcl ON pcl.widget_catalogue_id = widget_catalogues.id 
-                        WHERE `left` >= (SELECT `left` FROM widget_catalogues as pc WHERE pc.id = ?)
-                        AND `right` <= (SELECT `right` FROM widget_catalogues as pc WHERE pc.id = ?)
-                        AND pcl.language_id = ?
-                    )',
-                    [$widget_catalogue_id, $widget_catalogue_id, session('currentLanguage')]
-                ]
+
+        DB::beginTransaction();
+        try {
+
+            $payload = request()->only('name', 'keyword', 'album', 'short_code', 'model');
+            $payload['model_id'] = request('modelItem.id');
+            $payload['description'] = [
+                session('currentLanguage') ?? 1 => request('description'),
             ];
-        }
-        return $rawConditions;
-    }
 
-    function create()
-    {
-
-        DB::beginTransaction();
-        try {
-
-            //   Lấy ra payload và format lai
-            $payload = request()->only($this->payload());
-            $payload = $this->formatJson($payload, 'album');
-            // Lấy ra id người dùng hiện tại
-            $payload['user_id'] = Auth::id();
-
-            // Create widget
-            $widget = $this->widgetRepository->create($payload);
-            if ($widget->id > 0) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($widget->id);
-                // Create pivot and sync
-                $this->createPivotAndSync($widget, $payloadLanguage);
-
-                // create router
-                $this->createRouter($widget);
-            }
+            $this->widgetRepository->create($payload);
 
             DB::commit();
             return true;
@@ -104,32 +73,25 @@ class WidgetService extends BaseService implements WidgetServiceInterface
     }
 
 
-    function update($id)
+    public function update($id)
     {
 
         DB::beginTransaction();
         try {
-            // Lấy ra dữ liệu của widget hiện tại để xoá;
+
+            $payload = request()->only('name', 'keyword', 'album', 'short_code', 'model');
+            $payload['model_id'] = request('modelItem.id');
+
+            // Lấy mô tả hiện tại của widget
             $widget = $this->widgetRepository->findById($id);
+            $widgetDescription = $widget->description;
 
-            // Lấy ra payload và format lai
-            $payload = request()->only($this->payload());
-            $payload = $this->formatJson($payload, 'album');
-            // Update widget
-            $updateWidget = $this->widgetRepository->update($id, $payload);
+            $widgetDescription[session('currentLanguage')] = request('description');
 
-            if ($updateWidget) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($id);
-                // Xoá bản ghi cũa một pivot
-                $widget->languages()->detach([$payloadLanguage['language_id'], $id]);
-                // Create pivot and sync
-                $this->createPivotAndSync($widget, $payloadLanguage);
+            // Cập nhật mô tả của widget với mô tả mới
+            $payload['description'] = $widgetDescription;
 
-                // update router
-                $this->updateRouter($widget);
-            }
-
+            $this->widgetRepository->update($id, $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -138,42 +100,6 @@ class WidgetService extends BaseService implements WidgetServiceInterface
             die;
             return false;
         }
-    }
-
-    private function catalogue()
-    {
-        if (!empty(request('catalogue'))) {
-            return array_unique(array_merge(
-                request('catalogue'),
-                [request('widget_catalogue_id')],
-            ));
-        }
-        return [request('widget_catalogue_id')];
-    }
-
-
-    private function formatPayloadLanguage($widgetId)
-    {
-        $payloadLanguage = request()->only($this->payloadLanguage());
-        //Đinh dạng slug
-        $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
-
-        // Lấy ra widget_id 
-        $payloadLanguage['widget_id'] = $widgetId;
-        // Lấy ra language_id mặc định
-        $payloadLanguage['language_id'] = session('currentLanguage');
-        return $payloadLanguage;
-    }
-
-    private function createPivotAndSync($widget, $payloadLanguage)
-    {
-        // Tạo ra pivot vào bảng widget_language
-        $this->widgetRepository->createPivot($widget, $payloadLanguage, 'languages');
-
-        // Lấy ra id catalogue
-        $catalogue = $this->catalogue();
-        // Đồng bộ hoá id catalogue với bảng widget_catalogue_widget
-        $widget->widget_catalogues()->sync($catalogue);
     }
 
 
@@ -197,13 +123,28 @@ class WidgetService extends BaseService implements WidgetServiceInterface
         }
     }
 
-    private function payload()
+    public function saveTranslate()
     {
-        return ['widget_catalogue_id', 'image', 'follow', 'publish', 'album'];
-    }
+        DB::beginTransaction();
+        try {
+            $widget = $this->widgetRepository->findById(request('widgetId'));
 
-    private function payloadLanguage()
-    {
-        return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+            // Lấy ra danh sách ngôn ngữ
+            $widgetDescription = $widget->description;
+
+            // Cập nhật mô tả dịch cho ngôn ngữ cụ thể
+            $widgetDescription[request('languageId')] = request('translate_description');
+
+            // Cập nhật mô tả của widget với mô tả dịch mới
+            $widget->description = $widgetDescription;
+            $widget->save();
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            return false;
+        }
     }
 }

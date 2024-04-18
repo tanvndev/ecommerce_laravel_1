@@ -47,7 +47,7 @@ class SlideService extends BaseService implements SlideServiceInterface
         return $slides;
     }
 
-    public function convertSlidesToArray($slides = [])
+    public function convertSlidesToArray($slides = null)
     {
         $fields = ['image', 'description', 'canonical', 'window', 'name', 'alt'];
         $slide = array_fill_keys($fields, []);
