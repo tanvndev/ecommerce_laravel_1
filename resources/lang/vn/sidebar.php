@@ -84,33 +84,17 @@ return [
         ],
         [
             'id' => 'slide',
-            'route' => '',
+            'route' => 'slide.index',
             'icon' => 'icofont-image',
-            'title' => 'QL Slide & Banner',
+            'title' => 'QL Slide',
             'activeCondition' => ['slide.*'],
-            'subMenu' => [
-                [
-                    'title' => 'Cài đặt slide',
-                    'route' => 'slide.index',
-                    'activeCondition' => ['slide.*'],
-                ],
-
-            ]
         ],
         [
             'id' => 'menu',
-            'route' => '',
+            'route' => 'menu.index',
             'icon' => 'icofont-chart-flow',
-            'title' => 'QL menu',
+            'title' => 'QL Menu',
             'activeCondition' => ['menu.*'],
-            'subMenu' => [
-                [
-                    'title' => 'Cài đặt menu',
-                    'route' => 'menu.index',
-                    'activeCondition' => ['menu.*']
-                ],
-
-            ]
         ],
         [
             'id' => 'generalConfig',
