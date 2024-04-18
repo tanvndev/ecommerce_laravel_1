@@ -81,6 +81,26 @@ return [
             ]
         ],
         [
+            'id' => 'promotion',
+            'route' => '',
+            'icon' => 'icofont-handshake-deal',
+            'title' => 'QL Marketing',
+            'activeCondition' => ['promotion.*', 'coupon.*'],
+            'subMenu' => [
+                [
+                    'title' => 'QL Khuyến mãi',
+                    'route' => 'promotion.index',
+                    'activeCondition' => ['promotion.*'],
+                ],
+                // [
+                //     'title' => 'QL Mã giảm giá',
+                //     'route' => 'coupon.index',
+                //     'activeCondition' => ['coupon.*'],
+                // ],
+
+            ]
+        ],
+        [
             'id' => 'slide',
             'route' => 'slide.index',
             'icon' => 'icofont-image',
@@ -98,7 +118,7 @@ return [
             'id' => 'widget',
             'route' => 'widget.index',
             'icon' => 'icofont-multimedia',
-            'title' => 'QL widget',
+            'title' => 'QL Widget',
             'activeCondition' => ['widget.*'],
         ],
         [

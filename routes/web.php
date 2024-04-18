@@ -26,7 +26,8 @@ use App\Http\Controllers\Servers\{
     MenuController,
     SlideController,
     WidgetController,
-    //@@new-controller-module@@
+    PromotionController,
+//@@new-controller-module@@
 
 };
 
@@ -213,7 +214,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('{id}/{languageId}/translate', [WidgetController::class, 'translate'])->where(['id' => '[0-9]+', 'languageId' => '[0-9]+'])->name('translate');
         Route::put('saveTranslate', [WidgetController::class, 'saveTranslate'])->name('saveTranslate');
     });
-    //@@new-route-module@@
+    
+    // Routes for PromotionController
+    Route::prefix('promotion')->name('promotion.')->group(function () {
+        Route::get('index', [PromotionController::class, 'index'])->name('index');
+        Route::get('create', [PromotionController::class, 'create'])->name('create');
+        Route::post('store', [PromotionController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [PromotionController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [PromotionController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [PromotionController::class, 'destroy'])->name('destroy');
+    });
+//@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 

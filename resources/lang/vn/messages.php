@@ -446,7 +446,46 @@ return [
             'name' => 'Tên widget',
         ]
     ],
+    'promotion' => [
+        'index' => [
+            'title' => 'Danh sách khuyến mãi',
+            'table' => 'Thông tin khuyến mãi',
+            'create' => 'Tạo mới khuyến mãi'
+        ],
+        'create' => [
+            'title' => 'Tạo mới khuyến mãi',
+            'success' => 'Tạo mới khuyến mãi thành công.',
+            'error' => 'Tạo mới khuyến mãi thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập khuyến mãi',
+            'success' => 'Cập nhập khuyến mãi thành công.',
+            'error' => 'Cập nhập khuyến mãi thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá khuyến mãi thành công.',
+            'error' => 'Xoá khuyến mãi thất bại.',
+        ],
+        'translate' => [
+            'title' => 'Tạo bản dịch cho khuyến mãi',
+            'success' => 'Cập nhập bản dịch thành công.',
+            'error' => 'Cập nhập bản dịch thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên chương trình',
+            'code' => 'Mã khuyến mãi',
+            'promotionType' => 'Chọn hình thức khuyến mãi',
+        ]
+    ],
+
     'selectModule' => 'Chọn module',
+    'infoDetail' => 'Thông tin chi tiết',
+    'timeApplication' => 'Thời gian áp dụng chương trình',
+    'applicableCustomer' => 'Nguồn khách áp dụng',
+    'applicableObject' => 'Đối tượng áp dụng',
+    'noStoppingDay' => 'Không ngày kết thúc',
+    'startDate' => 'Thời gian bắt đầu',
+    'endDate' => 'Thời gian kết thúc',
     'contentConfiguration' => 'Cấu hình nội dung',
     'errorChildDelete' => 'Không thể xoá do vẫn còn danh mục con.',
     'parentId' => 'Danh mục cha',
