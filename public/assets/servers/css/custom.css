@@ -169,6 +169,99 @@ select::placeholder {
     color: #0dcaf0;
     cursor: pointer;
 }
+.search-widget-wrap {
+    padding: 0 10px;
+    margin-top: 20px;
+    position: relative;
+}
+.search-widget-wrap .input-widget-search {
+    padding: 10px 10px 10px 38px;
+}
+.search-widget-wrap .icon-search {
+    position: absolute;
+    left: 25px;
+    top: 16px;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 16px;
+    z-index: 1;
+}
+.search-widget-result {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 5%);
+    top: 52px;
+    left: 10px;
+    right: 10px;
+    border-radius: 4px;
+    z-index: 1;
+}
+.search-widget-result .search-widget-item {
+    padding: 5px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.search-widget-result .search-widget-item:hover {
+    background-color: #f3f4f6;
+}
+.search-widget-result .search-widget-item i {
+    font-size: 20px;
+}
+.search-widget-result .search-widget-item.active {
+    background-color: #f3f4f6;
+}
+.search-widget-result .search-widget-item .icon-widget-check {
+    color: var(--primary-color);
+    visibility: hidden;
+}
+
+.search-widget-result .search-widget-item.active .icon-widget-check {
+    visibility: visible;
+}
+
+.search-widget-title {
+    padding: 10px;
+    display: block;
+    width: 100%;
+}
+
+.search-model-result {
+    /* display: none; */
+    padding: 0px 15px;
+}
+.search-model-result .search-model-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.search-model-result .search-model-item:last-child {
+    border-bottom: none !important;
+}
+
+.search-model-result .search-model-item img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 6px;
+}
+.search-model-result .search-model-item span {
+    font-size: 16px;
+    margin-left: 10px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+.search-model-result .search-model-item button {
+    font-size: 12px;
+}
+
 /* .modal-custom-delete */
 
 .modal-custom-delete .modal .modal-content {

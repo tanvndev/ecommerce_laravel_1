@@ -45,7 +45,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Slide
         'App\Services\Interfaces\SlideServiceInterface' => 'App\Services\SlideService',
-    ];
+    // Widget
+'App\Services\Interfaces\WidgetServiceInterface' => 'App\Services\WidgetService',
+];
     public function register(): void
     {
         // 

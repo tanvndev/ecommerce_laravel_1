@@ -32,7 +32,6 @@ return [
                 ],
             ]
         ],
-
         [
             'id' => 'post',
             'route' => '',
@@ -52,7 +51,6 @@ return [
                 ],
             ]
         ],
-
         [
             'id' => 'product',
             'route' => '',
@@ -95,6 +93,20 @@ return [
             'icon' => 'icofont-chart-flow',
             'title' => 'QL Menu',
             'activeCondition' => ['menu.*'],
+        ],
+        [
+            'id' => 'widget',
+            'route' => '',
+            'icon' => 'icofont-multimedia',
+            'title' => 'QL widget',
+            'activeCondition' => ['widget.*'],
+            'subMenu' => [
+                [
+                    'title' => 'QL widget',
+                    'route' => 'widget.index',
+                    'activeCondition' => ['widget.*'],
+                ],
+            ]
         ],
         [
             'id' => 'generalConfig',

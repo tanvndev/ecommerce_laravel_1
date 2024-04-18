@@ -10,6 +10,7 @@ interface BaseRepositoryInterface
     public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false);
     public function create($payload = []);
     public function createBatch($payload = []);
+    public function createPivot($model, $payload = [], $relation = '');
     public function update($modelId, $payload = []);
     public function save($modelId, $payload = []);
     public function updateByWhereIn($whereInField = '', $whereIn = [], $payload = []);
@@ -29,5 +30,5 @@ interface BaseRepositoryInterface
         $groupBy = [],
         $rawQuery = [],
     );
-    public function createPivot($model, $payload = [], $relation = '');
+    public function findWidgetItem($condition = [], $column = ['*'], $alias = '', $languageId = 1);
 }

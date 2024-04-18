@@ -25,6 +25,7 @@ use App\Http\Controllers\Servers\{
     SystemController,
     MenuController,
     SlideController,
+    WidgetController,
     //@@new-controller-module@@
 
 };
@@ -200,6 +201,16 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [SlideController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [SlideController::class, 'destroy'])->name('destroy');
     });
+
+    // Routes for WidgetController
+    Route::prefix('widget')->name('widget.')->group(function () {
+        Route::get('index', [WidgetController::class, 'index'])->name('index');
+        Route::get('create', [WidgetController::class, 'create'])->name('create');
+        Route::post('store', [WidgetController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [WidgetController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [WidgetController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [WidgetController::class, 'destroy'])->name('destroy');
+    });
     //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
@@ -210,6 +221,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
     Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->middleware('admin')->name('ajax.dashboard.getMenu');
+    Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->middleware('admin')->name('ajax.dashboard.findModelObject');
     Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->middleware('admin')->name('ajax.attribute.getAttribute');
     Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->middleware('admin')->name('ajax.attribute.loadAttribute');
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');

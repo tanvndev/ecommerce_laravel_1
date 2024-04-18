@@ -417,6 +417,32 @@ return [
             'attributeCatalogue' => 'Chọn nhóm slide & banner',
         ]
     ],
+    'widget' => [
+        'index' => [
+            'title' => 'Danh sách widget',
+            'table' => 'Thông tin widget',
+            'create' => 'Tạo mới widget'
+        ],
+        'create' => [
+            'title' => 'Tạo mới widget',
+            'success' => 'Tạo mới widget thành công.',
+            'error' => 'Tạo mới widget thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập widget',
+            'success' => 'Cập nhập widget thành công.',
+            'error' => 'Cập nhập widget thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá widget thành công.',
+            'error' => 'Xoá widget thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên widget',
+        ]
+    ],
+    'selectModule' => 'Chọn module',
+    'contentConfiguration' => 'Cấu hình nội dung',
     'errorChildDelete' => 'Không thể xoá do vẫn còn danh mục con.',
     'parentId' => 'Danh mục cha',
     'catalogueSub' => 'Danh mục phụ',
@@ -457,6 +483,7 @@ return [
         'canonical' => 'Đường dẫn',
     ],
     'slideName' => 'Tên Slide',
+    'searchHere' => 'Tìm kiếm ở đây...',
     'addSlide' => 'Thêm slide',
     'keyword' => 'Từ khoá',
     'seoExample' => ['duong-dan-cua-ban', 'Bạn chưa nhập tiêu đề', 'Bạn

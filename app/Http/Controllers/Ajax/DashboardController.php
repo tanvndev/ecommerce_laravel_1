@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\ajax;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -95,5 +94,21 @@ class DashboardController extends Controller
             'relations' => [],
             'groupBy' =>  $select,
         ];
+    }
+
+    public function findModelObject(Request $request)
+    {
+        $repository = $this->getRepositoryInstance($request->model);
+        $languageTable = Str::snake($request->model) . '_language';
+        $object = $repository->findWidgetItem(
+            [
+                'name' => ['like', '%' . $request->keyword . '%']
+            ],
+            ['id', 'image'],
+            $languageTable,
+            $this->currentLanguage
+        );
+
+        return response()->json($object);
     }
 }

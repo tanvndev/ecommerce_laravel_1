@@ -1,23 +1,23 @@
 @extends('layouts.serverLayout')
 
 @section('style')
-<link href="{{asset('assets/servers/plugin/nice-select/nice-select.css')}}" rel="stylesheet" />
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 
 @section('script')
-<script src="{{ asset('assets/servers/plugin/nice-select/jquery.nice-select.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.js')}}"></script>
+<script src="{{ asset('assets/servers/plugin/ckeditor/ckeditor.js')}}"></script>
 <script src="{{ asset('assets/servers/js/library/ckfinder.js')}}"></script>
-<script src="{{ asset('assets/servers/js/library/slide.js')}}"></script>
+<script src="{{ asset('assets/servers/js/library/widget.js')}}"></script>
 
 @endsection
 
 @section('content')
 @php
-$url = $config['method'] == 'create' ? route('slide.store') : route('slide.update', $slide->id);
+$url = $config['method'] == 'create' ? route('widget.store') : route('widget.update', $widget->id);
 $method = $config['method'] == 'create' ? 'POST' : 'PUT';
 @endphp
 
@@ -40,13 +40,12 @@ $method = $config['method'] == 'create' ? 'POST' : 'PUT';
 
 
         <div class="row g-3 mb-3 justify-content-center ">
+
             @include('servers.includes.messageError')
-
             {{-- Aside --}}
-            @include('servers.slides.blocks.aside')
-
+            @include('servers.widgets.blocks.aside')
             <div class="col-lg-9">
-                @include('servers.slides.blocks.list')
+                @include('servers.widgets.blocks.content', ['model'=> $widget ?? []])
             </div>
         </div><!-- Row end  -->
 

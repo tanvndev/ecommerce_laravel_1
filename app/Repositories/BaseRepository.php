@@ -32,7 +32,8 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $query = $this->model->select($column);
         if (!empty($relation)) {
-            $query->customWhere($conditions)->relation($relation);
+            $query->customWhere($conditions);
+            $query->relation($relation);
         } else {
             $query->customWhere($conditions);
         }
@@ -40,6 +41,7 @@ class BaseRepository implements BaseRepositoryInterface
 
         return $all ? $query->get() : $query->first();
     }
+
 
     public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false)
     {
@@ -151,5 +153,24 @@ class BaseRepository implements BaseRepositoryInterface
 
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
         return $query->paginate($perPage)->withQueryString();
+    }
+
+    public function findWidgetItem($condition = [], $column = ['*'], $alias = '', $languageId = 1)
+    {
+        return $this->model
+            ->select($column)
+            ->with([
+                'languages' => function ($query) use ($languageId) {
+                    $query->where('language_id', $languageId);
+                }
+            ])
+            ->when($condition, function ($query) use ($condition, $alias) {
+                $query->whereHas('languages', function ($query) use ($condition, $alias) {
+                    foreach ($condition as $column => $value) {
+                        $query->where($alias . '.' . $column, ...$value);
+                    }
+                });
+            })
+            ->get();
     }
 }
