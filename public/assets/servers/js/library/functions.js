@@ -23,11 +23,26 @@ const formatToCommas = (nStr) => {
     return str;
 };
 
+const formatCommasToNumber = (str) => {
+    // Loại bỏ dấu phẩy trong chuỗi
+    let numberString = str.replace(/\./g, "");
+    // Chuyển chuỗi thành số nguyên
+    let number = parseInt(numberString, 10);
+    return number;
+};
+
 // Hàm này Chạy thông báo Toast
 const setToast = (icon, title) => {
     Toast.fire({
-        icon: icon,
-        title: title,
+        icon,
+        title,
+    });
+};
+
+const setAlertBasic = (icon, title) => {
+    Swal.fire({
+        icon,
+        title,
     });
 };
 

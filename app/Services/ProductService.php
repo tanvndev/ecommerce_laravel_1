@@ -103,7 +103,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             //   Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatPayloadtoJson($payload);
-            $payload['price'] = convertPrice($payload['price']);
+            $payload['price'] = convertPrice($payload['price'] ?? 0);
             // Lấy ra id người dùng hiện tại
             $payload['user_id'] = Auth::id();
 
@@ -116,11 +116,14 @@ class ProductService extends BaseService implements ProductServiceInterface
                 // Create pivot and sync
                 $this->createPivotAndSync($product, $payloadLanguage);
 
+
                 // create router
                 $this->createRouter($product);
 
-                // Tạo ra nhiều phiên bản
-                $this->createVariant($product);
+                if (null !== request('attribute') && !empty(request('attribute'))) {
+                    // Tạo ra nhiều phiên bản
+                    $this->createVariant($product);
+                }
             }
 
             DB::commit();
@@ -241,6 +244,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             // Lấy ra payload và format lai
             $payload = request()->only($this->payload());
             $payload = $this->formatJson($payload, 'album');
+            $payload['price'] = convertPrice($payload['price'] ?? 0);
             // Update product
             $updateProduct = $this->productRepository->update($id, $payload);
 
@@ -263,8 +267,11 @@ class ProductService extends BaseService implements ProductServiceInterface
                     $variant->delete();
                 });
 
-                // Tạo ra nhiều phiên bản
-                $this->createVariant($product);
+
+                if (null !== request('attribute') && !empty(request('attribute'))) {
+                    // Tạo ra nhiều phiên bản
+                    $this->createVariant($product);
+                }
             }
 
             DB::commit();

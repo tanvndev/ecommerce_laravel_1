@@ -28,6 +28,7 @@
 </script>
 
 <script src="{{ asset('assets/servers/js/library/variant.js')}}"></script>
+
 @endsection
 
 @section('content')

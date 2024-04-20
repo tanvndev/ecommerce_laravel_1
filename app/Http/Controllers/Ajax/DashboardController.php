@@ -111,4 +111,29 @@ class DashboardController extends Controller
 
         return response()->json($object);
     }
+
+    public function findPromotionObject(Request $request)
+    {
+        $modelName = $request->option['model'];
+        $repository = $this->getRepositoryInstance($modelName);
+        $languageTable = Str::snake($modelName) . '_language';
+        $object = $repository->findWidgetItem(
+            [
+                'name' => ['like', '%' . $request->search . '%']
+            ],
+            ['id', 'image'],
+            $languageTable,
+            $this->currentLanguage
+        );
+
+
+        $objectMapped = $object->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'text' => $item->languages->first()->pivot->name
+            ];
+        });
+
+        return response()->json(array('items' => $objectMapped));
+    }
 }

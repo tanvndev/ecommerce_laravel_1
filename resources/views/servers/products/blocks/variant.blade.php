@@ -19,14 +19,15 @@
         <div class="variant-body">
             @php
             $variantCatalogues = old('attributeCatalogue', isset($product) ? json_decode($product->attributeCatalogue,
-            true) : []);
+            true) : [])
             @endphp
 
+            @empty(!$variantCatalogues)
             @foreach ($variantCatalogues as $keyAttrCatalogue => $valAttrCatalogue)
             <div class="row d-flex align-items-center variant-item">
                 <div class="col-md-4">
                     <label class="form-label text-info">Chọn thuộc tính</label>
-                    <select class="init-nice-select w-100 choose-attribute" name="attributeCatalogue[]">
+                    <select class="init-nice-select-replace w-100 choose-attribute" name="attributeCatalogue[]">
                         <option selected>Chọn thuộc tính</option>
                         @foreach ($attributeCatalogues as $attributeCatalogue)
                         <option {{ $valAttrCatalogue==$attributeCatalogue->id ? 'selected' : '' }} value="{{
@@ -36,6 +37,7 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="col-md-7">
                     <label class="form-label text-info">Chọn giá trị tìm kiếm (nhập 2 từ để tìm kiếm)</label>
                     <div class="select-variant-wrap">
@@ -51,6 +53,7 @@
                 </div>
             </div>
             @endforeach
+            @endempty
         </div>
         <div class="col-md-4 mt-4 btn-add-variant-wrap">
             <button type="button" class="btn btn-outline-info w-100 border-style-dashed add-variant">Tạo phiên bản

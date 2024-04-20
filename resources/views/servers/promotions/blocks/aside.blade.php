@@ -14,13 +14,13 @@
                     {!! Form::label('end_date', __('messages.endDate'), ['class' => 'form-label']) !!}
                     {!! Form::datetimeLocal('end_date', old('end_date', $promotion->end_date ?? date('Y-m-d\TH:i')),
                     ['class' => 'form-control']) !!}
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="col-md-12 ">
                     <div class="d-flex align-items-center ">
                         {!! Form::label('', __('messages.noStoppingDay') , ['class' => 'form-label mb-0']) !!}
                         <div class="checkbox-wrapper-35 ms-4 ">
-                            {{ Form::checkbox('setting[neverEnd]', 'active',
-                            old('setting.neverEnd', $slide->setting['neverEnd'] ?? ''), ['id' =>
+                            {{ Form::checkbox('neverEnd', 'active', old('neverEnd', $slide->neverEnd ?? ''), ['id' =>
                             'switch-neverEnd-setting', 'class' => 'switch']) }}
                             <label for="switch-neverEnd-setting">
                                 <span class="switch-x-text">{{__('messages.status')}}</span>
@@ -42,21 +42,23 @@
                 <h6 class="m-0 fw-bold">{{__('messages.applicableCustomer')}}</h6>
             </div>
             <div class="card-body">
-                <div class="col-md-12 ">
-
-                    @foreach (__('general.navigate') as $navigate => $title)
-                    @php
-                    $settingNavigate = old('setting.navigate', ($slide->setting['navigate'] ?? null));
-                    $checked = ($settingNavigate == $navigate || ($settingNavigate == null && $navigate
-                    == 'dots'));
-                    @endphp
-                    <div class="form-check">
-                        {{ Form::radio('setting[navigate]', $navigate, $checked, ['class' =>
-                        'form-check-input', 'id' => "$navigate-$title"]) }}
-                        {{ Form::label("$navigate-$title", $title, ['class' => 'form-check-label']) }}
+                <div class="col-md-12 source-inner">
+                    <div class="form-check fs-15 mb-2 ">
+                        {{ Form::radio('source', 'all', true, ['class' =>'form-check-input', 'id' =>
+                        "all-source"]) }}
+                        {{ Form::label("all-source", 'Áp dụng cho toàn bộ nguồn khách', ['class' => 'form-check-label'])
+                        }}
                     </div>
-                    @endforeach
+
+                    <div class="form-check fs-15 mb-4">
+                        {{ Form::radio('source', 'choose', '', ['class' =>'form-check-input', 'id' =>
+                        "choose-source"]) }}
+                        {{ Form::label("choose-source", 'Chọn nguồn khách áp dụng', ['class' => 'form-check-label'])
+                        }}
+                    </div>
+
                 </div>
+
             </div>
         </div>
 
@@ -65,19 +67,19 @@
                 <h6 class="m-0 fw-bold">{{__('messages.applicableObject')}}</h6>
             </div>
             <div class="card-body">
-                <div class="col-md-12 ">
-                    @foreach (__('general.navigate') as $navigate => $title)
-                    @php
-                    $settingNavigate = old('setting.navigate', ($slide->setting['navigate'] ?? null));
-                    $checked = ($settingNavigate == $navigate || ($settingNavigate == null && $navigate
-                    == 'dots'));
-                    @endphp
-                    <div class="form-check">
-                        {{ Form::radio('setting[navigate]', $navigate, $checked, ['class' =>
-                        'form-check-input', 'id' => "$navigate-$title"]) }}
-                        {{ Form::label("$navigate-$title", $title, ['class' => 'form-check-label']) }}
+                <div class="col-md-12 apply-condition-inner">
+                    <div class="form-check fs-15 mb-2">
+                        {{ Form::radio('apply', 'all', true, ['class' =>'form-check-input', 'id' => "all-apply"]) }}
+                        {{ Form::label("all-apply", 'Áp dụng cho toàn bộ nguồn khách', ['class' => 'form-check-label'])
+                        }}
                     </div>
-                    @endforeach
+
+                    <div class="form-check fs-15 mb-4">
+                        {{ Form::radio('apply', 'choose', '', ['class' =>'form-check-input', 'id' =>
+                        "choose-apply"]) }}
+                        {{ Form::label("choose-apply", 'Chọn nguồn khách áp dụng', ['class' => 'form-check-label'])
+                        }}
+                    </div>
                 </div>
             </div>
         </div>

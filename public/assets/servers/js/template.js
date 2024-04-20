@@ -11,6 +11,16 @@ $(function () {
         $(this).val(value);
     });
 
+    $(".limit-percent").on("input", function () {
+        let value = parseInt($(this).val());
+        if (value > 100) {
+            $(this).val(100);
+        }
+        if (value < 0) {
+            $(this).val(0);
+        }
+    });
+
     $(".convert-to-slug").on("input", function () {
         let value = $(this).val();
         value = value.replace(/ /g, "-");
@@ -19,6 +29,10 @@ $(function () {
 
     if ($(".init-nice-select").length > 0) {
         $(".init-nice-select").niceSelect();
+    }
+
+    if ($(".init-nice-select-replace").length > 0) {
+        $(".init-nice-select-replace").niceSelect();
     }
 
     // auto expand textarea

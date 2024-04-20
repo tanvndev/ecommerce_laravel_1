@@ -10,7 +10,7 @@
 <script>
     var BASE_URL = "{{ url('/') }}";
 </script>
-<script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.html') }}"></script>
+{{-- <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.html') }}"></script> --}}
 
 @yield('style')
 

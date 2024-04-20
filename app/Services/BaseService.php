@@ -55,6 +55,7 @@ class BaseService implements BaseServiceInterface
     {
         $payloadRoute = $this->formatPayloadRoute($model, $this->controllerName);
         return $this->routerRepository->create($payloadRoute);
+        // dd($payloadRoute);
     }
 
     protected function updateRouter($model)
@@ -62,8 +63,11 @@ class BaseService implements BaseServiceInterface
         $payloadRoute = $this->formatPayloadRoute($model, $this->controllerName);
         $condition = [
             'module_id' => ['=', $model->id],
-            'controllers' => ['=', 'App\Http\Controllers\Clients\\' . $this->controllerName]
+            'controllers' => ['=', 'App\Http\Controllers\Clients\\' . $this->controllerName],
+            'language_id' => ['=', session('currentLanguage')]
         ];
+        // $this->routerRepository->forceDeleteByWhere($condition);
+        // return $this->routerRepository->create($payloadRoute);
         return $this->routerRepository->updateByWhere($condition, $payloadRoute);
     }
 

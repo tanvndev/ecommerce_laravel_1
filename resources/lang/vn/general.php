@@ -26,6 +26,31 @@ return [
         'hide' => 'Ẩn',
         'dots' => 'Dấu chấm',
         'thumbnails' => 'Ảnh thumbnails',
-    ]
+    ],
+    'promotion' => [
+        'order_amount_range' => 'Chiết khấu theo tổng giá trị đơn hàng',
+        'product_and_quantity' => 'Chiết khấu theo từng sản phẩm',
+        'product_quantity_range' => 'Chiết khấu theo số lượng sản phẩm',
+        'goods_discount_by_quantity' => 'Mua sản phẩm - giảm giá sản phẩm',
+
+        'membership_discount' => 'Chiết khấu thành viên',
+        'time_limited_offer' => 'Ưu đãi có hạn',
+        'first_purchase_discount' => 'Chiết khấu cho lần mua hàng đầu tiên',
+        'bundle_discount' => 'Chiết khấu gói sản phẩm',
+        'coupon_code_discount' => 'Chiết khấu mã giảm giá',
+        'free_shipping' => 'Miễn phí vận chuyển',
+        'loyalty_program' => 'Chương trình khách hàng thân thiết',
+        'seasonal_sale' => 'Khuyến mãi theo mùa',
+        'flash_sale' => 'Khuyến mãi chớp nhoáng',
+        'buy_one_get_one' => 'Mua một tặng một',
+        'refer_a_friend_discount' => 'Chiết khấu giới thiệu bạn bè',
+        'clearance_sale' => 'Khuyến mãi hàng dư',
+        'birthday_discount' => 'Chiết khấu sinh nhật',
+        'bulk_purchase_discount' => 'Chiết khấu mua hàng số lượng lớn',
+    ],
+    'promotion_select_product_and_quantity' => [
+        'Product' => 'Phiên bản sản phẩm',
+        'ProductCatalogue' => 'Loại sản phẩm',
+    ],
 
 ];

@@ -125,6 +125,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
                 // Tạo ra pivot vào bảng {privotTable}
                 $this->createPivotLanguage($productCatalogue, $payloadLanguage);
 
+                // dd($payload);
                 // update router
                 $this->updateRouter($productCatalogue);
 
