@@ -528,7 +528,8 @@ table.table-variant thead .table-dark {
             flex-wrap: wrap;
             justify-content: space-between;
 
-            .goods-item {
+            .goods-item,
+            .goods-item-2 {
                 padding: 7px 12px;
                 background-color: rgb(136, 200, 255, 0.3);
                 color: var(--text-color);
@@ -546,6 +547,7 @@ table.table-variant thead .table-dark {
                     overflow: hidden;
                     // max-width: 100px;
                     margin-right: 4px;
+                    font-weight: 600;
                 }
 
                 .btn-close {
@@ -555,7 +557,11 @@ table.table-variant thead .table-dark {
                 }
 
                 &:last-child {
+                    cursor: pointer;
                     background-color: transparent;
+                }
+                &.last-child {
+                    font-weight: 600;
                 }
             }
         }
@@ -640,6 +646,7 @@ table.table-variant thead .table-dark {
             padding-top: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
 
             &:first-child {
                 padding-top: 0;
@@ -662,7 +669,9 @@ table.table-variant thead .table-dark {
                 padding-left: 8px;
                 display: flex;
                 align-items: center;
-
+                // .product-img {
+                //     flex: 1 80px;
+                // }
                 .product-img img {
                     background-color: transparent;
                     width: 60px;
@@ -673,10 +682,11 @@ table.table-variant thead .table-dark {
                 }
 
                 .product-title {
-                    padding-left: 20px;
+                    padding-left: 15px;
                     .name {
                         font-weight: 600;
                         font-size: 14px;
+                        text-wrap: pretty;
                     }
                     .variant {
                         padding-left: 4px;

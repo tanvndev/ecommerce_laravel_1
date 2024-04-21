@@ -96,74 +96,7 @@ $method = $config['method'] == 'create' ? 'POST' : 'PUT';
 
                             </div>
                             <div class="col-lg-12 promotion-container">
-                                <div class="table-responsive rounded-1">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th class=" text-end w-45">Sản phẩm mua</th>
-                                                <th class=" text-end w-11">SL tối thiểu</th>
-                                                <th class=" text-end ">Giới hạn KM</th>
-                                                <th class=" text-end ">Chiết khấu</th>
-                                                <th class=" text-center"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="promotion-row-wrap">
-                                            <tr class="promotion-type-row-item">
-                                                <td class="">
-                                                    <div class="product-quantity-wrap">
-                                                        <div class="product-quantity-inner ">
-                                                            <div class="goods-list d-none">
-                                                                <div class="goods-item">
-                                                                    <span>Macbook the he moi nhat h n n n</span>
-                                                                    <button type="button" class="btn-close"></button>
-                                                                </div>
-                                                                <div class="goods-item last-child">
-                                                                    Tìm theo tên, mã sản phẩm...
-                                                                </div>
-                                                            </div>
-                                                            <div class="search-wrap" data-bs-toggle="modal"
-                                                                data-bs-target="#find-product">
-                                                                <div class="icon-search ">
-                                                                    <i class="icofont-search-1"></i>
-                                                                </div>
-                                                                <div class="input-search">
-                                                                    <p>Tìm theo tên, mã sản phẩm...</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
-                                                    </div>
-                                                </td>
-                                                <td class="">
-                                                    <input type="text" name="amountTo[]"
-                                                        class="form-control text-end int" value="1">
-                                                </td>
-                                                <td class="">
-                                                    <input type="text" name="amountTo[]"
-                                                        class="form-control text-end int" value="0">
-                                                </td>
-                                                <td class="discount-type">
-                                                    <div class="d-flex align-items-center">
-                                                        <input type="text" name="amountValue[]"
-                                                            class="form-control text-end int me-1 " value="0">
-
-                                                        <select class="form-select init-select2 w-25 "
-                                                            name="amountType[]">
-                                                            <option value="cast">đ</option>
-                                                            <option value="percent">%</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button"
-                                                        class="btn btn-outline-secondary delete-promotion-type-row text-danger px-2">
-                                                        <i class="icofont-trash fs-14 "></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ if (typeof jQuery === "undefined") {
 $(function () {
     "use strict";
     var init = {};
+    var _token = $('meta[name="csrf-token"]').attr("content");
 
     // Hàm này xử lý khi nhấn chọn nút neverEnd
     init.promotionNeverEnd = () => {
@@ -165,7 +166,7 @@ $(function () {
 
                     setTimeout(() => {
                         init.promotionMutipleSelect2();
-                    }, 100);
+                    }, 200);
                 }
             });
 
@@ -451,13 +452,26 @@ $(function () {
                                 <th class=" text-center"></th>
                             </tr>
                         </thead>
-                        <tbody class="promotion-row-wrap">
-                            <tr class="promotion-type-row-item">
+                        <tbody class="">
+                            <tr class="">
                                 <td class="">
-                                    <select class="form-select mutiple-select2 ajax-search"
-                                         name="" multiple>
-                                    </select>
+                                    <div class="product-quantity-wrap">
+                                        <div class="product-quantity-inner ">
+                                            <div class="goods-list d-none">
 
+                                            </div>
+                                            <div class="search-wrap search-product-btn" data-bs-toggle="modal"
+                                                data-bs-target="#find-product">
+                                                <div class="icon-search ">
+                                                    <i class="icofont-search-1"></i>
+                                                </div>
+                                                <div class="input-search">
+                                                    <p>Chọn vào đây để tìm kiếm...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </td>
                                 <td class="">
                                     <input type="text" name="amountTo[]"
@@ -492,8 +506,9 @@ $(function () {
             </div>
         `;
         $(".promotion-container").html(html);
-        init.setUpSelect2();
-        init.setUpAjaxSearchForProductAndQuantity();
+        setTimeout(() => {
+            init.setUpSelect2();
+        }, 500);
     };
 
     // Hàm này loại bỏ chọn apply condition
@@ -501,50 +516,375 @@ $(function () {
         $(".promotion-container").empty();
     };
 
-    // Set up ajaxsearch cho product-and-quantity
+    init.productQuantityList = () => {
+        $(document).on(
+            "click",
+            ".product-quantity-wrap .search-product-btn",
+            function () {
+                let option = {
+                    model: $(".select-product-and-quantity").val(),
+                };
 
-    init.setUpAjaxSearchForProductAndQuantity = () => {
-        if ($(".ajax-search").length <= 0) {
-            return;
+                init.sendProductSearchAjax(option);
+            }
+        );
+    };
+
+    // Hàm này load product ajax
+    init.sendProductSearchAjax = (option) => {
+        $.ajax({
+            url: "/ajax/product/loadProductPromotion",
+            type: "get",
+            dataType: "json",
+            data: option,
+            beforeSend: function () {
+                $(".search-product-result").html(`
+                    <div class="loader-menu-model w-100 "></div>
+                `);
+            },
+            success: function (response) {
+                if (response.data.data.length > 0) {
+                    init.fillToOject(response);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            },
+        });
+    };
+
+    init.fillToOject = (response) => {
+        switch (response.model) {
+            case "Product":
+                init.renderProductQuantityListHtml(response.data);
+                break;
+            case "ProductCatalogue":
+                init.renderProductCatalogueQuantityListHtml(response.data);
+                break;
+            default:
+                break;
+        }
+    };
+
+    // Hàm này render ra html product Quantity List Product
+    init.renderProductCatalogueQuantityListHtml = (response) => {
+        let html = response.data
+            ?.map((item) => {
+                let modelName = $(".select-product-and-quantity").val();
+                let name = item.name;
+                let id = item.id;
+                let product_variant_id = item.product_variant_id ?? 0;
+
+                let checked =
+                    $(
+                        `.goods-item.${`${modelName}_${id}_${product_variant_id}`}`
+                    ).length > 0
+                        ? "checked"
+                        : "";
+
+                return /*html*/ `
+                    <div class="row product-item" data-objectid="${id}" data-model="${modelName}">
+                        <div class="col-md-8">
+                            <div class="product-item-info">
+                                <div class="form-check">
+                                    <input ${checked} class="form-check-input product-item-checkbox ${id}"
+                                        type="checkbox"/>
+                                </div>
+                                <p class="mb-1 fs-16 ms-1 name">${name}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            })
+            .join("");
+        if (response.last_page > 1) {
+            html += init.renderProductQuantityListPagination(response.links);
+        }
+        $(".search-product-result").html(html);
+    };
+
+    // Hàm này render ra html product Quantity List Product
+    init.renderProductQuantityListHtml = (data) => {
+        let html = data.data
+            ?.map((data) => {
+                let modelName = $(".select-product-and-quantity").val();
+                let variant_name = data.variant_name.split("-");
+                let image = data.image;
+                let sku = data.sku;
+                let price = data.price;
+                let product_variant_id = data.product_variant_id ?? 0;
+                let product_id = data.id;
+                let inventory = data.inventory ?? 0;
+                let couldSell = data.couldSell ?? 0;
+
+                let checked =
+                    $(
+                        `.goods-item.${`${modelName}_${product_id}_${product_variant_id}`}`
+                    ).length > 0
+                        ? "checked"
+                        : "";
+
+                return /*html*/ `
+                <div class="row product-item" data-objectid="${product_id}" data-variantid="${product_variant_id}" data-model="${modelName}">
+                        <div class="col-md-8">
+                            <div class="product-item-info">
+                                <div class="form-check">
+                                    <input ${checked} class="form-check-input product-item-checkbox ${product_id}-${product_variant_id}" type="checkbox"/>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-img">
+                                        <img class="img-thumbnail"
+                                            src="${image}"
+                                            alt="${variant_name[0]}">
+                                    </div>
+
+                                    <div class="product-title">
+                                        <p class="name">${
+                                            variant_name[0]
+                                        } - (Phiên bản:
+                                                <span>
+                                                    ${variant_name[1]}
+                                                </span>)
+                                        </p>
+                                        
+                                        <p>Mã SP: <span>${sku}</span></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="product-price-stock">
+                                <p class="price">${formatCurrency(
+                                    price ?? 0
+                                )}</p>
+                                <div class="stock">
+                                    <p>
+                                        Tồn kho: <span>${inventory}</span>
+                                    </p>
+                                    <p>
+                                        Có thể bán: <span>${couldSell}</span>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+        `;
+            })
+            .join("");
+        if (data.last_page > 1) {
+            html += init.renderProductQuantityListPagination(data.links);
+        }
+        $(".search-product-result").html(html);
+        // init.checkChooseProductQuantity();
+    };
+    // Hàm này render ra html pagination
+    init.renderProductQuantityListPagination = (data = []) => {
+        let html =
+            '<nav><ul class="pagination pagination-product-quantity mt-3">';
+
+        for (let item of data) {
+            let label = "";
+            if (item.label == "pagination.previous") {
+                label = '<span aria-hidden="true">&laquo;</span>';
+            } else if (item.label == "pagination.next") {
+                label = '<span aria-hidden="true">&raquo;</span>';
+            } else {
+                label = item.label;
+            }
+
+            html += `
+                <li class="page-item ${item.url == null ? "disabled " : ""} ${
+                item.active ? "active" : ""
+            }">
+                    <a class="page-link" href="${item.url}">${label}</a>
+                </li>
+            `;
         }
 
-        $(".ajax-search").each(function () {
-            let _this = $(this);
-            let model = _this
-                .parents(".product-and-quantity")
-                .find(".select-product-and-quantity")
-                .val();
+        html += "</ul></nav>";
 
-            console.log(model);
-            let option = {
+        return html;
+    };
+
+    // Hàm này get ra pagination product
+    init.getPaginationProduct = () => {
+        $(document).on(
+            "click",
+            ".pagination-product-quantity .page-link",
+            function (event) {
+                event.preventDefault();
+                let _this = $(this);
+
+                const url = new URL(_this.attr("href"));
+
+                let option = {
+                    model: $(".select-product-and-quantity").val(),
+                    page: url.searchParams.get("page"),
+                    keyword:
+                        $(".search-product-wrap .input-product-search").val() ??
+                        "",
+                };
+
+                init.sendProductSearchAjax(option);
+            }
+        );
+    };
+    // Hàm này search ra product
+    init.seachProductQuantityListPagination = () => {
+        let typingTimeout;
+        $(document).on(
+            "keyup",
+            ".search-product-wrap .input-product-search",
+            function () {
+                let _this = $(this);
+                let keyword = _this.val();
+
+                let option = {
+                    model: $(".select-product-and-quantity").val(),
+                    keyword,
+                };
+
+                clearTimeout(typingTimeout);
+
+                typingTimeout = setTimeout(function () {
+                    init.sendProductSearchAjax(option);
+                }, 200);
+            }
+        );
+    };
+
+    // Chọn các sản phẩm trong list
+    var productItemChoose = [];
+    init.chooseProductItem = () => {
+        $(document).on("click", ".product-item", function () {
+            let _this = $(this);
+            let model = _this.data("model");
+            let productId = _this.data("objectid");
+            let name = _this.find(".name").text();
+            let variantId = _this.data("variantid") ?? 0;
+            let data = {
                 model,
+                product_id: productId,
+                variant_id: variantId,
+                name,
             };
 
-            $(".mutiple-select2").select2({
-                minimunInputLength: 2,
-                placeholder: "Nhập vào 2 từ để tìm kiếm",
-                ajax: {
-                    url: "/ajax/dashboard/findPromotionObject",
-                    type: "GET",
-                    dataType: "json",
-                    delay: 250,
-                    data: function (params) {
-                        let query = {
-                            search: params.term,
-                            option,
-                        };
-                        // Query parameters will be ?search=[term]
-                        return query;
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (obj, i) {
-                                return obj;
-                            }),
-                        };
-                    },
-                },
-            });
+            let isChecked = _this
+                .find(".product-item-checkbox")
+                .prop("checked");
+
+            // Nếu checked, thêm vào mảng object, ngược lại loại bỏ
+            if (!isChecked) {
+                productItemChoose.push(data);
+            } else {
+                productItemChoose = productItemChoose.filter(
+                    (item) =>
+                        item.model !== model ||
+                        item.product_id !== productId ||
+                        item.variant_id !== variantId
+                );
+            }
+            console.log(productItemChoose);
+
+            _this.find(".product-item-checkbox").prop("checked", !isChecked);
+        });
+    };
+
+    // Hàm render ra list sản phẩm đã chọn
+    init.confirmProductPromotion = () => {
+        $(document).on("click", ".confirm-product-promotion", function () {
+            if ($(".product-item-checkbox:checked").length == 0) {
+                return setToast("error", "Vui lòng chọn ít nhất 1 sản phẩm.");
+            }
+            let html =
+                productItemChoose &&
+                productItemChoose?.length > 0 &&
+                productItemChoose
+                    .map((item) => {
+                        let modelName =
+                            item.model +
+                                "_" +
+                                item.product_id +
+                                "_" +
+                                item.variant_id ?? 0;
+
+                        return /*html*/ `
+                        <div class="goods-item ${modelName}" data-model="${
+                            item.model
+                        }">
+                            <span>${item.name}</span>
+                            <button type="button" class="btn-close"></button>
+                            <input type="hidden" name="object[id][]" value="${
+                                item.product_id
+                            }">
+                            <input type="hidden" name="object[product_variant_id][]" value="${
+                                item.variant_id ?? 0
+                            }">
+                        </div>
+                        `;
+                    })
+                    .join("");
+            html += /*html*/ `
+                <div class="goods-item-2 last-child fw-bold search-product-btn" data-bs-toggle="modal"
+                data-bs-target="#find-product">
+                    Chọn vào đây để tìm kiếm...
+                </div>
+            `;
+            $(".goods-list").html(html);
+            init.checkGoodsListHide();
+            $("#find-product").modal("hide");
+        });
+    };
+
+    // Hàm này kiểm tra list sản phẩm có trống hay khong
+    init.checkGoodsListHide = () => {
+        if ($(".goods-list .goods-item").length <= 0) {
+            $(".goods-list").addClass("d-none");
+            $(".search-wrap").show();
+        } else {
+            $(".goods-list").removeClass("d-none");
+            $(".search-wrap").hide();
+        }
+    };
+
+    // Hàm này xoá goods item sản phẩm
+    init.deleteGoodsItem = () => {
+        $(document).on("click", ".goods-item .btn-close", function () {
+            let _this = $(this);
+            let productId = _this.siblings("input[name='object[id][]']").val();
+            let variantId = _this
+                .siblings("input[name='object[product_variant_id][]']")
+                .val();
+            let model = _this.closest(".goods-item").data("model");
+
+            _this.closest(".goods-item").remove();
+
+            // Lọc lại những gì đã chọn ở productItemChoose
+            productItemChoose = productItemChoose.filter(
+                (item) =>
+                    item.product_id != productId ||
+                    item.variant_id != variantId ||
+                    item.model != model
+            );
+
+            // Bỏ chọn những gì đã xoá
+            $(`.product-item`)
+                .find(`.${productId}-${variantId}`)
+                .prop("checked", false);
+
+            init.checkGoodsListHide();
+        });
+    };
+
+    // ChangeMethod
+    init.changePromotionMethod = () => {
+        $(document).on("change", ".select-product-and-quantity", function () {
+            $(".goods-list").html("");
+            productItemChoose = [];
+            init.checkGoodsListHide();
         });
     };
 
@@ -558,6 +898,12 @@ $(function () {
         init.createPromotionTypeRow();
         init.deletePromotionTypeRow();
         init.renderOrderRangeContainer();
-        init.setUpAjaxSearchForProductAndQuantity();
+        init.productQuantityList();
+        init.getPaginationProduct();
+        init.seachProductQuantityListPagination();
+        init.chooseProductItem();
+        init.confirmProductPromotion();
+        init.deleteGoodsItem();
+        init.changePromotionMethod();
     });
 });

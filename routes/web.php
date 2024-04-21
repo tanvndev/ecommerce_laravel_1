@@ -7,6 +7,7 @@ use App\Http\Controllers\Ajax\{
     AttributeController as AjaxAttributeController,
     MenuController as AjaxMenuController,
     SlideController as AjaxSlideController,
+    ProductController as AjaxProductController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -27,7 +28,8 @@ use App\Http\Controllers\Servers\{
     SlideController,
     WidgetController,
     PromotionController,
-    //@@new-controller-module@@
+    SourceController,
+//@@new-controller-module@@
 
 };
 
@@ -224,7 +226,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [PromotionController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [PromotionController::class, 'destroy'])->name('destroy');
     });
-    //@@new-route-module@@
+    
+    // Routes for SourceController
+    Route::prefix('source')->name('source.')->group(function () {
+        Route::get('index', [SourceController::class, 'index'])->name('index');
+        Route::get('create', [SourceController::class, 'create'])->name('create');
+        Route::post('store', [SourceController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [SourceController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [SourceController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [SourceController::class, 'destroy'])->name('destroy');
+    });
+//@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 
@@ -241,6 +253,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');
     Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->middleware('admin')->name('ajax.menu.drag');
     Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->middleware('admin')->name('ajax.slide.drag');
+    Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->middleware('admin')->name('ajax.slide.loadProductPromotion');
 });
 
 

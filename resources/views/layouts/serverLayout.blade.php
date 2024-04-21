@@ -18,14 +18,11 @@
 
         <!-- main body area -->
         <div class="main px-lg-4 px-md-4">
-            <div>
-                <!-- Body: Header -->
-                @include('servers.includes.header')
-                <!-- Body: Body -->
-                @yield('content')
-            </div>
 
-
+            <!-- Body: Header -->
+            @include('servers.includes.header')
+            <!-- Body: Body -->
+            @yield('content')
 
         </div>
         <!-- Modal Custom Settings-->

@@ -92,6 +92,11 @@ return [
                     'route' => 'promotion.index',
                     'activeCondition' => ['promotion.*'],
                 ],
+                [
+                    'title' => 'QL Nguồn khách',
+                    'route' => 'source.index',
+                    'activeCondition' => ['source.*'],
+                ],
                 // [
                 //     'title' => 'QL Mã giảm giá',
                 //     'route' => 'coupon.index',

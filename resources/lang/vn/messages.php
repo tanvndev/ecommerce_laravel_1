@@ -477,6 +477,35 @@ return [
             'promotionType' => 'Chọn hình thức khuyến mãi',
         ]
     ],
+    'source' => [
+        'index' => [
+            'title' => 'Danh sách nguồn khách',
+            'table' => 'Thông tin nguồn khách',
+            'create' => 'Tạo mới nguồn khách'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nguồn khách',
+            'success' => 'Tạo mới nguồn khách thành công.',
+            'error' => 'Tạo mới nguồn khách thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nguồn khách',
+            'success' => 'Cập nhập nguồn khách thành công.',
+            'error' => 'Cập nhập nguồn khách thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá nguồn khách thành công.',
+            'error' => 'Xoá nguồn khách thất bại.',
+        ],
+        'translate' => [
+            'title' => 'Tạo bản dịch cho nguồn khách',
+            'success' => 'Cập nhập bản dịch thành công.',
+            'error' => 'Cập nhập bản dịch thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên chương trình',
+        ]
+    ],
 
     'selectModule' => 'Chọn module',
     'infoDetail' => 'Thông tin chi tiết',

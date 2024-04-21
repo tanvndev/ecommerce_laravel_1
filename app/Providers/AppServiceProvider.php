@@ -49,6 +49,8 @@ class AppServiceProvider extends ServiceProvider
 'App\Services\Interfaces\WidgetServiceInterface' => 'App\Services\WidgetService',
 // Promotion
 'App\Services\Interfaces\PromotionServiceInterface' => 'App\Services\PromotionService',
+// Source
+'App\Services\Interfaces\SourceServiceInterface' => 'App\Services\SourceService',
 ];
     public function register(): void
     {

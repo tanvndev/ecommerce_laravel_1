@@ -24,7 +24,7 @@ class Product extends Model
         'attribute',
         'variant',
         'price',
-        'code',
+        'sku',
         'origin'
     ];
 

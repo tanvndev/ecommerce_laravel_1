@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -49,5 +50,38 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 }
             ]) //Lấy từ product_variants.attributes.languages để lấy những attribute có trong product
             ->find($id);
+    }
+
+    public function findProductForPromotion($condition = [], $relation = [])
+    {
+        $query = $this->model->newQuery();
+        $query->select(
+            'products.id',
+            'products.image',
+            'tb2.name',
+            'tb3.id as product_variant_id',
+            DB::raw("CONCAT(tb2.name, ' - ', COALESCE(tb4.name, 'Default')) as variant_name"),
+            DB::raw("COALESCE(tb3.sku, products.sku) as sku"),
+            DB::raw("COALESCE(tb3.price, products.price) as price")
+
+        )
+            ->join('product_language as tb2', 'products.id', '=', 'tb2.product_id')
+            ->leftJoin('product_variants as tb3', 'products.id', '=', 'tb3.product_id')
+            ->leftJoin('product_variant_language as tb4', 'tb3.id', '=', 'tb4.product_variant_id');
+
+        if (!empty($condition) && is_array($condition)) {
+            foreach ($condition as $column => $value) {
+                // dd($column, ...$value);
+                $query->where($column, ...$value);
+            }
+        }
+
+        if (count($relation)) {
+            $query->with($relation);
+        }
+
+        $query->orderBy('products.id', 'DESC');
+
+        return $query->paginate(10);
     }
 }

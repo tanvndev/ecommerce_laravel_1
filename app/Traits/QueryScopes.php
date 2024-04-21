@@ -100,7 +100,7 @@ trait QueryScopes
         // OrderBy
         // [
         //  'name' => 'ASC',
-        // 'created_at' => 'DESC'
+        //  'created_at' => 'DESC'
         // ]
         if (!empty($orderBy) && is_array($orderBy)) {
             foreach ($orderBy as $column => $direction) {
