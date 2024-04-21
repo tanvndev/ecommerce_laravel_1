@@ -28,7 +28,6 @@ class SourceController extends Controller
         parent::__construct();
         // Khởi tạo new Nestedsetbie
         $this->middleware(function ($request, $next) {
-            $this->initNetedset();
             return $next($request);
         });
 
@@ -36,15 +35,6 @@ class SourceController extends Controller
         $this->sourceRepository = $sourceRepository;
     }
 
-    private function initNetedset()
-    {
-        $this->nestedset = new Nestedsetbie([
-            'table' => 'source_catalogues',
-            'foreignkey' => 'source_catalogue_id',
-            'language_id' => $this->currentLanguage
-        ]);
-    }
-    //
     function index()
     {
         $this->authorize('modules', 'source.index');
@@ -53,13 +43,9 @@ class SourceController extends Controller
         // dd($sources);
         $config['seo'] = __('messages.source')['index'];
 
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
-
         return view('servers.sources.index', compact([
             'sources',
             'config',
-            'dropdown',
         ]));
     }
 
@@ -69,12 +55,9 @@ class SourceController extends Controller
 
         $config['seo'] = __('messages.source')['create'];
         $config['method'] = 'create';
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
-        // dd($dropdown);
+
         return view('servers.sources.store', compact([
             'config',
-            'dropdown',
         ]));
     }
 
@@ -96,13 +79,7 @@ class SourceController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $source = $this->sourceRepository->getSourceLanguageById($id, $this->currentLanguage);
-        // dd($source);
-
-
-        $albums =  json_decode($source->album);
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
+        $source = $this->sourceRepository->findById($id);
         // dd($source);
 
 
@@ -112,8 +89,6 @@ class SourceController extends Controller
         return view('servers.sources.store', compact([
             'config',
             'source',
-            'albums',
-            'dropdown',
         ]));
     }
 

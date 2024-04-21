@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\{ModuleTemplate};
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Update{ModuleTemplate}Request extends FormRequest
+class StoreCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class Update{ModuleTemplate}Request extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
+            'canonical' => 'required|string|unique:routers',
         ];
     }
 

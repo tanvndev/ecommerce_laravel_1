@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\{ModuleTemplate};
+namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Update{ModuleTemplate}Request extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

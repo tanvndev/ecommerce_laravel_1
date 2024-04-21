@@ -785,6 +785,10 @@ table.table-variant thead .table-dark {
   padding-right: 0;
 }
 
+.description-table p {
+  margin-bottom: 0;
+}
+
 .ibox .label {
   font-size: 10px;
 }

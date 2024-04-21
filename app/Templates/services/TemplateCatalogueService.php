@@ -63,7 +63,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
         return ${moduleTemplate}s;
     }
 
-    function create()
+    public function create()
     {
 
         DB::beginTransaction();
@@ -103,7 +103,7 @@ class {ModuleTemplate}Service extends BaseService implements {ModuleTemplate}Ser
     }
 
 
-    function update($id)
+    public function update($id)
     {
         DB::beginTransaction();
         try {

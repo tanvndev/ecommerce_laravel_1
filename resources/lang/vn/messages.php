@@ -503,7 +503,7 @@ return [
             'error' => 'Cập nhập bản dịch thất bại.',
         ],
         'table' => [
-            'name' => 'Tên chương trình',
+            'name' => 'Tên nguồn khách',
         ]
     ],
 
@@ -594,5 +594,6 @@ return [
     'cancelButton' => 'Huỷ bỏ',
     'agreeButton' => 'Đồng ý',
     'saveButton' => 'Lưu lại',
+
 
 ];

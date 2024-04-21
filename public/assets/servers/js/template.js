@@ -24,6 +24,7 @@ $(function () {
     $(".convert-to-slug").on("input", function () {
         let value = $(this).val();
         value = value.replace(/ /g, "-");
+        value = value.toLowerCase();
         $(this).val(value);
     });
 

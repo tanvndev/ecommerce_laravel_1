@@ -29,6 +29,7 @@ use App\Http\Controllers\Servers\{
     WidgetController,
     PromotionController,
     SourceController,
+CustomerController,
 //@@new-controller-module@@
 
 };
@@ -235,6 +236,16 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [SourceController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [SourceController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [SourceController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for CustomerController
+    Route::prefix('customer')->name('customer.')->group(function () {
+        Route::get('index', [CustomerController::class, 'index'])->name('index');
+        Route::get('create', [CustomerController::class, 'create'])->name('create');
+        Route::post('store', [CustomerController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [CustomerController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [CustomerController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [CustomerController::class, 'destroy'])->name('destroy');
     });
 //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động

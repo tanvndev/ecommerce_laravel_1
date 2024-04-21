@@ -23,30 +23,20 @@ class UpdateSourceRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
+            'keyword' => 'required|string|unique:sources,keyword,' . $this->id
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên nguồn khách',
+            'keyword' => 'Từ khoá',
         ];
     }
 
     public function messages()
     {
-        return [
-            'required' => ':attribute bắt buộc nhập.',
-            'unique' => ':attribute đã tồn tại.',
-            'email' => ':attribute sai định dạng.',
-            'string' => ':attribute phải là dạng ký tự.',
-            'integer' => ':attribute phải là dạng số.',
-            'email' => ':attribute sai định dạng.',
-            'min' => ':attribute phải tối thiểu :min ký tự.',
-            'same' => ':attribute chưa khớp.',
-            'gt' => ':attribute bắt buộc phải chọn.',
-        ];
+        return __('request.messages');
     }
 }
