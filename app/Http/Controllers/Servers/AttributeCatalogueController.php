@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Servers;
 
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{
+use App\Http\Requests\Attribute\{
     StoreAttributeCatalogueRequest,
     UpdateAttributeCatalogueRequest,
     DeleteAttributeCatalogueRequest
 };
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Services\Interfaces\AttributeCatalogueServiceInterface as AttributeCatalogueService;
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 

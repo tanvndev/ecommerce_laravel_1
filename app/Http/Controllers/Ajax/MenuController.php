@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreMenuCatalogueRequest;
+use App\Http\Requests\Menu\StoreMenuCatalogueRequest;
 use App\Repositories\Interfaces\MenuRepositoryInterface as MenuRepository;
 use App\Services\Interfaces\MenuCatalogueServiceInterface as MenuCatalogueService;
 use App\Services\Interfaces\MenuServiceInterface as MenuService;

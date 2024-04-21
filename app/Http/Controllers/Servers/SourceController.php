@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Servers;
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\{
+use App\Http\Requests\Source\{
     StoreSourceRequest,
     UpdateSourceRequest
 };
 
+
 use App\Services\Interfaces\SourceServiceInterface as SourceService;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\SourceRepositoryInterface as SourceRepository;
 
 
@@ -25,7 +25,7 @@ class SourceController extends Controller
         SourceService $sourceService,
         SourceRepository $sourceRepository,
     ) {
-        parent::__construct();        
+        parent::__construct();
         // Khởi tạo new Nestedsetbie
         $this->middleware(function ($request, $next) {
             $this->initNetedset();

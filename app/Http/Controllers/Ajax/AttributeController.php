@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\AttributeRepositoryInterface as AttributeRepository;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Http\Request;
 
 

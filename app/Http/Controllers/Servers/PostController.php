@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Servers;
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\{
+use App\Http\Requests\Post\{
     StorePostRequest,
     UpdatePostRequest
 };
 
 use App\Services\Interfaces\PostServiceInterface as PostService;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 
 

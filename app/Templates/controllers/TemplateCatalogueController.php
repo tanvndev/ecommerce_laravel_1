@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Servers;
 
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{
+use App\Http\Requests\{ModuleTemplate}\{
     Store{ModuleTemplate}Request,
     Update{ModuleTemplate}Request,
     Delete{ModuleTemplate}Request
 };
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Services\Interfaces\{ModuleTemplate}ServiceInterface as {ModuleTemplate}Service;
 use App\Repositories\Interfaces\{ModuleTemplate}RepositoryInterface as {ModuleTemplate}Repository;
 

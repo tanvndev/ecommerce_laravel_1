@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Servers;
 
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\{
+use App\Http\Requests\Post\{
     StorePostCatalogueRequest,
     UpdatePostCatalogueRequest,
     DeletePostCatalogueRequest
 };
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Services\Interfaces\PostCatalogueServiceInterface as PostCatalogueService;
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 

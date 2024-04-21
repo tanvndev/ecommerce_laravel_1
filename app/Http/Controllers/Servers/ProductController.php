@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Servers;
 use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\{
+use App\Http\Requests\Product\{
     StoreProductRequest,
     UpdateProductRequest
 };
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use App\Services\Interfaces\ProductServiceInterface as ProductService;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 
 

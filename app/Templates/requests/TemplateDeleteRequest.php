@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\{ModuleTemplate};
 
 use App\Rules\Check{ModuleTemplate}ChildrenRule;
 use Illuminate\Foundation\Http\FormRequest;

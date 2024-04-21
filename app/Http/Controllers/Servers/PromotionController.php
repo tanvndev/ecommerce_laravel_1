@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Servers;
 
-use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\{
+use App\Http\Requests\Promotion\{
     StorePromotionRequest,
     UpdatePromotionRequest
 };
