@@ -23,6 +23,7 @@ class StoreCustomerRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|unique:customers',
+            'phone' => 'required|string|phone|unique:customers',
             'fullname' => 'required|string',
             'customer_catalogue_id' => 'required|integer|gt:0',
             'password' => 'required|string|min:6',
@@ -35,9 +36,10 @@ class StoreCustomerRequest extends FormRequest
         return [
             'email' => 'Email',
             'fullname' => 'Họ và tên',
+            'phone' => 'Số điện thoại',
             'customer_catalogue_id' => 'Nhóm thành viên',
             'password' => 'Mật khẩu',
-            're_password' => 'Mật khẩu',
+            're_password' => 'Nhập lại Mật khẩu',
         ];
     }
 

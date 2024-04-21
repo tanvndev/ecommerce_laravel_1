@@ -36,4 +36,9 @@ class Customer extends Model
     {
         return $this->belongsTo(CustomerCatalogue::class, 'customer_catalogue_id', 'id');
     }
+
+    public function sources()
+    {
+        return $this->belongsTo(Source::class, 'customer_id', 'id');
+    }
 }

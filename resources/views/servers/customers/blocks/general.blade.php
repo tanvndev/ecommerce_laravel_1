@@ -29,6 +29,16 @@
             </div>
 
             <div class="col-md-6">
+                {!! Form::label('customer_catalogue_id', __('messages.customer.table.customerGroup'), ['class' =>
+                'form-label']) !!}
+                <span class="text-danger">(*)</span>
+                {!! Form::select('customer_catalogue_id', ['' => __('messages.customer.table.customerGroupSelect')] +
+                $customerCatalogues->pluck('name', 'id')->toArray(),
+                old('customer_catalogue_id', $customer->customer_catalogue_id ?? ''), ['class' => 'form-select
+                init-select2']) !!}
+            </div>
+
+            <div class="col-md-6">
                 {!! Form::label('birthday', __('messages.birthday'), ['class' => 'form-label']) !!}
                 {!! Form::input('date', 'birthday', old('birthday', $customer->birthday ?? ''), ['class' =>
                 'form-control'])
@@ -48,7 +58,7 @@
                 {!! Form::password('re_password', ['class' => 'form-control']) !!}
             </div>
             @endif
-            <div class="col-md-12">
+            <div class="col-md-6">
                 {!! Form::label('image', __('messages.image'), ['class' => 'form-label']) !!}
                 {!! Form::text('image', old('image', $customer->image ?? ''), ['readonly', 'data-type' => 'Images',
                 'class'

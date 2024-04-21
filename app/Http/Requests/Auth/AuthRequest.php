@@ -37,9 +37,6 @@ class AuthRequest extends FormRequest
 
     public function messages()
     {
-        return [
-            'required' => ':attribute bắt buộc nhập.',
-            'email' => ':attribute sai định dạng.',
-        ];
+        return __('request.messages');
     }
 }

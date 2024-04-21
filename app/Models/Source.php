@@ -18,4 +18,9 @@ class Source extends Model
         'description',
         'publish'
     ];
+
+    public function customers()
+    {
+        $this->hasMany(Customer::class, 'customer_id', 'id');
+    }
 }

@@ -23,6 +23,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|unique:users,email,' . $this->id,
+            'phone' => 'required|string|phone|unique:users,phone,' . $this->id,
             'fullname' => 'required|string',
             'user_catalogue_id' => 'required|integer|gt:0',
 
@@ -34,22 +35,13 @@ class UpdateUserRequest extends FormRequest
         return [
             'email' => 'Email',
             'fullname' => 'Họ và tên',
+            'phone' => 'Số điện thoại',
             'user_catalogue_id' => 'Nhóm thành viên',
         ];
     }
 
     public function messages()
     {
-        return [
-            'required' => ':attribute bắt buộc nhập.',
-            'unique' => ':attribute đã tồn tại.',
-            'email' => ':attribute sai định dạng.',
-            'string' => ':attribute phải là dạng ký tự.',
-            'integer' => ':attribute phải là dạng số.',
-            'email' => ':attribute sai định dạng.',
-            'min' => ':attribute phải tối thiểu :min ký tự.',
-            'same' => ':attribute chưa khớp.',
-            'gt' => ':attribute bắt buộc phải chọn.',
-        ];
+        return __('request.messages');
     }
 }
