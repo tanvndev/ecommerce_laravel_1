@@ -13,40 +13,26 @@ class Customer extends Model
     use HasFactory, SoftDeletes, QueryScopes;
     protected $table = 'customers';
     protected $fillable = [
+        'fullname',
+        'email',
+        'password',
+        'phone',
+        'address',
+        'province_id',
+        'district_id',
+        'ward_id',
+        'birthday',
         'image',
-        'follow',
-        'album',
+        'description',
+        'user_agent',
         'publish',
-        'order',
-        'user_id',
-        'customer_catalogue_id'
+        'customer_catalogue_id',
+        'ip',
 
     ];
 
-    public function languages()
-    {
-        return $this->belongsToMany(Language::class, 'customer_language', 'customer_id', 'language_id')->withPivot(
-            'name',
-            'canonical',
-            'meta_title',
-            'meta_description',
-            'meta_keyword',
-            'description',
-            'content',
-        )->withTimestamps();
-    }
-
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
-
 
     public function customer_catalogues()
-    {
-        return $this->belongsToMany(CustomerCatalogue::class, 'customer_catalogue_customer', 'customer_id', 'customer_catalogue_id');
-    }
-    public function customer_catalogue_language()
     {
         return $this->belongsTo(CustomerCatalogue::class, 'customer_catalogue_id', 'id');
     }

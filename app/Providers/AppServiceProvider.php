@@ -53,6 +53,8 @@ class AppServiceProvider extends ServiceProvider
 'App\Services\Interfaces\SourceServiceInterface' => 'App\Services\SourceService',
 // Customer
 'App\Services\Interfaces\CustomerServiceInterface' => 'App\Services\CustomerService',
+// CustomerCatalogue
+'App\Services\Interfaces\CustomerCatalogueServiceInterface' => 'App\Services\CustomerCatalogueService',
 ];
     public function register(): void
     {

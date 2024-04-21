@@ -299,6 +299,58 @@ return [
             'userGroupSelect' => 'Chọn nhóm thành viên',
         ]
     ],
+    'customerCatalogue' => [
+        'index' => [
+            'title' => 'Danh sách nhóm khách hàng',
+            'table' => 'Thông tin nhóm khách hàng',
+            'create' => 'Tạo mới nhóm khách hàng'
+        ],
+        'create' => [
+            'title' => 'Tạo mới nhóm khách hàng',
+            'success' => 'Tạo mới nhóm khách hàng thành công.',
+            'error' => 'Tạo mới nhóm khách hàng thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập nhóm khách hàng',
+            'success' => 'Cập nhập nhóm khách hàng thành công.',
+            'error' => 'Cập nhập nhóm khách hàng thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá nhóm khách hàng thành công.',
+            'error' => 'Xoá nhóm khách hàng thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên nhóm khách hàng',
+            'countUser' => 'Số khách hàng'
+        ],
+
+    ],
+    'customer' => [
+        'index' => [
+            'title' => 'Danh sách khách hàng',
+            'table' => 'Thông tin khách hàng',
+            'create' => 'Tạo mới khách hàng'
+        ],
+        'create' => [
+            'title' => 'Tạo mới khách hàng',
+            'success' => 'Tạo mới khách hàng thành công.',
+            'error' => 'Tạo mới khách hàng thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập khách hàng',
+            'success' => 'Cập nhập khách hàng thành công.',
+            'error' => 'Cập nhập khách hàng thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá khách hàng thành công.',
+            'error' => 'Xoá khách hàng thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên khách hàng',
+            'customerGroup' => 'Nhóm khách hàng',
+            'customerGroupSelect' => 'Chọn nhóm khách hàng',
+        ]
+    ],
 
     'permission' => [
         'index' => [

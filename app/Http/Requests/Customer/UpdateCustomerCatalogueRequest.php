@@ -4,7 +4,7 @@ namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCustomerRequest extends FormRequest
+class UpdateCustomerCatalogueRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,15 @@ class UpdateCustomerRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers,canonical,' . $this->id . ',module_id'
+            'description' => 'required|string',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên nhóm khách hàng',
+            'description' => 'Mô tả',
         ];
     }
 

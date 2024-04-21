@@ -29,8 +29,9 @@ use App\Http\Controllers\Servers\{
     WidgetController,
     PromotionController,
     SourceController,
-CustomerController,
-//@@new-controller-module@@
+    CustomerController,
+    CustomerCatalogueController,
+    //@@new-controller-module@@
 
 };
 
@@ -227,7 +228,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [PromotionController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [PromotionController::class, 'destroy'])->name('destroy');
     });
-    
+
     // Routes for SourceController
     Route::prefix('source')->name('source.')->group(function () {
         Route::get('index', [SourceController::class, 'index'])->name('index');
@@ -247,7 +248,17 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [CustomerController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [CustomerController::class, 'destroy'])->name('destroy');
     });
-//@@new-route-module@@
+
+    // Routes for CustomerCatalogueController
+    Route::prefix('customer/catalogue')->name('customer.catalogue.')->group(function () {
+        Route::get('index', [CustomerCatalogueController::class, 'index'])->name('index');
+        Route::get('create', [CustomerCatalogueController::class, 'create'])->name('create');
+        Route::post('store', [CustomerCatalogueController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [CustomerCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
+        Route::put('/{id}/update', [CustomerCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
+        Route::delete('destroy', [CustomerCatalogueController::class, 'destroy'])->name('destroy');
+    });
+    //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 
 

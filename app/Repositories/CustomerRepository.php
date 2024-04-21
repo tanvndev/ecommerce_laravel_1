@@ -14,29 +14,55 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
         $this->model = $model;
     }
 
-    public function getCustomerLanguageById($id = 0, $languageId = 0)
-    {
-        $select = [
-            'customers.id',
-            'customers.customer_catalogue_id',
-            'customers.publish',
-            'customers.image',
-            'customers.icon',
-            'customers.album',
-            'customers.follow',
-            'tb2.name',
-            'tb2.description',
-            'tb2.content',
-            'tb2.meta_keyword',
-            'tb2.meta_title',
-            'tb2.meta_description',
-            'tb2.canonical',
-        ];
-        return $this->model
-            ->select($select)
-            ->join('customer_language as tb2', 'customers.id', '=', 'tb2.customer_id')
-            ->where('tb2.language_id', $languageId)
-            ->with('customer_catalogues')
-            ->find($id);
+    public function pagination(
+        $column = ['*'],
+        $condition = [],
+        $perPage = 1,
+        $orderBy = [],
+        $join = [],
+        $relations = [],
+        $groupBy = [],
+        $whereRaw = [],
+    ) {
+        $query = $this->model->select($column)->where(function ($query) use ($condition) {
+
+            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
+                $query->where('fullname', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('email', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('phone', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('address', 'like', '%' . $condition['keyword'] . '%');
+            }
+
+            if (isset($condition['customer_catalogue_id']) && $condition['customer_catalogue_id'] != '') {
+                $query->where('customer_catalogue_id', $condition['customer_catalogue_id']);
+            }
+
+            if (isset($condition['publish']) && $condition['publish'] != '-1') {
+                $query->where('publish', $condition['publish']);
+            }
+        })->with($relations);
+
+
+        // OrderBy
+        //  'name' => 'ASC',
+        //  'created_at' => 'DESC'
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $column => $direction) {
+                $query->orderBy($column, $direction);
+            }
+        } else {
+            $query->orderBy('id', 'DESC');
+        }
+
+        // 'table_name_1' => ['constraint1', 'constraint2'],
+        if (!empty($join)) {
+            foreach ($join as $table => $constraints) {
+                $query->join($table, ...$constraints);
+            }
+        }
+
+
+        return $query->paginate($perPage)->withQueryString();
+        //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
     }
 }

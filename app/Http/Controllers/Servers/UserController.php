@@ -72,10 +72,13 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
+        $successMessage = $this->getToastMessage('user', 'success', 'create');
+        $errorMessage = $this->getToastMessage('user', 'error', 'create');
+
         if ($this->userService->create()) {
-            return redirect()->route('user.index')->with('toast_success', 'Tạo thành viên mới thành công.');
+            return redirect()->route('user.index')->with('toast_success', $successMessage);
         }
-        return redirect()->route('user.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.create')->with('toast_error', $errorMessage);
     }
 
 
@@ -108,20 +111,24 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, $id)
     {
+
+        $successMessage = $this->getToastMessage('user', 'success', 'update');
+        $errorMessage = $this->getToastMessage('user', 'error', 'update');
+
         // Lấy giá trị sesson
         $idUser = session('_id');
         if (empty($idUser)) {
-            return redirect()->route('user.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+            return redirect()->route('user.index')->with('toast_error', $errorMessage);
         }
 
         if ($this->userService->update($idUser)) {
             // Xoá giá trị sesson
             session()->forget('_id');
-            return redirect()->route('user.index')->with('toast_success', 'Cập nhập thành viên thành công.');
+            return redirect()->route('user.index')->with('toast_success', $successMessage);
         }
         // Xoá giá trị sesson
         session()->forget('_id');
-        return redirect()->route('user.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.create')->with('toast_error', $errorMessage);
     }
 
     /**
@@ -131,13 +138,16 @@ class UserController extends Controller
     {
         $this->authorize('modules', 'user.destroy');
 
+        $successMessage = $this->getToastMessage('user', 'success', 'delete');
+        $errorMessage = $this->getToastMessage('user', 'error', 'delete');
+
         if ($request->_id == null) {
-            return redirect()->route('user.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
+            return redirect()->route('user.index')->with('toast_error', $errorMessage);
         }
         if ($this->userService->destroy($request->_id)) {
 
-            return redirect()->route('user.index')->with('toast_success', 'Xoá thành viên thành công.');
+            return redirect()->route('user.index')->with('toast_success', $successMessage);
         }
-        return redirect()->route('user.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.index')->with('toast_error', $errorMessage);
     }
 }

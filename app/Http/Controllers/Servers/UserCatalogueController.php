@@ -60,11 +60,13 @@ class UserCatalogueController extends Controller
 
     public function store(StoreUserCatalogueRequest $request)
     {
+        $successMessage = $this->getToastMessage('userCatalogue', 'success', 'create');
+        $errorMessage = $this->getToastMessage('userCatalogue', 'error', 'create');
         // dd($request->all());
         if ($this->userCatalogueService->create()) {
-            return redirect()->route('user.catalogue.index')->with('toast_success', 'Tạo nhóm thành viên mới thành công.');
+            return redirect()->route('user.catalogue.index')->with('toast_success', $successMessage);
         }
-        return redirect()->route('user.catalogue.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.catalogue.create')->with('toast_error', $errorMessage);
     }
 
     public function edit($id)
@@ -91,20 +93,22 @@ class UserCatalogueController extends Controller
      */
     public function update(UpdateUserCatalogueRequest $request, $id)
     {
+        $successMessage = $this->getToastMessage('userCatalogue', 'success', 'update');
+        $errorMessage = $this->getToastMessage('userCatalogue', 'error', 'update');
         // Lấy giá trị sesson
         $idUser = session('_id');
         if (empty($idUser)) {
-            return redirect()->route('user.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+            return redirect()->route('user.catalogue.index')->with('toast_error', $errorMessage);
         }
 
         if ($this->userCatalogueService->update($idUser)) {
             // Xoá giá trị sesson
             session()->forget('_id');
-            return redirect()->route('user.catalogue.index')->with('toast_success', 'Cập nhập thành viên thành công.');
+            return redirect()->route('user.catalogue.index')->with('toast_success',  $successMessage);
         }
         // Xoá giá trị sesson
         session()->forget('_id');
-        return redirect()->route('user.catalogue.create')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.catalogue.create')->with('toast_error', $errorMessage);
     }
 
     /**
@@ -113,19 +117,23 @@ class UserCatalogueController extends Controller
     public function destroy(Request $request)
     {
         $this->authorize('modules', 'user.catalogue.destroy');
+        $successMessage = $this->getToastMessage('userCatalogue', 'success', 'update');
+        $errorMessage = $this->getToastMessage('userCatalogue', 'error', 'update');
 
         if ($request->_id == null) {
-            return redirect()->route('user.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại');
+            return redirect()->route('user.catalogue.index')->with('toast_error', $errorMessage);
         }
         if ($this->userCatalogueService->destroy($request->_id)) {
 
-            return redirect()->route('user.catalogue.index')->with('toast_success', 'Xoá thành viên thành công.');
+            return redirect()->route('user.catalogue.index')->with('toast_success', $successMessage);
         }
-        return redirect()->route('user.catalogue.index')->with('toast_error', 'Có lỗi vui lòng thử lại.');
+        return redirect()->route('user.catalogue.index')->with('toast_error', $errorMessage);
     }
 
     public function permission()
     {
+        $this->authorize('modules', 'user.catalogue.edit');
+
         $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
         $permissions = $this->permissionRepository->all();
 
@@ -139,9 +147,12 @@ class UserCatalogueController extends Controller
     }
     public function updatePermission(Request $request)
     {
+        $successMessage = $this->getToastMessage('userCatalogue', 'success', 'permission');
+        $errorMessage = $this->getToastMessage('userCatalogue', 'error', 'permission');
+
         if ($this->userCatalogueService->setPermission()) {
-            return redirect()->route('user.catalogue.permission')->with('toast_success', 'Cập nhập quyền thành công.');
+            return redirect()->route('user.catalogue.permission')->with('toast_success', $successMessage);
         }
-        return redirect()->route('user.catalogue.permission')->with('toast_error', 'Cập nhập quyền thất bại.');
+        return redirect()->route('user.catalogue.permission')->with('toast_error', $errorMessage);
     }
 }

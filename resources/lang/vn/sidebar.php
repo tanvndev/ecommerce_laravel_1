@@ -11,7 +11,7 @@ return [
         [
             'id' => 'user',
             'route' => '',
-            'icon' => 'icofont-users',
+            'icon' => 'icofont-user',
             'title' => 'QL Thành viên',
             'activeCondition' => ['user.*', 'permission.*'],
             'subMenu' => [
@@ -29,6 +29,25 @@ return [
                     'title' => 'QL Quyền',
                     'route' => 'permission.index',
                     'activeCondition' => ['permission.*']
+                ],
+            ]
+        ],
+        [
+            'id' => 'customer',
+            'route' => '',
+            'icon' => 'icofont-brand-myspace',
+            'title' => 'QL Khách hàng',
+            'activeCondition' => ['customer.*'],
+            'subMenu' => [
+                [
+                    'title' => 'QL Khách hàng',
+                    'route' => 'customer.index',
+                    'activeCondition' => ['customer.index', 'customer.create', 'customer.edit'],
+                ],
+                [
+                    'title' => 'QL Nhóm khách hàng',
+                    'route' => 'customer.catalogue.index',
+                    'activeCondition' => ['customer.catalogue.*']
                 ],
             ]
         ],

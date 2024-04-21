@@ -2,46 +2,38 @@
 
 namespace App\Http\Controllers\Servers;
 
-use App\Classes\Nestedsetbie;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Customer\{
     StoreCustomerRequest,
-    UpdateCustomerRequest
+    UpdateCustomerRequest,
 };
 
 use App\Services\Interfaces\CustomerServiceInterface as CustomerService;
+use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\CustomerRepositoryInterface as CustomerRepository;
+use App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface as CustomerCatalogueRepository;
+
 
 
 class CustomerController extends Controller
 {
     protected $customerService;
+    protected $provinceRepository;
     protected $customerRepository;
+    protected $customerCatalogueRepository;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         CustomerService $customerService,
+        ProvinceRepository $provinceRepository,
         CustomerRepository $customerRepository,
+        CustomerCatalogueRepository $customerCatalogueRepository,
     ) {
-        parent::__construct();        
-        // Khởi tạo new Nestedsetbie
-        $this->middleware(function ($request, $next) {
-            $this->initNetedset();
-            return $next($request);
-        });
-
         $this->customerService = $customerService;
+        $this->provinceRepository = $provinceRepository;
         $this->customerRepository = $customerRepository;
-    }
-
-    private function initNetedset()
-    {
-        $this->nestedset = new Nestedsetbie([
-            'table' => 'customer_catalogues',
-            'foreignkey' => 'customer_catalogue_id',
-            'language_id' => $this->currentLanguage
-        ]);
+        $this->customerCatalogueRepository = $customerCatalogueRepository;
     }
     //
     function index()
@@ -49,16 +41,14 @@ class CustomerController extends Controller
         $this->authorize('modules', 'customer.index');
 
         $customers = $this->customerService->paginate();
-        // dd($customers);
+        $customerCatalogues = $this->customerCatalogueRepository->all();
         $config['seo'] = __('messages.customer')['index'];
-
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
+        // dd('index');
 
         return view('servers.customers.index', compact([
             'customers',
             'config',
-            'dropdown',
+            'customerCatalogues'
         ]));
     }
 
@@ -66,20 +56,20 @@ class CustomerController extends Controller
     {
         $this->authorize('modules', 'customer.create');
 
+        $provinces = $this->provinceRepository->all();
+        $customerCatalogues = $this->customerCatalogueRepository->all();
+
         $config['seo'] = __('messages.customer')['create'];
         $config['method'] = 'create';
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
-        // dd($dropdown);
         return view('servers.customers.store', compact([
             'config',
-            'dropdown',
+            'provinces',
+            'customerCatalogues'
         ]));
     }
 
     public function store(StoreCustomerRequest $request)
     {
-
         $successMessage = $this->getToastMessage('customer', 'success', 'create');
         $errorMessage = $this->getToastMessage('customer', 'error', 'create');
 
@@ -89,19 +79,17 @@ class CustomerController extends Controller
         return redirect()->route('customer.create')->with('toast_error', $errorMessage);
     }
 
+
     public function edit($id)
     {
         $this->authorize('modules', 'customer.edit');
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $customer = $this->customerRepository->getCustomerLanguageById($id, $this->currentLanguage);
-        // dd($customer);
-
-
-        $albums =  json_decode($customer->album);
-        // Danh mục cha
-        $dropdown = $this->nestedset->Dropdown();
+        // Lấy ra các tỉnh thành
+        $provinces = $this->provinceRepository->all();
+        $customerCatalogues = $this->customerCatalogueRepository->all();
+        $customer = $this->customerRepository->findById($id);
         // dd($customer);
 
 
@@ -110,12 +98,11 @@ class CustomerController extends Controller
 
         return view('servers.customers.store', compact([
             'config',
+            'provinces',
             'customer',
-            'albums',
-            'dropdown',
+            'customerCatalogues',
         ]));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -137,7 +124,7 @@ class CustomerController extends Controller
         }
         // Xoá giá trị sesson
         session()->forget('_id');
-        return redirect()->route('customer.edit', $id)->with('toast_error', $errorMessage);
+        return redirect()->route('customer.create')->with('toast_error', $errorMessage);
     }
 
     /**
@@ -154,7 +141,8 @@ class CustomerController extends Controller
             return redirect()->route('customer.index')->with('toast_error', $errorMessage);
         }
         if ($this->customerService->destroy($request->_id)) {
-            return redirect()->route('customer.index')->with('toast_success', $successMessage);
+
+            return redirect()->route('customer.index')->with('toast_success',  $successMessage);
         }
         return redirect()->route('customer.index')->with('toast_error', $errorMessage);
     }

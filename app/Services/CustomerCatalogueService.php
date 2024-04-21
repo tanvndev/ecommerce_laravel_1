@@ -2,16 +2,21 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
-use App\Services\Interfaces\CustomerServiceInterface;
+use App\Services\Interfaces\CustomerCatalogueServiceInterface;
+use App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface as CustomerCatalogueRepository;
 use App\Repositories\Interfaces\CustomerRepositoryInterface as CustomerRepository;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
-class CustomerService extends BaseService implements CustomerServiceInterface
+use Illuminate\Support\Facades\DB;
+
+class CustomerCatalogueService extends BaseService implements CustomerCatalogueServiceInterface
 {
+    protected $customerCatalogueRepository;
     protected $customerRepository;
-    public function __construct(CustomerRepository $customerRepository)
-    {
+    public function __construct(
+        CustomerCatalogueRepository $customerCatalogueRepository,
+        CustomerRepository $customerRepository
+    ) {
+        $this->customerCatalogueRepository = $customerCatalogueRepository;
         $this->customerRepository = $customerRepository;
     }
     function paginate()
@@ -19,41 +24,37 @@ class CustomerService extends BaseService implements CustomerServiceInterface
         // addslashes là một hàm được sử dụng để thêm các ký tự backslashes (\) vào trước các ký tự đặc biệt trong chuỗi.
         $condition['keyword'] = addslashes(request('keyword'));
         $condition['publish'] = request('publish');
-        $condition['customer_catalogue_id'] = request('customer_catalogue_id');
 
-
-
-        $customers = $this->customerRepository->pagination(
-            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'customer_catalogue_id', 'image'],
+        $customerCatalogues = $this->customerCatalogueRepository->pagination(
+            ['id', 'name', 'publish', 'description'],
             $condition,
             request('perpage'),
             [],
             [],
-            ['customer_catalogues']
+            ['customers']
+
         );
 
-        // dd($customers);
-
-        return $customers;
+        return $customerCatalogues;
     }
 
     function create()
     {
         DB::beginTransaction();
         try {
-            // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
-            $payload = request()->except('_token', 're_password');
-            // Hash mật khẩu 
-            $payload['password'] = Hash::make($payload['password']);
-            $create =  $this->customerRepository->create($payload);
+            // Lấy ra tất cả các trường và loại bỏ trường bên dưới
+            $payload = request()->except('_token');
+            $create =  $this->customerCatalogueRepository->create($payload);
 
-
+            if (!$create) {
+                DB::rollBack();
+                return false;
+            }
             DB::commit();
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
             echo $e->getMessage();
-            die;
             return false;
         }
     }
@@ -64,7 +65,7 @@ class CustomerService extends BaseService implements CustomerServiceInterface
         try {
             // Lấy ra tất cả các trường và loại bỏ 2 trường bên dưới
             $payload = request()->except('_token', '_method');
-            $update =  $this->customerRepository->update($id, $payload);
+            $update =  $this->customerCatalogueRepository->update($id, $payload);
 
             if (!$update) {
                 DB::rollBack();
@@ -84,7 +85,7 @@ class CustomerService extends BaseService implements CustomerServiceInterface
         DB::beginTransaction();
         try {
             // Xoá mềm
-            $delete = $this->customerRepository->delete($id);
+            $delete =  $this->customerCatalogueRepository->delete($id);
 
             if (!$delete) {
                 DB::rollBack();

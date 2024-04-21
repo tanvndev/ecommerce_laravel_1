@@ -64,6 +64,8 @@ class AppRepositoryProvider extends ServiceProvider
 'App\Repositories\Interfaces\SourceRepositoryInterface' => 'App\Repositories\SourceRepository',
 // Customer
 'App\Repositories\Interfaces\CustomerRepositoryInterface' => 'App\Repositories\CustomerRepository',
+// CustomerCatalogue
+'App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface' => 'App\Repositories\CustomerCatalogueRepository',
 ];
 
     public function register(): void

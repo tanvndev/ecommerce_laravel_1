@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreCustomerRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the customer is authorized to make this request.
      */
     public function authorize(): bool
     {
@@ -22,16 +22,22 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers',
+            'email' => 'required|string|email|unique:customers',
+            'fullname' => 'required|string',
+            'customer_catalogue_id' => 'required|integer|gt:0',
+            'password' => 'required|string|min:6',
+            're_password' => 'string|same:password',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'email' => 'Email',
+            'fullname' => 'Họ và tên',
+            'customer_catalogue_id' => 'Nhóm thành viên',
+            'password' => 'Mật khẩu',
+            're_password' => 'Mật khẩu',
         ];
     }
 

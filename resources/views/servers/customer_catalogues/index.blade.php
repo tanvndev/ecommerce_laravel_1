@@ -9,8 +9,8 @@
                     class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">{{$config['seo']['table']}}</h3>
                     <div class="col-auto d-flex w-sm-100">
-                        <a href="{{route('customer.create')}}" class="btn btn-primary btn-set-task w-sm-100">
-                            <i class="icofont-plus-circle me-2 fs-6"></i>{{$config['seo']['create']}}</a>
+                        <a href="{{route('customer.catalogue.create')}}" class="btn btn-primary btn-set-task w-sm-100">
+                            <i class="icofont-plus-circle me-2 fs-6"></i>{{$config['seo']['create']}} </a>
                     </div>
                 </div>
             </div>
@@ -21,23 +21,23 @@
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Toolbox --}}
-                        @include('servers.includes.toolbox', ['model' =>'Customer'] )
+                        @include('servers.includes.toolbox', ['model' =>'CustomerCatalogue'] )
                     </div>
                 </div>
 
                 <div class="card mb-2">
                     <div class="card-body ">
                         {{-- Filter --}}
-                        @include('servers.customers.blocks.filter')
+                        @include('servers.customer_catalogues.blocks.filter')
                     </div>
                 </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
-                        @include('servers.customers.blocks.table', ['model' =>'Customer'])
+                        @include('servers.customer_catalogues.blocks.table', ['model' =>'CustomerCatalogue'])
                         {{-- Pagination --}}
                         <div class="mt-3 pagination-list-text">
-                            {{ $customers->links('pagination::bootstrap-5') }}
+                            {{ $customerCatalogues->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
 

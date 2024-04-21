@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\DB;
 class UserCatalogueService extends BaseService implements UserCatalogueServiceInterface
 {
     protected $userCatalogueRepository;
-    protected $UserRepository;
+    protected $userRepository;
     public function __construct(
         UserCatalogueRepository $userCatalogueRepository,
-        UserRepository $UserRepository
+        UserRepository $userRepository
     ) {
         $this->userCatalogueRepository = $userCatalogueRepository;
-        $this->UserRepository = $UserRepository;
+        $this->userRepository = $userRepository;
     }
     function paginate()
     {
@@ -137,7 +137,7 @@ class UserCatalogueService extends BaseService implements UserCatalogueServiceIn
             }
             $payload[$dataPost['field']] = $value;
 
-            $update = $this->UserRepository->updateByWhereIn('user_catalogue_id', $arrayId, $payload);
+            $update = $this->userRepository->updateByWhereIn('user_catalogue_id', $arrayId, $payload);
 
             if (!$update) {
                 DB::rollBack();
