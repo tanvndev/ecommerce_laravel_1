@@ -12,6 +12,7 @@
             <th>{{__('messages.tablePhone')}}</th>
             <th>{{__('messages.tableAddress')}}</th>
             <th>{{__('messages.customer.table.customerGroup')}}</th>
+            <th>{{__('messages.customer.table.source')}}</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -29,8 +30,6 @@
                     <span class="fw-bold ms-1"> {{$customer->fullname}}</span>
                 </div>
             </td>
-
-
             <td>
                 {{$customer->email}}
             </td>
@@ -42,6 +41,9 @@
             </td>
             <td>
                 {{$customer->customer_catalogues->name}}
+            </td>
+            <td>
+                {{$customer->sources->name}}
             </td>
             <td>
                 <div class="toggler toggler-list-check">

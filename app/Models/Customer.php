@@ -39,6 +39,6 @@ class Customer extends Model
 
     public function sources()
     {
-        return $this->belongsTo(Source::class, 'customer_id', 'id');
+        return $this->belongsTo(Source::class, 'source_id', 'id');
     }
 }

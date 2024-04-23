@@ -136,4 +136,36 @@ class DashboardController extends Controller
 
         return response()->json(array('items' => $objectMapped));
     }
+
+    public function getPromotionConditionValue(Request $request)
+    {
+        $response = [];
+        switch ($request->value) {
+            case 'staff_take_care_customer':
+                $repositoryInstance = $this->getRepositoryInstance('User');
+                $data = $repositoryInstance->all([], ['id', 'fullname'])->toArray();
+                break;
+            case 'customer_group':
+                $repositoryInstance = $this->getRepositoryInstance('CustomerCatalogue');
+                $data = $repositoryInstance->all([], ['id', 'name'])->toArray();
+                break;
+            case 'customer_gender':
+                $data = __('general.gender');
+                break;
+            case 'customer_birthday':
+                $data = __('general.day');
+                break;
+        }
+        if (is_array($data) && count($data) > 0) {
+            foreach ($data as $key => $value) {
+                $response[] = [
+                    'id' => $value['id'],
+                    'text' => $value['name'] ?? $value['fullname']
+                ];
+            }
+        }
+        return response()->json([
+            'data' => $response
+        ]);
+    }
 }

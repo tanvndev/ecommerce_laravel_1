@@ -10,6 +10,7 @@ return [
         'min' => ':attribute phải tối thiểu :min ký tự.',
         'same' => ':attribute chưa khớp.',
         'gt' => ':attribute bắt buộc phải chọn.',
+        'after' => ':attribute phải lớn hơn :date.'
     ],
 
 ];

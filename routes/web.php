@@ -8,6 +8,7 @@ use App\Http\Controllers\Ajax\{
     MenuController as AjaxMenuController,
     SlideController as AjaxSlideController,
     ProductController as AjaxProductController,
+    SourceController as AjaxSourceController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -270,12 +271,14 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->middleware('admin')->name('ajax.dashboard.getMenu');
     Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->middleware('admin')->name('ajax.dashboard.findModelObject');
     Route::get('ajax/dashboard/findPromotionObject', [AjaxDashboardController::class, 'findPromotionObject'])->middleware('admin')->name('ajax.dashboard.findPromotionObject');
+    Route::get('ajax/dashboard/getPromotionConditionValue', [AjaxDashboardController::class, 'getPromotionConditionValue'])->middleware('admin')->name('ajax.dashboard.getPromotionConditionValue');
     Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->middleware('admin')->name('ajax.attribute.getAttribute');
     Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->middleware('admin')->name('ajax.attribute.loadAttribute');
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');
     Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->middleware('admin')->name('ajax.menu.drag');
     Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->middleware('admin')->name('ajax.slide.drag');
     Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->middleware('admin')->name('ajax.slide.loadProductPromotion');
+    Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->middleware('admin')->name('ajax.source.getAllSource');
 });
 
 

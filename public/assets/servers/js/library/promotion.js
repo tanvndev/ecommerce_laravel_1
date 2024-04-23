@@ -2,14 +2,14 @@ if (typeof jQuery === "undefined") {
     throw new Error("jQuery plugins need to be before this file");
 }
 
-$(function () {
+jQuery(function ($) {
     "use strict";
     var init = {};
     var _token = $('meta[name="csrf-token"]').attr("content");
 
-    // Hàm này xử lý khi nhấn chọn nút neverEnd
+    // Hàm này xử lý khi nhấn chọn nút neverEndDate
     init.promotionNeverEnd = () => {
-        $(document).on("change", 'input[name="neverEnd"]', function () {
+        $(document).on("change", 'input[name="neverEndDate"]', function () {
             const isChecked = $(this).prop("checked");
             $('input[name="end_date"]')
                 .val(isChecked ? "" : $('input[name="start_date"]').val())
@@ -28,7 +28,9 @@ $(function () {
             _this
                 .toggleClass("is-invalid", isInvalid)
                 .siblings(".invalid-feedback")
-                .text(isInvalid ? "Ngày kết thúc phải sau ngày bắt đầu" : "");
+                .text(
+                    isInvalid ? "Ngày kết thúc phải lớn hơn ngày bắt đầu" : ""
+                );
 
             if (isInvalid) {
                 _this.val(startDate);
@@ -38,34 +40,49 @@ $(function () {
 
     // Hàm này giúp chọn source
     init.promotionSource = () => {
-        $(document).on("change", 'input[name="source"]', function () {
+        $(document).on("change", 'input[name="sourceStatus"]', function () {
             const _this = $(this);
             if (_this.val() == "choose") {
-                let sourceHtml = init.renderPromotionSource();
-                _this.parents(".source-inner").append(sourceHtml);
-                init.promotionMutipleSelect2();
+                init.sendAjaxChooseSource(_this);
             } else {
                 _this.parents(".source-inner").find(".source-wrapper").remove();
             }
         });
     };
 
-    // Hàm này render ra source
-    init.renderPromotionSource = () => {
-        let sourceData = [
-            {
-                id: 1,
-                name: "Tiktok",
+    // Gửi ajax chọn nguồn khách hàng
+    init.sendAjaxChooseSource = (_this) => {
+        $.ajax({
+            url: "/ajax/source/getAllSource",
+            type: "GET",
+            dataType: "json",
+            beforeSend: function () {
+                _this.parents(".source-inner").append(`
+                    <div class="source-wrapper">
+                        <div class="loader-menu-model w-100 "></div>
+                    </div>
+                `);
             },
-            {
-                id: 2,
-                name: "Youtube",
+            success: function (response) {
+                if (response.data.length > 0) {
+                    let sourceHtml = init.renderPromotionSource(response.data);
+                    $(".source-wrapper").remove();
+                    _this.parents(".source-inner").append(sourceHtml);
+                    init.promotionMutipleSelect2();
+                }
             },
-        ];
+            error: function (xhr, status, error) {
+                // Handle error
+                console.error(xhr.responseText);
+            },
+        });
+    };
 
+    // Hàm này render ra source
+    init.renderPromotionSource = (sourceData = []) => {
         let html = /*html*/ `
             <div class="source-wrapper">
-                <select name="" multiple class="form-select mutiple-select2">
+                <select name="sourceValue[]" multiple class="form-select mutiple-select2">
                     ${
                         sourceData &&
                         sourceData
@@ -84,7 +101,7 @@ $(function () {
 
     // Hàm này giúp chọn apply condition
     init.promotionApplyCondition = () => {
-        $(document).on("change", 'input[name="apply"]', function () {
+        $(document).on("change", 'input[name="applyStatus"]', function () {
             const _this = $(this);
             if (_this.val() == "choose") {
                 let applyHtml = init.renderPromotionApplyCondition();
@@ -101,39 +118,25 @@ $(function () {
 
     //  Hàm này render ra apply condition
     init.renderPromotionApplyCondition = () => {
-        let applyConditionData = [
-            {
-                id: "staff_take_care_customer",
-                name: "Nhân viên chăm sóc khách hàng",
-            },
-            {
-                id: "customer_group",
-                name: "Nhóm khách hàng",
-            },
-            {
-                id: "customer_gender",
-                name: "Giới tính",
-            },
-            {
-                id: "customer_birthday",
-                name: "Ngày sinh",
-            },
-        ];
+        let applyConditionData = JSON.parse(
+            $(".apply_condition_item_select").val()
+        );
+
+        let optionHtml =
+            applyConditionData &&
+            applyConditionData
+                .map((item) => {
+                    return /*html*/ `
+                        <option value="${item.id}">${item.name}</option>
+                    `;
+                })
+                .join("");
 
         let html = /*html*/ `
             <div class="apply-condition-wrapper">
-                <div class="mb-4">
-                    <select name="" multiple class="form-select mutiple-select2 apply-condition-item">
-                        ${
-                            applyConditionData &&
-                            applyConditionData
-                                .map((item) => {
-                                    return /*html*/ `
-                                <option value="${item.id}">${item.name}</option>
-                            `;
-                                })
-                                .join("")
-                        }
+                <div class="mb-3">
+                    <select name="applyValue[]" multiple class="form-select mutiple-select2 apply-condition-item">
+                        ${optionHtml}
                     </select>
                 </div>
             </div>
@@ -155,18 +158,8 @@ $(function () {
                 // Kiểm tra đã có condition nào đang chọn
                 if (!selectConditions.includes(element)) {
                     selectConditions.push(element);
-                    let html = "";
 
-                    html = init.renderApplyConditionItemHtml(
-                        label[index].text,
-                        element
-                    );
-
-                    _this.parents(".apply-condition-wrapper").append(html);
-
-                    setTimeout(() => {
-                        init.promotionMutipleSelect2();
-                    }, 200);
+                    init.sendAjaxApplyConditionItem(label[index].text, element);
                 }
             });
 
@@ -196,33 +189,77 @@ $(function () {
         });
     };
 
-    // hàm này render ra html apply conditon child
-    init.renderApplyConditionItemHtml = (label = "", element) => {
-        let data = [
-            {
-                id: "1",
-                name: "Khách vip",
-            },
-            {
-                id: "2",
-                name: "Khách bán buôn",
-            },
-        ];
+    // Hàm này giúp lấy lấy lại dữ liệu khi đổ form
+    init.applyConditionItemSet = () => {
+        let checkedValue = JSON.parse($(".apply_condition_item_set").val());
+        if (checkedValue.length > 0) {
+            $(".apply-condition-item").val(checkedValue).trigger("change");
+        }
+    };
 
-        let html = /*html*/ `
-            <div class="border-bottom apply-condition-child pb-3 ${element}">
+    // Gửi ajax lấy gia dữ liệu apply condition item
+    init.sendAjaxApplyConditionItem = (label, value) => {
+        $.ajax({
+            url: "/ajax/dashboard/getPromotionConditionValue",
+            type: "GET",
+            dataType: "json",
+            data: {
+                value,
+            },
+            beforeSend: function () {
+                $(".apply-condition-wrapper").append(`
+                    <div class="apply-wrapper-loading">
+                        <div class="loader-menu-model w-100 "></div>
+                    </div>
+                `);
+            },
+            success: function (response) {
+                if (response.data.length > 0) {
+                    let html = init.renderApplyConditionItemHtml(
+                        label,
+                        value,
+                        response.data
+                    );
+                    $(".apply-wrapper-loading").remove();
+                    $(".apply-condition-wrapper").append(html);
+
+                    setTimeout(() => {
+                        init.promotionMutipleSelect2();
+                    }, 200);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                console.error(xhr.responseText);
+            },
+        });
+    };
+
+    // hàm này render ra html apply conditon child
+    init.renderApplyConditionItemHtml = (
+        label = "",
+        element = "",
+        data = []
+    ) => {
+        let conditionHiddenInput = $(`.child_condition_item_${element}`);
+        let conditionHiddenVal =
+            conditionHiddenInput.length > 0
+                ? JSON.parse(conditionHiddenInput.val())
+                : [];
+
+        let optionsHtml = data
+            .map((item, index) => {
+                let selected =
+                    conditionHiddenVal[index] == item.id ? "selected" : "";
+                return `<option ${selected} value="${item.id}">${item.text}</option>`;
+            })
+            .join("");
+
+        let html = `
+            <div class="border-bottom apply-condition-child pt-3 pb-3 ${element}">
                 <label for="" class="form-label text-primary fw-normal">${label}</label>
-                <select class="form-select mutiple-select2" multiple name="" id="">
-                    ${
-                        data &&
-                        data
-                            .map((item) => {
-                                return /*html*/ `
-                                <option value="${item.id}">${item.name}</option>
-                            `;
-                            })
-                            .join("")
-                    }
+                <select class="form-select mutiple-select2" multiple name="${element}[]">
+                    ${optionsHtml}
                 </select>
             </div>
         `;
@@ -234,27 +271,6 @@ $(function () {
         $(".mutiple-select2").select2({
             minimunInputLength: 2,
             placeholder: "Click vào đây để lựa chọn...",
-            // ajax: {
-            //     url: "/ajax/attribute/getAttribute",
-            //     type: "GET",
-            //     dataType: "json",
-            //     delay: 250,
-            //     data: function (params) {
-            //         let query = {
-            //             search: params.term,
-            //             option: option,
-            //         };
-            //         // Query parameters will be ?search=[term]
-            //         return query;
-            //     },
-            //     processResults: function (data) {
-            //         return {
-            //             results: $.map(data, function (obj, i) {
-            //                 return obj;
-            //             }),
-            //         };
-            //     },
-            // },
         });
     };
 
@@ -277,7 +293,9 @@ $(function () {
 
         // Kiểm tra giá trị đến phải lớn hơn giá trị từ
         if (orderAmountRangeTo <= orderAmountRangeFrom) {
-            $row.find("input").addClass("is-invalid");
+            $row.find("input")
+                .not("input[name='amountValue[]']")
+                .addClass("is-invalid");
             setToast(
                 "warning",
                 "Vui lòng nhập giá trị đến lớn hơn giá trị từ."
@@ -286,6 +304,15 @@ $(function () {
         }
         $row.find("input").removeClass("is-invalid");
         return orderAmountRangeTo;
+    };
+
+    // Hàm này xóa khu vềc khi chọn promotion type
+    init.deletePromotionTypeRow = () => {
+        $(document).on("click", ".delete-promotion-type-row", function () {
+            if ($(".promotion-type-row-item").length > 1) {
+                $(this).parents(".promotion-type-row-item").remove();
+            }
+        });
     };
 
     // Hàm này tạo ra khu vềc khi chọn promotion type
@@ -297,15 +324,6 @@ $(function () {
             }
             let html = init.renderPromotionTypeRowHtml(lastInputVal);
             $(".promotion-row-wrap").append(html);
-            init.setUpSelect2();
-        });
-    };
-    // Hàm này xóa khu vềc khi chọn promotion type
-    init.deletePromotionTypeRow = () => {
-        $(document).on("click", ".delete-promotion-type-row", function () {
-            if ($(".promotion-type-row-item").length > 1) {
-                $(this).parents(".promotion-type-row-item").remove();
-            }
         });
     };
 
@@ -314,19 +332,19 @@ $(function () {
         let html = /*html*/ `
             <tr class="promotion-type-row-item">
                 <td class="order-amount-range-from"> 
-                    <input type="text" class="form-control text-end int" value="${formatToCommas(
+                    <input type="text" name="promotion_order_amount_range[amountFrom][]" class="form-control text-end int" value="${formatToCommas(
                         +lastInputVal + 1
                     )}">
                 </td>
                 <td class="order-amount-range-to">
-                    <input type="text" class="form-control text-end int" value="0">
+                    <input type="text" name="promotion_order_amount_range[amountTo][]" class="form-control text-end int" value="0">
                 </td>
                 <td class="discount-type">
                     <div class="d-flex align-items-center">
-                        <input type="text" class="form-control text-end int me-1 "
+                        <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 "
                             value="0">
 
-                        <select class="form-select init-select2 w-25 " name="">
+                        <select class="form-select w-21" name="promotion_order_amount_range[amountType][]">
                             <option value="cast">đ</option>
                             <option value="percent">%</option>
                         </select>
@@ -343,6 +361,60 @@ $(function () {
         return html;
     };
 
+    // Ham này lấy lại dữ liệu không gửi form đi
+    init.renderPreloadPromotionType = () => {
+        let dataPreload = JSON.parse(
+            $(".preload_input_order_amount_range").val()
+        );
+        if (!dataPreload || dataPreload.length === 0) {
+            return;
+        }
+
+        let html = dataPreload?.amountFrom
+            .map(
+                (value, index) => /*html*/ `
+                    <tr class="promotion-type-row-item">
+                        <td class="order-amount-range-from"> 
+                            <input type="text" name="promotion_order_amount_range[amountFrom][]" class="form-control text-end int" value="${value}">
+                        </td>
+                        <td class="order-amount-range-to">
+                            <input type="text" name="promotion_order_amount_range[amountTo][]" class="form-control text-end int" value="${
+                                dataPreload?.amountTo[index]
+                            }">
+                        </td>
+                        <td class="discount-type">
+                            <div class="d-flex align-items-center">
+                                <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 " value="${
+                                    dataPreload?.amountValue[index]
+                                }">
+                                <select class="form-select w-21" name="promotion_order_amount_range[amountType][]">
+                                    <option ${
+                                        dataPreload?.amountType[index] == "cast"
+                                            ? "selected"
+                                            : ""
+                                    } value="cast">đ</option>
+                                    <option ${
+                                        dataPreload?.amountType[index] ==
+                                        "percent"
+                                            ? "selected"
+                                            : ""
+                                    } value="percent">%</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-outline-secondary delete-promotion-type-row text-danger px-2">
+                                <i class="icofont-trash fs-14 "></i>
+                            </button>
+                        </td>
+                    </tr>
+                `
+            )
+            .join("");
+
+        $(".promotion-row-wrap").html(html);
+    };
+
     // Hàm này bắt sự kiện change vào select promotion method và hiển thị ra promotion container
     init.renderOrderRangeContainer = () => {
         $(document).on("change", ".promotion-method", function () {
@@ -353,7 +425,7 @@ $(function () {
                     init.emptyPromotionContainer();
                     break;
                 case "order_amount_range":
-                    init.renderOrderAmountRange();
+                    init.renderOrderAmountRangeDefault();
                     break;
                 case "product_and_quantity":
                     init.renderProductAndQuantity();
@@ -367,35 +439,40 @@ $(function () {
                     break;
             }
         });
+
+        let preload = $(".preload_promotion_method").val();
+        if (preload || preload !== "") {
+            $(".promotion-method").trigger("change");
+        }
     };
 
     // Trường hợp render ra order amount range
-    init.renderOrderAmountRange = () => {
+    init.renderOrderAmountRangeDefault = () => {
         let html = /*html*/ `
         <div class="card-body order-amount-range">
             <div class="table-responsive rounded-1">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th class=" text-end ">Giá trị từ</th>
-                            <th class=" text-end ">Giá trị đến </th>
-                            <th class=" text-end ">Chiết khấu</th>
-                            <th class=" text-center"></th>
+                            <th class="text-end ">Giá trị từ</th>
+                            <th class="text-end ">Giá trị đến </th>
+                            <th class="text-end ">Chiết khấu</th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody class="promotion-row-wrap">
                         <tr class="promotion-type-row-item">
                             <td class="order-amount-range-from">
-                                <input type="text" name="amountFrom[]" class="form-control text-end int" value="0">
+                                <input type="text" name="promotion_order_amount_range[amountFrom][]" class="form-control text-end int" value="0">
                             </td>
                             <td class="order-amount-range-to">
-                                <input type="text" name="amountTo[]" class="form-control text-end int" value="0">
+                                <input type="text" name="promotion_order_amount_range[amountTo][]" class="form-control text-end int" value="0">
                             </td>
                             <td class="discount-type">
                                 <div class="d-flex align-items-center">
-                                    <input type="text" name="amountValue[]" class="form-control text-end int me-1 " value="0">
+                                    <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 " value="0">
 
-                                    <select class="form-select init-select2 w-25 " name="amountType[]">
+                                    <select class="form-select w-21 " name="promotion_order_amount_range[amountType][]">
                                         <option value="cast">đ</option>
                                         <option value="percent">%</option>
                                     </select>
@@ -417,25 +494,24 @@ $(function () {
         </div>
         `;
         $(".promotion-container").html(html);
-        init.setUpSelect2();
     };
 
     init.renderProductAndQuantity = () => {
-        let selects = JSON.parse(
-            $('input[name="select_product_and_quantity"').val()
-        );
-        let selectHtml = ``;
-        for (const key in selects) {
-            if (Object.hasOwnProperty.call(selects, key)) {
-                const val = selects[key];
-                selectHtml += `<option value="${key}">${val}</option>`;
-            }
-        }
+        let selects = JSON.parse($(".select_product_and_quantity").val());
+        let module_type = $(".preload_select_product_and_quantity").val();
+        let selectHtml = Object.entries(selects)
+            .map(([key, val]) => {
+                return `<option ${
+                    module_type == key ? "selected" : ""
+                } value="${key}">${val}</option>`;
+            })
+            .join("");
+
         let html = /*html*/ `
         <div class="product-and-quantity mt-3">
                 <div class="mb-4">
-                    <label for="" class="form-label text-primary">Sản phẩm áp dụng</label>
-                    <select name="" class="form-select select-product-and-quantity init-select2">
+                    <label class="form-label text-primary">Sản phẩm áp dụng</label>
+                    <select name="module_type" class="form-select select-product-and-quantity init-select2">
                     ${selectHtml}
                     </select>
 
@@ -445,16 +521,16 @@ $(function () {
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class=" text-end w-45">Sản phẩm mua</th>
-                                <th class=" text-end w-11">SL tối thiểu</th>
-                                <th class=" text-end ">Giới hạn KM</th>
-                                <th class=" text-end ">Chiết khấu</th>
-                                <th class=" text-center"></th>
+                                <th class="text-end w-45">Sản phẩm mua</th>
+                                <th class="text-end w-11">SL tối thiểu</th>
+                                <th class="text-end ">Giới hạn KM</th>
+                                <th class="text-end ">Chiết khấu</th>
+                                <th class="text-center"></th>
                             </tr>
                         </thead>
-                        <tbody class="">
-                            <tr class="">
-                                <td class="">
+                        <tbody>
+                            <tr>
+                                <td>
                                     <div class="product-quantity-wrap">
                                         <div class="product-quantity-inner ">
                                             <div class="goods-list d-none">
@@ -474,20 +550,20 @@ $(function () {
                                     </div>
                                 </td>
                                 <td class="">
-                                    <input type="text" name="amountTo[]"
+                                    <input type="text" name="product_and_quantity[quantity]"
                                         class="form-control text-end int" value="1">
                                 </td>
                                 <td class="">
-                                    <input type="text" name="amountTo[]"
+                                    <input type="text" name="product_and_quantity[max_discount]"
                                         class="form-control text-end int" value="0">
                                 </td>
                                 <td class="discount-type">
                                     <div class="d-flex align-items-center">
-                                        <input type="text" name="amountValue[]"
+                                        <input type="text" name="product_and_quantity[discount_value]"
                                             class="form-control text-end int me-1 " value="0">
 
                                         <select class="form-select init-select2 w-25 "
-                                            name="amountType[]">
+                                            name="product_and_quantity[discount_type]">
                                             <option value="cast">đ</option>
                                             <option value="percent">%</option>
                                         </select>
@@ -787,7 +863,6 @@ $(function () {
                         item.variant_id !== variantId
                 );
             }
-            console.log(productItemChoose);
 
             _this.find(".product-item-checkbox").prop("checked", !isChecked);
         });
@@ -817,6 +892,9 @@ $(function () {
                         }">
                             <span>${item.name}</span>
                             <button type="button" class="btn-close"></button>
+                            <input type="hidden" name="object[name][]" value="${
+                                item.name
+                            }">
                             <input type="hidden" name="object[id][]" value="${
                                 item.product_id
                             }">
@@ -879,6 +957,123 @@ $(function () {
         });
     };
 
+    // Ham này lấy lại dữ liệu không gửi form đi
+    init.renderPreloadProductAndQuantity = () => {
+        let preloadInfo = JSON.parse($(".preload_product_and_quantity").val());
+        let preloadObject = JSON.parse($(".preload_object_input").val());
+        if (preloadInfo.length == 0 || preloadObject.length == 0) {
+            return;
+        }
+        let model = $(".select-product-and-quantity").val();
+        let productChoose = [];
+        let htmlObject = preloadObject?.id
+            .map((value, index) => {
+                let modelName =
+                    model +
+                        "_" +
+                        value +
+                        "_" +
+                        preloadObject?.product_variant_id[index] ?? 0;
+
+                productChoose.push({
+                    model,
+                    product_id: value,
+                    variant_id: preloadObject?.product_variant_id[index],
+                    name: preloadObject?.name[index],
+                });
+
+                return /*html*/ `
+                    <div class="goods-item ${modelName}" data-model="${model}">
+                        <span>${preloadObject?.name[index]}</span>
+                        <button type="button" class="btn-close"></button>
+                        <input type="hidden" name="object[name][]" value="${
+                            preloadObject?.name[index]
+                        }">
+                        <input type="hidden" name="object[id][]" value="${value}">
+                        <input type="hidden" name="object[product_variant_id][]" value="${
+                            preloadObject?.product_variant_id[index] ?? 0
+                        }">
+                    </div>
+                        `;
+            })
+            .join("");
+        productItemChoose = productChoose;
+        htmlObject += /*html*/ `
+                <div class="goods-item-2 last-child fw-bold search-product-btn" data-bs-toggle="modal"
+                data-bs-target="#find-product">
+                    Chọn vào đây để tìm kiếm...
+                </div>
+            `;
+
+        let html = /*html*/ `
+            <tr>
+                <td>
+                    <div class="product-quantity-wrap">
+                        <div class="product-quantity-inner ">
+                            <div class="goods-list">
+                                ${htmlObject}
+                            </div>
+                            <div class="search-wrap search-product-btn" data-bs-toggle="modal"
+                                data-bs-target="#find-product" style="display: none;">
+                                <div class="icon-search ">
+                                    <i class="icofont-search-1"></i>
+                                </div>
+                                <div class="input-search">
+                                    <p>Chọn vào đây để tìm kiếm...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </td>
+                <td class="">
+                    <input type="text" name="product_and_quantity[quantity]"
+                        class="form-control text-end int" value="${
+                            preloadInfo?.quantity
+                        }">
+                </td>
+                <td class="">
+                    <input type="text" name="product_and_quantity[max_discount]"
+                        class="form-control text-end int" value="${
+                            preloadInfo?.max_discount
+                        }">
+                </td>
+                <td class="discount-type">
+                    <div class="d-flex align-items-center">
+                        <input type="text" name="product_and_quantity[discount_value]"
+                            class="form-control text-end int me-1 " value="${
+                                preloadInfo?.discount_value
+                            }">
+
+                        <select class="form-select init-select2 w-25 "
+                            name="product_and_quantity[discount_type]">
+                            <option ${
+                                preloadInfo?.discount_type == "cast"
+                                    ? "selected"
+                                    : ""
+                            } value="cast">đ</option>
+                            <option ${
+                                preloadInfo?.max_discount == "percent"
+                                    ? "selected"
+                                    : ""
+                            } value="percent">%</option>
+                        </select>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <button type="button"
+                        class="btn btn-outline-secondary delete-promotion-type-row text-danger px-2">
+                        <i class="icofont-trash fs-14 "></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+        $(".product-and-quantity table tbody").html(html);
+        setTimeout(() => {
+            init.setUpSelect2();
+        }, 500);
+    };
+
     // ChangeMethod
     init.changePromotionMethod = () => {
         $(document).on("change", ".select-product-and-quantity", function () {
@@ -905,5 +1100,8 @@ $(function () {
         init.confirmProductPromotion();
         init.deleteGoodsItem();
         init.changePromotionMethod();
+        init.applyConditionItemSet();
+        init.renderPreloadPromotionType();
+        init.renderPreloadProductAndQuantity();
     });
 });

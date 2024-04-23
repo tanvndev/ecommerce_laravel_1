@@ -12,6 +12,7 @@ use App\Http\Requests\Customer\{
 use App\Services\Interfaces\CustomerServiceInterface as CustomerService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 use App\Repositories\Interfaces\CustomerRepositoryInterface as CustomerRepository;
+use App\Repositories\Interfaces\SourceRepositoryInterface as SourceRepository;
 use App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface as CustomerCatalogueRepository;
 
 
@@ -21,6 +22,7 @@ class CustomerController extends Controller
     protected $customerService;
     protected $provinceRepository;
     protected $customerRepository;
+    protected $sourceRepository;
     protected $customerCatalogueRepository;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
@@ -29,11 +31,13 @@ class CustomerController extends Controller
         ProvinceRepository $provinceRepository,
         CustomerRepository $customerRepository,
         CustomerCatalogueRepository $customerCatalogueRepository,
+        SourceRepository $sourceRepository,
     ) {
         $this->customerService = $customerService;
         $this->provinceRepository = $provinceRepository;
         $this->customerRepository = $customerRepository;
         $this->customerCatalogueRepository = $customerCatalogueRepository;
+        $this->sourceRepository = $sourceRepository;
     }
     //
     function index()
@@ -58,13 +62,15 @@ class CustomerController extends Controller
 
         $provinces = $this->provinceRepository->all();
         $customerCatalogues = $this->customerCatalogueRepository->all();
+        $sources = $this->sourceRepository->all();
 
         $config['seo'] = __('messages.customer')['create'];
         $config['method'] = 'create';
         return view('servers.customers.store', compact([
             'config',
             'provinces',
-            'customerCatalogues'
+            'customerCatalogues',
+            'sources',
         ]));
     }
 
@@ -90,6 +96,8 @@ class CustomerController extends Controller
         $provinces = $this->provinceRepository->all();
         $customerCatalogues = $this->customerCatalogueRepository->all();
         $customer = $this->customerRepository->findById($id);
+        $sources = $this->sourceRepository->all();
+
         // dd($customer);
 
 
@@ -101,6 +109,7 @@ class CustomerController extends Controller
             'provinces',
             'customer',
             'customerCatalogues',
+            'sources',
         ]));
     }
 

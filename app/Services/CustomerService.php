@@ -24,12 +24,12 @@ class CustomerService extends BaseService implements CustomerServiceInterface
 
 
         $customers = $this->customerRepository->pagination(
-            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'customer_catalogue_id', 'image'],
+            ['id', 'email', 'phone', 'fullname', 'address', 'publish', 'customer_catalogue_id', 'source_id', 'image'],
             $condition,
             request('perpage'),
             [],
             [],
-            ['customer_catalogues']
+            ['customer_catalogues', 'sources']
         );
 
         // dd($customers);

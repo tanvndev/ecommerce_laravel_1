@@ -21,17 +21,26 @@ class StorePromotionRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        // dd($this->all());
+        $rules = [
             'name' => 'required|string',
-            'canonical' => 'required|string|unique:routers',
+            'start_date' => 'required|date_format:Y-m-d\TH:i',
+
         ];
+
+        if (!$this->has('neverEndDate')) {
+            $rules['end_date'] = 'required|date_format:Y-m-d\TH:i|after:start_date';
+        }
+        return $rules;
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Tiêu đề',
-            'canonical' => 'Đường dẫn',
+            'name' => 'Tên chương trình',
+            'code' => 'Mã khuyến mãi',
+            'start_date' => 'Ngày bắt đầu',
+            'end_date' => 'Ngày kết thúc',
         ];
     }
 

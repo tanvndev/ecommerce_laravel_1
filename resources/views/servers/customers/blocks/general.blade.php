@@ -19,12 +19,12 @@
             </div>
 
             <div class="col-md-6">
-                {!! Form::label('customer_catalogue_id', __('messages.customer.table.customerGroup'), ['class' =>
+                {!! Form::label('customer_catalogue_id', __('messages.customer.table.sourceSelect'), ['class' =>
                 'form-label']) !!}
                 <span class="text-danger">(*)</span>
-                {!! Form::select('customer_catalogue_id', ['' => __('messages.customer.table.customerGroupSelect')] +
-                $customerCatalogues->pluck('name', 'id')->toArray(),
-                old('customer_catalogue_id', $customer->customer_catalogue_id ?? ''), ['class' => 'form-select
+                {!! Form::select('customer_catalogue_id', [ __('messages.customer.table.sourceSelect')] +
+                $sources->pluck('name', 'id')->toArray(),
+                old('customer_catalogue_id', $customer->source_id ?? ''), ['class' => 'form-select
                 init-select2']) !!}
             </div>
 

@@ -8,20 +8,22 @@ use App\Http\Requests\Promotion\{
     StorePromotionRequest,
     UpdatePromotionRequest
 };
-
+use App\Models\Source;
 use App\Services\Interfaces\PromotionServiceInterface as PromotionService;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
-
+use App\Repositories\Interfaces\SourceRepositoryInterface as SourceRepository;
 
 class PromotionController extends Controller
 {
     protected $promotionService;
+    protected $sourceRepository;
     protected $promotionRepository;
 
     // Sử dụng dependency injection chuyển đổi đối tượng của một lớp được đăng ký trong container
     public function __construct(
         PromotionService $promotionService,
         PromotionRepository $promotionRepository,
+        SourceRepository $sourceRepository,
     ) {
         parent::__construct();
         // Khởi tạo new Nestedsetbie
@@ -31,6 +33,7 @@ class PromotionController extends Controller
 
         $this->promotionService = $promotionService;
         $this->promotionRepository = $promotionRepository;
+        $this->sourceRepository = $sourceRepository;
     }
 
 
@@ -55,21 +58,23 @@ class PromotionController extends Controller
 
         $config['seo'] = __('messages.promotion')['create'];
         $config['method'] = 'create';
+        $sources = $this->sourceRepository->all();
         return view('servers.promotions.store', compact([
             'config',
+            'sources'
         ]));
     }
 
     public function store(StorePromotionRequest $request)
     {
+        dd($request->all());
+        // $successMessage = $this->getToastMessage('promotion', 'success', 'create');
+        // $errorMessage = $this->getToastMessage('promotion', 'error', 'create');
 
-        $successMessage = $this->getToastMessage('promotion', 'success', 'create');
-        $errorMessage = $this->getToastMessage('promotion', 'error', 'create');
-
-        if ($this->promotionService->create()) {
-            return redirect()->route('promotion.index')->with('toast_success', $successMessage);
-        }
-        return redirect()->route('promotion.create')->with('toast_error', $errorMessage);
+        // if ($this->promotionService->create()) {
+        //     return redirect()->route('promotion.index')->with('toast_success', $successMessage);
+        // }
+        // return redirect()->route('promotion.create')->with('toast_error', $errorMessage);
     }
 
     public function edit($id)

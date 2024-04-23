@@ -16,12 +16,13 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    public function all($relation = [])
+    public function all($relation = [], $column = ['*'])
     {
+        $query = $this->model->select($column);
         if (!empty($relation)) {
-            return $this->model->relation($relation)->get();
+            return $query->relation($relation)->get();
         }
-        return $this->model->all();
+        return $query->get();
     }
     public function findById($modelId, $column = ['*'], $relation = [])
     {

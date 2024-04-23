@@ -23,7 +23,7 @@ class StoreCustomerRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|unique:customers',
-            'phone' => 'required|string|phone|unique:customers',
+            'phone' => 'required|unique:customers',
             'fullname' => 'required|string',
             'customer_catalogue_id' => 'required|integer|gt:0',
             'password' => 'required|string|min:6',

@@ -45,17 +45,17 @@ class AppServiceProvider extends ServiceProvider
 
         // Slide
         'App\Services\Interfaces\SlideServiceInterface' => 'App\Services\SlideService',
-    // Widget
-'App\Services\Interfaces\WidgetServiceInterface' => 'App\Services\WidgetService',
-// Promotion
-'App\Services\Interfaces\PromotionServiceInterface' => 'App\Services\PromotionService',
-// Source
-'App\Services\Interfaces\SourceServiceInterface' => 'App\Services\SourceService',
-// Customer
-'App\Services\Interfaces\CustomerServiceInterface' => 'App\Services\CustomerService',
-// CustomerCatalogue
-'App\Services\Interfaces\CustomerCatalogueServiceInterface' => 'App\Services\CustomerCatalogueService',
-];
+        // Widget
+        'App\Services\Interfaces\WidgetServiceInterface' => 'App\Services\WidgetService',
+        // Promotion
+        'App\Services\Interfaces\PromotionServiceInterface' => 'App\Services\PromotionService',
+        // Source
+        'App\Services\Interfaces\SourceServiceInterface' => 'App\Services\SourceService',
+        // Customer
+        'App\Services\Interfaces\CustomerServiceInterface' => 'App\Services\CustomerService',
+        // CustomerCatalogue
+        'App\Services\Interfaces\CustomerCatalogueServiceInterface' => 'App\Services\CustomerCatalogueService',
+    ];
     public function register(): void
     {
         // 

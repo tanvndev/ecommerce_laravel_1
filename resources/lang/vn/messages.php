@@ -349,6 +349,8 @@ return [
             'name' => 'Tên khách hàng',
             'customerGroup' => 'Nhóm khách hàng',
             'customerGroupSelect' => 'Chọn nhóm khách hàng',
+            'sourceSelect' => 'Chọn nguồn khách hàng',
+            'source' => 'Nguồn khách hàng',
         ]
     ],
 
@@ -632,7 +634,7 @@ return [
     'tableAction' => 'Thực thi',
     'tableOrder' => 'Vị trí',
     'tableDescription' => 'Mô tả',
-    'tablePhone' => 'Mô tả',
+    'tablePhone' => 'Số điện thoại',
     'tableEmail' => 'Email',
     'tableAddress' => 'Địa chị',
     'tableCanonical' => 'Canonical',

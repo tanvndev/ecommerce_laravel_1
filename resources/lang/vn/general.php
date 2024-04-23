@@ -52,5 +52,40 @@ return [
         'Product' => 'Phiên bản sản phẩm',
         'ProductCatalogue' => 'Loại sản phẩm',
     ],
+    'apply_condition_item_select' => [
+        [
+            "id" => "staff_take_care_customer",
+            "name" => "Nhân viên chăm sóc khách hàng",
+        ],
+        [
+            "id" => "customer_group",
+            "name" => "Nhóm khách hàng",
+        ],
+        [
+            "id" => "customer_gender",
+            "name" => "Giới tính",
+        ],
+        [
+            "id" => "customer_birthday",
+            "name" => "Ngày sinh",
+        ],
+    ],
+    'gender' => [
+        [
+            'id' => 1,
+            'name' => 'Nam'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Nữ'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Không xác định'
+        ]
+    ],
+    'day' => array_map(function ($value) {
+        return ['id' => $value - 1, 'name' => $value];
+    }, range(1, 31)),
 
 ];
