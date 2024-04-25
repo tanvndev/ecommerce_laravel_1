@@ -36,6 +36,9 @@ use App\Http\Controllers\Servers\{
 
 };
 
+use App\Http\Controllers\Clients\{
+    HomeController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +51,12 @@ use App\Http\Controllers\Servers\{
 |
 */
 
+
+// CLIENT ROUTES
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
+// SERVER ROUTES
 
 Route::middleware(['admin', 'locale'])->group(function () {
     // Routes for Dashboard
