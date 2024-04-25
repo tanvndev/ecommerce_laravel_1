@@ -7,22 +7,22 @@ jQuery(function ($) {
     var init = {};
     var _token = $('meta[name="csrf-token"]').attr("content");
 
-    // Hàm này xử lý khi nhấn chọn nút neverEndDate
+    // Hàm này xử lý khi nhấn chọn nút never_end
     init.promotionNeverEnd = () => {
-        $(document).on("change", 'input[name="neverEndDate"]', function () {
+        $(document).on("change", 'input[name="never_end"]', function () {
             const isChecked = $(this).prop("checked");
-            $('input[name="end_date"]')
-                .val(isChecked ? "" : $('input[name="start_date"]').val())
+            $('input[name="end_at"]')
+                .val(isChecked ? "" : $('input[name="start_at"]').val())
                 .prop("disabled", isChecked);
         });
     };
 
     // Hàm này validate khi chọn ngày kết thúc nhỏ hơn ngày hiện tại
     init.validateEndDate = () => {
-        $('input[name="end_date"]').on("input", function () {
+        $('input[name="end_at"]').on("input", function () {
             const _this = $(this);
             const endDate = _this.val();
-            const startDate = $('input[name="start_date"]').val();
+            const startDate = $('input[name="start_at"]').val();
             const isInvalid = endDate && startDate && endDate < startDate;
 
             _this
@@ -241,21 +241,24 @@ jQuery(function ($) {
         element = "",
         data = []
     ) => {
-        let conditionHiddenInput = $(`.child_condition_item_${element}`);
-        let conditionHiddenVal =
+        const conditionHiddenInput = $(`.child_condition_item_${element}`);
+        const conditionHiddenVal =
             conditionHiddenInput.length > 0
                 ? JSON.parse(conditionHiddenInput.val())
                 : [];
 
-        let optionsHtml = data
+        const optionsHtml = data
             .map((item, index) => {
-                let selected =
-                    conditionHiddenVal[index] == item.id ? "selected" : "";
+                const selected = conditionHiddenVal.includes(
+                    conditionHiddenVal[index]
+                )
+                    ? "selected"
+                    : "";
                 return `<option ${selected} value="${item.id}">${item.text}</option>`;
             })
             .join("");
 
-        let html = `
+        const html = `
             <div class="border-bottom apply-condition-child pt-3 pb-3 ${element}">
                 <label for="" class="form-label text-primary fw-normal">${label}</label>
                 <select class="form-select mutiple-select2" multiple name="${element}[]">
@@ -291,10 +294,22 @@ jQuery(function ($) {
         );
         const orderAmountRangeTo = getLastInputValue(".order-amount-range-to");
 
+        const orderAmountTypeValue = getLastInputValue(".discount-value");
+
+        if (orderAmountTypeValue == "0") {
+            $row.find(
+                "input[name='promotion_order_amount_range[amountValue][]']"
+            ).addClass("is-invalid");
+            setToast("warning", "Vui lòng nhập giá trị triết khấu.");
+            return false;
+        }
+
         // Kiểm tra giá trị đến phải lớn hơn giá trị từ
         if (orderAmountRangeTo <= orderAmountRangeFrom) {
             $row.find("input")
-                .not("input[name='amountValue[]']")
+                .not(
+                    "input[name='promotion_order_amount_range[amountValue][]']"
+                )
                 .addClass("is-invalid");
             setToast(
                 "warning",
@@ -339,7 +354,7 @@ jQuery(function ($) {
                 <td class="order-amount-range-to">
                     <input type="text" name="promotion_order_amount_range[amountTo][]" class="form-control text-end int" value="0">
                 </td>
-                <td class="discount-type">
+                <td class="discount-value">
                     <div class="d-flex align-items-center">
                         <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 "
                             value="0">
@@ -366,7 +381,12 @@ jQuery(function ($) {
         let dataPreload = JSON.parse(
             $(".preload_input_order_amount_range").val()
         );
-        if (!dataPreload || dataPreload.length === 0) {
+
+        if (
+            !dataPreload.amountFrom ||
+            dataPreload.amountTo.length === 0 ||
+            dataPreload.amountValue.length === 0
+        ) {
             return;
         }
 
@@ -382,7 +402,7 @@ jQuery(function ($) {
                                 dataPreload?.amountTo[index]
                             }">
                         </td>
-                        <td class="discount-type">
+                        <td class="discount-value">
                             <div class="d-flex align-items-center">
                                 <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 " value="${
                                     dataPreload?.amountValue[index]
@@ -468,7 +488,7 @@ jQuery(function ($) {
                             <td class="order-amount-range-to">
                                 <input type="text" name="promotion_order_amount_range[amountTo][]" class="form-control text-end int" value="0">
                             </td>
-                            <td class="discount-type">
+                            <td class="discount-value">
                                 <div class="d-flex align-items-center">
                                     <input type="text" name="promotion_order_amount_range[amountValue][]" class="form-control text-end int me-1 " value="0">
 
@@ -961,7 +981,12 @@ jQuery(function ($) {
     init.renderPreloadProductAndQuantity = () => {
         let preloadInfo = JSON.parse($(".preload_product_and_quantity").val());
         let preloadObject = JSON.parse($(".preload_object_input").val());
-        if (preloadInfo.length == 0 || preloadObject.length == 0) {
+        if (
+            !preloadInfo ||
+            preloadInfo?.discount_type == "" ||
+            !preloadObject ||
+            preloadObject["id"]?.length == 0
+        ) {
             return;
         }
         let model = $(".select-product-and-quantity").val();

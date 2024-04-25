@@ -18,8 +18,7 @@
                     {!! Form::label('code', __('messages.promotion.table.code'), ['class' => 'form-label'])
                     !!}
                     {!! Form::text('code', old('code', $promotion->code ?? ''), ['class' => 'form-control',
-                    'placeholder' => 'Sẽ tự động tạo nếu không nhập'])
-                    !!}
+                    'placeholder' => 'Nếu không nhập sẽ tự động sinh mã'])!!}
                 </div>
 
                 <div class="col-md-12">
@@ -42,27 +41,31 @@
             <div class="row g-3 align-items-center">
                 <div class="col-md-12">
                     {!! Form::label('', __('messages.promotion.table.promotionType'), ['class' =>
-                    'form-label mb-3'])!!}
+                    'form-label mb-3'])!!} <span class="text-danger">(*)</span>
 
-                    {!! Form::select('promotion_method', [__('messages.promotion.table.promotionType')] +
-                    __('general.promotion'), old('promotion_method', $promotion->promotion_method ?? ''),
-                    ['class' => 'form-select init-select2 promotion-method'])
-                    !!}
+                    {!! Form::select('promotion_method', ['' => __('messages.promotion.table.promotionType')] +
+                    __('general.promotion'), old('promotion_method', $promotion->method ?? ''),
+                    ['class' => 'form-select init-select2 promotion-method']) !!}
 
                 </div>
                 <div class="col-lg-12 promotion-container"></div>
             </div>
 
+
             <input type="hidden" class="preload_promotion_method"
-                value="{{old('promotion_method', $promotion->promotion_method ?? '')}}">
+                value="{{old('promotion_method', $promotion->method ?? '')}}">
+
             <input type="hidden" class="preload_select_product_and_quantity"
-                value="{{old('module_type', $promotion->module_type ?? '')}}">
+                value="{{old('module_type', $promotionInfo['model'] ?? '')}}">
+
             <input type="hidden" class="preload_input_order_amount_range"
-                value="{{ json_encode(old('promotion_order_amount_range', $promotion->promotion_order_amount_range ?? '')) }}">
+                value="{{ json_encode(old('promotion_order_amount_range', $promotionInfo ?? '')) }}">
+
             <input type="hidden" class="preload_product_and_quantity"
-                value="{{ json_encode(old('product_and_quantity', $promotion->product_and_quantity ?? '')) }}">
+                value="{{ json_encode(old('product_and_quantity', $productAndQuantity ?? '')) }}">
+
             <input type="hidden" class="preload_object_input"
-                value="{{ json_encode(old('object', $promotion->object ?? '')) }}">
+                value="{{ json_encode(old('object', $promotionInfo['object'] ?? '')) }}">
         </div>
     </div>
 </div><!-- Row end  -->

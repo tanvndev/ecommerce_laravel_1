@@ -15,9 +15,10 @@
 @php
 $url = $config['method'] == 'create' ? route('promotion.store') : route('promotion.update', $promotion->id);
 $method = $config['method'] == 'create' ? 'POST' : 'PUT';
+$validate = $config['method'] == 'create' ? '' : 'novalidate';
 @endphp
 
-{!! Form::open(['method' => $method, 'url' => $url, 'files' => true]) !!}
+{!! Form::open(['method' => $method, 'url' => $url, 'files' => true, $validate]) !!}
 <div class="body d-flex py-3">
 
     <div class="container-xxl">

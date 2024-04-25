@@ -67,14 +67,13 @@ class PromotionController extends Controller
 
     public function store(StorePromotionRequest $request)
     {
-        dd($request->all());
-        // $successMessage = $this->getToastMessage('promotion', 'success', 'create');
-        // $errorMessage = $this->getToastMessage('promotion', 'error', 'create');
+        $successMessage = $this->getToastMessage('promotion', 'success', 'create');
+        $errorMessage = $this->getToastMessage('promotion', 'error', 'create');
 
-        // if ($this->promotionService->create()) {
-        //     return redirect()->route('promotion.index')->with('toast_success', $successMessage);
-        // }
-        // return redirect()->route('promotion.create')->with('toast_error', $errorMessage);
+        if ($this->promotionService->create()) {
+            return redirect()->route('promotion.index')->with('toast_success', $successMessage);
+        }
+        return redirect()->route('promotion.create')->with('toast_error', $errorMessage);
     }
 
     public function edit($id)
@@ -83,11 +82,18 @@ class PromotionController extends Controller
 
         // Gán id vào sesson
         session(['_id' => $id]);
-        $promotion = [];
-        // dd($promotion);
+        $promotion = $this->promotionRepository->findById($id);
+        $sources = $this->sourceRepository->all();
 
+        $promotionInfo = $promotion->discount_infomation['info'] ?? [];
+        // dd($promotionInfo);
+        $productAndQuantity = [
+            'quantity' => $promotionInfo['quantity'] ?? 0,
+            'max_discount' => $promotionInfo['max_discount'] ?? [],
+            'discount_value' => $promotionInfo['discount_value'] ?? [],
+            'discount_type' => $promotionInfo['discount_type'] ?? [],
+        ];
 
-        $albums =  json_decode($promotion ?? '');
 
         $config['seo'] = __('messages.promotion')['update'];
         $config['method'] = 'update';
@@ -95,6 +101,9 @@ class PromotionController extends Controller
         return view('servers.promotions.store', compact([
             'config',
             'promotion',
+            'sources',
+            'promotionInfo',
+            'productAndQuantity',
         ]));
     }
 

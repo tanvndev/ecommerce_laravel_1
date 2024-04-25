@@ -6,10 +6,6 @@
         <div class="row">
             @include('servers.includes.filterPublish')
 
-            {!! Form::select('promotion_catalogue_id', $dropdown, null, [
-            'class' => 'form-select filter',
-            'placeholder' => __('messages.promotion.table.promotionCatalogue')
-            ]) !!}
         </div>
     </div>
     @include('servers.includes.filterSearch')

@@ -528,7 +528,9 @@ return [
         'table' => [
             'name' => 'Tên chương trình',
             'code' => 'Mã khuyến mãi',
+            'discount' => 'Chiết khấu',
             'promotionType' => 'Chọn hình thức khuyến mãi',
+            'promotionMethod' => 'Loại khuyến mãi',
         ]
     ],
     'source' => [
@@ -560,8 +562,10 @@ return [
             'name' => 'Tên nguồn khách',
         ]
     ],
-
+    'code' => "Mã",
+    'expired' => "Hết hạn",
     'selectModule' => 'Chọn module',
+    'infomation' => 'Thông tin',
     'infoDetail' => 'Thông tin chi tiết',
     'timeApplication' => 'Thời gian áp dụng chương trình',
     'applicableCustomer' => 'Nguồn khách áp dụng',

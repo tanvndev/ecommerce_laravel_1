@@ -6,22 +6,23 @@
             </div>
             <div class="card-body">
                 <div class="mb-3 ">
-                    {!! Form::label('start_date', __('messages.startDate'), ['class' => 'form-label']) !!} <span
+                    {!! Form::label('start_at', __('messages.startDate'), ['class' => 'form-label']) !!} <span
                         class="text-danger">(*)</span>
-                    {!! Form::datetimeLocal('start_date', old('start_date', $promotion->start_date ??
-                    date('Y-m-d\TH:i')), ['class' => 'form-control']) !!}
+
+                    {!! Form::datetimeLocal('start_at', old('start_at', $promotion->start_at ??
+                    date('Y-m-d\TH:i:s')), ['class' => 'form-control']) !!}
                 </div>
                 <div class="mb-3 ">
-                    {!! Form::label('end_date', __('messages.endDate'), ['class' => 'form-label']) !!} <span
+                    {!! Form::label('end_at', __('messages.endDate'), ['class' => 'form-label']) !!} <span
                         class="text-danger">(*)</span>
 
                     @php
-                    $disabled = old('neverEndDate', $slide->neverEndDate ?? '') != '' ? 'disabled' : '';
-                    $value = $disabled ? '' : old('end_date', $promotion->end_date ?? date('Y-m-d\TH:i'));
+                    $disabled = old('never_end', $promotion->never_end ?? '') != '' ? 'disabled' : '';
+                    $value = $disabled ? '' : old('end_at', $promotion->end_at ?? date('Y-m-d\TH:i:s'));
                     @endphp
 
-                    {!! Form::datetimeLocal('end_date', $value, ['class' => 'form-control', $disabled, 'id' =>
-                    'end_date']) !!}
+                    {!! Form::datetimeLocal('end_at', $value, ['class' => 'form-control', $disabled, 'id' => 'end_at'])
+                    !!}
 
                     <div class="invalid-feedback"></div>
                 </div>
@@ -29,9 +30,9 @@
                     <div class="d-flex align-items-center ">
                         {!! Form::label('', __('messages.noStoppingDay') , ['class' => 'form-label mb-0']) !!}
                         <div class="checkbox-wrapper-35 ms-4 ">
-                            {{ Form::checkbox('neverEndDate', 'active', old('neverEndDate', $slide->neverEndDate ?? ''),
-                            ['id' => 'switch-neverEndDate-setting', 'class' => 'switch']) }}
-                            <label for="switch-neverEndDate-setting">
+                            {{ Form::checkbox('never_end', 'active', old('never_end', $promotion->never_end ?? ''),
+                            ['id' => 'switch-never_end-setting', 'class' => 'switch']) }}
+                            <label for="switch-never_end-setting">
                                 <span class="switch-x-text">{{__('messages.status')}}</span>
                                 <span class="switch-x-toggletext">
                                     <span class="switch-x-unchecked"><span class="switch-x-hiddenlabel">Unchecked:
@@ -52,37 +53,33 @@
             </div>
             <div class="card-body">
                 <div class="col-md-12 source-inner">
+                    @php
+                    $promotionInfoSource = $promotion->discount_infomation['source'] ?? '';
+                    $sourceStatus = old('sourceStatus', $promotionInfoSource['status'] ?? 'all');
+                    @endphp
+
                     <div class="form-check fs-15 mb-2 ">
-                        {{ Form::radio('sourceStatus', 'all', old('sourceStatus', $promotion->sourceStatus ?? 'all'),
-                        ['class'
-                        =>'form-check-input', 'id' => "all-source"]) }}
+                        {{ Form::radio('sourceStatus', 'all', $sourceStatus == 'all', ['class' =>'form-check-input',
+                        'id' => "all-source"]) }}
                         {{ Form::label("all-source", 'Áp dụng cho toàn bộ nguồn khách', ['class' => 'form-check-label'])
                         }}
                     </div>
 
                     <div class="form-check fs-15 mb-4">
-                        {{ Form::radio('sourceStatus', 'choose', old('sourceStatus', $promotion->sourceStatus ?? ''),
-                        ['class'
+                        {{ Form::radio('sourceStatus', 'choose', $sourceStatus == 'choose', ['class'
                         =>'form-check-input', 'id' => "choose-source"]) }}
-                        {{ Form::label("choose-source", 'Chọn nguồn khách áp dụng', ['class' => 'form-check-label'])
-                        }}
+                        {{ Form::label("choose-source", 'Chọn nguồn khách áp dụng', ['class' => 'form-check-label']) }}
                     </div>
 
-                    @php
-                    $sourceStatus = old('sourceStatus', $promotion->sourceStatus ?? '');
-                    $selected = in_array(old('sourceValue', $promotion->sourceValue ?? ''),
-                    $sources->pluck('id')->toArray());
-                    @endphp
-
-                    @empty(!$sourceStatus)
+                    @if($sourceStatus == 'choose')
                     <div class="source-wrapper">
-                        {!! Form::select('sourceValue[]', $sources->pluck('name', 'id')->toArray(), $selected , ['class'
-                        => 'form-select mutiple-select2', 'multiple']) !!}
+                        {!! Form::select('sourceValue[]', $sources->pluck('name', 'id'),
+                        old('sourceValue',$promotionInfoSource['data'] ?? []), ['class' => 'form-select
+                        mutiple-select2', 'multiple']) !!}
                     </div>
-                    @endempty
-
-
+                    @endif
                 </div>
+
 
             </div>
         </div>
@@ -92,30 +89,33 @@
                 <h6 class="m-0 fw-bold">{{__('messages.applicableObject')}}</h6>
             </div>
             <div class="card-body">
+                @php
+                $promotionInfoApply = $promotion->discount_infomation['apply'] ?? '';
+                $applyStatus = old('applyStatus', $promotionInfoApply['status'] ?? 'all');
+                @endphp
                 <div class="col-md-12 apply-condition-inner">
                     <div class="form-check fs-15 mb-2">
-                        {{ Form::radio('applyStatus', 'all', old('applyStatus', $promotion->applyStatus ?? 'all'),
-                        ['class' =>'form-check-input', 'id' => "all-apply"]) }}
+                        {{ Form::radio('applyStatus', 'all', $applyStatus == 'all', ['class' =>'form-check-input', 'id'
+                        => "all-apply"]) }}
                         {{ Form::label("all-apply", 'Áp dụng cho toàn bộ nguồn khách', ['class' => 'form-check-label'])
                         }}
                     </div>
 
                     <div class="form-check fs-15 mb-4">
-                        {{ Form::radio('applyStatus', 'choose', old('applyStatus', $promotion->applyStatus ?? ''),
-                        ['class' =>'form-check-input', 'id' => "choose-apply"]) }}
+                        {{ Form::radio('applyStatus', 'choose', $applyStatus == 'choose', ['class' =>'form-check-input',
+                        'id' => "choose-apply"]) }}
                         {{ Form::label("choose-apply", 'Chọn nguồn khách áp dụng', ['class' => 'form-check-label'])
                         }}
                     </div>
 
                     @php
-                    $applyStatus = old('applyStatus', $promotion->applyStatus ?? '');
-                    $applyValue = old('applyValue', $promotion->applyValue ?? '');
+                    $applyValue = old('applyValue', $promotionInfoApply['data'] ?? '');
 
                     $selected = in_array($applyValue,
                     collect(__('general.apply_condition_item_select'))->pluck('id')->toArray());
                     @endphp
 
-                    @empty(!$applyStatus)
+                    @if($applyStatus == 'choose')
                     <div class="apply-condition-wrapper">
                         <div class="mb-3">
                             {!! Form::select('applyValue[]',
@@ -124,11 +124,13 @@
                             'multiple']) !!}
                         </div>
                     </div>
-                    @endempty
+                    @endif
+
                     <input type="hidden" class="apply_condition_item_set" value="{{json_encode($applyValue)}}">
                     @empty(!$applyValue)
                     @foreach ($applyValue as $key => $value)
-                    <input type="hidden" class="child_condition_item_{{$value}}" value="{{ json_encode(old($value)) }}">
+                    <input type="hidden" class="child_condition_item_{{$value}}"
+                        value="{{ json_encode(old($value, $promotionInfoApply['condition'][$value] ?? '')) }}">
                     @endforeach
                     @endempty
                 </div>

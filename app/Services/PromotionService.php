@@ -2,9 +2,9 @@
 // Trong Laravel, Service Pattern thường được sử dụng để tạo các lớp service, giúp tách biệt logic của ứng dụng khỏi controller.
 namespace App\Services;
 
+use App\Enums\PromotionEnum;
 use App\Services\Interfaces\PromotionServiceInterface;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -28,13 +28,17 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         ];
 
         $select = [
-            'promotions.id',
-            'promotions.publish',
-            'promotions.image',
-            'promotions.user_id',
-            'promotions.order',
-            'tb2.name',
-            'tb2.canonical',
+            'id',
+            'code',
+            'name',
+            'method',
+            'discount_infomation',
+            'description',
+            'publish',
+            'order',
+            'start_at',
+            'end_at',
+            'never_end'
         ];
 
         //////////////////////////////////////////////////////////
@@ -49,13 +53,17 @@ class PromotionService extends BaseService implements PromotionServiceInterface
     }
 
 
-    function create()
+    public function create()
     {
-
         DB::beginTransaction();
         try {
+            $payload = $this->handlePayload();
+            $promotion = $this->promotionRepository->create($payload);
 
-
+            // Nếu tạo thành công, thêm sản phẩm và biến thể vào khuyến mãi sản phẩm
+            if ($payload['method'] == PromotionEnum::PRODUCT_AND_QUANTITY && $promotion->id > 0) {
+                $this->createPromtionProductVariant($promotion, 'create');
+            }
 
             DB::commit();
             return true;
@@ -68,12 +76,17 @@ class PromotionService extends BaseService implements PromotionServiceInterface
     }
 
 
-    function update($id)
+    public function update($id)
     {
-
         DB::beginTransaction();
         try {
+            $payload = $this->handlePayload();
+            $promotion = $this->promotionRepository->save($id, $payload);
 
+            // Nếu tạo thành công, thêm sản phẩm và biến thể vào khuyến mãi sản phẩm
+            if ($payload['method'] == PromotionEnum::PRODUCT_AND_QUANTITY && $promotion->id > 0) {
+                $this->createPromtionProductVariant($promotion, 'update');
+            }
 
             DB::commit();
             return true;
@@ -85,17 +98,87 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         }
     }
 
+    private function handlePayload()
+    {
+        // dd(request()->all());
+        $payload = request()->only('name', 'code', 'start_at', 'end_at', 'never_end', 'description');
+        $payload['method'] = request('promotion_method');
+        $payload['code'] = (empty($payload['code'])) ? Str::random(10) : $payload['code'];
+
+        switch ($payload['method']) {
+            case PromotionEnum::ORDER_AMOUNT_RANGE:
+                $payload[PromotionEnum::DISCOUNT] = $this->orderByRange($payload);
+                break;
+            case PromotionEnum::PRODUCT_AND_QUANTITY:
+                $payload[PromotionEnum::DISCOUNT] = $this->productAndQuantity($payload);
+                break;
+        }
+
+        return $payload;
+    }
+
+    private function createPromtionProductVariant($promotion = null, $method = 'create')
+    {
+        $object = request()->input('object');
+        $dataRelation = [];
+        foreach ($object['id'] as $key => $value) {
+            $dataRelation[] = [
+                'promotion_id' => $promotion->id,
+                'product_id' => $value,
+                'product_variant_id' => $object['product_variant_id'][$key] ?? 0,
+                'model' => request()->input(PromotionEnum::MODULE_TYPE)
+            ];
+        }
+
+        if ($method == 'update') {
+            $promotion->products()->detach();
+        }
+
+        $promotion->products()->sync($dataRelation);
+    }
+
+    private function handleSourceAndCondition()
+    {
+        $payload = [
+            'source' => [
+                'status' => request()->input('sourceStatus'),
+                'data' => request()->input('sourceValue'),
+            ],
+            'apply' => [
+                'status' => request()->input('applyStatus'),
+                'data' => request()->input('applyValue'),
+            ]
+        ];
+        foreach ($payload['apply']['data'] as $key => $value) {
+            $payload['apply']['condition'][$value] = request()->input($value);
+        }
+        return $payload;
+    }
+
+    private function orderByRange()
+    {
+        $payload['info'] = request()->input('promotion_order_amount_range');
+        return $payload + $this->handleSourceAndCondition();
+    }
+
+    private function productAndQuantity()
+    {
+        $data['info'] = request()->input('product_and_quantity');
+        $data['info']['model'] = request()->input(PromotionEnum::MODULE_TYPE);
+        $data['info']['object'] = request()->input('object');
+
+        return $data + $this->handleSourceAndCondition();
+    }
 
 
-    function destroy($id)
+
+
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->promotionRepository->delete($id);
-
-            // Xoa router
-            $this->deleteRouter($id);
 
             DB::commit();
             return true;

@@ -110,3 +110,22 @@ if (!function_exists('convertArrayByKey')) {
         return $outputs;
     }
 }
+
+if (!function_exists('convertDateTime')) {
+    function convertDateTime($dateTime = '', $format = 'd/m/Y H:i')
+    {
+        return date($format, strtotime($dateTime));
+    }
+}
+if (!function_exists('renderDiscountInfomation')) {
+    function renderDiscountInfomation($promotion = null)
+    {
+        if ($promotion->method == 'product_and_quantity') {
+            $discountValue = $promotion->discount_infomation['info']['discount_value'];
+            $discountType = $promotion->discount_infomation['info']['discount_type'] == 'percent' ? '%' : 'đ';
+
+            return "<span class='badge bg-success px-3 py-2 fs-12'>$discountValue$discountType</span>";
+        }
+        return "<a class='link-primary' href='" . route('promotion.edit', $promotion->id) . "'>Xem chi tiết</a>";
+    }
+}
