@@ -45,10 +45,6 @@ class Menu extends Model
 
     public function menu_catalogues()
     {
-        return $this->belongsToMany(MenuCatalogue::class, 'menu_catalogue_menu', 'menu_id', 'menu_catalogue_id');
-    }
-    public function menu_catalogue_language()
-    {
         return $this->belongsTo(MenuCatalogue::class, 'menu_catalogue_id', 'id');
     }
 }

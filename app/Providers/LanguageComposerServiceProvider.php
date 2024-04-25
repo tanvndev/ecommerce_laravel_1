@@ -22,7 +22,6 @@ class LanguageComposerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         View::composer(['servers.*'], function ($view) {
             $languageRepository = app(LanguageRepository::class);
             $languages = $languageRepository->all();

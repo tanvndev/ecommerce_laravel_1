@@ -18,8 +18,9 @@ class MenuCatalogue extends Model
         'publish',
     ];
 
-    public function menu_catalogue_language()
+    public function menus()
     {
-        return $this->belongsTo(MenuCatalogue::class, 'menu_catalogue_id', 'id');
+
+        return $this->hasMany(Menu::class, 'menu_catalogue_id', 'id');
     }
 }

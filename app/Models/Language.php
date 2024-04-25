@@ -119,6 +119,11 @@ class Language extends Model
             'name',
         )->withTimestamps();
     }
+
+    public function systems()
+    {
+        return $this->hasMany(System::class, 'language_id', 'id');
+    }
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

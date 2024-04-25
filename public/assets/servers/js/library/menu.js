@@ -222,6 +222,8 @@ jQuery(function ($) {
                     canonical: _this.val(),
                 });
 
+                console.log(menuRow);
+
                 $(".menu-row-wrap")
                     .append(menuRow)
                     .find(".menu-row-empty")

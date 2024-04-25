@@ -58,21 +58,24 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="axil-footer-widget">
                         <h5 class="widget-title">Support</h5>
-                        <!-- <div class="logo mb--30">
-                        <a href="index.html">
-                            <img class="light-logo" src="assets/images/logo/logo.png" alt="Logo Images">
-                        </a>
-                    </div> -->
+                        <div class="logo mb--30">
+                            <a href="index.html">
+                                <img class="light-logo" src="{{$systemSetting['homepage_logo']}}" alt="Logo Images">
+                            </a>
+                        </div>
                         <div class="inner">
-                            <p>685 Market Street, <br>
-                                Las Vegas, LA 95820, <br>
-                                United States.
-                            </p>
+                            <p>{{$systemSetting['contactpage_address']}}</p>
                             <ul class="support-list-item">
-                                <li><a href="mailto:example@domain.com"><i class="fal fa-envelope-open"></i>
-                                        example@domain.com</a></li>
-                                <li><a href="tel:(+01)850-315-5862"><i class="fal fa-phone-alt"></i> (+01)
-                                        850-315-5862</a></li>
+                                <li>
+                                    <a href="mailto:{{$systemSetting['contactpage_email']}}"><i
+                                            class="fal fa-envelope-open"></i>
+                                        {{$systemSetting['contactpage_email']}}</a>
+                                </li>
+                                <li>
+                                    <a href="tel:{{$systemSetting['contactpage_hotline']}}"><i
+                                            class="fal fa-phone-alt"></i>
+                                        {{$systemSetting['contactpage_hotline']}}</a>
+                                </li>
                                 <!-- <li><i class="fal fa-map-marker-alt"></i> 685 Market Street,  <br> Las Vegas, LA 95820, <br> United States.</li> -->
                             </ul>
                         </div>
