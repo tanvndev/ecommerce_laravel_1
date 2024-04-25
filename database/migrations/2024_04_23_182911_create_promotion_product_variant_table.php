@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('promotion_id')->constrained('promotions')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->unsignedBigInteger('product_variant_id');
+            $table->string('variant_uuid');
             $table->string('model');
             $table->timestamps();
         });

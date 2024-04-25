@@ -10,6 +10,7 @@ use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as Pr
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class ProductService extends BaseService implements ProductServiceInterface
 {
@@ -147,11 +148,10 @@ class ProductService extends BaseService implements ProductServiceInterface
     private function createVariant($product)
     {
         $payload = request()->only(['variant', 'productVariant', 'attribute']);
-        $variantPayload = $this->formatPayloadVariant($payload);
+        $variantPayload = $this->formatPayloadVariant($product, $payload);
 
         // Tạo ra bản ghi cho product_variant
         $variants = $product->product_variants()->createMany($variantPayload);
-
         $productVariantLangue = [];
         $variantAttribute = [];
         // Lấy ra id các bản ghi product_variant
@@ -212,12 +212,15 @@ class ProductService extends BaseService implements ProductServiceInterface
         return $result;
     }
 
-    private function formatPayloadVariant($payload)
+    private function formatPayloadVariant($product, $payload)
     {
         $variantPayload = [];
         if (isset($payload['variant']['sku']) && count($payload['variant']['sku']) > 0) {
             foreach ($payload['variant']['sku'] as $key => $value) {
+                $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $product->id . ', ' . $payload['productVariant']['id'][$key] ?? '');
+
                 $variantPayload[] = [
+                    'uuid' => $uuid,
                     'code' => $payload['productVariant']['id'][$key] ?? '',
                     'quantity' => convertPrice($payload['variant']['quantity'][$key] ?? 0),
                     'price' => convertPrice($payload['variant']['price'][$key] ?? 0),
@@ -328,7 +331,6 @@ class ProductService extends BaseService implements ProductServiceInterface
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
             $delete = $this->productRepository->delete($id);
-
             // Xoa router
             $this->deleteRouter($id);
 

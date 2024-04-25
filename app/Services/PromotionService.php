@@ -69,7 +69,8 @@ class PromotionService extends BaseService implements PromotionServiceInterface
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            echo $e->getMessage();
+            echo $e->getMessage() . ' ' . $e->getLine();
+
             die;
             return false;
         }
@@ -103,7 +104,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         // dd(request()->all());
         $payload = request()->only('name', 'code', 'start_at', 'end_at', 'never_end', 'description');
         $payload['method'] = request('promotion_method');
-        $payload['code'] = (empty($payload['code'])) ? Str::random(10) : $payload['code'];
+        $payload['code'] = Str::upper((empty($payload['code'])) ? Str::random(10) : $payload['code']);
 
         switch ($payload['method']) {
             case PromotionEnum::ORDER_AMOUNT_RANGE:
@@ -125,7 +126,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
             $dataRelation[] = [
                 'promotion_id' => $promotion->id,
                 'product_id' => $value,
-                'product_variant_id' => $object['product_variant_id'][$key] ?? 0,
+                'variant_uuid' => $object['product_variant_id'][$key] ?? 0,
                 'model' => request()->input(PromotionEnum::MODULE_TYPE)
             ];
         }
@@ -149,8 +150,11 @@ class PromotionService extends BaseService implements PromotionServiceInterface
                 'data' => request()->input('applyValue'),
             ]
         ];
-        foreach ($payload['apply']['data'] as $key => $value) {
-            $payload['apply']['condition'][$value] = request()->input($value);
+
+        if ($payload['apply']['status'] == 'choose') {
+            foreach ($payload['apply']['data'] as $key => $value) {
+                $payload['apply']['condition'][$value] = request()->input($value);
+            }
         }
         return $payload;
     }
@@ -167,10 +171,9 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         $data['info']['model'] = request()->input(PromotionEnum::MODULE_TYPE);
         $data['info']['object'] = request()->input('object');
 
+
         return $data + $this->handleSourceAndCondition();
     }
-
-
 
 
     public function destroy($id)
@@ -178,8 +181,9 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         DB::beginTransaction();
         try {
             // Xoá mềm hay xoá cứng chỉnh trong model
-            $delete = $this->promotionRepository->delete($id);
-
+            $promotion = $this->promotionRepository->findById($id);
+            $promotion->products()->detach();
+            $this->promotionRepository->delete($id);
             DB::commit();
             return true;
         } catch (\Exception $e) {

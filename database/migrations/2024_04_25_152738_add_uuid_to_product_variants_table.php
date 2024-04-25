@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('promotion_conditionable');
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->string('uuid');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('product_variants', function (Blueprint $table) {
+            $table->dropColumn('uuid');
+        });
     }
 };

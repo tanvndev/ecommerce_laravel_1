@@ -11,7 +11,9 @@ class ProductVariant extends Model
 {
     use HasFactory, SoftDeletes, QueryScopes;
     protected $table = 'product_variants';
+
     protected $fillable = [
+        'uuid',
         'product_id',
         'code',
         'quantity',

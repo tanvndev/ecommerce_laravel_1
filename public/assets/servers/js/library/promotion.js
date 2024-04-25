@@ -669,7 +669,7 @@ jQuery(function ($) {
                 let modelName = $(".select-product-and-quantity").val();
                 let name = item.name;
                 let id = item.id;
-                let product_variant_id = item.product_variant_id ?? 0;
+                let product_variant_id = item.uuid ?? 0;
 
                 let checked =
                     $(
@@ -701,6 +701,7 @@ jQuery(function ($) {
 
     // Hàm này render ra html product Quantity List Product
     init.renderProductQuantityListHtml = (data) => {
+        console.log(data);
         let html = data.data
             ?.map((data) => {
                 let modelName = $(".select-product-and-quantity").val();
@@ -708,7 +709,7 @@ jQuery(function ($) {
                 let image = data.image;
                 let sku = data.sku;
                 let price = data.price;
-                let product_variant_id = data.product_variant_id ?? 0;
+                let product_variant_id = data.uuid ?? 0;
                 let product_id = data.id;
                 let inventory = data.inventory ?? 0;
                 let couldSell = data.couldSell ?? 0;
