@@ -36,6 +36,4 @@
     @include('clients.includes.script')
 </body>
 
-
-
 </html>

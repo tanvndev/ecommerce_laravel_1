@@ -15,11 +15,11 @@ class MenuComposer
     }
     public function compose(View $view)
     {
-        $menu = $this->menuCatalogueRepository->findByWhere(
+        $menuCatalogue = $this->menuCatalogueRepository->findByWhere(
             [
-                'keyword' => ['=', 'main-menu']
+                'publish' => ['=', config('apps.general.defaultPublish')],
             ],
-            ['*'],
+            ['id', 'keyword'],
             [
                 [
                     'menus' => function ($query) {
@@ -33,8 +33,18 @@ class MenuComposer
             ],
             true
         );
-        dd($menu);
 
-        $view->with('menu', $menu);
+        // dd($menuCatalogue);
+        $menus = [];
+        $htmlType = ['main-menu'];
+        if ($menuCatalogue != null) {
+            foreach ($menuCatalogue as $key => $value) {
+                $type = (in_array($value->keyword, $htmlType)) ? 'html' : 'array';
+                $menus[$value->keyword] = client_recursive_menu(recursive($value->menus), 0, $type);
+            }
+        }
+        // dd($menus);
+
+        $view->with('menus', $menus);
     }
 }

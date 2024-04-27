@@ -73,7 +73,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        view()->composer('clients.*', SystemComposer::class);
-        view()->composer('clients.*', MenuComposer::class);
+        $composerClass = [
+            SystemComposer::class,
+            MenuComposer::class,
+        ];
+        foreach ($composerClass as $value) {
+            view()->composer('clients.*', $value);
+        }
     }
 }

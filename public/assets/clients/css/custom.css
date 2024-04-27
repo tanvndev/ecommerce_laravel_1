@@ -1,0 +1,20 @@
+body::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+body::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.header-brand a {
+  display: block;
+  width: 70px;
+}/*# sourceMappingURL=custom.css.map */

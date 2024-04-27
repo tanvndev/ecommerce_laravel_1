@@ -5,6 +5,8 @@ if (typeof jQuery === "undefined") {
 $(function () {
     "use strict";
 
+    $("img").attr("loading", "lazy");
+
     $(".path-route").on("input", function () {
         let value = $(this).val();
         value = value.replace(/ /g, "/");

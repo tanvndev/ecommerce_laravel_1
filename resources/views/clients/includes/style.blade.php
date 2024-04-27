@@ -9,7 +9,8 @@ $cssFiles = [
 'assets/clients/css/vendor/sal.css',
 'assets/clients/css/vendor/magnific-popup.css',
 'assets/clients/css/vendor/base.css',
-'assets/clients/css/style.min.css'
+'assets/clients/css/style.min.css',
+'assets/clients/css/custom.css',
 ];
 @endphp
 

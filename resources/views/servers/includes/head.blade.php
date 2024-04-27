@@ -12,6 +12,6 @@
 </script>
 {{-- <script src="{{ asset('assets/servers/plugin/ckfinder_2/ckfinder.html') }}"></script> --}}
 
-@yield('style')
-
 @include('servers.includes.style')
+
+@yield('style')

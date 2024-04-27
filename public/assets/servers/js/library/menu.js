@@ -60,10 +60,8 @@ jQuery(function ($) {
     init.createMenuRow = () => {
         $(document).on("click", ".create-menu-row", function () {
             let _this = $(this);
-            $(".menu-row-wrap")
-                .append(init.menuRowHtml())
-                .find(".menu-row-empty")
-                .hide();
+            $(".menu-row-wrap").append(init.menuRowHtml());
+            console.log(1);
         });
     };
 
@@ -214,15 +212,13 @@ jQuery(function ($) {
     };
     // Hàm này giúp tìm ra check box menu model
     init.chooseMenu = () => {
-        $(document).on("click", ".choose-menu", function () {
+        $(document).on("change", ".choose-menu", function () {
             let _this = $(this);
             if (_this.is(":checked")) {
                 let menuRow = init.menuRowHtml({
                     name: _this.siblings("label").text(),
                     canonical: _this.val(),
                 });
-
-                console.log(menuRow);
 
                 $(".menu-row-wrap")
                     .append(menuRow)

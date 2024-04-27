@@ -33,10 +33,6 @@
 
     {{-- Script --}}
     @include('servers.includes.script')
-
-    @yield('script')
 </body>
-
-
 
 </html>

@@ -1,7 +1,7 @@
 @extends('layouts.clientLayout')
 @section('content')
 
-<div class="axil-main-slider-area main-slider-style-1">
+{{-- <div class="axil-main-slider-area main-slider-style-1">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-5 col-sm-6">
@@ -1761,5 +1761,5 @@
     </div>
     <!-- End .container -->
 </div>
-<!-- End Axil Newsletter Area  -->
+<!-- End Axil Newsletter Area  --> --}}
 @endsection

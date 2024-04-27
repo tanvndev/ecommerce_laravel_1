@@ -68,6 +68,47 @@ if (!function_exists('recursive_menu')) {
     }
 }
 
+if (!function_exists('client_recursive_menu')) {
+    function client_recursive_menu($data, $parentId = 0, $type = 'html')
+    {
+        $html = '';
+        if (count($data) > 0) {
+            if ($type == 'html') {
+                foreach ($data as $key => $value) {
+                    $name = $value['item']->languages->first()->pivot->name;
+                    $canonical = write_url($value['item']->languages->first()->pivot->canonical);
+
+                    if (count($value['children']) > 0) {
+                        $html .= '<li class="menu-item-has-children">';
+                        $html .= "<a title=\"{$name}\" href=\"{$canonical}\">{$name}</a>";
+                        $html .= '<ul class="axil-submenu">';
+                        $html .= client_recursive_menu($value['children'], $value['item']->parent_id);
+                        $html .= '</ul>';
+                        $html .= '</li>';
+                    } else {
+                        $html .= "<li><a title=\"{$name}\" href=\"{$canonical}\">{$name}</a></li>";
+                    }
+                }
+                return $html;
+            }
+        }
+        return $data;
+    }
+}
+
+if (!function_exists('write_url')) {
+    function write_url($canonical = '', $fullDomain = true, $suffix = false)
+    {
+        if (strpos($canonical, 'http') !== false) {
+            return $canonical;
+        }
+
+        $fullUrl = (($fullDomain === true) ? config('app.url') : '') . $canonical . ($suffix === true ? config('apps.general.suffix') : '');
+
+        return $fullUrl;
+    }
+}
+
 if (!function_exists('buildMenu')) {
     function buildMenu($menus = [], $parentId = 0, $prefix = '')
     {

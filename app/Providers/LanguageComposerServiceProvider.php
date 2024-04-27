@@ -22,9 +22,16 @@ class LanguageComposerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer(['servers.*'], function ($view) {
+        View::composer(['servers.*', 'clients.*'], function ($view) {
             $languageRepository = app(LanguageRepository::class);
-            $languages = $languageRepository->all();
+            $languages = $languageRepository->findByWhere(
+                [
+                    'publish' => ['=', config('apps.general.defaultPublish')],
+                ],
+                ['id', 'name', 'canonical', 'current', 'image'],
+                [],
+                true
+            );
             // dd($languages);
             $view->with('languages', $languages);
         });

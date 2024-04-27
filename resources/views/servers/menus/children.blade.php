@@ -11,7 +11,6 @@
 
 @endsection
 
-@section('content')
 
 @section('content')
 @php

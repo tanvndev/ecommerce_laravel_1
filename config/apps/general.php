@@ -1,5 +1,5 @@
 <?php
 return [
-    'publish' => ['Không xuất bản', 'Xuất bản'],
-    'follow' => ['noFollow', 'Follow'],
+    'suffix' => '.html',
+    'defaultPublish' => 1,
 ];
