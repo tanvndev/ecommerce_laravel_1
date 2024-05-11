@@ -12,6 +12,5 @@
     var BASE_URL = "{{ url('/') }}";
 </script>
 
-@yield('style')
 
 @include('clients.includes.style')

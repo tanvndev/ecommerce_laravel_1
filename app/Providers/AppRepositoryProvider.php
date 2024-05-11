@@ -51,22 +51,21 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\SystemRepositoryInterface' => 'App\Repositories\SystemRepository',
         // Menu
         'App\Repositories\Interfaces\MenuRepositoryInterface' => 'App\Repositories\MenuRepository',
-        // Menu
+        // Menu Catalogue
         'App\Repositories\Interfaces\MenuCatalogueRepositoryInterface' => 'App\Repositories\MenuCatalogueRepository',
-
         // Slide
         'App\Repositories\Interfaces\SlideRepositoryInterface' => 'App\Repositories\SlideRepository',
-    // Widget
-'App\Repositories\Interfaces\WidgetRepositoryInterface' => 'App\Repositories\WidgetRepository',
-// Promotion
-'App\Repositories\Interfaces\PromotionRepositoryInterface' => 'App\Repositories\PromotionRepository',
-// Source
-'App\Repositories\Interfaces\SourceRepositoryInterface' => 'App\Repositories\SourceRepository',
-// Customer
-'App\Repositories\Interfaces\CustomerRepositoryInterface' => 'App\Repositories\CustomerRepository',
-// CustomerCatalogue
-'App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface' => 'App\Repositories\CustomerCatalogueRepository',
-];
+        // Widget
+        'App\Repositories\Interfaces\WidgetRepositoryInterface' => 'App\Repositories\WidgetRepository',
+        // Promotion
+        'App\Repositories\Interfaces\PromotionRepositoryInterface' => 'App\Repositories\PromotionRepository',
+        // Source
+        'App\Repositories\Interfaces\SourceRepositoryInterface' => 'App\Repositories\SourceRepository',
+        // Customer
+        'App\Repositories\Interfaces\CustomerRepositoryInterface' => 'App\Repositories\CustomerRepository',
+        // CustomerCatalogue
+        'App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface' => 'App\Repositories\CustomerCatalogueRepository',
+    ];
 
     public function register(): void
     {

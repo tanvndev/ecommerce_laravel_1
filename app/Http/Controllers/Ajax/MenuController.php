@@ -14,15 +14,12 @@ class MenuController extends Controller
     protected $menuRepository;
     protected $menuCatalogueService;
     protected $menuService;
-    public function __construct(
-        MenuRepository $menuRepository,
-        MenuCatalogueService $menuCatalogueService,
-        MenuService $menuService,
-    ) {
+    public function __construct()
+    {
         parent::__construct();
-        $this->menuRepository = $menuRepository;
-        $this->menuCatalogueService = $menuCatalogueService;
-        $this->menuService = $menuService;
+        $this->menuRepository = app(MenuRepository::class);
+        $this->menuCatalogueService = app(MenuCatalogueService::class);
+        $this->menuService = app(MenuService::class);
     }
 
     public function createCatalogue(StoreMenuCatalogueRequest $request)

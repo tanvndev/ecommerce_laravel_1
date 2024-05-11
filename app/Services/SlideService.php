@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Services\Interfaces\SlideServiceInterface;
 use App\Repositories\Interfaces\SlideRepositoryInterface as SlideRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

@@ -12,13 +12,11 @@ class LocationController extends Controller
 {
     protected $provinceRepository;
     protected $districtRepository;
-    public function __construct(
-        ProvinceRepository $provinceRepository,
-        DistrictRepository $districtRepository
-
-    ) {
-        $this->districtRepository = $districtRepository;
-        $this->provinceRepository = $provinceRepository;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->districtRepository = app(DistrictRepository::class);
+        $this->provinceRepository = app(ProvinceRepository::class);
     }
     function getLocation(Request $request)
     {

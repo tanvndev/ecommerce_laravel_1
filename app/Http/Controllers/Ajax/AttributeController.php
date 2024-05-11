@@ -10,12 +10,11 @@ use Illuminate\Http\Request;
 class AttributeController extends Controller
 {
     protected $attributeRepository;
-    public function __construct(
-        AttributeRepository $attributeRepository,
-    ) {
+    public function __construct()
+    {
         // Lấy ra ngôn ngữ hiện tại và gán vào session
         parent::__construct();
-        $this->attributeRepository = $attributeRepository;
+        $this->attributeRepository = app(AttributeRepository::class);
     }
 
     public function getAttribute(Request $request)
