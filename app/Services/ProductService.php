@@ -6,6 +6,8 @@ use App\Services\Interfaces\ProductServiceInterface;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 use App\Repositories\Interfaces\ProductVariantLanguageRepositoryInterface as ProductVariantLanguageRepository;
 use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as ProductVariantAttributeRepository;
+use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,16 +19,19 @@ class ProductService extends BaseService implements ProductServiceInterface
     protected $productRepository;
     protected $productVariantLanguageRepository;
     protected $productVariantAttributeRepository;
+    protected $promotionRepository;
 
     public function __construct(
         ProductRepository $productRepository,
         ProductVariantLanguageRepository $productVariantLanguageRepository,
         ProductVariantAttributeRepository $productVariantAttributeRepository,
+        PromotionRepository $promotionRepository,
     ) {
         parent::__construct();
         $this->productRepository = $productRepository;
         $this->productVariantLanguageRepository = $productVariantLanguageRepository;
         $this->productVariantAttributeRepository = $productVariantAttributeRepository;
+        $this->promotionRepository = $promotionRepository;
         $this->controllerName = 'ProductController';
     }
     function paginate()
@@ -352,5 +357,22 @@ class ProductService extends BaseService implements ProductServiceInterface
     private function payloadLanguage()
     {
         return ['name', 'canonical', 'description', 'content', 'meta_title', 'meta_description', 'meta_keyword'];
+    }
+
+    // Service Client
+
+    public function combineProductAndPromotion($productId = [],  $products = [])
+    {
+        $promotions = $this->promotionRepository->findByProduct($productId);
+        if (count($promotions)) {
+            foreach ($products as $index => $product) {
+                foreach ($promotions as $key => $promotion) {
+                    if ($promotion->product_id == $product->id) {
+                        $products[$index]->promotion = $promotion;
+                    }
+                }
+            }
+        }
+        return $products;
     }
 }

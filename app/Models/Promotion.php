@@ -23,7 +23,11 @@ class Promotion extends Model
         'end_at',
         'never_end',
         'order',
-        'description'
+        'description',
+        'max_discount',
+        'discount_value',
+        'discount_type'
+
     ];
 
     protected $casts = [

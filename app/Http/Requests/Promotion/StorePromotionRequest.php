@@ -21,6 +21,19 @@ class StorePromotionRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('product_and_quantity.discount_value')) {
+            $this->merge([
+                'product_and_quantity' => [
+                    'discount_value' => convertPrice($this->input('product_and_quantity.discount_value')),
+                    'quantity' => convertPrice($this->input('product_and_quantity.quantity')),
+                ],
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         $rules = [

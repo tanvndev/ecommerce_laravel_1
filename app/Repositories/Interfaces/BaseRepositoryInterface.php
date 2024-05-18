@@ -6,7 +6,7 @@ interface BaseRepositoryInterface
 {
     public function all($relation = [], $column = ['*']);
     public function findById($modelId, $column = ['*'], $relation = []);
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = null, $whereInParams = []);
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = null, $whereInParams = [], $withCount = []);
     public function findByWhereHas($condition = [], $column = ['*'], $relation = [], $alias = '', $all = false);
     public function create($payload = []);
     public function createBatch($payload = []);

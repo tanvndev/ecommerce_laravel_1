@@ -1079,7 +1079,7 @@ jQuery(function ($) {
                                     : ""
                             } value="cast">đ</option>
                             <option ${
-                                preloadInfo?.max_discount == "percent"
+                                preloadInfo?.discount_type == "percent"
                                     ? "selected"
                                     : ""
                             } value="percent">%</option>

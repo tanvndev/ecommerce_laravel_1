@@ -60,151 +60,37 @@
 @endif
 
 <!-- Start Categorie Area  -->
+@empty(!$widgets['categories'])
 <div class="axil-categorie-area bg-color-white axil-section-gapcommon">
     <div class="container">
         <div class="section-title-wrapper">
-            <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Categories</span>
-            <h2 class="title">Browse by Category</h2>
+            <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Danh mục</span>
+            <h2 class="title">Tìm kiếm bằng danh mục</h2>
         </div>
         <div class="categrie-product-activation slick-layout-wrapper--15 axil-slick-arrow  arrow-top-slide">
+            @foreach ($widgets['categories'] as $category)
+            @php
+            $name = $category->languages->first()->pivot->name;
+            $canonical = write_url($category->languages->first()->pivot->canonical);
+            $image = $category->image;
+            @endphp
             <div class="slick-single-layout">
                 <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-4.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Phones</h6>
+                    <a href="{{ $canonical }}}" title="{{$name}}">
+                        <img class="img-fluid" src="{{$image}}" alt="{{$name}}">
+                        <h6 class="cat-title">{{$name}}</h6>
                     </a>
                 </div>
-                <!-- End .categrie-product -->
             </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="300" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-5.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Computers</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="400" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-11.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Accessories</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="500" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-6.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Laptops</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="600" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-2.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Monitors</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="700" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-7.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Networking</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product" data-sal="zoom-out" data-sal-delay="800" data-sal-duration="500">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-8.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">PC Gaming</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-1.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Smartwatches</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-9.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Headphones</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-10.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Camera & Photo</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-8.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Video Games</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
-            <!-- End .slick-single-layout -->
-            <div class="slick-single-layout">
-                <div class="categrie-product">
-                    <a href="#">
-                        <img class="img-fluid" src="assets/clients/images/product/categories/elec-1.png"
-                            alt="product categorie">
-                        <h6 class="cat-title">Sports</h6>
-                    </a>
-                </div>
-                <!-- End .categrie-product -->
-            </div>
+            @endforeach
         </div>
     </div>
 </div>
+@endempty
 <!-- End Categorie Area  -->
 
 <!-- Poster Countdown Area  -->
-{{-- <div class="axil-poster-countdown">
+<div class="axil-poster-countdown">
     <div class="container">
         <div class="poster-countdown-wrap bg-lighter">
             <div class="row">
@@ -234,7 +120,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <!-- End Poster Countdown Area  -->
 
 <!-- Start Expolre Product Area  -->

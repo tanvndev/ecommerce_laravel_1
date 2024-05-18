@@ -59,6 +59,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         try {
             $payload = $this->handlePayload();
             $promotion = $this->promotionRepository->create($payload);
+            // dd($promotion);
 
             // Nếu tạo thành công, thêm sản phẩm và biến thể vào khuyến mãi sản phẩm
             if ($payload['method'] == PromotionEnum::PRODUCT_AND_QUANTITY && $promotion->id > 0) {
@@ -103,6 +104,12 @@ class PromotionService extends BaseService implements PromotionServiceInterface
     {
         // dd(request()->all());
         $payload = request()->only('name', 'code', 'start_at', 'end_at', 'never_end', 'description');
+        if (!is_null(request()->input(PromotionEnum::PRODUCT_AND_QUANTITY))) {
+            $payload += request()->input(PromotionEnum::PRODUCT_AND_QUANTITY);
+            $payload['discount_value'] = convertPrice($payload['discount_value']);
+            $payload['max_discount'] = convertPrice($payload['max_discount']);
+            // dd($payload);
+        }
         $payload['method'] = request('promotion_method');
         $payload['code'] = Str::upper((empty($payload['code'])) ? Str::random(10) : $payload['code']);
 
@@ -170,7 +177,6 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         $data['info'] = request()->input('product_and_quantity');
         $data['info']['model'] = request()->input(PromotionEnum::MODULE_TYPE);
         $data['info']['object'] = request()->input('object');
-
 
         return $data + $this->handleSourceAndCondition();
     }

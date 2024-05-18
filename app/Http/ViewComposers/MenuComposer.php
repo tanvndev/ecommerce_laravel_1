@@ -31,7 +31,7 @@ class MenuComposer
                     }
                 ]
             ],
-            true
+            true,
         );
 
         // dd($menuCatalogue);

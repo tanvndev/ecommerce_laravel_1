@@ -58,8 +58,6 @@ class OrderAmountRangeRule implements ValidationRule
         }
 
 
-
-
         if ($conflict) {
             $fail('Có xung đột giữa các khoảng giá trị khuyến mãi, vui lòng kiêm tra lại.');
         }

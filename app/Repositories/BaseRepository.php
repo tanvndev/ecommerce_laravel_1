@@ -29,7 +29,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = null, $whereInParams = [])
+    public function findByWhere($conditions = [], $column = ['*'], $relation = [], $all = false, $orderBy = null, $whereInParams = [], $withCount = [])
     {
         $query = $this->model->select($column);
 
@@ -45,6 +45,10 @@ class BaseRepository implements BaseRepositoryInterface
 
         if (!is_null($orderBy)) {
             $query->customOrderBy($orderBy);
+        }
+
+        if (!empty($withCount)) {
+            $query->withCount($withCount);
         }
 
         return $all ? $query->get() : $query->first();

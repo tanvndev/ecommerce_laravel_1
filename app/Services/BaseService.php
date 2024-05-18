@@ -116,4 +116,24 @@ class BaseService implements BaseServiceInterface
             return false;
         }
     }
+
+    protected function getServiceInstance($modelName)
+    {
+        $serviceInterfaceNameSpace = 'App\Services\Interfaces\\' . ucfirst($modelName) . 'ServiceInterface';
+        if (interface_exists($serviceInterfaceNameSpace)) {
+            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
+            return app($serviceInterfaceNameSpace);
+        }
+        return null;
+    }
+
+    protected function getRepositoryInstance($modelName)
+    {
+        $repositoryInterfaceNameSpace = 'App\Repositories\Interfaces\\' . ucfirst($modelName) . 'RepositoryInterface';
+        if (interface_exists($repositoryInterfaceNameSpace)) {
+            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
+            return app($repositoryInterfaceNameSpace);
+        }
+        return null;
+    }
 }
