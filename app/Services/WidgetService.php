@@ -190,7 +190,6 @@ class WidgetService extends BaseService implements WidgetServiceInterface
             $model = lcfirst(str_replace('Catalogue', '', $widget->model));
 
             if (isset($params[$key]['object']) && count($object)) {
-                $objectId = $object->pluck('id')->toArray();
 
                 // Lay ra cac danh muc con cua danh muc do
                 if (isset($params[$key]['children']) && strpos($widget->model, 'Catalogue') !== false) {
