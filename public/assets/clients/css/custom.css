@@ -50,4 +50,25 @@ body::-webkit-scrollbar-thumb:hover {
 
 .axil-product .product-content .product-price-variant span.price.old-price {
   font-size: 14px;
+}
+
+.axil-product-list .product-content .product-price-variant .price.old-price {
+  font-size: 14px;
+}
+
+.axil-product-list .thumbnail img {
+  border-radius: 6px;
+  transition: var(--transition);
+  width: 90px;
+  height: 90px;
+  -o-object-fit: contain;
+  object-fit: contain;
+  mix-blend-mode: darken;
+}
+
+.axil-product-list .thumbnail a {
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  display: block;
+  transition: var(--transition);
 }/*# sourceMappingURL=custom.css.map */
