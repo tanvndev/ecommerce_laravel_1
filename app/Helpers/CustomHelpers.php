@@ -24,6 +24,92 @@ if (!function_exists('convertPrice')) {
         return $price;
     }
 }
+if (!function_exists('formatCurrency')) {
+
+    function formatCurrency($amount, $currencyCode = 'vn')
+    {
+        switch (strtoupper($currencyCode)) {
+            case 'VN':
+                // Định dạng cho tiền tệ Việt Nam (VND)
+                return number_format($amount, 0, ',', '.') . ' ₫';
+            case 'CN':
+                // Định dạng cho tiền tệ Trung Quốc (CNY)
+                return '¥' . number_format($amount, 2, '.', ',');
+            case 'EN':
+                // Định dạng cho tiền tệ Hoa Kỳ (USD)
+                return '$' . number_format($amount, 2, '.', ',');
+            default:
+                // Nếu mã tiền tệ không được hỗ trợ, trả về số tiền gốc
+                return $amount;
+        }
+    }
+}
+
+if (!function_exists('getPrice')) {
+    function getPrice($product)
+    {
+        $result = [
+            'price' => $product->price,
+            'priceSale' => $product->price,
+            'percent' => 0,
+            'priceHtml' => '',
+            'discountHtml' => '',
+        ];
+
+        $price = formatCurrency($result['price']);
+
+        if ($product->promotions->isNotEmpty()) {
+            $promotion = $product->promotions[0];
+
+            if ($promotion->discount_type == 'percent') {
+                $result['percent'] = $promotion->discount_value;
+                $result['priceSale'] = $result['price'] * (1 - $result['percent'] / 100);
+            } else {
+                $result['priceSale'] = $result['price'] - $promotion->discount_value;
+                $result['percent'] = ($promotion->discount_value / $result['price']) * 100;
+            }
+
+            $result['priceSale'] = formatCurrency($result['priceSale']);
+
+            $result['priceHtml'] = "
+            <span class='price current-price'>{$result['priceSale']}</span>
+            <span class='price old-price'>{$price}</span>
+            ";
+
+            $result['discountHtml'] = "
+            <div class='label-block label-right'>
+                <div class='product-badget'>Giảm {$result['percent']}%</div>
+            </div>
+            ";
+        } else {
+            $result['priceHtml'] = "<span class='price current-price'>{$price}</span>";
+        }
+
+        return $result;
+    }
+}
+
+if (!function_exists('getReview')) {
+    function getReview($product)
+    {
+        $number = rand(1, 5);
+        $filledStars = round($number);
+        $starArray = array();
+
+        for ($index = 0; $index < 5; $index++) {
+            if ($index < $filledStars) {
+                $starArray[] = '<i class="fas fa-star"></i>';
+            } else {
+                $starArray[] = '<i class="far fa-star"></i>';
+            }
+        }
+        return [
+            'star' => implode(' ', $starArray),
+            'count' => rand(1, 999)
+        ];
+    }
+}
+
 
 if (!function_exists('recursive')) {
 
@@ -168,5 +254,27 @@ if (!function_exists('renderDiscountInfomation')) {
             return "<span class='badge bg-success px-3 py-2 fs-12'>$discountValue$discountType</span>";
         }
         return "<a class='link-primary' href='" . route('promotion.edit', $promotion->id) . "'>Xem chi tiết</a>";
+    }
+}
+
+
+if (!function_exists('renderQuickView')) {
+    function renderQuickView($product, $canonical, $name)
+    {
+        $html = "
+        <li class='select-option'>
+            <a ";
+
+        if (isset($product->product_variants) && count($product->product_variants) > 0) {
+            $html .= "data-bs-toggle='modal' data-bs-target='#quick-view-modal' ";
+        }
+
+        $html .= "href='{{ $canonical }}' title='{{$name}}'>
+                Thêm vào giỏ hàng
+            </a>
+        </li>
+        ";
+
+        return $html;
     }
 }

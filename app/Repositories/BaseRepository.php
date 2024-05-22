@@ -5,6 +5,8 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -185,5 +187,65 @@ class BaseRepository implements BaseRepositoryInterface
                 });
             })
             ->get();
+    }
+
+    public function recursiveCategory($ids = [], $table)
+    {
+        $ids = (array) $ids;
+        // Kiểm tra và xác thực đầu vào
+        if (empty($ids) || !is_array($ids)) {
+            throw new InvalidArgumentException('The first parameter should be a non-empty array of IDs.');
+        }
+
+        // Xác thực tên bảng
+        if (!preg_match('/^[a-zA-Z_]+$/', $table)) {
+            throw new InvalidArgumentException('Invalid table name.');
+        }
+
+        $table = $table . '_catalogues';
+
+        // Tạo chuỗi placeholders
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        // Truy vấn SQL
+        $query = "
+        WITH RECURSIVE category_tree AS (
+            SELECT id, parent_id, deleted_at 
+            FROM $table 
+            WHERE id IN ($placeholders) AND deleted_at IS NULL
+            UNION ALL
+            SELECT c.id, c.parent_id, c.deleted_at
+            FROM $table as c
+            INNER JOIN category_tree ct ON c.parent_id = ct.id
+        )
+        SELECT id FROM category_tree WHERE deleted_at IS NULL
+    ";
+
+        // Thực thi truy vấn với các giá trị id
+        return DB::select($query, $ids);
+    }
+
+    public function findObjectByCategoryIds($ids, $model, $languageId)
+    {
+
+        $query = $this->model
+            ->select($model . 's.*')
+            ->where(
+                'publish',
+                config('apps.general.defaultPublish')
+            )
+            ->with('languages', function ($query) use ($languageId) {
+                $query->where('language_id', $languageId ?? 1);
+            });
+
+        if ($model == 'product') {
+            $query->with('product_variants');
+        }
+        $query->join($model . '_catalogue_' . $model . ' as tb2', 'tb2.' . $model . '_id', '=', $model . 's.id')
+            ->whereIn('tb2.' . $model . '_catalogue_id', $ids)
+            ->orderBy('order', 'desc')
+            ->get();
+
+        return $query;
     }
 }

@@ -4,7 +4,7 @@ $jsFiles = [
 'assets/clients/js/vendor/jquery.js',
 'assets/clients/js/vendor/popper.min.js',
 'assets/clients/js/vendor/bootstrap.min.js',
-// 'assets/clients/js/vendor/slick.min.js',
+'assets/clients/js/vendor/slick.min.js',
 'assets/clients/js/vendor/jquery-ui.min.js',
 'assets/clients/js/vendor/sal.js',
 'assets/clients/js/vendor/jquery.magnific-popup.min.js',

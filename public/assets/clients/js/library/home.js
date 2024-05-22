@@ -113,7 +113,112 @@ jQuery(function ($) {
         });
     };
 
+    init.slickFeedback = () => {
+        $(".testimonial-slick-activation").slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            autoplay: true,
+            arrows: true,
+            dots: false,
+            speed: 1000,
+            draggable: true,
+            prevArrow:
+                '<button class="slide-arrow prev-arrow"><i class="fal fa-long-arrow-left"></i></button>',
+            nextArrow:
+                '<button class="slide-arrow next-arrow"><i class="fal fa-long-arrow-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 1,
+                    },
+                },
+            ],
+        });
+    };
+
+    init.slickArrivalProduct = () => {
+        $(".new-arrivals-product-activation").slick({
+            infinite: true,
+            slidesToShow: 4,
+            slidesToScroll: 4,
+            arrows: true,
+            dots: false,
+            prevArrow:
+                '<button class="slide-arrow prev-arrow"><i class="fal fa-long-arrow-left"></i></button>',
+            nextArrow:
+                '<button class="slide-arrow next-arrow"><i class="fal fa-long-arrow-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 1199,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                    },
+                },
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                    },
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ],
+        });
+    };
+
+    init.modalProduct = () => {
+        $(".product-small-thumb").slick({
+            infinite: false,
+            slidesToShow: 6,
+            slidesToScroll: 1,
+            arrows: false,
+            dots: false,
+            focusOnSelect: true,
+            vertical: true,
+            speed: 800,
+            asNavFor: ".product-large-thumbnail",
+            responsive: [
+                {
+                    breakpoint: 992,
+                    settings: {
+                        vertical: false,
+                    },
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        vertical: false,
+                        slidesToShow: 4,
+                    },
+                },
+            ],
+        });
+
+        $(".product-large-thumbnail").slick({
+            infinite: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            dots: false,
+            speed: 800,
+            draggable: false,
+            asNavFor: ".product-small-thumb",
+        });
+    };
+
     $(document).ready(function () {
         init.slickSliderMain();
+        init.slickFeedback();
+        init.slickArrivalProduct();
+        // init.modalProduct();
     });
 });

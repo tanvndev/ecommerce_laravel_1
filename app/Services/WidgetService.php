@@ -159,80 +159,161 @@ class WidgetService extends BaseService implements WidgetServiceInterface
     }
 
     // Frontend services
-    public function findWidgetByKeyword($keyword, $params = [])
-    {
-        $widget = $this->widgetRepository->findByWhere([
-            'keyword' => ['=', $keyword],
-            'publish' => ['=', config('apps.general.defaultPublish')],
-        ]);
 
-        if (is_null($widget)) {
+
+    public function getWidget($params = [])
+    {
+        $whereIn = [];
+        $whereInField = 'keyword';
+        if (count($params)) {
+            foreach ($params as $key => $value) {
+                $whereIn[] = $value['keyword'];
+            }
+        }
+        // Lay ra toan bo widget
+        $widgets = $this->widgetRepository->getWidgetWhereIn($whereIn, $whereInField);
+
+        if (is_null($widgets)) {
             return false;
         }
 
-        $model = $widget->model;
-        $modelId = $widget->model_id;
+        $temp = [];
+        foreach ($widgets as $key => $widget) {
+            if (!isset($params[$key])) {
+                continue;
+            }
 
-        $relation = [];
-        $withCount = [];
+            $agrument = $this->widgetAgrument($widget, $params[$key]);
+            $repository = $this->getRepositoryInstance($widget->model);
+            $object = $repository->findByWhere(...$agrument);
+
+            $model = lcfirst(str_replace('Catalogue', '', $widget->model));
+
+            if (isset($params[$key]['object']) && count($object)) {
+                $objectId = $object->pluck('id')->toArray();
+
+                // Lay ra cac danh muc con cua danh muc do
+                if (isset($params[$key]['children']) && strpos($widget->model, 'Catalogue') !== false) {
+                    $repository2 = $this->getRepositoryInstance(ucfirst($model));
+                    $replace = $model . 's';
+                    foreach ($object as $valueObject) {
+
+                        $agrumentChildren = $this->childrenAgrument([$valueObject->id]);
+                        $valueObject->childrens = $repository->findByWhere(...$agrumentChildren);
+
+                        // Lay ra san pham cua danh muc do
+                        $childIds = $repository->recursiveCategory($valueObject->id, $model);
+                        $ids = [];
+                        foreach ($childIds as $childId) {
+                            $ids[] = $childId->id;
+                        }
+
+                        // dd($valueObject);
+                        if ($valueObject->right - $valueObject->left > 1) {
+                            $valueObject->{$replace} = $repository2->findObjectByCategoryIds($ids, $model, session('currentLanguage', 1));
+                        }
+                    }
+                }
+
+                // Lấy ra promotion của sản phẩm tương ứng nếu có
+                if ($model == 'product' && isset($params[$key]['object']) && count($object) && isset($params[$key]['promotion'])) {
+                    $productIds = [];
+
+                    if ($widget->model == 'Product') {
+                        $productIds = $object->pluck('id')->toArray();
+                        if (!empty($productIds)) {
+                            $this->productService->combineProductAndPromotion($productIds, $object);
+                        }
+                    } else {
+                        foreach ($object as $valueProduct) {
+                            $productIds = $valueProduct->products->pluck('id')->toArray();
+                            if (!empty($productIds)) {
+                                $valueProduct->products = $this->productService->combineProductAndPromotion($productIds, $valueProduct->products);
+                            }
+                        }
+                    }
+                }
+                $widget->object = $object;
+            }
+
+            $temp[$widget->keyword] = $widgets[$key];
+        }
+        return $temp;
+    }
+
+    private function childrenAgrument($objectId)
+    {
+        return [
+            'conditions' => [
+                'publish' => ['=', config('apps.general.defaultPublish')]
+            ],
+            'column' => '*',
+            'relation' => [
+                [
+                    'languages' => function ($query) {
+                        $query->where('language_id', session('currentLanguage', 1));
+                    }
+                ]
+            ],
+            'all' => true,
+            'orderBy' => null,
+            'whereInParams' => ['field' => 'parent_id', 'value' => $objectId],
+        ];
+    }
+
+    private function widgetAgrument($widget, $param)
+    {
 
         $relation[] = ['languages' => function ($query) {
             $query->where('language_id', session('currentLanguage', 1));
         }];
 
+        $model = $widget->model;
+        $modelId = $widget->model_id;
+
+        $withCount = [];
 
         // Neu co param object thi se lay ra cac san pham ben trong danh muc do
-        if (strpos($model, 'Catalogue') !== false && isset($params['object'])) {
+        if (strpos($model, 'Catalogue') !== false && isset($param['object'])) {
             $relatedModel = lcfirst(str_replace('Catalogue', '', $model)) . 's';
 
-            $relation[] = [$relatedModel => function ($query) use ($params) {
-                $query->limit($params['limit'] ?? 10)
-                    ->whereHas('languages', function ($query) {
+            $relation[] = [$relatedModel => function ($query) use ($param, $relatedModel) {
+                $query
+                    ->limit($param['limit'] ?? 10)
+                    ->with('languages', function ($query) {
                         $query->where('language_id', session('currentLanguage', 1));
-                    })
-                    ->where('publish', config('apps.general.defaultPublish'))
-                    ->take($params['limit'] ?? 10)
+                    });
+
+                if ($relatedModel == 'products') {
+                    $query->with('product_variants');
+                }
+
+                $query->where('publish', config('apps.general.defaultPublish'))
+                    ->take($param['limit'] ?? 10)
                     ->orderBy('order', 'DESC');
             }];
 
             // Neu co count Object se dem so san pham trong danh muc do
-            if (isset($params['countObject'])) {
+            if (isset($param['countObject'])) {
                 $withCount[] = $relatedModel;
             }
         }
 
-
-        $object = $this->getRepositoryInstance($model)->findByWhere([
-            'publish' => ['=', config('apps.general.defaultPublish')],
-        ], ['*'], $relation, true, [], ['field' => 'id', 'value' => $modelId], $withCount);
-
-        $model = lcfirst(str_replace('Catalogue', '', $model));
-
-        // Neu la san pham thi se lay ra cac promotion
-        if ($model == 'product' && isset($params['object']) && count($object)) {
-            foreach ($object as $key => $value) {
-                $productId = $value->products->pluck('id')->toArray();
-                if (!empty($productId)) {
-                    $value->products = $this->productService->combineProductAndPromotion($productId, $value->products);
-                }
-
-                // Lay ra cac danh muc con cua danh muc do
-                if (isset($params['children'])) {
-                    $condition = [
-                        'left' => ['>', $value->left],
-                        'right' => ['<', $value->right],
-                        'publish' => ['=', config('apps.general.defaultPublish')]
-                    ];
-                    $value->childrens = $this->productCatalogueRepository->findByWhere(
-                        $condition,
-                        ['*'],
-                        [],
-                        true
-                    );
-                }
-            }
+        // Lay them bien the cho san pham
+        if ($model == 'Product' && isset($param['object'])) {
+            $relation[] = 'product_variants';
         }
 
-        return $object;
+        return [
+            'conditions' => [
+                'publish' => ['=', config('apps.general.defaultPublish')],
+            ],
+            'column' => '*',
+            'relation' => $relation,
+            'all' => true,
+            'orderBy' => null,
+            'whereInParams' => ['field' => 'id', 'value' => $modelId],
+            'withCount' => $withCount
+        ];
     }
 }

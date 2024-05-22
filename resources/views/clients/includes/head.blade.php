@@ -3,7 +3,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="viewport" content="index, follow">
+{{--
+<meta name="viewport" content="index, follow"> --}}
 <title>{{$config['seo']['title'] ?? 'ebazar'}}</title>
 
 <link rel="icon" href="assets/servers/images/favicon.html" type="image/x-icon"> <!-- Favicon-->

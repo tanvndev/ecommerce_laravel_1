@@ -8,7 +8,7 @@
             <ul class="cart-item-list">
                 <li class="cart-item">
                     <div class="item-img">
-                        <a href="single-product.html"><img src="assets/images/product/electric/product-01.png"
+                        <a href="single-product.html"><img src="assets/clients/images/product/electric/product-01.png"
                                 alt="Commodo Blown Lamp"></a>
                         <button class="close-btn"><i class="fas fa-times"></i></button>
                     </div>
@@ -32,7 +32,7 @@
                 </li>
                 <li class="cart-item">
                     <div class="item-img">
-                        <a href="single-product-2.html"><img src="assets/images/product/electric/product-02.png"
+                        <a href="single-product-2.html"><img src="assets/clients/images/product/electric/product-02.png"
                                 alt="Commodo Blown Lamp"></a>
                         <button class="close-btn"><i class="fas fa-times"></i></button>
                     </div>
@@ -56,7 +56,7 @@
                 </li>
                 <li class="cart-item">
                     <div class="item-img">
-                        <a href="single-product-3.html"><img src="assets/images/product/electric/product-03.png"
+                        <a href="single-product-3.html"><img src="assets/clients/images/product/electric/product-03.png"
                                 alt="Commodo Blown Lamp"></a>
                         <button class="close-btn"><i class="fas fa-times"></i></button>
                     </div>

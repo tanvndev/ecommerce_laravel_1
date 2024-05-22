@@ -4,7 +4,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/images/icons/service1.png" alt="Service">
+                        <img src="assets/clients/images/icons/service1.png" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Fast &amp; Secure Delivery</h6>
@@ -15,7 +15,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/images/icons/service2.png" alt="Service">
+                        <img src="assets/clients/images/icons/service2.png" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Money Back Guarantee</h6>
@@ -26,7 +26,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/images/icons/service3.png" alt="Service">
+                        <img src="assets/clients/images/icons/service3.png" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">24 Hour Return Policy</h6>
@@ -37,7 +37,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/images/icons/service4.png" alt="Service">
+                        <img src="assets/clients/images/icons/service4.png" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Pro Quality Support</h6>
@@ -122,14 +122,14 @@
                             <span>Save $3 With App & New User only</span>
                             <div class="download-btn-group">
                                 <div class="qr-code">
-                                    <img src="assets/images/others/qr.png" alt="Axilthemes">
+                                    <img src="assets/clients/images/others/qr.png" alt="Axilthemes">
                                 </div>
                                 <div class="app-link">
                                     <a href="#">
-                                        <img src="assets/images/others/app-store.png" alt="App Store">
+                                        <img src="assets/clients/images/others/app-store.png" alt="App Store">
                                     </a>
                                     <a href="#">
-                                        <img src="assets/images/others/play-store.png" alt="Play Store">
+                                        <img src="assets/clients/images/others/play-store.png" alt="Play Store">
                                     </a>
                                 </div>
                             </div>
@@ -167,9 +167,9 @@
                         class="copyright-right d-flex flex-wrap justify-content-xl-end justify-content-center align-items-center">
                         <span class="card-text">Accept For</span>
                         <ul class="payment-icons-bottom quick-link">
-                            <li><img src="assets/images/icons/cart/cart-1.png" alt="paypal cart"></li>
-                            <li><img src="assets/images/icons/cart/cart-2.png" alt="paypal cart"></li>
-                            <li><img src="assets/images/icons/cart/cart-5.png" alt="paypal cart"></li>
+                            <li><img src="assets/clients/images/icons/cart/cart-1.png" alt="paypal cart"></li>
+                            <li><img src="assets/clients/images/icons/cart/cart-2.png" alt="paypal cart"></li>
+                            <li><img src="assets/clients/images/icons/cart/cart-5.png" alt="paypal cart"></li>
                         </ul>
                     </div>
                 </div>

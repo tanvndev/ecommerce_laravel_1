@@ -27,6 +27,9 @@
     {{-- Modal Cart --}}
     @include('clients.includes.modalCart')
 
+    {{-- Modal Quick View --}}
+    @include('clients.includes.popupQuickView')
+
     <div class="closeMask"></div>
 
     {{-- Alert sweetalert --}}

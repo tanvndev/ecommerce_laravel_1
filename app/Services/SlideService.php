@@ -176,4 +176,24 @@ class SlideService extends BaseService implements SlideServiceInterface
             return false;
         }
     }
+
+
+    // Service client
+    public function getSlide($keyword = [])
+    {
+        $result = [];
+        $slides = $this->slideRepository->findByWhere([
+            'publish' => ['=', config('apps.general.defaultPublish')],
+        ], ['*'], [], true, [], [
+            'field' => 'keyword',
+            'value' => $keyword
+        ]);
+
+        foreach ($slides as $key => $slide) {
+            $slide->item = $slide->item[session('currentLanguage')];
+            $result[$slide->keyword] = $slide;
+        }
+
+        return $result;
+    }
 }

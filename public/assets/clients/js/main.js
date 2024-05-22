@@ -59,7 +59,7 @@
             axilInit.colorVariantActive();
             axilInit.headerCampaignRemove();
             // axilInit.offerPopupActivation();
-            axilInit.axilMasonary();
+            // axilInit.axilMasonary();
             axilInit.counterUpActivation();
             axilInit.scrollSmoth();
             axilInit.onLoadClassAdd();

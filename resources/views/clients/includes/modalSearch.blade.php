@@ -20,7 +20,7 @@
                 <div class="axil-product-list">
                     <div class="thumbnail">
                         <a href="single-product.html">
-                            <img src="assets/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <img src="assets/clients/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
                         </a>
                     </div>
                     <div class="product-content">
@@ -48,7 +48,7 @@
                 <div class="axil-product-list">
                     <div class="thumbnail">
                         <a href="single-product.html">
-                            <img src="assets/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
+                            <img src="assets/clients/images/product/electric/product-09.png" alt="Yantiti Leather Bags">
                         </a>
                     </div>
                     <div class="product-content">

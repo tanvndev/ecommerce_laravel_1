@@ -11,5 +11,5 @@ interface WidgetServiceInterface
     public function updateStatus();
     public function updateStatusAll();
     public function saveTranslate();
-    public function findWidgetByKeyword($keyword, $params = []);
+    public function getWidget($params = []);
 }

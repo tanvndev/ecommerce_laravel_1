@@ -31,4 +31,6 @@ interface BaseRepositoryInterface
         $rawQuery = [],
     );
     public function findWidgetItem($condition = [], $column = ['*'], $alias = '', $languageId = 1);
+    public function recursiveCategory($ids = [], $table);
+    public function findObjectByCategoryIds($ids, $model, $languageId);
 }

@@ -12,4 +12,5 @@ interface SlideServiceInterface
     public function updateStatusAll();
     public function convertSlidesToArray($slides = []);
     public function dragUpdate($data = []);
+    public function getSlide($keyword = []);
 }

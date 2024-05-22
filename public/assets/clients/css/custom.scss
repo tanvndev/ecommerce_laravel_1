@@ -20,3 +20,34 @@ body {
     display: block;
     width: 70px;
 }
+
+.axil-product > .thumbnail > a img {
+    width: 100%;
+    border-radius: 6px;
+    transition: 0.3s;
+    min-width: 276px;
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: contain;
+    mix-blend-mode: darken;
+    padding: 25px;
+}
+
+.axil-product > .thumbnail > a {
+    display: block;
+    background-color: #f7f7f7;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    height: 300px;
+    width: 300px;
+    min-width: 276px;
+    max-width: 300px;
+    max-height: 300px;
+    text-align: center;
+    display: grid;
+    place-content: center;
+}
+.axil-product .product-content .product-price-variant span.price.old-price {
+    font-size: 14px;
+}
