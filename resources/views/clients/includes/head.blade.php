@@ -3,6 +3,12 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<meta name="title">
+<meta name="description">
+<meta name="keywords">
+<meta name="author" content="ebazar">
+
 {{--
 <meta name="viewport" content="index, follow"> --}}
 <title>{{$config['seo']['title'] ?? 'ebazar'}}</title>

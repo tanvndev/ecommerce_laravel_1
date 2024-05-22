@@ -27,11 +27,12 @@ class HomeController extends Controller
             ['keyword' => 'categories', 'children' => true, 'object' => true, 'countObject' => true, 'promotion' => true],
             ['keyword' => 'home-outstanding-products', 'object' => true, 'promotion' => true],
             ['keyword' => 'news', 'object' => true],
-            ['keyword' => 'home-arrival-product', 'object' => true, 'children' => true, 'promotion' => true],
+            ['keyword' => 'home-arrival-product', 'object' => true, 'promotion' => true],
+            ['keyword' => 'home-most-sold', 'object' => true, 'promotion' => true],
         ]);
         // dd($widgets);
 
-        // dd($widgets['home-arrival-product']->object);
+        // dd($widgets['home-most-sold']->object);
 
         $slides = $this->slideService->getSlide(
             [
