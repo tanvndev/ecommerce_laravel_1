@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
+use App\Repositories\Interfaces\SystemRepositoryInterface as SystemRepository;
+
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -14,6 +16,7 @@ class Controller extends BaseController
 
     protected $currentLanguage;
     protected $nestedset;
+    protected $systemRepository;
 
     public function __construct()
     {
@@ -24,6 +27,27 @@ class Controller extends BaseController
             session(['currentLanguage' => $languageId]);
             return $next($request);
         });
+
+        $this->systemRepository = app(SystemRepository::class);
+    }
+
+    protected function getSystemCustomSetting()
+    {
+        $systems = $this->systemRepository->findByWhere(
+            [
+                'language_id' => ['=', session('currentLanguage')]
+            ],
+            ['keyword', 'content'],
+            [],
+            true
+        );
+        $systemsArr = [];
+
+        foreach ($systems as $system) {
+            $systemsArr[$system->keyword] = $system->content;
+        }
+
+        return $systemsArr;
     }
 
     protected function getToastMessage($module, $key, $action)

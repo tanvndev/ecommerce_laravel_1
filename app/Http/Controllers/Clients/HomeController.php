@@ -7,8 +7,6 @@ use App\Repositories\Interfaces\SlideRepositoryInterface as SlideRepository;
 use App\Services\Interfaces\SlideServiceInterface as SlideService;
 use App\Services\Interfaces\WidgetServiceInterface as WidgetService;
 
-use Illuminate\Http\Request;
-
 class HomeController extends Controller
 {
     protected $slideRepository;
@@ -33,7 +31,14 @@ class HomeController extends Controller
         // dd($widgets);
 
         // dd($widgets['home-most-sold']->object);
-
+        $system = $this->getSystemCustomSetting();
+        $seo = [
+            'meta_title' => $system['seo_meta_title'],
+            'meta_description' => $system['seo_meta_description'],
+            'meta_keywords' => $system['seo_meta_keyword'],
+            'meta_image' => $system['seo_meta_image'],
+            'canonical' => config('app.url'),
+        ];
         $slides = $this->slideService->getSlide(
             [
                 ['keyword' => 'main-slide'],
@@ -42,6 +47,7 @@ class HomeController extends Controller
         );
 
         return view('clients.home.index', compact([
+            'seo',
             'slides',
             'widgets'
         ]));
