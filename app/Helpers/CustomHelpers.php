@@ -278,3 +278,18 @@ if (!function_exists('renderQuickView')) {
         return $html;
     }
 }
+
+if (!function_exists('seo')) {
+    function seo($model)
+    {
+        $seo = [
+            'meta_title' => $model['seo_meta_title'],
+            'meta_description' => $model['seo_meta_description'],
+            'meta_keywords' => $model['seo_meta_keyword'],
+            'meta_image' => $model['seo_meta_image'],
+            'canonical' => config('app.url'),
+        ];
+
+        return $seo;
+    }
+}
