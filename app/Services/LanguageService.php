@@ -143,15 +143,7 @@ class LanguageService extends BaseService implements LanguageServiceInterface
         }
     }
 
-    private function getRepositoryInstance($modelName)
-    {
-        $repositoryInterfaceNameSpace = 'App\Repositories\Interfaces\\' . ucfirst($modelName) . 'RepositoryInterface';
-        if (interface_exists($repositoryInterfaceNameSpace)) {
-            // hàm app() giúp truy cập các đối tượng đã đăng ký trong container
-            return app($repositoryInterfaceNameSpace);
-        }
-        return null;
-    }
+
 
     private function detachAndCreatePivot($model, $repositoryInstance,  $option, $payloadLanguage)
     {
