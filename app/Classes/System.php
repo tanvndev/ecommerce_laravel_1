@@ -27,7 +27,10 @@ class System
                     ],
                 ],
                 'short_intro' => ['type' => 'editor', 'label' => 'Giới thiệu ngắn'],
-
+                'qrApp' => ['type' => 'image', 'label' => 'QR app', 'title' => 'Click vào ô phía dưới để tải QR.'],
+                'AppstoreApp' => ['type' => 'image', 'label' => 'Appstore app', 'title' => 'Click vào ô phía dưới để tải Appstore.'],
+                'PlaystoreApp' => ['type' => 'image', 'label' => 'Playstore app', 'title' => 'Click vào ô phải dưới để tải Playstore.'],
+                'method_payment' => ['type' => 'image', 'mutiple' => true,  'label' => 'Phương thức thanh toán'],
             ],
         ];
 
@@ -66,6 +69,22 @@ class System
                 'meta_url' => ['type' => 'text', 'label' => 'Đường dẫn'],
                 'description' => ['type' => 'textarea', 'label' => 'Mô tả'],
                 'favicon' => ['type' => 'image', 'label' => 'Favicon', 'title' => 'Click vào ô phía dưới để tải ảnh.'],
+            ],
+        ];
+
+        $data['social'] = [
+            'name' => 'Social',
+            'label' => 'Cau hinh mang xa hoi',
+            'description' => 'Cau hinh cac mang xa hoi hien nay',
+            'value' => [
+                'facebook' => ['type' => 'text', 'label' => 'Facebook'],
+                'twitter' => ['type' => 'text', 'label' => 'Twitter'],
+                'youtube' => ['type' => 'text', 'label' => 'Youtube'],
+                'instagram' => ['type' => 'text', 'label' => 'Instagram'],
+                'pinterest' => ['type' => 'text', 'label' => 'Pinterest'],
+                'tiktok' => ['type' => 'text', 'label' => 'Tiktok'],
+                'linkedin' => ['type' => 'text', 'label' => 'Linkedin'],
+                'skype' => ['type' => 'text', 'label' => 'Skype'],
             ],
         ];
 
