@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 
 
-class HomeController extends Controller
+class RouterController extends Controller
 {
     protected $routerRepository;
 
@@ -17,12 +17,13 @@ class HomeController extends Controller
     }
     public function index($canonical = '')
     {
-        $router = $this->routerRepository->getByWhere([
-            'language_id' => ['=', session('currentLanguage')],
+
+        $router = $this->routerRepository->findByWhere([
+            'language_id' => ['=', $this->currentLanguage],
             'canonical' => ['=', $canonical],
         ]);
 
-        if (!is_null($router) && count($router) > 0) {
+        if (!is_null($router) && !empty($router)) {
             $method = 'index';
             echo app($router->controllers)->{$method}($router->module_id);
         }
