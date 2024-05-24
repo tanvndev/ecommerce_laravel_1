@@ -19,6 +19,8 @@ class ProductCatalogueRepository extends BaseRepository implements ProductCatalo
         $select = [
             'product_catalogues.id',
             'product_catalogues.parent_id',
+            'product_catalogues.left',
+            'product_catalogues.right',
             'product_catalogues.publish',
             'product_catalogues.image',
             'product_catalogues.icon',
