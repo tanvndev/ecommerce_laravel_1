@@ -16,7 +16,7 @@ class ProductCatalogueController extends Controller
     }
     public function index($id)
     {
-        $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, $this->currentLanguage);
+        $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, session('currentLanguage') ?? 1);
 
         $seo = seo($productCatalogue);
 
