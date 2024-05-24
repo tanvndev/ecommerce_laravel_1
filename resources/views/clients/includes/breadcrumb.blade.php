@@ -5,11 +5,11 @@
             <div class="col-lg-6 col-md-8">
                 <div class="inner">
                     <ul class="axil-breadcrumb">
-                        <li class="axil-breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="axil-breadcrumb-item"><a href="/">{{__('client.home')}}</a></li>
                         <li class="separator"></li>
-                        <li class="axil-breadcrumb-item active" aria-current="page">My Account</li>
+                        <li class="axil-breadcrumb-item active" aria-current="page">{{ $model->name }}</li>
                     </ul>
-                    <h1 class="title">Explore All Products</h1>
+                    <h1 class="title">{{ $model->name }}</h1>
                 </div>
             </div>
             <div class="col-lg-6 col-md-4">
