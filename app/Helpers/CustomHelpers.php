@@ -283,13 +283,25 @@ if (!function_exists('seo')) {
     function seo($model)
     {
         $seo = [
-            'meta_title' => $model['seo_meta_title'],
-            'meta_description' => $model['seo_meta_description'],
-            'meta_keywords' => $model['seo_meta_keyword'],
-            'meta_image' => $model['seo_meta_image'],
-            'canonical' => config('app.url'),
+            'meta_title' => ($model->meta_title) ?? $model->name,
+            'meta_description' => ($model->meta_description) ?? cut_string_and_decode($model->description),
+            'meta_keywords' => ($model->meta_keywords) ?? $model->name,
+            'meta_image' => ($model->image) ?? '',
+            'canonical' => (write_url($model->canonical)) ?? '',
         ];
 
         return $seo;
+    }
+}
+
+if (!function_exists('cut_string_and_decode')) {
+    function cut_string_and_decode($str = null, $n = 200)
+    {
+        $str = html_entity_decode($str);
+        $str = strip_tags($str);
+        if (mb_strlen($str) > $n) {
+            $str = mb_substr($str, 0, $n) . '...';
+        }
+        return $str;
     }
 }
