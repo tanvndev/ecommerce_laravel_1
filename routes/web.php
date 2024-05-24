@@ -37,7 +37,8 @@ use App\Http\Controllers\Servers\{
 };
 
 use App\Http\Controllers\Clients\{
-    HomeController
+    HomeController,
+    RouterController
 };
 
 /*
@@ -54,6 +55,7 @@ use App\Http\Controllers\Clients\{
 
 // CLIENT ROUTES
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('{canonical}', [RouterController::class, 'index'])->where('canonical', '[0-9a-zA-Z-]+')->name('router.index');
 
 
 // SERVER ROUTES

@@ -2,7 +2,7 @@
 
 @section('content')
 {{-- Start Breadcrumb --}}
-@include('clients.includes.breadcrumb')
+@include('clients.includes.breadcrumb', ['model' => $productCatalogue])
 {{-- End Breadcrumb --}}
 <!-- Start Shop Area  -->
 <div class="axil-shop-area axil-section-gap bg-color-white">
@@ -121,7 +121,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-01.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-01.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">10% OFF</div>
@@ -153,7 +154,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-02.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-02.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
@@ -181,7 +183,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-03.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-03.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">25% OFF</div>
@@ -212,7 +215,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-04.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-04.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">5% OFF</div>
@@ -243,7 +247,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-05.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-05.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
@@ -271,7 +276,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-06.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-06.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">5% OFF</div>
@@ -302,7 +308,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-07.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-07.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">15% OFF</div>
@@ -333,7 +340,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-08.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-08.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="product-hover-action">
                                     <ul class="cart-action">
@@ -361,7 +369,8 @@
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
                                 <a href="single-product.html">
-                                    <img src="assets/images/product/electric/product-02.png" alt="Product Images">
+                                    <img src="assets/clients/images/product/electric/product-02.png"
+                                        alt="Product Images">
                                 </a>
                                 <div class="label-block label-right">
                                     <div class="product-badget">30% OFF</div>
