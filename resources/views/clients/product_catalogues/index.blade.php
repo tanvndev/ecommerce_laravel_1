@@ -1,6 +1,9 @@
 @extends('layouts.clientLayout')
 
 @section('content')
+{{-- Start Breadcrumb --}}
+@include('clients.includes.breadcrumb')
+{{-- End Breadcrumb --}}
 <!-- Start Shop Area  -->
 <div class="axil-shop-area axil-section-gap bg-color-white">
     <div class="container">
