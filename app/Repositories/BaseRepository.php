@@ -248,4 +248,21 @@ class BaseRepository implements BaseRepositoryInterface
 
         return $query;
     }
+
+    public function breadcrumb($model, $languageId = 1)
+    {
+        $query = $this->findByWhere([
+            'left' => ['<=', $model->left],
+            'right' => ['>=', $model->right],
+            'publish' => ['=', config('apps.general.defaultPublish')]
+        ], ['*'], [
+            [
+                'languages' => function ($query) use ($languageId) {
+                    $query->where('language_id', $languageId);
+                }
+            ]
+        ], true, ['left' => 'asc']);
+
+        return $query;
+    }
 }
