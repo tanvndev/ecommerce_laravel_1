@@ -34,7 +34,6 @@ class MenuComposer
             true,
         );
 
-        // dd($menuCatalogue);
         $menus = [];
         $htmlType = ['main-menu'];
         if ($menuCatalogue != null) {
