@@ -7,8 +7,7 @@ use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 use App\Repositories\Interfaces\ProductVariantLanguageRepositoryInterface as ProductVariantLanguageRepository;
 use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as ProductVariantAttributeRepository;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
-
-
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -34,13 +33,13 @@ class ProductService extends BaseService implements ProductServiceInterface
         $this->promotionRepository = $promotionRepository;
         $this->controllerName = 'ProductController';
     }
-    function paginate()
+    public function paginate($productCatalogue = null)
     {
 
         $condition = [
             'keyword' => addslashes(request('keyword')),
             'publish' => request('publish'),
-            'product_catalogue_id' => request('product_catalogue_id'),
+            // 'product_catalogue_id' => request('product_catalogue_id'),
             'where' => [
                 'tb2.language_id' => ['=', session('currentLanguage')]
             ]
@@ -66,24 +65,29 @@ class ProductService extends BaseService implements ProductServiceInterface
         $products = $this->productRepository->pagination(
             $select,
             $condition,
-            request('perpage'),
+            request('perpage', 18),
             $orderBy,
             $join,
             ['product_catalogues'],
             $select,
-            $this->whereRaw()
+            $this->whereRaw($productCatalogue)
 
         );
+
+
 
         // dd($products);
         return $products;
     }
 
-    private function whereRaw()
+    private function whereRaw($productCatalogue = null)
     {
         $rawConditions = [];
         $product_catalogue_id = request('product_catalogue_id');
-        if ($product_catalogue_id > 0) {
+        if ($product_catalogue_id > 0 || !is_null($productCatalogue)) {
+
+            $product_catalogue_id = ($product_catalogue_id > 0) ? $product_catalogue_id : $productCatalogue->id;
+
             $rawConditions['whereRaw'] = [
                 [
                     'tb3.product_catalogue_id IN (
