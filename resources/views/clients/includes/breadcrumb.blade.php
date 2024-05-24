@@ -7,8 +7,24 @@
                     <ul class="axil-breadcrumb">
                         <li class="axil-breadcrumb-item"><a href="/">{{__('client.home')}}</a></li>
                         <li class="separator"></li>
-                        <li class="axil-breadcrumb-item active" aria-current="page">{{ $model->name }}</li>
+                        @if (!is_null($breadcrumb) && count($breadcrumb) > 0)
+                        @foreach ($breadcrumb as $index => $brc)
+                        @php
+                        $name = $brc->languages->first()->pivot->name;
+                        $canonical = write_url($brc->languages->first()->pivot->canonical);
+                        @endphp
+
+                        @if ($index < count($breadcrumb) - 1) <li class="axil-breadcrumb-item"><a
+                                href="{{ $canonical }}" title="{{ $name }}">{{ $name }}</a></li>
+                            <li class="separator"></li>
+                            @else
+                            <li class="axil-breadcrumb-item active" aria-current="page">{{ $name }}</li>
+                            @endif
+
+                            @endforeach
+                            @endif
                     </ul>
+
                     <h1 class="title">{{ $model->name }}</h1>
                 </div>
             </div>
