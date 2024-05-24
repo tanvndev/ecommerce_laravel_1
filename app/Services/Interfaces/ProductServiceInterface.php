@@ -4,7 +4,7 @@ namespace App\Services\Interfaces;
 
 interface ProductServiceInterface
 {
-    public function paginate();
+    public function paginate($productCatalogue = null);
     public function create();
     public function update($id);
     public function destroy($id);
