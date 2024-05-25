@@ -28,6 +28,10 @@ class Product extends Model
         'origin'
     ];
 
+    public $cast = [
+        'album' => 'json'
+    ];
+
     public function languages()
     {
         return $this->belongsToMany(Language::class, 'product_language', 'product_id', 'language_id')->withPivot(
