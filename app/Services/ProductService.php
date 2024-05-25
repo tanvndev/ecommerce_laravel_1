@@ -365,10 +365,16 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     // Service Client
 
-    public function combineProductAndPromotion($productId = [],  $products = [])
+    public function combineProductAndPromotion($productId = [],  $products = null, $flag = false)
     {
         $promotions = $this->promotionRepository->findByProduct($productId);
         if (count($promotions)) {
+
+            if ($flag == true) {
+                $products->promotions = $promotions;
+                return $products;
+            }
+
             foreach ($products as $index => $product) {
                 foreach ($promotions as $key => $promotion) {
                     if ($promotion->product_id == $product->id) {
