@@ -51,7 +51,7 @@ class ProductCatalogue extends Model
 
     public function product_catalogue_language()
     {
-        return $this->hasMany(ProductCatalogueLanguage::class, 'product_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany(ProductCatalogueLanguage::class, 'product_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage', 1));
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.
