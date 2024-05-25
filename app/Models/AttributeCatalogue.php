@@ -51,7 +51,7 @@ class AttributeCatalogue extends Model
 
     public function attribute_catalogue_language()
     {
-        return $this->hasMany(AttributeCatalogueLanguage::class, 'attribute_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany(AttributeCatalogueLanguage::class, 'attribute_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage', 1));
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.
