@@ -126,3 +126,21 @@ body {
         }
     }
 }
+.single-product-content {
+    .price-amount {
+        .price {
+            margin: 4px;
+            color: var(--color-heading);
+            font-weight: 700;
+            font-size: 30px;
+            font-family: var(--font-secondary);
+            color: var(--color-success);
+            &.old-price {
+                color: #d6d6d6;
+                text-decoration: line-through;
+                margin-left: 0;
+                font-size: 20px;
+            }
+        }
+    }
+}

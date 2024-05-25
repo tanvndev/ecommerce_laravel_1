@@ -51,7 +51,7 @@ class {ModuleTemplate} extends Model
 
     public function {pivotTable}()
     {
-        return $this->hasMany({ModuleTemplate}Language::class, '{foreignKey}', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany({ModuleTemplate}Language::class, '{foreignKey}', 'id')->where('language_id', '=', session('currentLanguage', 1));
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.

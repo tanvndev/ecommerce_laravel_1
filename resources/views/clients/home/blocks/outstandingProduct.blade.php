@@ -45,7 +45,7 @@
                                         </span>
                                         <span class="rating-number">({{$review['count']}})</span>
                                     </div>
-                                    <h5 class="title"><a href="single-product.html">{{ $name }}</a></h5>
+                                    <h5 class="title"><a href="{{ $canonical }}" title="{{ $name}}">{{ $name }}</a></h5>
                                     <div class="product-price-variant">
                                         {!! $price['priceHtml'] !!}
                                     </div>

@@ -46,7 +46,7 @@
                     <div class="col-xl-4 col-sm-6">
                         <div class="axil-product product-style-one mb--30">
                             <div class="thumbnail">
-                                <a href="single-product.html" title="{{ $name }}">
+                                <a href="{{ $canonical }}" title="{{ $name }}">
                                     <img src="{{ asset($image) }}" alt="{{ $name }}">
                                 </a>
                                 {!! $price['discountHtml'] !!}

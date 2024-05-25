@@ -109,6 +109,11 @@ body::-webkit-scrollbar-thumb:hover {
   border-radius: var(--radius-small);
   font-size: 16px;
 }
+.product-pagination .pagination .page-link:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
 .product-pagination .pagination .page-item {
   margin: 4px;
 }
@@ -120,8 +125,18 @@ body::-webkit-scrollbar-thumb:hover {
 .product-pagination .pagination .page-item.disabled {
   display: none;
 }
-.product-pagination .pagination .page-link:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+
+.single-product-content .price-amount .price {
+  margin: 4px;
+  color: var(--color-heading);
+  font-weight: 700;
+  font-size: 30px;
+  font-family: var(--font-secondary);
+  color: var(--color-success);
+}
+.single-product-content .price-amount .price.old-price {
+  color: #d6d6d6;
+  text-decoration: line-through;
+  margin-left: 0;
+  font-size: 20px;
 }/*# sourceMappingURL=custom.css.map */
