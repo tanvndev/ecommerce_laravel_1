@@ -51,7 +51,7 @@ class PostCatalogue extends Model
 
     public function post_catalogue_language()
     {
-        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id')->where('language_id', '=', session('currentLanguage', 1));
     }
 
     // Hàm này giúp kiểm tra có  danh  mục con hay không.
