@@ -67,7 +67,7 @@ class WidgetService extends BaseService implements WidgetServiceInterface
             $payload = request()->only('name', 'keyword', 'album', 'short_code', 'model');
             $payload['model_id'] = request('modelItem.id');
             $payload['description'] = [
-                session('currentLanguage') ?? 1 => request('description'),
+                session('currentLanguage', 1) => request('description'),
             ];
 
             $this->widgetRepository->create($payload);
