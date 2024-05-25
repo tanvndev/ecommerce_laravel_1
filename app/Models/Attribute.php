@@ -53,7 +53,7 @@ class Attribute extends Model
 
     public function attribute_language()
     {
-        return $this->hasMany(AttributeLanguage::class, 'attribute_id', 'id')->where('language_id', '=', session('currentLanguage') ?? 1);
+        return $this->hasMany(AttributeLanguage::class, 'attribute_id', 'id')->where('language_id', '=', session('currentLanguage', 1));
     }
 
     public function product_variants()
