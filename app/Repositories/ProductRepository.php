@@ -15,7 +15,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $this->model = $model;
     }
 
-    public function getProductLanguageById($id = 0, $languageId = 0)
+    public function getProductLanguageById($id = 0, $languageId = 1)
     {
         $select = [
             'products.id',
