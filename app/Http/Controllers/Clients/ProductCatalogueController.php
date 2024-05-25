@@ -23,8 +23,8 @@ class ProductCatalogueController extends Controller
     }
     public function index($id)
     {
-        $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, session('currentLanguage') ?? 1);
-        $breadcrumb = $this->productCatalogueRepository->breadcrumb($productCatalogue, session('currentLanguage') ?? 1);
+        $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, session('currentLanguage', 1));
+        $breadcrumb = $this->productCatalogueRepository->breadcrumb($productCatalogue, session('currentLanguage', 1));
         $products = $this->productService->paginate($productCatalogue);
         $productId = $products->pluck('id')->toArray();
         if (count($productId) > 0) {
