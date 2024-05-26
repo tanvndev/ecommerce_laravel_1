@@ -38,7 +38,8 @@ use App\Http\Controllers\Servers\{
 
 use App\Http\Controllers\Clients\{
     HomeController,
-    RouterController
+    RouterController,
+    CartController
 };
 
 /*
@@ -55,6 +56,7 @@ use App\Http\Controllers\Clients\{
 
 // CLIENT ROUTES
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')
     ->name('router.index');
