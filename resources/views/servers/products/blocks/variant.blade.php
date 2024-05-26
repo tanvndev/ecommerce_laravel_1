@@ -18,8 +18,7 @@
     <div class="card-body variant-wrap">
         <div class="variant-body">
             @php
-            $variantCatalogues = old('attributeCatalogue', isset($product) ? json_decode($product->attributeCatalogue,
-            true) : [])
+            $variantCatalogues = old('attributeCatalogue', isset($product) ? $product->attributeCatalogue : [])
             @endphp
 
             @empty(!$variantCatalogues)

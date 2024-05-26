@@ -50,7 +50,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
         $attributes = $this->attributeRepository->pagination(
             $select,
             $condition,
-            1,
+            request('perpage', 20),
             $orderBy,
             $join,
             ['attribute_catalogues'],

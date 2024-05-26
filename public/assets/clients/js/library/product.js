@@ -7,40 +7,6 @@ jQuery(function ($) {
     var init = {};
 
     init.slickActive = () => {
-        $(".product-small-thumb-3").slick({
-            infinite: false,
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            arrows: false,
-            dots: false,
-            focusOnSelect: true,
-            vertical: true,
-            speed: 800,
-            draggable: false,
-            swipe: false,
-            asNavFor: ".product-large-thumbnail-3",
-            responsive: [
-                {
-                    breakpoint: 992,
-                    settings: {
-                        vertical: false,
-                    },
-                },
-            ],
-        });
-
-        $(".product-large-thumbnail-3").slick({
-            infinite: false,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            dots: false,
-            speed: 800,
-            draggable: false,
-            swipe: false,
-            asNavFor: ".product-small-thumb-3",
-        });
-
         $(".recent-product-activation").slick({
             infinite: true,
             slidesToShow: 4,

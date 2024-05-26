@@ -15,11 +15,13 @@ class ProductCatalogueController extends Controller
 {
     private $productCatalogueRepository;
     private $productService;
-    public function __construct()
-    {
+    public function __construct(
+        ProductCatalogueRepository $productCatalogueRepository,
+        ProductService $productService
+    ) {
         parent::__construct();
-        $this->productCatalogueRepository = app(ProductCatalogueRepository::class);
-        $this->productService = app(ProductService::class);
+        $this->productCatalogueRepository = $productCatalogueRepository;
+        $this->productService = $productService;
     }
     public function index($id)
     {

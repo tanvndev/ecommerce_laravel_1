@@ -10,10 +10,11 @@ class RouterController extends Controller
 {
     protected $routerRepository;
 
-    public function __construct()
-    {
+    public function __construct(
+        RouterRepository $routerRepository
+    ) {
         parent::__construct();
-        $this->routerRepository = app(RouterRepository::class);
+        $this->routerRepository = $routerRepository;
     }
     public function index($canonical = '')
     {

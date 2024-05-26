@@ -9,7 +9,8 @@ $jsFiles = [
 'assets/clients/js/vendor/sal.js',
 'assets/clients/js/vendor/jquery.magnific-popup.min.js',
 'assets/clients/js/vendor/imagesloaded.pkgd.min.js',
-'assets/clients/js/main.js'
+'assets/clients/js/main.js',
+'assets/clients/js/library/library.js'
 // 'assets/clients/js/vendor/isotope.pkgd.min.js',
 // 'assets/clients/js/vendor/counterup.js',
 // 'assets/clients/js/vendor/waypoints.min.js',

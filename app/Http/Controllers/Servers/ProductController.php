@@ -107,7 +107,7 @@ class ProductController extends Controller
 
         $attributeCatalogues = $this->attributeCatalogueRepository->getAll($this->currentLanguage);
 
-        $albums =  json_decode($product->album);
+        $albums =  $product->album;
         // Danh mục cha
         $dropdown = $this->nestedset->Dropdown();
         // dd($product);

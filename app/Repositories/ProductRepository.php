@@ -66,6 +66,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             DB::raw("COALESCE(tb3.price, products.price) as price")
 
         )
+            ->where('products.publish', config('apps.general.defaultPublish'))
+            ->where('products.deleted_at', null)
+            ->where('tb3.publish', config('apps.general.defaultPublish'))
+            ->where('tb3.deleted_at', null)
             ->join('product_language as tb2', 'products.id', '=', 'tb2.product_id')
             ->leftJoin('product_variants as tb3', 'products.id', '=', 'tb3.product_id')
             ->leftJoin('product_variant_language as tb4', 'tb3.id', '=', 'tb4.product_variant_id');

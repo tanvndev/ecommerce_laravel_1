@@ -21,9 +21,9 @@
         return ['id' => $item->id, 'name' => $name];
     }));
 
-    var attributeForm = @json(old('attribute', isset($product->attribute) ? json_decode($product->attribute, true) : []));
+    var attributeForm = @json(old('attribute', isset($product->attribute) ? $product->attribute : []));
  
-    var variantForm = @json(old('variant', isset($product->variant) ? json_decode($product->variant, true) : []));
+    var variantForm = @json(old('variant', isset($product->variant) ? $product->variant : []));
 
 </script>
 

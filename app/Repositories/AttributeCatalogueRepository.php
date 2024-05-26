@@ -14,7 +14,7 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
         $this->model = $model;
     }
 
-    public function getAttributeCatalogueLanguageById($id = 0, $languageId = 0)
+    public function getAttributeCatalogueLanguageById($id = 0, $languageId = 1)
     {
         $select = [
             'attribute_catalogues.id',
@@ -45,5 +45,21 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
         return $query->with(['attribute_catalogue_language' => function ($query) use ($languageId) {
             $query->where('language_id', $languageId);
         }])->get();
+    }
+
+    public function getAttributeCatalogueLanguageWhereIn($whereIn = [], $whereInField = 'id', $languageId = 1)
+    {
+        $query = $this->model
+            ->select(
+                'attribute_catalogues.id',
+                'tb2.name',
+
+            )
+            ->where('publish', config('apps.general.defaultPublish'))
+            ->join('attribute_catalogue_language as tb2', 'attribute_catalogues.id', '=', 'tb2.attribute_catalogue_id')
+            ->where('tb2.language_id', $languageId)
+            ->whereIn($whereInField, $whereIn)
+            ->get();
+        return $query;
     }
 }

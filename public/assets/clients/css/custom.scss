@@ -144,3 +144,17 @@ body {
         }
     }
 }
+
+.range-variant li {
+    user-select: none; /* Không cho phép bôi đen văn bản */
+    -webkit-user-select: none; /* Đối với trình duyệt Webkit (Chrome, Safari) */
+    -moz-user-select: none; /* Đối với Firefox */
+    -ms-user-select: none; /* Đối với Internet Explorer/Edge */
+}
+
+.axil-breadcrumb-area .inner .title {
+    font-size: 22px;
+}
+.single-product-content .inner .product-title {
+    font-size: 32px;
+}

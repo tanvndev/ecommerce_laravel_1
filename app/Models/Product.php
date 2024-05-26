@@ -28,8 +28,11 @@ class Product extends Model
         'origin'
     ];
 
-    public $cast = [
-        'album' => 'json'
+    public $casts = [
+        'album' => 'json',
+        'attributeCatalogue' => 'json',
+        'attribute' => 'json',
+        'variant' => 'json',
     ];
 
     public function languages()

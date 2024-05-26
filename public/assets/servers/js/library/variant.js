@@ -257,66 +257,80 @@ jQuery(function ($) {
         if (variantForm !== "") {
             $(".variant-row").each(function (index, value) {
                 let _this = $(this);
-                let inputHiddenFields = [
-                    {
-                        name: "variant[quantity][]",
-                        class: "variant_quantity",
-                        value: variantForm?.quantity[index],
-                    },
-                    {
-                        name: "variant[sku][]",
-                        class: "variant_sku",
-                        value: variantForm?.sku[index],
-                    },
-                    {
-                        name: "variant[price][]",
-                        class: "variant_price",
-                        value: variantForm?.price[index],
-                    },
-                    {
-                        name: "variant[barcode][]",
-                        class: "variant_barcode",
-                        value: variantForm?.barcode[index],
-                    },
-                    {
-                        name: "variant[file_name][]",
-                        class: "variant_filename",
-                        value: variantForm?.file_name[index],
-                    },
-                    {
-                        name: "variant[file_url][]",
-                        class: "variant_fileurl",
-                        value: variantForm?.file_url[index],
-                    },
-                    {
-                        name: "variant[album][]",
-                        class: "variant_album",
-                        value: variantForm?.album[index],
-                    },
-                ];
-                let albumArr = variantForm?.album[index]?.split(",");
+                let variantKey = _this
+                    .attr("class")
+                    .match(/tr-variant-(.+)/)[1];
+                let dataIndex = variantForm?.sku.findIndex((sku) =>
+                    sku.includes(variantKey)
+                );
+                if (dataIndex != -1) {
+                    let inputHiddenFields = [
+                        {
+                            name: "variant[quantity][]",
+                            class: "variant_quantity",
+                            value: variantForm?.quantity[dataIndex],
+                        },
+                        {
+                            name: "variant[sku][]",
+                            class: "variant_sku",
+                            value: variantForm?.sku[dataIndex],
+                        },
+                        {
+                            name: "variant[price][]",
+                            class: "variant_price",
+                            value: variantForm?.price[dataIndex],
+                        },
+                        {
+                            name: "variant[barcode][]",
+                            class: "variant_barcode",
+                            value: variantForm?.barcode[dataIndex],
+                        },
+                        {
+                            name: "variant[file_name][]",
+                            class: "variant_filename",
+                            value: variantForm?.file_name[dataIndex],
+                        },
+                        {
+                            name: "variant[file_url][]",
+                            class: "variant_fileurl",
+                            value: variantForm?.file_url[dataIndex],
+                        },
+                        {
+                            name: "variant[album][]",
+                            class: "variant_album",
+                            value: variantForm?.album[dataIndex],
+                        },
+                    ];
+                    let albumArr = variantForm?.album[dataIndex]?.split(",");
 
-                inputHiddenFields.forEach((inputHiddenField) => {
+                    inputHiddenFields.forEach((inputHiddenField) => {
+                        _this
+                            .find(`input[name="${inputHiddenField.name}"]`)
+                            .val(inputHiddenField.value);
+                    });
+
                     _this
-                        .find(`input[name="${inputHiddenField.name}"]`)
-                        .val(inputHiddenField.value);
-                });
+                        .find(".td-quantity")
+                        .text(
+                            formatToCommas(
+                                variantForm.quantity[dataIndex] ?? "-"
+                            )
+                        );
+                    _this
+                        .find(".td-price")
+                        .text(
+                            formatToCommas(variantForm.price[dataIndex] ?? "-")
+                        );
+                    _this.find(".td-sku").text(variantForm.sku[dataIndex]);
 
-                _this
-                    .find(".td-quantity")
-                    .text(formatToCommas(variantForm.quantity[index] ?? "-"));
-                _this
-                    .find(".td-price")
-                    .text(formatToCommas(variantForm.price[index] ?? "-"));
-                _this.find(".td-sku").text(variantForm.sku[index]);
-
-                _this
-                    .find(".img-variant-src")
-                    .attr(
-                        "src",
-                        (albumArr && albumArr[0]) ||
-                            "https://www.eclosio.ong/wp-content/uploads/2018/08/default.png"
-                    );
+                    _this
+                        .find(".img-variant-src")
+                        .attr(
+                            "src",
+                            (albumArr && albumArr[0]) ||
+                                "https://www.eclosio.ong/wp-content/uploads/2018/08/default.png"
+                        );
+                }
             });
         }
     };

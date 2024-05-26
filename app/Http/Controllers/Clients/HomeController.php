@@ -12,12 +12,15 @@ class HomeController extends Controller
     protected $slideRepository;
     protected $widgetService;
     protected $slideService;
-    public function __construct()
-    {
+    public function __construct(
+        SlideRepository $slideRepository,
+        SlideService $slideService,
+        WidgetService $widgetService
+    ) {
         parent::__construct();
-        $this->slideRepository = app(SlideRepository::class);
-        $this->slideService = app(SlideService::class);
-        $this->widgetService = app(WidgetService::class);
+        $this->slideRepository = $slideRepository;
+        $this->slideService = $slideService;
+        $this->widgetService = $widgetService;
     }
     public function index()
     {

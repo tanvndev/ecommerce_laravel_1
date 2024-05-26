@@ -55,7 +55,7 @@
             );
             axilInit.stickyHeaderMenu();
             axilInit.salActivation();
-            axilInit.magnificPopupActivation();
+            // axilInit.magnificPopupActivation();
             axilInit.colorVariantActive();
             axilInit.headerCampaignRemove();
             // axilInit.offerPopupActivation();

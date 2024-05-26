@@ -13,12 +13,15 @@ class ProductController extends Controller
     private $productRepository;
     private $productService;
     private $productCatalogueRepository;
-    public function __construct()
-    {
+    public function __construct(
+        ProductRepository $productRepository,
+        ProductService $productService,
+        ProductCatalogueRepository $productCatalogueRepository
+    ) {
         parent::__construct();
-        $this->productRepository = app(ProductRepository::class);
-        $this->productService = app(ProductService::class);
-        $this->productCatalogueRepository = app(ProductCatalogueRepository::class);
+        $this->productRepository = $productRepository;
+        $this->productService = $productService;
+        $this->productCatalogueRepository = $productCatalogueRepository;
     }
 
     public function index($id)
@@ -27,7 +30,11 @@ class ProductController extends Controller
         $product = $this->productService->combineProductAndPromotion([$id], $product, true);
 
         $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($product->product_catalogue_id, session('currentLanguage', 1));
-        $albums =  json_decode($product->album ?? []);
+
+        // Neu co bien the san pham thi lay bien the
+        if (!is_null($product->attribute)) {
+            $product = $this->productService->getAttribute($product);
+        }
 
         $breadcrumb = $this->productCatalogueRepository->breadcrumb($productCatalogue, session('currentLanguage', 1));
         $seo = seo($product);
@@ -36,7 +43,6 @@ class ProductController extends Controller
             'breadcrumb',
             'productCatalogue',
             'product',
-            'albums',
         ));
     }
 }

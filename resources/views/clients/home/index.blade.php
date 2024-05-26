@@ -3,7 +3,6 @@
 
 @section('script')
 <script src="{{ asset('assets/clients/js/library/home.js') }}"></script>
-<script src="{{ asset('assets/clients/js/library/library.js') }}"></script>
 @endsection
 
 {{-- Start Banner Area --}}

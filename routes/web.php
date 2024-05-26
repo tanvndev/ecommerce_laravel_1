@@ -59,6 +59,10 @@ Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')
     ->name('router.index');
 
+// AJAX ROUTES
+Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.product.loadVariant');
+
+
 
 // SERVER ROUTES
 
@@ -279,19 +283,19 @@ Route::middleware(['admin', 'locale'])->group(function () {
 
     // Route for Ajax
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
-    Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->middleware('admin')->name('ajax.dashboard.changeStatus');
-    Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->middleware('admin')->name('ajax.dashboard.changeStatusAll');
-    Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->middleware('admin')->name('ajax.dashboard.getMenu');
-    Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->middleware('admin')->name('ajax.dashboard.findModelObject');
-    Route::get('ajax/dashboard/findPromotionObject', [AjaxDashboardController::class, 'findPromotionObject'])->middleware('admin')->name('ajax.dashboard.findPromotionObject');
-    Route::get('ajax/dashboard/getPromotionConditionValue', [AjaxDashboardController::class, 'getPromotionConditionValue'])->middleware('admin')->name('ajax.dashboard.getPromotionConditionValue');
-    Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->middleware('admin')->name('ajax.attribute.getAttribute');
-    Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->middleware('admin')->name('ajax.attribute.loadAttribute');
-    Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->middleware('admin')->name('ajax.menu.createCatalogue');
-    Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->middleware('admin')->name('ajax.menu.drag');
-    Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->middleware('admin')->name('ajax.slide.drag');
-    Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->middleware('admin')->name('ajax.slide.loadProductPromotion');
-    Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->middleware('admin')->name('ajax.source.getAllSource');
+    Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus');
+    Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->name('ajax.dashboard.changeStatusAll');
+    Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->name('ajax.dashboard.getMenu');
+    Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->name('ajax.dashboard.findModelObject');
+    Route::get('ajax/dashboard/findPromotionObject', [AjaxDashboardController::class, 'findPromotionObject'])->name('ajax.dashboard.findPromotionObject');
+    Route::get('ajax/dashboard/getPromotionConditionValue', [AjaxDashboardController::class, 'getPromotionConditionValue'])->name('ajax.dashboard.getPromotionConditionValue');
+    Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->name('ajax.attribute.getAttribute');
+    Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->name('ajax.attribute.loadAttribute');
+    Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->name('ajax.menu.createCatalogue');
+    Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->name('ajax.menu.drag');
+    Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->name('ajax.slide.drag');
+    Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->name('ajax.product.loadProductPromotion');
+    Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->name('ajax.source.getAllSource');
 });
 
 

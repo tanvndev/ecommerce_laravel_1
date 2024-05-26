@@ -10,56 +10,24 @@
     @php
     $price = getPrice($product);
     $review = getReview($product);
+    $canonical = write_url($product->canonical);
+    $attributeCatalogues = $product->attributeCatalogues;
+    $productName = $product->name;
     @endphp
     <!-- Start Shop Area  -->
     <div class="axil-single-product-area axil-section-gap pb--0 bg-color-white">
         <div class="single-product-thumb mb--40">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-7 mb--40">
-                        @if (isset($albums) && count($albums) > 0)
-                        <div class="row">
-                            <div class="col-lg-10 order-lg-2">
-                                <div class="single-product-thumbnail-wrap zoom-gallery">
-                                    <div class="single-product-thumbnail product-large-thumbnail-3 axil-product">
-                                        @foreach ($albums as $album)
-                                        <div class="thumbnail">
-                                            <a href="{{$album}}" class="popup-zoom">
-                                                <img src="{{$album}}" alt="{{$product->name}}">
-                                            </a>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="label-block">
-                                        <div class="product-badget">Giảm 20%</div>
-                                    </div>
-                                    @foreach ($albums as $album)
-                                    <div class="product-quick-view position-view">
-                                        <a href="{{$album}}" class="popup-zoom">
-                                            <i class="far fa-search-plus"></i>
-                                        </a>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="col-lg-2 order-lg-1">
-                                <div class="product-small-thumb-3 small-thumb-wrapper">
-                                    @foreach ($albums as $album)
-                                    <div class="small-thumb-img">
-                                        <img src="{{$album}}" alt="{{$product->name}}">
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        @endif
+                    <div class="col-lg-6 mb--40 product-album">
+                        @include('clients.products.blocks.album', ['albums' => $product->album ?? []])
                     </div>
 
-                    <div class="col-lg-5 mb--40">
+                    <div class="col-lg-6 mb--40">
                         <div class="single-product-content">
                             <div class="inner">
-                                <h2 class="product-title">{{ $product->name }}</h2>
-                                <div class="price-amount">
+                                <h2 class="product-title product-main-title">{{ $productName }}</h2>
+                                <div class="price-amount price-variant">
                                     {!! $price['priceHtml'] !!}
                                 </div>
                                 <div class="product-rating">
@@ -75,39 +43,12 @@
                                     <li><i class="fal fa-check"></i>Giao hàng miễn phí</li>
                                     <li><i class="fal fa-check"></i>Giảm giá 30% khi sử dụng Mã sử dụng: MOTIVE30</li>
                                 </ul>
-                                <div class="product-variations-wrapper">
 
-                                    <!-- Start Product Variation  -->
-                                    <div class="product-variation">
-                                        <h6 class="title">Colors:</h6>
-                                        <div class="color-variant-wrapper">
-                                            <ul class="color-variant">
-                                                <li class="color-extra-01 active"><span><span
-                                                            class="color"></span></span>
-                                                </li>
-                                                <li class="color-extra-02"><span><span class="color"></span></span>
-                                                </li>
-                                                <li class="color-extra-03"><span><span class="color"></span></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- End Product Variation  -->
+                                <p class="description">{!! $product->description !!}</p>
 
-                                    <!-- Start Product Variation  -->
-                                    <div class="product-variation product-size-variation">
-                                        <h6 class="title">Size:</h6>
-                                        <ul class="range-variant">
-                                            <li>xs</li>
-                                            <li>s</li>
-                                            <li>m</li>
-                                            <li>l</li>
-                                            <li>xl</li>
-                                        </ul>
-                                    </div>
-                                    <!-- End Product Variation  -->
-
-                                </div>
+                                <!-- Start Product Variation  -->
+                                @include('clients.products.blocks.variant')
+                                <!-- End Product Variation  -->
 
                                 <!-- Start Product Action Wrapper  -->
                                 <div class="product-action-wrapper d-flex-center">
@@ -117,14 +58,17 @@
 
                                     <!-- Start Product Action  -->
                                     <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart.html" class="axil-btn btn-bg-primary">Add
+                                        <li class="add-to-cart"><a href="cart.html"
+                                                class="btn axil-btn btn-bg-primary">Add
                                                 to Cart</a></li>
-                                        <li class="wishlist"><a href="wishlist.html" class="axil-btn wishlist-btn"><i
-                                                    class="far fa-heart"></i></a></li>
+                                        <li class="wishlist"><a href="wishlist.html"
+                                                class="btn axil-btn wishlist-btn"><i class="far fa-heart"></i></a></li>
                                     </ul>
                                     <!-- End Product Action  -->
 
                                 </div>
+                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                <input type="hidden" name="product_name" value="{{$productName}}">
                                 <!-- End Product Action Wrapper  -->
                             </div>
                         </div>

@@ -3,16 +3,28 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
+use App\Repositories\Interfaces\ProductVariantRepositoryInterface as ProductVariantRepository;
+use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+use App\Services\Interfaces\PromotionServiceInterface as PromotionService;
+
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    protected $productRepository;
-    protected $productCatalogueService;
-    protected $productService;
-    public function __construct()
-    {
+    protected $productVariantRepository;
+    protected $attributeCatalogueRepository;
+    protected $promotionRepository;
+
+    public function __construct(
+        ProductVariantRepository $productVariantRepository,
+        PromotionRepository $promotionRepository,
+        AttributeCatalogueRepository $attributeCatalogueRepository
+    ) {
         parent::__construct();
+        $this->productVariantRepository = $productVariantRepository;
+        $this->promotionRepository = $promotionRepository;
+        $this->attributeCatalogueRepository = $attributeCatalogueRepository;
     }
 
 
@@ -58,5 +70,21 @@ class ProductController extends Controller
             'model' => $modelName,
             'data' => $data
         ]);
+    }
+
+    public function loadVariant(Request $request)
+    {
+        $attributeId = $request->input('attribute_id');
+
+        sort($attributeId, SORT_NUMERIC);
+        $attributeId = implode(', ', $attributeId);
+
+        $variant = $this->productVariantRepository->findVariant($attributeId, $request->product_id);
+
+        $variantPromotion = $this->promotionRepository->findPromotionProductVariant($variant->uuid);
+        $variantPrice = getVariantPrice($variant, $variantPromotion);
+        $variant->promotion = $variantPrice ?? null;
+
+        return response()->json($variant);
     }
 }

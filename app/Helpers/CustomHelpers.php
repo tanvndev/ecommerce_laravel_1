@@ -45,71 +45,6 @@ if (!function_exists('formatCurrency')) {
     }
 }
 
-if (!function_exists('getPrice')) {
-    function getPrice($product)
-    {
-        $result = [
-            'price' => $product->price,
-            'priceSale' => $product->price,
-            'percent' => 0,
-            'priceHtml' => '',
-            'discountHtml' => '',
-        ];
-
-        $price = formatCurrency($result['price']);
-
-        if ($product->promotions->isNotEmpty()) {
-            $promotion = $product->promotions[0];
-
-            if ($promotion->discount_type == 'percent') {
-                $result['percent'] = $promotion->discount_value;
-                $result['priceSale'] = $result['price'] * (1 - $result['percent'] / 100);
-            } else {
-                $result['priceSale'] = $result['price'] - $promotion->discount_value;
-                $result['percent'] = ($promotion->discount_value / $result['price']) * 100;
-            }
-
-            $result['priceSale'] = formatCurrency($result['priceSale']);
-
-            $result['priceHtml'] = "
-            <span class='price current-price'>{$result['priceSale']}</span>
-            <span class='price old-price'>{$price}</span>
-            ";
-
-            $result['discountHtml'] = "
-            <div class='label-block label-right'>
-                <div class='product-badget'>Giảm {$result['percent']}%</div>
-            </div>
-            ";
-        } else {
-            $result['priceHtml'] = "<span class='price current-price'>{$price}</span>";
-        }
-
-        return $result;
-    }
-}
-
-if (!function_exists('getReview')) {
-    function getReview($product)
-    {
-        $number = rand(1, 5);
-        $filledStars = round($number);
-        $starArray = array();
-
-        for ($index = 0; $index < 5; $index++) {
-            if ($index < $filledStars) {
-                $starArray[] = '<i class="fas fa-star"></i>';
-            } else {
-                $starArray[] = '<i class="far fa-star"></i>';
-            }
-        }
-        return [
-            'star' => implode(' ', $starArray),
-            'count' => rand(1, 999)
-        ];
-    }
-}
-
 
 if (!function_exists('recursive')) {
 
@@ -303,5 +238,114 @@ if (!function_exists('cut_string_and_decode')) {
             $str = mb_substr($str, 0, $n) . '...';
         }
         return $str;
+    }
+}
+if (!function_exists('sortString')) {
+    function sortString($string)
+    {
+        if ($string == '') {
+            return '';
+        }
+
+        $array = explode(", ", $string);
+        sort($array, SORT_NUMERIC);
+        $sortedNumbers = implode(", ", $array);
+        return $sortedNumbers;
+    }
+}
+
+if (!function_exists('getPrice')) {
+    function getPrice($product)
+    {
+        $promotion = null;
+
+        if (isset($product->promotion)) {
+            if (!is_null($product->promotion[0])) {
+                $promotion = $product->promotion[0];
+            } elseif (!is_null($product->promotion)) {
+                $promotion = $product->promotion;
+            }
+        }
+
+        $result = calculatePrice($product->price, $promotion);
+        return $result;
+    }
+}
+
+
+if (!function_exists('getVariantPrice')) {
+    function getVariantPrice($variant, $variantPromotion)
+    {
+        $result = calculatePrice($variant->price, $variantPromotion);
+        return $result;
+    }
+}
+
+if (!function_exists('calculatePrice')) {
+    function calculatePrice($price, $promotion = null)
+    {
+        $result = [
+            'price' => $price,
+            'priceSale' => $price,
+            'percent' => 0,
+            'priceHtml' => '',
+            'discountHtml' => '',
+        ];
+
+        $formattedPrice = formatCurrency($price);
+
+        if (!is_null($promotion)) {
+
+            if ($promotion->discount_type == 'percent') {
+                $result['percent'] = $promotion->discount_value;
+            } else {
+                $result['percent'] = ($promotion->discount_value / $result['price']) * 100;
+            }
+
+            // dd($promotion);
+
+            $result['priceSale'] = formatCurrency($result['price'] - $promotion->discount);
+
+            $result['priceHtml'] = "
+                <span class='price current-price'>{$result['priceSale']}</span>
+                <span class='price old-price'>{$formattedPrice}</span>
+            ";
+
+            $result['discountHtml'] = "
+                <div class='label-block label-right product-variant-disocunt'>
+                    <div class='product-badget'>Giảm {$result['percent']}%</div>
+                </div>
+            ";
+
+            if ($promotion->discount > $price) {
+                $result['priceHtml'] = "<span class='price current-price'>{$formattedPrice}</span>";
+                $result['discountHtml'] = "";
+            }
+        } else {
+            $result['priceHtml'] = "<span class='price current-price'>{$formattedPrice}</span>";
+        }
+
+        return $result;
+    }
+}
+
+if (!function_exists('getReview')) {
+    function getReview($product)
+    {
+        $number = rand(1, 5);
+        $filledStars = round($number);
+        $starArray = array();
+
+        for ($index = 0; $index < 5; $index++) {
+            if ($index < $filledStars) {
+                $starArray[] = '<i class="fas fa-star"></i>';
+            } else {
+                $starArray[] = '<i class="far fa-star"></i>';
+            }
+        }
+        return [
+            'star' => implode(' ', $starArray),
+            'count' => rand(1, 999)
+        ];
     }
 }

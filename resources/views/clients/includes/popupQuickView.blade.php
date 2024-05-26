@@ -97,7 +97,7 @@
                                     <div class="product-variations-wrapper">
 
                                         <!-- Start Product Variation  -->
-                                        <div class="product-variation">
+                                        {{-- <div class="product-variation">
                                             <h6 class="title">Colors:</h6>
                                             <div class="color-variant-wrapper">
                                                 <ul class="color-variant mt--0">
@@ -110,11 +110,11 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <!-- End Product Variation  -->
 
                                         <!-- Start Product Variation  -->
-                                        <div class="product-variation">
+                                        {{-- <div class="product-variation">
                                             <h6 class="title">Size:</h6>
                                             <ul class="range-variant">
                                                 <li>xs</li>
@@ -123,7 +123,7 @@
                                                 <li>l</li>
                                                 <li>xl</li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                         <!-- End Product Variation  -->
 
                                     </div>
