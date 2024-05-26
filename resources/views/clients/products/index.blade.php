@@ -58,9 +58,10 @@
 
                                     <!-- Start Product Action  -->
                                     <ul class="product-action d-flex-center mb--0">
-                                        <li class="add-to-cart"><a href="cart.html"
-                                                class="btn axil-btn btn-bg-primary">Add
-                                                to Cart</a></li>
+                                        <li class="add-to-cart">
+                                            <a href="cart.html" class="btn axil-btn btn-bg-primary">Thêm vào giỏ
+                                                hàng</a>
+                                        </li>
                                         <li class="wishlist"><a href="wishlist.html"
                                                 class="btn axil-btn wishlist-btn"><i class="far fa-heart"></i></a></li>
                                     </ul>

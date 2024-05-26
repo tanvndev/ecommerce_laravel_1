@@ -14,6 +14,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravelcollective/html": "^6.4",
+        "mindscms/laravelshoppingcart": "^2.1",
         "ramsey/uuid": "^4.7",
         "realrashid/sweet-alert": "^7.1"
     },
