@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use App\Repositories\Interfaces\ProductVariantRepositoryInterface as ProductVariantRepository;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
-use App\Services\Interfaces\PromotionServiceInterface as PromotionService;
 
 use Illuminate\Http\Request;
 
@@ -76,8 +75,7 @@ class ProductController extends Controller
     {
         $attributeId = $request->input('attribute_id');
 
-        sort($attributeId, SORT_NUMERIC);
-        $attributeId = implode(', ', $attributeId);
+        $attributeId = sortAttributeId($attributeId);
 
         $variant = $this->productVariantRepository->findVariant($attributeId, $request->product_id);
 

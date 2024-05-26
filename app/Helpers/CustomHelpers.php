@@ -304,10 +304,11 @@ if (!function_exists('calculatePrice')) {
 
             // dd($promotion);
 
-            $result['priceSale'] = formatCurrency($result['price'] - $promotion->discount);
+            $result['priceSale'] = $result['price'] - $promotion->discount;
+            $priceSale = formatCurrency($result['priceSale']);
 
             $result['priceHtml'] = "
-                <span class='price current-price'>{$result['priceSale']}</span>
+                <span class='price current-price'>{$priceSale}</span>
                 <span class='price old-price'>{$formattedPrice}</span>
             ";
 
@@ -347,5 +348,14 @@ if (!function_exists('getReview')) {
             'star' => implode(' ', $starArray),
             'count' => rand(1, 999)
         ];
+    }
+}
+
+if (!function_exists('sortAttributeId')) {
+    function sortAttributeId($attributeId)
+    {
+        sort($attributeId, SORT_NUMERIC);
+        $attributeId = implode(", ", $attributeId);
+        return $attributeId;
     }
 }

@@ -13,6 +13,7 @@
     $canonical = write_url($product->canonical);
     $attributeCatalogues = $product->attributeCatalogues;
     $productName = $product->name;
+    $product_id = $product->id;
     @endphp
     <!-- Start Shop Area  -->
     <div class="axil-single-product-area axil-section-gap pb--0 bg-color-white">
@@ -59,8 +60,9 @@
                                     <!-- Start Product Action  -->
                                     <ul class="product-action d-flex-center mb--0">
                                         <li class="add-to-cart">
-                                            <a href="cart.html" class="btn axil-btn btn-bg-primary">Thêm vào giỏ
-                                                hàng</a>
+                                            <button type="button" data-id="{{$product_id}}"
+                                                class="btn axil-btn btn-bg-primary add-to-cart-btn">Thêm vào giỏ
+                                                hàng</button>
                                         </li>
                                         <li class="wishlist"><a href="wishlist.html"
                                                 class="btn axil-btn wishlist-btn"><i class="far fa-heart"></i></a></li>
@@ -68,7 +70,7 @@
                                     <!-- End Product Action  -->
 
                                 </div>
-                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                <input type="hidden" name="product_id" value="{{$product_id}}">
                                 <input type="hidden" name="product_name" value="{{$productName}}">
                                 <!-- End Product Action Wrapper  -->
                             </div>

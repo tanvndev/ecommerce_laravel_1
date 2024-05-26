@@ -701,7 +701,6 @@ jQuery(function ($) {
 
     // Hàm này render ra html product Quantity List Product
     init.renderProductQuantityListHtml = (data) => {
-        console.log(data);
         let html = data.data
             ?.map((data) => {
                 let modelName = $(".select-product-and-quantity").val();

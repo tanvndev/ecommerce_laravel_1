@@ -100,6 +100,7 @@ jQuery(function ($) {
         $(document).on("click", ".choose-attribute", function () {
             const $this = $(this);
             $this.siblings().removeClass("active");
+            $(".choose-attribute").removeClass("invalid");
             $this.toggleClass("active");
 
             init.handleAttribute();

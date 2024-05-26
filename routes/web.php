@@ -9,6 +9,7 @@ use App\Http\Controllers\Ajax\{
     SlideController as AjaxSlideController,
     ProductController as AjaxProductController,
     SourceController as AjaxSourceController,
+    CartController as AjaxCartController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -57,12 +58,14 @@ use App\Http\Controllers\Clients\{
 // CLIENT ROUTES
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
+
 Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')
     ->name('router.index');
 
 // AJAX ROUTES
 Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.product.loadVariant');
+Route::post('ajax/cart/create', [AjaxCartController::class, 'create'])->name('ajax.cart.create');
 
 
 

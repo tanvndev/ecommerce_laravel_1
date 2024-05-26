@@ -145,7 +145,8 @@ body {
     }
 }
 
-.range-variant li {
+.range-variant li,
+.pro-qty .qtybtn {
     user-select: none; /* Không cho phép bôi đen văn bản */
     -webkit-user-select: none; /* Đối với trình duyệt Webkit (Chrome, Safari) */
     -moz-user-select: none; /* Đối với Firefox */
@@ -157,4 +158,8 @@ body {
 }
 .single-product-content .inner .product-title {
     font-size: 32px;
+}
+
+.range-variant .choose-attribute.invalid {
+    border-color: var(--color-danger);
 }

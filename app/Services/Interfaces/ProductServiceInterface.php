@@ -10,6 +10,6 @@ interface ProductServiceInterface
     public function destroy($id);
     public function updateStatus();
     public function updateStatusAll();
-    public function combineProductAndPromotion($productId = [],  $products = []);
+    public function combineProductAndPromotion($productId = [],  $products = null, $flag = false);
     public function getAttribute($product);
 }
