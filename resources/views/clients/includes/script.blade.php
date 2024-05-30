@@ -23,6 +23,8 @@ $jsFiles = [
 ];
 @endphp
 
+
+
 @foreach ($jsFiles as $js)
 <script src="{{ asset($js) }}"></script>
 @endforeach

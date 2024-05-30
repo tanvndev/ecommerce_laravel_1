@@ -7,9 +7,12 @@ jQuery(function ($) {
     var init = {};
 
     init.getLocation = () => {
-        $(".locations").on("change", function () {
+        $(document).on("change", ".locations", function () {
             let _this = $(this);
-            // const location_id = ;
+
+            if (!_this.val()) {
+                return false;
+            }
 
             let options = {
                 data: {

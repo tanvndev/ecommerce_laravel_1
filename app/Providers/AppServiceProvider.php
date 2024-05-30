@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\ViewComposers\MenuComposer;
-use App\Http\ViewComposers\SystemComposer;
+use App\Http\ViewComposers\{
+    MenuComposer,
+    SystemComposer
+};
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

@@ -54,7 +54,7 @@
                                 <!-- Start Product Action Wrapper  -->
                                 <div class="product-action-wrapper d-flex-center">
                                     <!-- Start Quentity Action  -->
-                                    <div class="pro-qty"><input type="text" value="1"></div>
+                                    <div class="pro-qty"><input class="only-number" type="text" value="1"></div>
                                     <!-- End Quentity Action  -->
 
                                     <!-- Start Product Action  -->

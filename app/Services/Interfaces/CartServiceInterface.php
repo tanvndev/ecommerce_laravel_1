@@ -8,7 +8,10 @@ namespace App\Services\Interfaces;
  */
 interface CartServiceInterface
 {
+    public function getCart();
     public function create();
-    public function update($id);
-    public function destroy($id);
+    public function update();
+    public function destroy();
+    public function remakeCart($carts);
+    public function cartPromotion($cartTotal);
 }

@@ -50,6 +50,7 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
             ->where('p.publish', config('apps.general.defaultPublish'))
             ->where('promotions.publish', config('apps.general.defaultPublish'))
             ->whereIn('p.id', $productId)
+            ->whereDate('promotions.start_at', '<=', date('Y-m-d H:i:s'))
             ->whereDate('promotions.end_at', '>', date('Y-m-d H:i:s'))
             ->groupBy(
                 'promotions.id',
@@ -96,6 +97,7 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
             ->join('product_variants as pv', 'pv.uuid', '=', 'ppv.variant_uuid')
             ->where('promotions.publish', config('apps.general.defaultPublish'))
             ->where('ppv.variant_uuid', $variantUuid)
+            ->whereDate('promotions.start_at', '<=', date('Y-m-d H:i:s'))
             ->whereDate('promotions.end_at', '>', date('Y-m-d H:i:s'))
             ->groupBy(
                 'promotions.id',
@@ -105,5 +107,15 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
                 'pv.price'
             )
             ->first();
+    }
+
+    public function getPromtionByCartTotal($cartTotal)
+    {
+        return $this->model->select('promotions.*')
+            ->where('promotions.publish', config('apps.general.defaultPublish'))
+            ->where('promotions.method', 'order_amount_range')
+            ->whereDate('promotions.start_at', '<=', date('Y-m-d H:i:s'))
+            ->whereDate('promotions.end_at', '>', date('Y-m-d H:i:s'))
+            ->get();
     }
 }

@@ -65,8 +65,11 @@ Route::get('{canonical}', [RouterController::class, 'index'])
 
 // AJAX ROUTES
 Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.product.loadVariant');
+Route::get('ajax/cart/getCart', [AjaxCartController::class, 'getCart'])->name('ajax.cart.getCart');
 Route::post('ajax/cart/create', [AjaxCartController::class, 'create'])->name('ajax.cart.create');
-
+Route::put('ajax/cart/update', [AjaxCartController::class, 'update'])->name('ajax.cart.update');
+Route::delete('ajax/cart/destroy', [AjaxCartController::class, 'destroy'])->name('ajax.cart.destroy');
+Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
 
 
 // SERVER ROUTES
@@ -287,7 +290,6 @@ Route::middleware(['admin', 'locale'])->group(function () {
 
 
     // Route for Ajax
-    Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->name('ajax.dashboard.changeStatusAll');
     Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->name('ajax.dashboard.getMenu');

@@ -61,6 +61,33 @@ const handleToast = (response) => {
     }
 };
 
+const formatCurrency = (amount, currencyCode = "vn") => {
+    switch (currencyCode.toUpperCase()) {
+        case "VN":
+            // Format for Vietnamese currency (VND)
+            return new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+                minimumFractionDigits: 0,
+            }).format(amount);
+        case "CN":
+            // Format for Chinese currency (CNY)
+            return new Intl.NumberFormat("zh-CN", {
+                style: "currency",
+                currency: "CNY",
+            }).format(amount);
+        case "EN":
+            // Format for US currency (USD)
+            return new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+            }).format(amount);
+        default:
+            // If the currency code is not supported, return the original amount
+            return amount.toString();
+    }
+};
+
 const convertToSlug = (str) => {
     str = str.toLowerCase(); // chuyen ve ki tu biet thuong
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -77,11 +104,4 @@ const convertToSlug = (str) => {
     str = str.replace(/-+-/g, "-");
     str = str.replace(/^\-+|\-+$/g, "");
     return str;
-};
-
-const formatCurrency = (number) => {
-    return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-    }).format(number);
 };

@@ -19,15 +19,44 @@ class CartController extends Controller
         $this->cartService = $cartService;
     }
 
+    public function getCart()
+    {
+        return $this->handleResponse($this->cartService->getCart(), 'Lấy sản phẩm');
+    }
+
     public function create()
     {
-        if ($this->cartService->create()) {
-            $cart = Cart::instance('shopping')->content();
+        return $this->handleResponse($this->cartService->create(), 'Thêm sản phẩm vào giỏ hàng');
+    }
+
+    public function update()
+    {
+        return $this->handleResponse($this->cartService->update(), 'Cập nhập số lượng');
+    }
+
+    public function destroy()
+    {
+        return $this->handleResponse($this->cartService->destroy(), 'Xóa sản phẩm');
+    }
+
+    protected function handleResponse($carts, $action)
+    {
+        if ($carts === false) {
             return response()->json([
-                'code' => 200,
-                'message' => 'Thêm sản phẩm vào giỏ hàng thành công.',
-                'cart' => $cart
+                'code' => 400,
+                'message' => $action . ' thất bại.',
+                'data' => []
             ]);
         }
+
+        return response()->json([
+            'code' => 200,
+            'message' => $action . ' thành công.',
+            'data' => [
+                'carts' => $carts,
+                'count' => $carts->count ?? 0,
+                'total' => $carts->total ?? 0
+            ]
+        ]);
     }
 }

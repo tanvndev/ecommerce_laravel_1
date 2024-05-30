@@ -65,6 +65,7 @@
             axilInit.onLoadClassAdd();
             axilInit.dropdownMenuSlide();
             axilInit.addLazyLoad();
+            axilInit.onlyNumbers();
         },
 
         w: function (e) {
@@ -72,6 +73,28 @@
         },
         addLazyLoad: function () {
             $("img").attr("loading", "lazy");
+        },
+
+        onlyNumbers: function () {
+            $(".only-number").on("keypress", function (e) {
+                if (e.which < 48 || e.which > 57) {
+                    e.preventDefault();
+                }
+            });
+
+            // Handle paste events to ensure only numeric content is pasted
+            $(".only-number").on("paste", function (e) {
+                var clipboardData =
+                    e.originalEvent.clipboardData.getData("text");
+                if (!clipboardData.match(/^[0-9]*$/)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Remove any non-numeric characters on input
+            $(".only-number").on("input", function () {
+                this.value = this.value.replace(/[^0-9]/g, "");
+            });
         },
 
         contactForm: function () {
@@ -276,10 +299,10 @@
                     var newVal = parseFloat(oldValue) + 1;
                 } else {
                     // Don't allow decrementing below zero
-                    if (oldValue > 0) {
+                    if (oldValue > 1) {
                         var newVal = parseFloat(oldValue) - 1;
                     } else {
-                        newVal = 0;
+                        newVal = 1;
                     }
                 }
                 $button.parent().find("input").val(newVal);

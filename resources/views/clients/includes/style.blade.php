@@ -19,3 +19,6 @@ $cssFiles = [
 @foreach ($cssFiles as $cssFile)
 <link rel="stylesheet" href="{{ asset($cssFile) }}">
 @endforeach
+
+<!-- plugin js file  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
