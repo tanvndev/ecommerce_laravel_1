@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->json('promotion')->nullable();
             $table->json('cart')->nullable();
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('guest_cookie')->nullable();
             $table->string('confirm', 20);
             $table->string('payment', 20);
