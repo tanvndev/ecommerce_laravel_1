@@ -4,7 +4,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/clients/images/icons/service1.png" alt="Service">
+                        <img src="{{asset('assets/clients/images/icons/service1.png')}}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Giao hàng nhanh chóng</h6>
@@ -15,7 +15,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/clients/images/icons/service2.png" alt="Service">
+                        <img src="{{asset('assets/clients/images/icons/service2.png')}}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Đảm bảo lại tiền</h6>
@@ -26,7 +26,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/clients/images/icons/service3.png" alt="Service">
+                        <img src="{{asset('assets/clients/images/icons/service3.png')}}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Chính sách hoàn trả 24 giờ</h6>
@@ -37,7 +37,7 @@
             <div class="col">
                 <div class="service-box service-style-2">
                     <div class="icon">
-                        <img src="assets/clients/images/icons/service4.png" alt="Service">
+                        <img src="{{asset('assets/clients/images/icons/service4.png')}}" alt="Service">
                     </div>
                     <div class="content">
                         <h6 class="title">Hỗ trợ chuyên nghiệp</h6>

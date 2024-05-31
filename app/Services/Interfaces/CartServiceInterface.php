@@ -12,6 +12,7 @@ interface CartServiceInterface
     public function create();
     public function update();
     public function destroy();
+    public function order();
     public function remakeCart($carts);
     public function cartPromotion($cartTotal);
 }

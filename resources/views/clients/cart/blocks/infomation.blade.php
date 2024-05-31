@@ -31,13 +31,23 @@
         <div class="col-lg-6">
             <div class="form-group">
                 {!! Form::label('fullname', __('messages.fullname')) !!}
-                {!! Form::text('fullname', null, ['placeholder' => 'Nhập vào họ và tên', 'class' => 'form-control']) !!}
+                {!! Form::text('fullname', old('fullname'), ['placeholder' => 'Nhập vào họ và tên', 'class' =>
+                'form-control' . ($errors->has('fullname') ? ' is-invalid' : '')]) !!}
+                <div class="invalid-feedback">
+                    {{ $errors->first('fullname') }}
+                </div>
             </div>
+
         </div>
         <div class="col-lg-6">
             <div class="form-group">
                 {!! Form::label('phone', __('messages.phone')) !!}
-                {!! Form::tel('phone', null, ['placeholder' => 'Nhập vào số điện thoại', 'class' => 'form-control']) !!}
+                {!! Form::tel('phone', old('phone'), ['placeholder' => 'Nhập vào số điện thoại', 'class' =>
+                'form-control' . ($errors->has('phone') ? ' is-invalid' : '')]) !!}
+
+                <div class="invalid-feedback">
+                    {{ $errors->first('phone') }}
+                </div>
             </div>
         </div>
 
@@ -45,14 +55,21 @@
 
     <div class="form-group">
         {!! Form::label('email', 'Email') !!}
-        {!! Form::email('email', null, ['placeholder' => 'Nhập vào địa chỉ email', 'class' => 'form-control']) !!}
+        {!! Form::email('email', old('email'), ['placeholder' => 'Nhập vào địa chỉ email', 'class' => 'form-control' .
+        ($errors->has('email') ? ' is-invalid' : '')])
+        !!}
+
+        <div class="invalid-feedback">
+            {{ $errors->first('email') }}
+        </div>
     </div>
 
     @include('clients.cart.blocks.address')
 
     <div class="form-group">
         {!! Form::label('description', __('messages.notes')) !!}
-        {!! Form::textarea('description', null, ['rows' => 2, 'placeholder' => 'Ghi chú về đơn đặt hàng của bạn, ví dụ:
+        {!! Form::textarea('description', old('description'), ['rows' => 2, 'placeholder' => 'Ghi chú về đơn đặt hàng
+        của bạn, ví dụ:
         ghi chú đặc biệt để giao hàng.', 'class' => 'form-control']) !!}
     </div>
 

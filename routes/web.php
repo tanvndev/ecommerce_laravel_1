@@ -58,6 +58,8 @@ use App\Http\Controllers\Clients\{
 // CLIENT ROUTES
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
+Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
+Route::get('cart/success', [CartController::class, 'success'])->name('cart.success');
 
 Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')

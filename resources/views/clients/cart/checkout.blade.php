@@ -23,10 +23,20 @@
 
 @section('content')
 <section class="main-wrapper">
+
     <!-- Start Checkout Area  -->
     <div class="axil-checkout-area axil-section-gap">
         <div class="container">
-            {!! Form::open() !!}
+            {{-- @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif --}}
+            {!! Form::open(['route' => 'cart.store', 'method' => 'post']) !!}
             <div class="row">
                 <div class="col-lg-6">
                     @include('clients.cart.blocks.infomation')
@@ -35,7 +45,6 @@
                     @include('clients.cart.blocks.orderList')
                 </div>
             </div>
-            </form>
             {!! Form::close() !!}
         </div>
     </div>

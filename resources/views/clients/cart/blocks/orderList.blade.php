@@ -17,7 +17,7 @@
                 @endphp
                 <tr class="order-product">
                     <td>
-                        <div class="d-flex align-items-center position-relative">
+                        <div class="d-flex align-items-center">
                             <img class="img-thumbnail img-product " src="{{$cart->image}}" alt="{{ $cart->name }}">
                             <a href="{{ $canonical }}" title="{{ $cart->name }}">
                                 {{ $cart->name }} <span class="quantity fw-bold text-primary ms-2">x{{ $cart->qty
@@ -46,28 +46,28 @@
                     <td class="discount-value">- {{formatCurrency($cartPromotion['discount'] ?? 0)}}</td>
                 </tr>
                 <tr class="order-shipping">
-                    @php
+                    {{-- @php
                     $transportDefault = __('payment.transportMethod')[0]['cost'];
-                    @endphp
+                    @endphp --}}
                     <td colspan="2">
                         <div class="shipping-amount">
-                            <span class="title">Hình thức vận chuyển</span>
-                            <span class="amount">{{formatCurrency($transportDefault)}}</span>
+                            <span class="title">Phí vận chuyển</span>
+                            <span class="amount">Miễn phí</span>
                         </div>
-                        @foreach (__('payment.transportMethod') as $key => $transport)
+                        {{-- @foreach (__('payment.transportMethod') as $key => $transport)
                         <div class="input-group">
                             <input type="radio" class="transport-method" id="transport_{{$transport['name']}}"
                                 name="shipping" value="{{$transport['cost']}}" {{ $key==0 ? 'checked' : '' }}>
                             <label for="transport_{{$transport['name']}}">{{$transport['title']}}</label>
                         </div>
-                        @endforeach
+                        @endforeach --}}
 
                     </td>
                 </tr>
                 <tr class="order-total">
                     <td>Tổng tiền</td>
                     <td data-total="{{($carts->total - $cartPromotion['discount']) ?? 0 }}" class="order-total-amount">
-                        {{formatCurrency($carts->total - $cartPromotion['discount'] - $transportDefault)}}
+                        {{formatCurrency($carts->total - $cartPromotion['discount'])}}
                     </td>
                 </tr>
             </tbody>

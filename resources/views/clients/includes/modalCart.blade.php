@@ -50,7 +50,7 @@
             </h3>
             <div class="group-btn d-block">
                 {{-- <a href="cart.html" class="axil-btn btn-bg-primary viewcart-btn">View Cart</a> --}}
-                <a href="checkout" class="axil-btn btn-bg-secondary checkout-btn w-100">Thanh toán</a>
+                <a href="/checkout" class="axil-btn btn-bg-secondary checkout-btn w-100">Thanh toán</a>
             </div>
         </div>
     </div>

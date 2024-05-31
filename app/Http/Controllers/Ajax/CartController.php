@@ -21,7 +21,7 @@ class CartController extends Controller
 
     public function getCart()
     {
-        return $this->handleResponse($this->cartService->getCart(), 'Lấy sản phẩm');
+        return $this->handleResponse($this->cartService->getCart(true), 'Lấy sản phẩm');
     }
 
     public function create()
