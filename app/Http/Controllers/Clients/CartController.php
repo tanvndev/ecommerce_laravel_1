@@ -60,10 +60,14 @@ class CartController extends Controller
         $order = $this->cartService->order();
         if (!empty($order)) {
             $request->session()->put('orderSuccess', $order);
+            // Xoa gio hang
+            Cart::instance('shopping')->destroy();
             return redirect()->route('cart.success')->with('toast_success', 'Đặt hàng thành công.');
         }
         return redirect()->back()->with('toast_error', 'Đặt hàng thất bại, vui lòng đặt lại!');
     }
+
+
 
     public function success(Request $request)
     {
@@ -71,8 +75,8 @@ class CartController extends Controller
             return redirect()->route('checkout')->with('toast_error', 'Đặt hàng thất bại, vui lòng thử lại!');
         }
 
-        // $order = $request->session()->pull('orderSuccess');
-        $order = $request->session()->get('orderSuccess');
+        $order = $request->session()->pull('orderSuccess');
+        // $order = $request->session()->get('orderSuccess');
         $seo = [
             'meta_title' => 'Đặt hàng thành công',
             'meta_description' => '',

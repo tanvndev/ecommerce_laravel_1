@@ -9,6 +9,8 @@ use App\Repositories\Interfaces\ProductVariantRepositoryInterface as ProductVari
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
 use App\Services\Interfaces\ProductServiceInterface as ProductService;
 
+use App\Mail\OrderMail;
+use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
 
@@ -297,8 +299,9 @@ class CartService implements CartServiceInterface
             $this->createOrderProduct($payload, $order);
             // Xu ly thanh toan online
             $this->handlePaymentOnline($payload['payment_method']);
-            // Xoa gio hang
-            Cart::instance('shopping')->destroy();
+            // Gui mail cho khach hang
+            $this->sendMail($payload);
+
             DB::commit();
             return $payload;
         } catch (\Exception $e) {
@@ -307,6 +310,13 @@ class CartService implements CartServiceInterface
             die;
             return [];
         }
+    }
+
+    private function sendMail($order)
+    {
+        $to = $order['email'];
+        $cc = env('MAIL_USERNAME');
+        Mail::to($to)->cc($cc)->send(new OrderMail($order));
     }
 
     private function handlePaymentOnline($method)
