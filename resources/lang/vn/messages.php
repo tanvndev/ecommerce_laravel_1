@@ -89,6 +89,30 @@ return [
         ]
 
     ],
+    'order' => [
+        'index' => [
+            'table' => 'Thông tin đơn hàng',
+            'create' => 'Tạo mới đơn hàng'
+        ],
+        'create' => [
+            'title' => 'Tạo mới đơn hàng',
+            'success' => 'Tạo mới đơn hàng thành công.',
+            'error' => 'Tạo mới đơn hàng thất bại.',
+        ],
+        'update' => [
+            'title' => 'Cập nhập đơn hàng',
+            'success' => 'Cập nhập đơn hàng thành công.',
+            'error' => 'Cập nhập đơn hàng thất bại.',
+        ],
+        'delete' => [
+            'success' => 'Xoá đơn hàng thành công.',
+            'error' => 'Xoá đơn hàng thất bại.',
+        ],
+        'table' => [
+            'name' => 'Tên đơn hàng',
+        ]
+
+    ],
     'attributeCatalogue' => [
         'index' => [
             'title' => 'Danh sách nhóm thuộc tính',
@@ -563,6 +587,13 @@ return [
         ]
     ],
     'code' => "Mã",
+    'customerInfo' => "Khách hàng",
+    'payment' => "Thanh toán",
+    'paymentMethod' => "Hình thức thanh toán",
+    'shipping' => "Phí ship",
+    'delivery' => "Giao hàng",
+    'endTotal' => "Tổng cuối",
+    'discount' => "Giảm giá",
     'expired' => "Hết hạn",
     'selectModule' => 'Chọn module',
     'infomation' => 'Thông tin',
@@ -624,6 +655,7 @@ return [
     'phone' => 'Số điện thoại',
     'fullname' => 'Họ và tên',
     'birthday' => 'Ngày sinh',
+    'created' => 'Ngày tạo',
     'password' => 'Mật khẩu',
     'rePassword' => 'Nhập lại mật khẩu',
     'cities' => 'Tỉnh/Thành phố',

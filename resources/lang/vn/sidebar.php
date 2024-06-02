@@ -125,6 +125,21 @@ return [
             ]
         ],
         [
+            'id' => 'order-sidebar',
+            'route' => '',
+            'icon' => 'icofont-notepad',
+            'title' => 'QL Đơn hàng',
+            'activeCondition' => ['order.*'],
+            'subMenu' => [
+                [
+                    'title' => 'QL đơn hàng',
+                    'route' => 'order.index',
+                    'activeCondition' => ['order.*'],
+                ],
+
+            ]
+        ],
+        [
             'id' => 'slide',
             'route' => 'slide.index',
             'icon' => 'icofont-image',

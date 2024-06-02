@@ -2,7 +2,8 @@
 return [
     'confirm' => [
         'pending' => 'Chờ xác nhận',
-        'confirm' => 'Đã xác nhận'
+        'success' => 'Đã xác nhận',
+        'cancel' => 'Đã huỷ',
     ],
     'payment' => [
         'unpaid' => 'Chưa thanh toán',

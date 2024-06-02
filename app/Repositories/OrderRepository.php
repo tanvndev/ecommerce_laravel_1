@@ -13,4 +13,29 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     ) {
         $this->model = $model;
     }
+
+    public function pagination(
+        $column = ['*'],
+        $condition = [],
+        $perPage = 1,
+        $orderBy = ['id' => 'DESC'],
+        $join = [],
+        $relations = [],
+        $groupBy = [],
+        $rawQuery = [],
+    ) {
+        $query = $this->model->select($column);
+        $query->keyword($condition['keyword'] ?? null, ['fullname', 'phone', 'email', 'address', 'code'])
+            ->publish($condition['publish'] ?? null)
+            ->customWhere($condition['where'] ?? null)
+            ->customWhereRaw($rawQuery['whereRaw'] ?? null)
+            ->relation($relations ?? null)
+            ->relationCount($relations ?? null)
+            ->customJoin($join ?? null)
+            ->customGroupBy($groupBy ?? null)
+            ->customOrderBy($orderBy ?? null);
+
+        //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
+        return $query->paginate($perPage)->withQueryString();
+    }
 }

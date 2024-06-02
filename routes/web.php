@@ -33,6 +33,7 @@ use App\Http\Controllers\Servers\{
     SourceController,
     CustomerController,
     CustomerCatalogueController,
+    OrderController,
     //@@new-controller-module@@
 
 };
@@ -286,6 +287,12 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::put('/{id}/update', [CustomerCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [CustomerCatalogueController::class, 'destroy'])->name('destroy');
     });
+
+    // Routes for OrderController
+    Route::prefix('order')->name('order.')->group(function () {
+        Route::get('index', [OrderController::class, 'index'])->name('index');
+    });
+
     //@@new-route-module@@
     // Không xoá dòng comment này dùng để dịnh vị vị trí để thêm route tự động
 

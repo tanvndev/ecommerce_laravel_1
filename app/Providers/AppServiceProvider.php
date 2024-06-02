@@ -62,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\CustomerCatalogueServiceInterface' => 'App\Services\CustomerCatalogueService',
         // Cart
         'App\Services\Interfaces\CartServiceInterface' => 'App\Services\CartService',
+        // Order
+        'App\Services\Interfaces\OrderServiceInterface' => 'App\Services\OrderService',
     ];
     public function register(): void
     {

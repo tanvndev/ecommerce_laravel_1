@@ -11,7 +11,6 @@ use App\Http\Requests\Attribute\{
 };
 
 use App\Services\Interfaces\AttributeServiceInterface as AttributeService;
-use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Repositories\Interfaces\AttributeRepositoryInterface as AttributeRepository;
 
 

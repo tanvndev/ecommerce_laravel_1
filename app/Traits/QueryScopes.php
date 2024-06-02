@@ -5,10 +5,17 @@ namespace App\Traits;
 trait QueryScopes
 {
 
-    public function scopeKeyword($query, $keyword)
+    public function scopeKeyword($query, $keyword, $fieldSearch = [])
     {
         if (!empty($keyword)) {
-            $query->where('name', 'LIKE', '%' . $keyword . '%');
+
+            if (!empty($fieldSearch)) {
+                foreach ($fieldSearch as $field) {
+                    $query->orWhere($field, 'LIKE', '%' . $keyword . '%');
+                }
+            } else {
+                $query->where('name', 'LIKE', '%' . $keyword . '%');
+            }
         }
         return $query;
     }

@@ -45,7 +45,7 @@ class GenerateService implements GenerateServiceInterface
         try {
             // $makeDatabase = $this->makeDatabase();
             $makeController =  $this->makeController();
-            $makeModel = $this->makeModel();
+            // $makeModel = $this->makeModel();
             $makeService = $this->makeService();
             $makeRepository = $this->makeRepository();
             $makeProvider = $this->makeProvider();
