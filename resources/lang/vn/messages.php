@@ -589,7 +589,7 @@ return [
     'code' => "Mã",
     'customerInfo' => "Khách hàng",
     'payment' => "Thanh toán",
-    'paymentMethod' => "Hình thức thanh toán",
+    'paymentMethod' => "Hình thức",
     'shipping' => "Phí ship",
     'delivery' => "Giao hàng",
     'endTotal' => "Tổng cuối",

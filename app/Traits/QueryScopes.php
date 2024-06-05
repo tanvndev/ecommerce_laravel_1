@@ -5,7 +5,7 @@ namespace App\Traits;
 trait QueryScopes
 {
 
-    public function scopeKeyword($query, $keyword, $fieldSearch = [])
+    public function scopeKeyword($query, $keyword, $fieldSearch = [], $whereHas = [])
     {
         if (!empty($keyword)) {
 
@@ -17,6 +17,15 @@ trait QueryScopes
                 $query->where('name', 'LIKE', '%' . $keyword . '%');
             }
         }
+
+        if (!empty($whereHas)) {
+            $field = $whereHas['field'];
+            $query->orWhereHas($whereHas['relation'], function ($q) use ($field, $keyword) {
+                $q->where($field, 'LIKE', '%' . $keyword . '%');
+            });
+        }
+
+
         return $query;
     }
 
@@ -117,6 +126,29 @@ trait QueryScopes
             $query->orderBy('id', 'DESC');
         }
 
+        return $query;
+    }
+
+    public function scopeFilterDropdown($query, $condition = [])
+    {
+        if (!empty($condition) && is_array($condition)) {
+            foreach ($condition as $column => $value) {
+                if ($value != '') {
+                    $query->where($column, $value);
+                }
+            }
+        }
+        return $query;
+    }
+
+    public function scopeCreatedAt($query, $condition = '')
+    {
+        if (!empty($condition) && $condition != '') {
+            $date = explode(' - ', $condition);
+            $startAt = convertDateTime($date[0], 'Y-m-d H:i:s');
+            $endAt = convertDateTime($date[1], 'Y-m-d H:i:s');
+            $query->whereBetween('created_at', [$startAt, $endAt]);
+        }
         return $query;
     }
 }

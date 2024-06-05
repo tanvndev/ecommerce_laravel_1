@@ -1,5 +1,42 @@
 @extends('layouts.serverLayout')
 
+@section('style')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endsection
+
+@section('script')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+            $('.date-range-picker').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: "Clear",
+                },
+            });
+
+            $('.date-range-picker').on(
+                "apply.daterangepicker",
+                function (ev, picker) {
+                    $(this).val(
+                        picker.startDate.format("MM/DD/YYYY") +
+                            " - " +
+                            picker.endDate.format("MM/DD/YYYY")
+                    );
+                }
+            );
+
+            $('.date-range-picker').on(
+                "cancel.daterangepicker",
+                function (ev, picker) {
+                    $(this).val("");
+                }
+            );
+        });
+</script>
+@endsection
+
 @section('content')
 <div class="body d-flex py-3">
     <div class="container-xxl">

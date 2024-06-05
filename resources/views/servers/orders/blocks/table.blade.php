@@ -8,15 +8,15 @@
                 </div>
             </th>
             <th>{{__('messages.code')}}</th>
-            <th>{{__('messages.created')}}</th>
+            <th>{{__('messages.created')}} đơn</th>
             <th>{{__('messages.customerInfo')}}</th>
-            <th>{{__('messages.paymentMethod')}}</th>
             <th>{{__('messages.discount')}}</th>
             <th>{{__('messages.shipping')}}</th>
             <th>{{__('messages.endTotal')}}</th>
             <th>{{__('messages.payment')}}</th>
             <th>{{__('messages.delivery')}}</th>
             <th>{{__('messages.status')}}</th>
+            <th>{{__('messages.paymentMethod')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -64,12 +64,10 @@
             <td>
                 <div class="mb-1"><b>N: </b>{{$order->fullname}}</div>
                 <div class="mb-1"><b>P: </b>{{$order->phone}}</div>
-                <div class="mb-1"><b>A: </b>{{$order->address}}</div>
+                <div class="mb-1 addess-table"><b>A: </b>{{$order->address}}</div>
             </td>
 
-            <td>
-                {{ array_column(__('payment.method'), 'title', 'name')[$order->payment_method] }}
-            </td>
+
             <td>
                 <span class="fw-bold">{{formatCurrency($order->promotion['discount'])}}</span>
             </td>
@@ -87,6 +85,10 @@
             </td>
             <td>
                 <span class="badge bg-{{$statusConfirm}}">{{__('cart.confirm')[$order->confirm]}}</span>
+            </td>
+            <td>
+                <img class="img-contain" width="50px"
+                    src="{{ array_column(__('payment.method'), 'image', 'name')[$order->payment_method] }}" alt="">
             </td>
         </tr>
         @endforeach

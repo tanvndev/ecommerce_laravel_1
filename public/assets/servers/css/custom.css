@@ -1429,4 +1429,40 @@ body.fullscreen-ibox-mode {
 .checkbox-wrapper-35 .switch:checked + label .switch-x-checked {
   opacity: 1;
   transform: none;
+}
+
+.input-date {
+  position: relative;
+}
+.input-date input {
+  cursor: pointer;
+  padding-left: 32px;
+}
+.input-date .icon-input-date {
+  position: absolute;
+  left: 12px;
+  top: 49%;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.submit-date {
+  font-size: 16px;
+  color: #20c997;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+.submit-date:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.addess-table {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
 }/*# sourceMappingURL=custom.css.map */

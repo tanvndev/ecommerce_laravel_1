@@ -19,8 +19,15 @@ class OrderService implements OrderServiceInterface
     function paginate()
     {
         // addslashes là một hàm được sử dụng để thêm các ký tự backslashes (\) vào trước các ký tự đặc biệt trong chuỗi.
-        $condition['keyword'] = addslashes(request('keyword'));
-        $condition['publish'] = request('publish');
+        $condition = [
+            'keyword' => addslashes(request('keyword')),
+            'publish' => request('publish'),
+            'dropdown' => [],
+            'created_at' => request('created_at'),
+        ];
+        foreach (__('cart') as $key => $value) {
+            $condition['dropdown'][$key] = request($key);
+        }
 
 
         $select = [
