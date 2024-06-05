@@ -44,4 +44,19 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
         return $query->paginate($perPage)->withQueryString();
     }
+
+    public function getOrderById($id)
+    {
+        $query = $this->model->select(
+            'orders.*',
+            'provinces.name as province_name',
+            'districts.name as district_name',
+            'wards.name as ward_name',
+        )
+            ->leftJoin('provinces', 'provinces.code', '=', 'orders.province_id')
+            ->leftJoin('districts', 'districts.code', '=', 'orders.district_id')
+            ->leftJoin('wards', 'wards.code', '=', 'orders.ward_id')
+            ->find($id);
+        return $query;
+    }
 }

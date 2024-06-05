@@ -76,7 +76,6 @@ class CartController extends Controller
         }
 
         $order = $request->session()->pull('orderSuccess');
-        // $order = $request->session()->get('orderSuccess');
         $seo = [
             'meta_title' => 'Đặt hàng thành công',
             'meta_description' => '',

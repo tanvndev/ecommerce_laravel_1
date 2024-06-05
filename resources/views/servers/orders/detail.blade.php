@@ -1,11 +1,14 @@
+@extends('layouts.serverLayout')
+
+@section('content')
 <div class="body d-flex py-3">
     <div class="container-xxl">
         <div class="row align-items-center">
             <div class="border-0 mb-4">
                 <div
                     class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                    <h3 class="fw-bold mb-0">Order Details: #Order-78414</h3>
-                    <div class="col-auto d-flex btn-set-task w-sm-100 align-items-center">
+                    <h3 class="fw-bold mb-0">{{$config['seo']['title']}}: #{{$order->code}}</h3>
+                    {{-- <div class="col-auto d-flex btn-set-task w-sm-100 align-items-center">
                         <select class="form-select" aria-label="Default select example">
                             <option selected="">Select Order Id</option>
                             <option value="1">Order-78414</option>
@@ -16,7 +19,7 @@
                             <option value="6">Order-78419</option>
                             <option value="7">Order-78420</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div> <!-- Row end  -->
@@ -27,8 +30,8 @@
                         <div class="avatar rounded no-thumbnail bg-success text-light"><i
                                 class="fa fa-shopping-cart fa-lg" aria-hidden="true"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
-                            <div class="h6 mb-0">Order Created at</div>
-                            <span class="small">16/03/2021 at 04:23 PM</span>
+                            <div class="h6 mb-0">{{__('messages.order.table.create_at')}}</div>
+                            <span class="small">{{$order->created_at->format('d/m/Y H:i:s')}}</span>
                         </div>
                     </div>
                 </div>
@@ -39,8 +42,8 @@
                         <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-user fa-lg"
                                 aria-hidden="true"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
-                            <div class="h6 mb-0">Name</div>
-                            <span class="small">Gabrielle</span>
+                            <div class="h6 mb-0">{{__('messages.fullname')}}</div>
+                            <span class="small">{{$order->fullname}}</span>
                         </div>
                     </div>
                 </div>
@@ -52,7 +55,7 @@
                                 aria-hidden="true"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="h6 mb-0">Email</div>
-                            <span class="small">gabrielle.db@gmail.com</span>
+                            <span class="small">{{$order->email}}</span>
                         </div>
                     </div>
                 </div>
@@ -63,89 +66,67 @@
                         <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-phone-square fa-lg"
                                 aria-hidden="true"></i></div>
                         <div class="flex-fill ms-3 text-truncate">
-                            <div class="h6 mb-0">Contact No</div>
-                            <span class="small">202-906-12354</span>
+                            <div class="h6 mb-0">{{__('messages.phone')}}</div>
+                            <span class="small">{{$order->phone}}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div> <!-- Row end  -->
-        <div class="row g-3 mb-3 row-cols-1 row-cols-md-1 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-3 row-deck">
+        <div class="row g-3 mb-3 row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck">
             <div class="col">
                 <div class="card auth-detailblock">
                     <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold ">Delivery Address</h6>
-                        <a href="#" class="text-muted">Edit</a>
+                        <h6 class="mb-0 fw-bold ">{{__('messages.order.detail.info')}}</h6>
+                        <a href="#" class="text-muted">Chỉnh sửa</a>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Block Number:</label>
-                                <span><strong>A-510</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.code')}}:</label>
+                                <span><strong>{{$order->code}}</strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Address:</label>
-                                <span><strong>81 Fulton London</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.fullname')}}:</label>
+                                <span><strong>{{$order->fullname}}</strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Pincode:</label>
-                                <span><strong>385467</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.phone')}}:</label>
+                                <span><strong>{{$order->phone}}</strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Phone:</label>
-                                <span><strong>202-458-4568</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.email')}}:</label>
+                                <span><strong>{{$order->email}}</strong></span>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="col">
                 <div class="card">
                     <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold ">Billing Address</h6>
-                        <a href="#" class="text-muted">Edit</a>
+                        <h6 class="mb-0 fw-bold ">{{__('messages.order.detail.address')}}</h6>
+                        <a href="#" class="text-muted">Chỉnh sửa</a>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Block Number:</label>
-                                <span><strong>A-510</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.cities')}}:</label>
+                                <span><strong>{{ $order->province_name }}</strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Address:</label>
-                                <span><strong>81 Fulton London</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.districts')}}:</label>
+                                <span><strong> {{ $order->district_name }} </strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Pincode:</label>
-                                <span><strong>385467</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.wards')}}:</label>
+                                <span><strong>{{ $order->ward_name }}</strong></span>
                             </div>
                             <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Phone:</label>
-                                <span><strong>202-458-4568</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold ">Invoice Deatil</h6>
-                        <a href="#" class="text-muted">Download</a>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Number:</label>
-                                <span><strong>#78414</strong></span>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Seller GST :</label>
-                                <span><strong>AFQWEPX17390VJ</strong></span>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label col-6 col-sm-5">Purchase GST :</label>
-                                <span><strong>NVFQWEPX1730VJ</strong></span>
+                                <label class="form-label col-6 col-sm-5">{{__('messages.address')}}:</label>
+                                <span><strong>{{$order->address}}</strong></span>
                             </div>
                         </div>
                     </div>
@@ -156,156 +137,89 @@
             <div class="col-xl-12 col-xxl-8">
                 <div class="card">
                     <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold ">Order Summary</h6>
+                        <h6 class="mb-0 fw-bold ">Tóm tắt đơn hàng</h6>
                     </div>
                     <div class="card-body">
                         <div class="product-cart">
-                            <div class="checkout-table table-responsive">
-                                <div id="myCartTable_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6">
-                                            <div class="dataTables_length" id="myCartTable_length"><label>Show <select
-                                                        name="myCartTable_length" aria-controls="myCartTable"
-                                                        class="form-select form-select-sm">
-                                                        <option value="10">10</option>
-                                                        <option value="25">25</option>
-                                                        <option value="50">50</option>
-                                                        <option value="100">100</option>
-                                                    </select> entries</label></div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6">
-                                            <div id="myCartTable_filter" class="dataTables_filter"><label>Search:<input
-                                                        type="search" class="form-control form-control-sm"
-                                                        placeholder="" aria-controls="myCartTable"></label></div>
-                                        </div>
+                            <div class="checkout-table">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table
+                                            class="table display table-hover align-middle nowrap no-footer dtr-inline"
+                                            style="width: 100%;" role="grid">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th width="40%">
+                                                        Sản phẩm
+                                                    </th>
+                                                    <th>
+                                                        Số lượng
+                                                    </th>
+                                                    <th>
+                                                        Giá bán
+                                                    </th>
+                                                    <th>
+                                                        Giá khuyến mãi
+                                                    </th>
+                                                    <th>
+                                                        Thành tiến
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($order->cart['detail'] as $item)
+                                                @php
+                                                $option = $item['options'][0]
+                                                @endphp
+                                                <tr role="row" class="odd">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="{{$option['image']}}" class="avatar rounded lg "
+                                                                alt="Product">
+                                                            <h6 class="title mb-0 ms-2">{{$item['name']}}</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {{$item['qty']}}
+                                                    </td>
+                                                    <td>
+                                                        <p class="price">{{formatCurrency($option['originalPrice'])}}
+                                                        </p>
+
+                                                    </td>
+                                                    <td>
+                                                        <p class="price">{{formatCurrency($item['price'])}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="price">{{formatCurrency($item['price'] +
+                                                            $item['qty'])}}</p>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table id="myCartTable"
-                                                class="table display dataTable table-hover align-middle nowrap no-footer dtr-inline"
-                                                style="width: 100%;" role="grid" aria-describedby="myCartTable_info">
-                                                <thead>
-                                                    <tr role="row">
-                                                        <th class="product sorting_asc" tabindex="0"
-                                                            aria-controls="myCartTable" rowspan="1" colspan="1"
-                                                            style="width: 457px;" aria-sort="ascending"
-                                                            aria-label="Product Image: activate to sort column descending">
-                                                            Product Image</th>
-                                                        <th class="dt-body-right sorting" tabindex="0"
-                                                            aria-controls="myCartTable" rowspan="1" colspan="1"
-                                                            style="width: 228px;"
-                                                            aria-label="Product Name: activate to sort column ascending">
-                                                            Product Name</th>
-                                                        <th class="quantity sorting" tabindex="0"
-                                                            aria-controls="myCartTable" rowspan="1" colspan="1"
-                                                            style="width: 100px;"
-                                                            aria-label="Quantity: activate to sort column ascending">
-                                                            Quantity</th>
-                                                        <th class="price dt-body-right sorting" tabindex="0"
-                                                            aria-controls="myCartTable" rowspan="1" colspan="1"
-                                                            style="width: 80px;"
-                                                            aria-label="Price: activate to sort column ascending">Price
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-
-
-
-                                                    <tr role="row" class="odd">
-                                                        <td tabindex="0" class="sorting_1">
-                                                            <img src="dist/assets/images/product/product-1.jpg"
-                                                                class="avatar rounded lg" alt="Product">
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <h6 class="title">Oculus VR <span
-                                                                    class="d-block fs-6 text-primary">Pr-1204</span>
-                                                            </h6>
-                                                        </td>
-                                                        <td>
-                                                            1
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <p class="price">$149.00</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr role="row" class="even">
-                                                        <td tabindex="0" class="sorting_1">
-                                                            <img src="dist/assets/images/product/product-2.jpg"
-                                                                class="avatar rounded lg" alt="Product">
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <h6 class="title">Wall Clock <span
-                                                                    class="d-block fs-6 text-primary">Pr-1004</span>
-                                                            </h6>
-                                                        </td>
-                                                        <td>
-                                                            1
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <p class="price">$399.00</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr role="row" class="odd">
-                                                        <td tabindex="0" class="sorting_1">
-                                                            <img src="dist/assets/images/product/product-3.jpg"
-                                                                class="avatar rounded lg" alt="Product">
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <h6 class="title">Note Diaries <span
-                                                                    class="d-block fs-6 text-primary">Pr-1224</span>
-                                                            </h6>
-                                                        </td>
-                                                        <td>
-                                                            1
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <p class="price">$149.00</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr role="row" class="even">
-                                                        <td tabindex="0" class="sorting_1">
-                                                            <img src="dist/assets/images/product/product-4.jpg"
-                                                                class="avatar rounded lg" alt="Product">
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <h6 class="title">Flower Port <span
-                                                                    class="d-block fs-6 text-primary">Pr-1414</span>
-                                                            </h6>
-                                                        </td>
-                                                        <td>
-                                                            1
-                                                        </td>
-                                                        <td class=" dt-body-right">
-                                                            <p class="price">$399.00</p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="dataTables_info" id="myCartTable_info" role="status"
+                                            aria-live="polite">Showing 1 to 4 of 4 entries</div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-5">
-                                            <div class="dataTables_info" id="myCartTable_info" role="status"
-                                                aria-live="polite">Showing 1 to 4 of 4 entries</div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-7">
-                                            <div class="dataTables_paginate paging_simple_numbers"
-                                                id="myCartTable_paginate">
-                                                <ul class="pagination">
-                                                    <li class="paginate_button page-item previous disabled"
-                                                        id="myCartTable_previous"><a href="#"
-                                                            aria-controls="myCartTable" data-dt-idx="0" tabindex="0"
-                                                            class="page-link">Previous</a></li>
-                                                    <li class="paginate_button page-item active"><a href="#"
-                                                            aria-controls="myCartTable" data-dt-idx="1" tabindex="0"
-                                                            class="page-link">1</a></li>
-                                                    <li class="paginate_button page-item next disabled"
-                                                        id="myCartTable_next"><a href="#" aria-controls="myCartTable"
-                                                            data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
-                                                </ul>
-                                            </div>
+                                    <div class="col-sm-12 col-md-7">
+                                        <div class="dataTables_paginate paging_simple_numbers"
+                                            id="myCartTable_paginate">
+                                            <ul class="pagination">
+                                                <li class="paginate_button page-item previous disabled"
+                                                    id="myCartTable_previous"><a href="#" aria-controls="myCartTable"
+                                                        data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
+                                                <li class="paginate_button page-item active"><a href="#"
+                                                        aria-controls="myCartTable" data-dt-idx="1" tabindex="0"
+                                                        class="page-link">1</a></li>
+                                                <li class="paginate_button page-item next disabled"
+                                                    id="myCartTable_next"><a href="#" aria-controls="myCartTable"
+                                                        data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
@@ -314,24 +228,25 @@
                                 class="checkout-coupon-total checkout-coupon-total-2 d-flex flex-wrap justify-content-end">
                                 <div class="checkout-total">
                                     <div class="single-total">
-                                        <p class="value">Subotal Price:</p>
-                                        <p class="price">$1096.00</p>
+                                        <p class="value">Tạm tính:</p>
+                                        <p class="price">{{ formatCurrency($order->cart['total']) }}</p>
                                     </div>
                                     <div class="single-total">
-                                        <p class="value">Shipping Cost (+):</p>
-                                        <p class="price">$12.00</p>
+                                        <p class="value">Phí vận chuyển (+):</p>
+                                        <p class="price">Miễn phí</p>
                                     </div>
                                     <div class="single-total">
-                                        <p class="value">Discount (-):</p>
-                                        <p class="price">$10.00</p>
+                                        <p class="value">Mã giảm giá (-):</p>
+                                        <p class="price">{{formatCurrency($order->promotion['discount'])}}</p>
                                     </div>
-                                    <div class="single-total">
+                                    {{-- <div class="single-total">
                                         <p class="value">Tax(18%):</p>
                                         <p class="price">$198.00</p>
-                                    </div>
+                                    </div> --}}
                                     <div class="single-total total-payable">
-                                        <p class="value">Total Payable:</p>
-                                        <p class="price">$1296.00</p>
+                                        <p class="value">Tổng:</p>
+                                        <p class="price">{{formatCurrency($order->cart['total'] -
+                                            $order->promotion['discount'])}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -342,14 +257,14 @@
             <div class="col-xl-12 col-xxl-4">
                 <div class="card mb-3">
                     <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold ">Status Orders</h6>
+                        <h6 class="mb-0 fw-bold ">{{__('messages.order.table.status')}}</h6>
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="row g-3 align-items-center">
                                 <div class="col-md-12">
-                                    <label class="form-label">Order ID</label>
-                                    <input type="text" class="form-control" value="78414">
+                                    <label class="form-label">{{__('messages.code')}}</label>
+                                    <input type="text" readonly class="form-control" value="{{$order->code}}">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="form-label">Order Status</label>
@@ -360,10 +275,6 @@
                                     </select>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label">Quantity</label>
-                                    <input type="text" class="form-control" value="4">
-                                </div>
-                                <div class="col-md-12">
                                     <label class="form-label">Order Transection</label>
                                     <select class="form-select" aria-label="Transection">
                                         <option value="1">Completed</option>
@@ -371,9 +282,9 @@
                                     </select>
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="comment" class="form-label">Comment</label>
+                                    <label for="comment" class="form-label">{{__('messages.notes')}}</label>
                                     <textarea class="form-control" id="comment"
-                                        rows="4">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</textarea>
+                                        rows="4">{{$order->description}}</textarea>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary mt-4 text-uppercase">Submit</button>
@@ -384,3 +295,5 @@
         </div> <!-- Row end  -->
     </div>
 </div>
+
+@endsection

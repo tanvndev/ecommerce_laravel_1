@@ -104,12 +104,15 @@ return [
             'success' => 'Cập nhập đơn hàng thành công.',
             'error' => 'Cập nhập đơn hàng thất bại.',
         ],
-        'delete' => [
-            'success' => 'Xoá đơn hàng thành công.',
-            'error' => 'Xoá đơn hàng thất bại.',
+        'detail' => [
+            'title' => 'Chi tiết đơn hàng',
+            'info' => 'Thông tin khách hàng',
+            'address' => 'Thông tin giao hàng'
         ],
         'table' => [
             'name' => 'Tên đơn hàng',
+            'create_at' => 'Ngày tạo đơn',
+            'status' => 'Trạng thái đơn hàng'
         ]
 
     ],

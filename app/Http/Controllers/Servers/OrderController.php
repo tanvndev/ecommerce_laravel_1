@@ -28,7 +28,7 @@ class OrderController extends Controller
     }
 
 
-    function index()
+    public function index()
     {
         $this->authorize('modules', 'order.index');
 
@@ -38,6 +38,20 @@ class OrderController extends Controller
 
         return view('servers.orders.index', compact([
             'orders',
+            'config',
+        ]));
+    }
+
+    public function detail($id)
+    {
+        $this->authorize('modules', 'order.detail');
+
+        $order = $this->orderRepository->getOrderById($id);
+        // dd($order);
+        $config['seo'] = __('messages.order')['detail'];
+
+        return view('servers.orders.detail', compact([
+            'order',
             'config',
         ]));
     }

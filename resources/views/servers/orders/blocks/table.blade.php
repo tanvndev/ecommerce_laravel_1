@@ -56,7 +56,8 @@
             </td>
 
             <td>
-                <span class="text-primary fw-bold"> #{{$order->code}}</span>
+                <span class="text-primary fw-bold"> #<a class="text-primary fw-bold link-body-emphasis"
+                        href="{{route('order.detail', ['id' => $order->id])}}">{{$order->code}}</a></span>
             </td>
             <td>
                 {{ convertDateTime($order->created_at, 'H:i d/m/Y') }}

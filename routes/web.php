@@ -291,6 +291,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     // Routes for OrderController
     Route::prefix('order')->name('order.')->group(function () {
         Route::get('index', [OrderController::class, 'index'])->name('index');
+        Route::get('{id}/detail', [OrderController::class, 'detail'])->where(['id' => '[0-9]+'])->name('detail');
     });
 
     //@@new-route-module@@
