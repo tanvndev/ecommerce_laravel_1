@@ -10,6 +10,7 @@ use App\Http\Controllers\Ajax\{
     ProductController as AjaxProductController,
     SourceController as AjaxSourceController,
     CartController as AjaxCartController,
+    OrderController as AjaxOrderController,
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -292,6 +293,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::prefix('order')->name('order.')->group(function () {
         Route::get('index', [OrderController::class, 'index'])->name('index');
         Route::get('{id}/detail', [OrderController::class, 'detail'])->where(['id' => '[0-9]+'])->name('detail');
+        Route::put('{id}/update', [OrderController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
     });
 
     //@@new-route-module@@
@@ -313,6 +315,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->name('ajax.slide.drag');
     Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->name('ajax.product.loadProductPromotion');
     Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->name('ajax.source.getAllSource');
+    Route::put('ajax/order/update', [AjaxOrderController::class, 'update'])->name('ajax.order.update');
 });
 
 

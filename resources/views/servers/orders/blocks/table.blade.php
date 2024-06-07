@@ -23,30 +23,8 @@
         @foreach ($orders as $order)
         @php
         $statusPayment = $order->payment == 'unpaid' ? 'danger' : 'success';
-
-        switch ($order->delivery) {
-        case 'pending':
-        $statusDelivery = 'warning';
-        break;
-        case 'processing':
-        $statusDelivery = 'info';
-        break;
-        default:
-        $statusDelivery = 'success';
-        break;
-        }
-
-        switch ($order->confirm) {
-        case 'pending':
-        $statusConfirm = 'warning';
-        break;
-        case 'cancel':
-        $statusConfirm = 'danger';
-        break;
-        default:
-        $statusConfirm = 'success';
-        break;
-        }
+        $statusDelivery = __('order.delivery')[$order->delivery]['color'];
+        $statusConfirm = __('order.confirm')[$order->confirm]['color'];
         @endphp
         <tr>
             <td>

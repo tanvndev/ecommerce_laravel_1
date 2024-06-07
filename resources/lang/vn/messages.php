@@ -107,7 +107,9 @@ return [
         'detail' => [
             'title' => 'Chi tiết đơn hàng',
             'info' => 'Thông tin khách hàng',
-            'address' => 'Thông tin giao hàng'
+            'address' => 'Thông tin giao hàng',
+            'success' => 'Cập nhập thông tin đơn hàng thành công.',
+            'error' => 'Cập nhập thông tin đơn hàng thành công.',
         ],
         'table' => [
             'name' => 'Tên đơn hàng',
@@ -590,6 +592,7 @@ return [
         ]
     ],
     'code' => "Mã",
+    'updateBtn' => "Cập nhập",
     'customerInfo' => "Khách hàng",
     'payment' => "Thanh toán",
     'paymentMethod' => "Hình thức",

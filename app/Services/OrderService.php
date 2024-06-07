@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\OrderRepositoryInterface as OrderRepository;
 use App\Services\Interfaces\OrderServiceInterface;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class OrderService
@@ -59,5 +61,23 @@ class OrderService implements OrderServiceInterface
         // dd($orders);
 
         return $orders;
+    }
+
+    public function update($id)
+    {
+        DB::beginTransaction();
+        try {
+            $payload = request()->except('_token', '_method');
+            $payload['user_id'] = Auth::id();
+
+            $this->orderRepository->update($id, $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
     }
 }

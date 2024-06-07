@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     private $cartService;
-    private $productRepository;
     public function __construct(
         CartService $cartService,
     ) {

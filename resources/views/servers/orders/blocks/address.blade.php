@@ -1,47 +1,63 @@
-<div class="card mb-3 card-create">
-    <div class="card-header py-3 bg-transparent border-bottom-0">
-        <h6 class="mb-0 fw-bold ">{{__('messages.contactInfo')}}</h6>
-        <small>{{__('messages.noteNotice')[0]}} <span class="text-danger">(*)</span>
-            {{__('messages.noteNotice')[1]}}</small>
-    </div>
-    <div class="card-body">
-        <div class="row g-3 align-items-center">
-            <div class="col-md-6">
-                {!! Form::label('province_id', __('messages.cities'), ['class' => 'form-label']) !!}
-                {!! Form::select('province_id',
-                ['' => __('messages.cities')] + $provinces->pluck('name', 'code')->toArray(), old('province_id',
-                $user->province_id ?? ''),
-                ['class' => 'form-select init-select2 locations provinces', 'data-target' => 'districts']) !!}
+<div class="row g-3 mb-3 row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2 row-deck">
+    <div class="col">
+        <div class="card auth-detailblock">
+            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                <h6 class="mb-0 fw-bold ">{{__('messages.order.detail.info')}}</h6>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#edit-order"
+                    class="text-muted edit update-info-order">Chỉnh sửa</a>
             </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.code')}}:</label>
+                        <span><strong>{{$order->code}}</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.fullname')}}:</label>
+                        <span><strong>{{$order->fullname}}</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.phone')}}:</label>
+                        <span><strong>{{$order->phone}}</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.email')}}:</label>
+                        <span><strong>{{$order->email}}</strong></span>
+                    </div>
 
-            <div class="col-md-6">
-                {!! Form::label('district_id', __('messages.districts'), ['class' => 'form-label']) !!}
-                {!! Form::select('district_id', ['' => __('messages.districts')], null, ['class' => 'form-select
-                init-select2 locations districts', 'data-target' => 'wards']) !!}
+                </div>
             </div>
-            <div class="col-md-6">
-                {!! Form::label('ward_id', __('messages.wards'), ['class' => 'form-label']) !!}
-                {!! Form::select('ward_id', ['' => __('messages.wards')], null, ['class' => 'form-select init-select2
-                wards']) !!}
-            </div>
-
-
-            <div class="col-md-6">
-                {!! Form::label('phone', __('messages.phone'), ['class' => 'form-label']) !!}
-                {!! Form::text('phone', old('phone', $user->phone ?? ''), ['class' => 'form-control', 'type' => 'tel'])
-                !!}
-            </div>
-            <div class="col-md-12">
-                {!! Form::label('address', __('messages.address'), ['class' => 'form-label']) !!}
-                {!! Form::text('address', old('address', $user->address ?? ''), ['class' => 'form-control']) !!}
-            </div>
-            <div class="col-md-12">
-                {!! Form::label('description', __('messages.notes'), ['class' => 'form-label']) !!}
-                {!! Form::text('description', old('description', $user->description ?? ''), ['class' => 'form-control'])
-                !!}
-            </div>
-
-
         </div>
     </div>
-</div>
+
+    <div class="col">
+        <div class="card auth-detailblock">
+            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                <h6 class="mb-0 fw-bold ">{{__('messages.order.detail.address')}}</h6>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#edit-order"
+                    class="text-muted edit update-info-order">Chỉnh
+                    sửa</a>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.cities')}}:</label>
+                        <span><strong>{{ $order->province_name }}</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.districts')}}:</label>
+                        <span><strong> {{ $order->district_name }} </strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.wards')}}:</label>
+                        <span><strong>{{ $order->ward_name }}</strong></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label col-6 col-sm-5">{{__('messages.address')}}:</label>
+                        <span><strong>{{$order->address}}</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- Row end  -->
