@@ -13,20 +13,15 @@
             <th>{{__('messages.discount')}}</th>
             <th>{{__('messages.shipping')}}</th>
             <th>{{__('messages.endTotal')}}</th>
+            <th>{{__('messages.status')}}</th>
             <th>{{__('messages.payment')}}</th>
             <th>{{__('messages.delivery')}}</th>
-            <th>{{__('messages.status')}}</th>
             <th>{{__('messages.paymentMethod')}}</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($orders as $order)
-        @php
-        $statusPayment = $order->payment == 'unpaid' ? 'danger' : 'success';
-        $statusDelivery = __('order.delivery')[$order->delivery]['color'];
-        $statusConfirm = __('order.confirm')[$order->confirm]['color'];
-        @endphp
-        <tr>
+        <tr class="order-item-tr" data-order-id="{{$order->id}}">
             <td>
                 <div class="form-check form-table-list-check">
                     <input class="form-check-input check-item" value="{{$order->id}}" type="checkbox">
@@ -57,14 +52,15 @@
                 <span class="fw-bold">{{formatCurrency($order->cart['total'])}}</span>
             </td>
             <td>
-                <span class="badge bg-{{$statusPayment}}">{{__('cart.payment')[$order->payment]}}</span>
+                {!! renderOrderStatusDropdown($order, 'confirm') !!}
             </td>
             <td>
-                <span class="badge bg-{{$statusDelivery}}">{{__('cart.delivery')[$order->delivery]}}</span>
+                {!! renderOrderStatusDropdown($order, 'payment') !!}
             </td>
             <td>
-                <span class="badge bg-{{$statusConfirm}}">{{__('cart.confirm')[$order->confirm]}}</span>
+                {!! renderOrderStatusDropdown($order, 'delivery') !!}
             </td>
+
             <td>
                 <img class="img-contain" width="50px"
                     src="{{ array_column(__('payment.method'), 'image', 'name')[$order->payment_method] }}" alt="">

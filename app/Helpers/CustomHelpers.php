@@ -359,3 +359,26 @@ if (!function_exists('sortAttributeId')) {
         return $attributeId;
     }
 }
+
+
+if (!function_exists('renderOrderStatusDropdown')) {
+    function renderOrderStatusDropdown($order, $name, $class = 'w-100 init-nice-select update-order')
+    {
+        $html = '<div class="update-order-wrap">';
+
+        $html .= ' <select name="' . $name . '" id="' . $name . '" data-field="' . $name . '" class="' . $class . '">';
+        foreach (__("cart.{$name}") as $value => $label) {
+            if ($value == '') continue;
+            $isSelected = ($order->{$name} == $value) ? 'selected' : '';
+            $html .= '<option value="' . $value . '" ' . $isSelected . '>' . $label . '</option>';
+        }
+        $html .= '</select>';
+
+        $html .= '</div>';
+
+        if ($order->confirm === 'cancel') {
+            return '<span class="badge text-center bg-danger">Đơn hàng đã hủy</span>';
+        }
+        return $html;
+    }
+}

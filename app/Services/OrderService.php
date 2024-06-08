@@ -67,7 +67,7 @@ class OrderService implements OrderServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload = request()->except('_token', '_method');
+            $payload = request()->except('_token', '_method', 'id');
             $payload['user_id'] = Auth::id();
 
             $this->orderRepository->update($id, $payload);

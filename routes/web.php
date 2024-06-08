@@ -315,7 +315,7 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::put('ajax/slide/drag', [AjaxSlideController::class, 'drag'])->name('ajax.slide.drag');
     Route::get('ajax/product/loadProductPromotion', [AjaxProductController::class, 'loadProductPromotion'])->name('ajax.product.loadProductPromotion');
     Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->name('ajax.source.getAllSource');
-    Route::put('ajax/order/update', [AjaxOrderController::class, 'update'])->name('ajax.order.update');
+    Route::put('ajax/order/{id}/update', [AjaxOrderController::class, 'update'])->where(['id' => '[0-9]+'])->name('ajax.order.update');
 });
 
 

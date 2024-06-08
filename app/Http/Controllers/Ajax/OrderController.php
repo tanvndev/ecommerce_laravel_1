@@ -19,7 +19,22 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function update()
+    public function update($id)
     {
+        $successMessage = $this->getToastMessage('order', 'success', 'detail');
+        $errorMessage = $this->getToastMessage('order', 'error', 'detail');
+
+        $response = $this->orderService->update($id);
+        if ($response !== false) {
+            return response()->json([
+                'type' => 'success',
+                'message' => $successMessage,
+            ]);
+        }
+
+        return response()->json([
+            'type' => 'error',
+            'message' => $errorMessage,
+        ]);
     }
 }

@@ -7,6 +7,7 @@
             <h6 class="mb-0 fw-bold ">{{__('messages.order.table.status')}}</h6>
             <span
                 class="ms-3 badge bg-{{__('order.delivery')[$delivery]['color']}}">{{__('cart.delivery')[$delivery]}}</span>
+
         </div>
         <div class="card-body card-create">
             {!! Form::open(['route' => ['order.update', $order->id], 'method' => 'put']) !!}
@@ -17,15 +18,45 @@
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">{{__('messages.status')}}</label>
-                    {!! Form::select('confirm', __('cart.confirm'), old('confirm', $order->confirm ??
-                    ''),
-                    ['class' => 'w-100 init-nice-select']) !!}
+                    <select name="confirm" id="confirm" class="w-100 init-nice-select">
+                        @foreach (__('cart.confirm') as $value => $label)
+                        @if ($value == '') @continue @endif
+                        <option value="{{ $value }}" {{ old('confirm', $order->confirm ?? '') == $value ? 'selected' :
+                            '' }}>
+                            {{ $label }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">{{ __('messages.delivery') }}</label>
-                    {!! Form::select('delivery', __('cart.delivery'), old('delivery', $order->delivery ??
-                    ''),
-                    ['class' => 'w-100 init-nice-select']) !!}
+
+                    <select name="delivery" id="delivery" class="w-100 init-nice-select">
+                        @foreach (__('cart.delivery') as $value => $label)
+                        @if ($value == '') @continue @endif
+                        <option value="{{ $value }}" {{ old('delivery', $order->delivery ?? '') == $value ? 'selected' :
+                            '' }}>
+                            {{ $label }}
+                        </option>
+                        @endforeach
+                    </select>
+
+
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">{{ __('messages.payment') }}</label>
+
+                    <select name="payment" id="payment" class="w-100 init-nice-select">
+                        @foreach (__('cart.payment') as $value => $label)
+                        @if ($value == '') @continue @endif
+                        <option value="{{ $value }}" {{ old('payment', $order->payment ?? '') == $value ? 'selected' :
+                            '' }}>
+                            {{ $label }}
+                        </option>
+                        @endforeach
+                    </select>
+
+
                 </div>
             </div>
             <button type="submit"

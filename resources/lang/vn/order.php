@@ -33,5 +33,17 @@ return [
         ],
 
     ],
+    'payment' => [
+        'unpaid' => [
+            'title' => 'Chưa thanh toán',
+            'color' => 'danger'
+        ],
+        'paid' => [
+            'title' => 'Đã thanh toán',
+            'color' => 'success'
+        ],
+
+
+    ],
 
 ];

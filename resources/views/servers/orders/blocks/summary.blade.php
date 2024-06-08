@@ -1,7 +1,9 @@
 <div class="col-xl-12 col-xxl-8">
     <div class="card">
-        <div class="card-header py-3 d-flex  bg-transparent border-bottom-0">
+        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
             <h6 class="mb-0 fw-bold ">Tóm tắt đơn hàng</h6>
+            <span
+                class="ms-3 badge bg-{{__('order.payment')[$order->payment]['color']}}">{{__('cart.payment')[$order->payment]}}</span>
         </div>
         <div class="card-body">
             @php

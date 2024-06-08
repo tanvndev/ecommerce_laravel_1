@@ -2,11 +2,16 @@
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link href="{{asset('assets/servers/plugin/nice-select/nice-select.css')}}" rel="stylesheet" />
+
 @endsection
 
 @section('script')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{{ asset('assets/servers/plugin/nice-select/jquery.nice-select.min.js') }}"></script>
+<script src=" {{ asset('assets/servers/js/library/order.js') }}"></script>
+
 <script type="text/javascript">
     $(function () {
             $('.date-range-picker').daterangepicker({
