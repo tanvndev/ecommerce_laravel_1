@@ -42,7 +42,8 @@ use App\Http\Controllers\Servers\{
 use App\Http\Controllers\Clients\{
     HomeController,
     RouterController,
-    CartController
+    CartController,
+    VnpController
 };
 
 /*
@@ -62,6 +63,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 Route::get('cart/success', [CartController::class, 'success'])->name('cart.success');
+
+// VNPAY
+Route::get('return/vnpay', [VnpController::class, 'handleReturnUrl'])->name('return.vnpay');
+Route::get('return/vnpay_ipn', [VnpController::class, 'handleVnpIpn'])->name('return.vnpay_ipn');
 
 Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')

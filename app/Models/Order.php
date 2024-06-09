@@ -18,6 +18,7 @@ class Order extends Model
         'province_id',
         'district_id',
         'ward_id',
+        'user_id',
         'address',
         'payment_method',
         'description',

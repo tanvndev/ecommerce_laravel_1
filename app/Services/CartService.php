@@ -12,7 +12,9 @@ use App\Services\Interfaces\ProductServiceInterface as ProductService;
 use App\Mail\OrderMail;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 /**
  * Class CartService
@@ -297,8 +299,6 @@ class CartService implements CartServiceInterface
             }
             // Dong bo du lieu vao bang order_product
             $this->createOrderProduct($payload, $order);
-            // Xu ly thanh toan online
-            $this->handlePaymentOnline($payload['payment_method']);
             // Gui mail cho khach hang
             $this->sendMail($payload);
 
@@ -319,27 +319,7 @@ class CartService implements CartServiceInterface
         Mail::to($to)->cc($cc)->send(new OrderMail($order));
     }
 
-    private function handlePaymentOnline($method)
-    {
-        switch ($method) {
-            case 'vnpay_payment':
-                # code...
-                break;
-            case 'momo_payment':
-                # code...
-                break;
-            case 'momo_payment':
-                # code...
-                break;
-            case 'paypal_payment':
-                # code...
-                break;
 
-            default:
-                # code...
-                break;
-        }
-    }
 
     private function createOrderProduct($payload, $order)
     {
@@ -372,6 +352,7 @@ class CartService implements CartServiceInterface
         $payload = request()->except('_token');
         $payload['code'] = $this->generateOrderCode();
         $payload['created_at'] = date('Y-m-d H:i:s');
+        $payload['user_id'] = Auth::id();
 
         $payload['cart'] = [
             'detail' => $carts,

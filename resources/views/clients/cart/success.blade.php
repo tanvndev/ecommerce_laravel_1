@@ -33,6 +33,26 @@
 
             </div>
         </div>
+
+        <div class="checkout__totals-wrapper">
+            <div class="checkout__totals">
+                <h3>Thông tin đơn hàng</h3>
+                <div class="info-address">
+                    <p>Họ và tên: <span>{{$order['fullname'] ?? ''}}</span></p>
+                    <p>Email: <span>{{$order['email'] ?? ''}}</span></p>
+                    <p>Số điện thoại: <span>{{$order['phone'] ?? ''}}</span></p>
+                    <p>Địa chỉ: <span>{{$order['address'] ?? ''}}</span></p>
+
+                    @include($template ?? '')
+
+                    @if ($order['description'] != '')
+                    <p>Ghi chủ: <span>{{$order['description'] ?? ''}}</span></p>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
         <div class="checkout__totals-wrapper">
             <div class="checkout__totals">
                 <h3>Chi tiết đơn hàng</h3>
@@ -118,18 +138,7 @@
         </div>
 
 
-        <div class="checkout__totals-wrapper">
-            <div class="checkout__totals">
-                <h3>Thông tin nhận hàng</h3>
-                <div class="info-address">
-                    <p>Họ và tên: <span>{{$order['fullname'] ?? ''}}</span></p>
-                    <p>Email: <span>{{$order['email'] ?? ''}}</span></p>
-                    <p>Số điện thoại: <span>{{$order['phone'] ?? ''}}</span></p>
-                    <p>Địa chỉ: <span>{{$order['address'] ?? ''}}</span></p>
-                </div>
-            </div>
 
-        </div>
     </div>
 </div>
 

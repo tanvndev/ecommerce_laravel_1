@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Clients;
 
+use App\Classes\Vnpay;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\StoreCartRequest;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
@@ -26,8 +27,6 @@ class CartController extends Controller
 
     public function checkout()
     {
-        // Cart::instance('shopping')->destroy();
-
         $carts = $this->cartService->getCart();
 
         if (empty($carts) || count($carts) == 0) {
@@ -46,7 +45,6 @@ class CartController extends Controller
             'canonical' => write_url('checkout'),
         ];
 
-
         return view('clients.cart.checkout', compact(
             'seo',
             'carts',
@@ -60,8 +58,14 @@ class CartController extends Controller
         $order = $this->cartService->order();
         if (!empty($order)) {
             $request->session()->put('orderSuccess', $order);
-            // Xoa gio hang
-            Cart::instance('shopping')->destroy();
+
+            // Thanh toan voi vnpay
+            $response = Vnpay::payment($order);
+
+            if ($response['code'] == 00) {
+                return redirect()->away($response['url']);
+            }
+
             return redirect()->route('cart.success')->with('toast_success', 'Đặt hàng thành công.');
         }
         return redirect()->back()->with('toast_error', 'Đặt hàng thất bại, vui lòng đặt lại!');
@@ -75,7 +79,8 @@ class CartController extends Controller
             return redirect()->route('checkout')->with('toast_error', 'Đặt hàng thất bại, vui lòng thử lại!');
         }
 
-        $order = $request->session()->pull('orderSuccess');
+        $order = $request->session()->get('orderSuccess');
+        $paymentReturn = $request->session()->get('paymentReturn') ?? [];
         $seo = [
             'meta_title' => 'Đặt hàng thành công',
             'meta_description' => '',
@@ -84,10 +89,15 @@ class CartController extends Controller
             'canonical' => write_url('cart/success'),
         ];
 
+        // Xoa gio hang
+        Cart::instance('shopping')->destroy();
+        $template = 'clients.includes.vnpay';
 
         return view('clients.cart.success', compact(
             'seo',
-            'order'
+            'order',
+            'paymentReturn',
+            'template'
         ));
     }
 }
