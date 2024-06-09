@@ -43,7 +43,8 @@
 
 <div class="form-group">
     {!! Form::label('address', __('messages.address')) !!}
-    {!! Form::text('address', old('address'), ['placeholder' => 'Nhập vào địa chỉ chi tiết', 'class' => 'form-control' .
+    {!! Form::text('address', old('address', $user->address ?? ''), ['placeholder' => 'Nhập vào địa chỉ chi tiết',
+    'class' => 'form-control' .
     ($errors->has('address') ? ' is-invalid' : '')])
     !!}
 

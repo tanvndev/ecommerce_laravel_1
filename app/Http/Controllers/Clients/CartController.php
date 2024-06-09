@@ -7,6 +7,7 @@ use App\Classes\Vnpay;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\StoreCartRequest;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Interfaces\CartServiceInterface as CartService;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -38,6 +39,7 @@ class CartController extends Controller
         // dd($cartPromotion);
 
         $provinces = $this->provinceRepository->all();
+        $user = Auth::user() ?? [];
         $seo = [
             'meta_title' => 'Thanh toán',
             'meta_description' => '',
@@ -50,7 +52,8 @@ class CartController extends Controller
             'seo',
             'carts',
             'provinces',
-            'cartPromotion'
+            'cartPromotion',
+            'user'
         ));
     }
 

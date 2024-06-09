@@ -31,7 +31,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 {!! Form::label('fullname', __('messages.fullname')) !!}
-                {!! Form::text('fullname', old('fullname'), ['placeholder' => 'Nhập vào họ và tên', 'class' =>
+                {!! Form::text('fullname', old('fullname', $user->fullname ?? ''), ['placeholder' => 'Nhập vào họ và
+                tên', 'class' =>
                 'form-control' . ($errors->has('fullname') ? ' is-invalid' : '')]) !!}
                 <div class="invalid-feedback">
                     {{ $errors->first('fullname') }}
@@ -42,7 +43,8 @@
         <div class="col-lg-6">
             <div class="form-group">
                 {!! Form::label('phone', __('messages.phone')) !!}
-                {!! Form::tel('phone', old('phone'), ['placeholder' => 'Nhập vào số điện thoại', 'class' =>
+                {!! Form::tel('phone', old('phone', $user->phone ?? ''), ['placeholder' => 'Nhập vào số điện thoại',
+                'class' =>
                 'form-control' . ($errors->has('phone') ? ' is-invalid' : '')]) !!}
 
                 <div class="invalid-feedback">
@@ -55,7 +57,8 @@
 
     <div class="form-group">
         {!! Form::label('email', 'Email') !!}
-        {!! Form::email('email', old('email'), ['placeholder' => 'Nhập vào địa chỉ email', 'class' => 'form-control' .
+        {!! Form::email('email', old('email', $user->email ?? ''), ['placeholder' => 'Nhập vào địa chỉ email', 'class'
+        => 'form-control' .
         ($errors->has('email') ? ' is-invalid' : '')])
         !!}
 
