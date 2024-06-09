@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Clients;
 
+use App\Classes\Momo;
 use App\Classes\Vnpay;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\StoreCartRequest;
@@ -55,13 +56,12 @@ class CartController extends Controller
 
     public function store(StoreCartRequest $request)
     {
+        // Tra ve mot mang
         $order = $this->cartService->order();
         if (!empty($order)) {
             $request->session()->put('orderSuccess', $order);
 
-            // Thanh toan voi vnpay
-            $response = Vnpay::payment($order);
-
+            $response = $this->methodPayment($order);
             if ($response['code'] == 00) {
                 return redirect()->away($response['url']);
             }
@@ -71,6 +71,26 @@ class CartController extends Controller
         return redirect()->back()->with('toast_error', 'Đặt hàng thất bại, vui lòng đặt lại!');
     }
 
+    private function methodPayment($order = null)
+    {
+        switch ($order['payment_method']) {
+            case 'vnp_payment':
+                $response = Vnpay::payment($order);
+                break;
+            case 'momo_payment':
+                $response = Momo::payment($order);
+                break;
+            case 'paypal_payment':
+                $response = Momo::payment($order);
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        return $response;
+    }
 
 
     public function success(Request $request)
@@ -81,6 +101,7 @@ class CartController extends Controller
 
         $order = $request->session()->get('orderSuccess');
         $paymentReturn = $request->session()->get('paymentReturn') ?? [];
+        $template = $request->session()->get('templatePayment') ?? '';
         $seo = [
             'meta_title' => 'Đặt hàng thành công',
             'meta_description' => '',
@@ -91,7 +112,6 @@ class CartController extends Controller
 
         // Xoa gio hang
         Cart::instance('shopping')->destroy();
-        $template = 'clients.includes.vnpay';
 
         return view('clients.cart.success', compact(
             'seo',

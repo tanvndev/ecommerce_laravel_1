@@ -117,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                @if ($confirm != 'cancel')
+                @if ($confirm != 'cancel' && !in_array($order->delivery, ['processing', 'success']))
                 <div class="col-md-6">
                     <div class="d-flex justify-content-end">
                         {!! Form::open(['route' => ['order.update', $order->id], 'method' => 'put']) !!}

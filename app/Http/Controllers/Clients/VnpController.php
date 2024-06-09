@@ -61,6 +61,7 @@ class VnpController extends Controller
         if ($secureHash == $vnp_SecureHash) {
             if ($request->input('vnp_ResponseCode') == '00') {
                 $request->session()->put('paymentReturn',  $inputData);
+                $request->session()->put('templatePayment',  'clients.includes.vnpay');
 
                 $this->handleVnpIpn($inputData);
 

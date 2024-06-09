@@ -27,25 +27,22 @@ class Momo
         return $result;
     }
 
-    static function payment($orderData)
+    public static function payment($order)
     {
-        global $config;
-        $configMomo = $config['bank']['momo'];
+        $configMomo = config('apps.paymentConfig.momo');
 
-        if (empty($configMomo)) {
-            return false;
-        }
+        $endpoint = $configMomo['endpoint'];
+        $partnerCode = $configMomo['partnerCode'];
+        $accessKey = $configMomo['accessKey'];
+        $secretKey = $configMomo['secretKey'];
 
-        $endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
-        $partnerCode = $configMomo['partner_code'];
-        $accessKey = $configMomo['access_key'];
-        $secretKey = $configMomo['secret_key'];
+        $orderAmount = $order['cart']['total'] - $order['promotion']['discount'];
 
-        $orderInfo = "momo_payment";
-        $amount = $orderData['amount'] . "";
-        $orderId = $orderData['order_code'] . "";
-        $returnUrl = "http://localhost/WEB2041_Ecommerce/payment-final";
-        $notifyurl = "http://localhost:8000/atm/ipn_momo.php";
+        $orderInfo = $order['description'] ?? 'Thanh toan don hang ' . $order['code'] . ' qua MOMO.';
+        $amount = $orderAmount . "";
+        $orderId = $order['code'] . "";
+        $returnUrl = $configMomo['returnUrl'];
+        $notifyurl = $configMomo['notifyUrl'];
         // Lưu ý: link notifyUrl không phải là dạng localhost
         $bankCode = "SML";
 
@@ -75,6 +72,13 @@ class Momo
         $jsonResult = json_decode($result, true);  // decode json
 
         error_log(print_r($jsonResult, true));
-        return $jsonResult['payUrl'];
+
+        $returnData = [
+            'code' => '00',
+            'message' => $jsonResult['message'],
+            'url' => $jsonResult['payUrl'],
+        ];
+
+        return $returnData;
     }
 }
