@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Classes\Momo;
-use App\Classes\Vnpay;
+use App\Classes\{
+    Momo,
+    Vnpay,
+    Paypal
+};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\StoreCartRequest;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
@@ -11,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Interfaces\CartServiceInterface as CartService;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
+
+
 
 class CartController extends Controller
 {
@@ -76,6 +81,8 @@ class CartController extends Controller
 
     private function methodPayment($order = null)
     {
+
+
         switch ($order['payment_method']) {
             case 'vnp_payment':
                 $response = Vnpay::payment($order);
@@ -84,7 +91,7 @@ class CartController extends Controller
                 $response = Momo::payment($order);
                 break;
             case 'paypal_payment':
-                $response = Momo::payment($order);
+                $response = Paypal::payment($order);
                 break;
 
             default:

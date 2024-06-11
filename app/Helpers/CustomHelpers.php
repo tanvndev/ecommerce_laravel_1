@@ -382,3 +382,24 @@ if (!function_exists('renderOrderStatusDropdown')) {
         return $html;
     }
 }
+
+
+if (!function_exists('convertVndTo')) {
+
+    function convertVndTo($amountVnd, $currency = 'USD')
+    {
+        // Example exchange rates; in a real application, you would get these from an API or a config file.
+        $exchangeRates = [
+            'USD' => 0.000043,
+            'EUR' => 0.000038,
+            // Add more currencies as needed
+        ];
+
+        if (!isset($exchangeRates[$currency])) {
+            throw new Exception("Exchange rate for currency '{$currency}' not found.");
+        }
+
+        $result = number_format($amountVnd * $exchangeRates[$currency], 2, '.', '');
+        return $result;
+    }
+}

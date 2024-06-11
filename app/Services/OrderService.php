@@ -80,4 +80,19 @@ class OrderService implements OrderServiceInterface
             return false;
         }
     }
+
+    public function updatePayment($id, $payload)
+    {
+        DB::beginTransaction();
+        try {
+            $this->orderRepository->update($id, $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
 }

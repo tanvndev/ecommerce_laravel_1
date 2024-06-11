@@ -297,11 +297,11 @@ class CartService implements CartServiceInterface
             if ($order->id == null || empty($order->id)) {
                 throw new \Exception('Error create order.');
             }
+            $payload['id'] = $order->id;
             // Dong bo du lieu vao bang order_product
             $this->createOrderProduct($payload, $order);
             // Gui mail cho khach hang
             $this->sendMail($payload);
-
             DB::commit();
             return $payload;
         } catch (\Exception $e) {

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Clients;
+namespace App\Http\Controllers\Clients\Payments;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\OrderRepositoryInterface as OrderRepository;
 use App\Services\Interfaces\OrderServiceInterface as OrderService;
+
 
 use Exception;
 use Illuminate\Http\Request;
@@ -15,11 +16,15 @@ class MomoController extends Controller
 {
 
     private $orderRepository;
+    private $orderService;
     public function __construct(
-        OrderRepository $orderRepository
+        OrderRepository $orderRepository,
+        OrderService $orderService
+
     ) {
         parent::__construct();
         $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
     }
 
     public function handleReturnUrl(Request $request)
@@ -83,7 +88,6 @@ class MomoController extends Controller
         $secretKey = $configMomo['secretKey'];
         if (!empty($get)) {
             $response = array();
-            DB::beginTransaction();
             try {
                 $partnerCode = $get["partnerCode"];
                 $accessKey = $get["accessKey"];
@@ -119,19 +123,14 @@ class MomoController extends Controller
                         $payload['payment'] = 'paid';
                     } else {
                         $payload['payment'] = 'unpaid';
-                        DB::rollBack();
                         $result = '<div class="alert alert-danger">' . $message . '</div>';
                     }
                 } else {
                     $payload['payment'] = 'unpaid';
-                    DB::rollBack();
-
                     $result = '<div class="alert alert-danger">This transaction could be hacked, please check your signature and returned signature</div>';
                 }
-                $this->orderRepository->update($order->id, $payload);
-                DB::commit();
+                $this->orderService->update($order->id, $payload);
             } catch (Exception $e) {
-                DB::rollBack();
                 echo $response['message'] = $e;
             }
 

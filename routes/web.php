@@ -43,8 +43,12 @@ use App\Http\Controllers\Clients\{
     HomeController,
     RouterController,
     CartController,
+};
+
+use App\Http\Controllers\Clients\Payments\{
     VnpController,
-    MomoController
+    MomoController,
+    PaypalController
 };
 
 /*
@@ -72,6 +76,11 @@ Route::get('return/vnpay_ipn', [VnpController::class, 'handleVnpIpn'])->name('re
 // MOMO
 Route::get('return/momo', [MomoController::class, 'handleReturnUrl'])->name('return.momo');
 Route::get('return/momo_ipn', [MomoController::class, 'handleMomoIpn'])->name('return.momo_ipn');
+
+// PAYPAL
+Route::get('paypal/success', [PaypalController::class, 'success'])->name('paypal.success');
+Route::get('paypal/cancel', [PaypalController::class, 'cancel'])->name('paypal.cancel');
+
 
 Route::get('{canonical}', [RouterController::class, 'index'])
     ->where('canonical', '^(?!admin$)[0-9a-zA-Z-]+$')

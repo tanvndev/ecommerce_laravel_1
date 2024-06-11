@@ -1,24 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Clients;
+namespace App\Http\Controllers\Clients\Payments;
+
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\OrderRepositoryInterface as OrderRepository;
 use App\Services\Interfaces\OrderServiceInterface as OrderService;
 
+
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class VnpController extends Controller
 {
 
     private $orderRepository;
+    private $orderService;
     public function __construct(
-        OrderRepository $orderRepository
+        OrderRepository $orderRepository,
+        OrderService $orderService
     ) {
         parent::__construct();
         $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
     }
 
     public function handleReturnUrl(Request $request)
@@ -124,7 +128,6 @@ class VnpController extends Controller
 
         $orderCode = $inputData['vnp_TxnRef'];
 
-        DB::beginTransaction();
         try {
             //Check Orderid    
             //Kiểm tra checksum của dữ liệu
@@ -147,34 +150,28 @@ class VnpController extends Controller
                             }
                             //Cài đặt Code cập nhật kết quả thanh toán, tình trạng đơn hàng vào DB
 
-                            $this->orderRepository->update($order->id, $payload);
+                            $this->orderService->updatePayment($order->id, $payload);
 
-                            DB::commit();
                             //Trả kết quả về cho VNPAY: Website/APP TMĐT ghi nhận yêu cầu thành công                
                             $returnData['RspCode'] = '00';
                             $returnData['Message'] = 'Confirm Success';
                         } else {
-                            DB::rollBack();
                             $returnData['RspCode'] = '02';
                             $returnData['Message'] = 'Order already confirmed';
                         }
                     } else {
-                        DB::rollBack();
                         $returnData['RspCode'] = '04';
                         $returnData['Message'] = 'invalid amount';
                     }
                 } else {
-                    DB::rollBack();
                     $returnData['RspCode'] = '01';
                     $returnData['Message'] = 'Order not found';
                 }
             } else {
-                DB::rollBack();
                 $returnData['RspCode'] = '97';
                 $returnData['Message'] = 'Invalid signature';
             }
         } catch (Exception $e) {
-            DB::rollBack();
             echo $e->getMessage();
             $returnData['RspCode'] = '99';
             $returnData['Message'] = 'Unknow error';
