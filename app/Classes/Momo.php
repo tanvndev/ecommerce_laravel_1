@@ -41,29 +41,26 @@ class Momo
         $orderInfo = $order['description'] ?? 'Thanh toan don hang ' . $order['code'] . ' qua MOMO.';
         $amount = $orderAmount . "";
         $orderId = $order['code'] . "";
-        $returnUrl = $configMomo['returnUrl'];
-        $notifyurl = $configMomo['notifyUrl'];
-        // Lưu ý: link notifyUrl không phải là dạng localhost
-        $bankCode = "SML";
-
+        $redirectUrl = $configMomo['redirectUrl'];
+        $ipnUrl = $configMomo['ipnUrl'];
         $requestId = time() . "";
-        $requestType = "payWithMoMoATM";
+        $requestType = "payWithATM";
         $extraData = "";
 
         // echo $serectkey;die;
-        $rawHash = "partnerCode=" . $partnerCode . "&accessKey=" . $accessKey . "&requestId=" . $requestId . "&bankCode=" . $bankCode . "&amount=" . $amount . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&returnUrl=" . $returnUrl . "&notifyUrl=" . $notifyurl . "&extraData=" . $extraData . "&requestType=" . $requestType;
+        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+
         $signature = hash_hmac("sha256", $rawHash, $secretKey);
 
-        $data =  array(
+        $data = array(
             'partnerCode' => $partnerCode,
-            'accessKey' => $accessKey,
             'requestId' => $requestId,
             'amount' => $amount,
             'orderId' => $orderId,
             'orderInfo' => $orderInfo,
-            'returnUrl' => $returnUrl,
-            'bankCode' => $bankCode,
-            'notifyUrl' => $notifyurl,
+            'redirectUrl' => $redirectUrl,
+            'ipnUrl' => $ipnUrl,
+            'lang' => 'vi',
             'extraData' => $extraData,
             'requestType' => $requestType,
             'signature' => $signature
