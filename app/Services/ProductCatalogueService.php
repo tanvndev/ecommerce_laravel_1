@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Classes\Nestedsetbie;
+use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
+use App\Repositories\Interfaces\AttributeRepositoryInterface as AttributeRepository;
 use App\Services\Interfaces\ProductCatalogueServiceInterface;
 use App\Repositories\Interfaces\ProductCatalogueRepositoryInterface as ProductCatalogueRepository;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +14,18 @@ use Illuminate\Support\Str;
 class ProductCatalogueService extends BaseService implements ProductCatalogueServiceInterface
 {
     protected $productCatalogueRepository;
+    protected $attributeCatalogueRepository;
+    protected $attributeRepository;
     public function __construct(
         ProductCatalogueRepository $productCatalogueRepository,
+        AttributeCatalogueRepository $attributeCatalogueRepository,
+        AttributeRepository $attributeRepository
+
     ) {
         parent::__construct();
         $this->productCatalogueRepository = $productCatalogueRepository;
+        $this->attributeCatalogueRepository = $attributeCatalogueRepository;
+        $this->attributeRepository = $attributeRepository;
         $this->controllerName = 'ProductCatalogueController';
     }
 
@@ -63,7 +72,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
         return $productCatalogues;
     }
 
-    function create()
+    public  function create()
     {
 
         DB::beginTransaction();
@@ -102,7 +111,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
     }
 
 
-    function update($id)
+    public function update($id)
     {
         DB::beginTransaction();
         try {
@@ -203,5 +212,89 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
             'foreignkey' => 'product_catalogue_id',
             'language_id' => session('currentLanguage')
         ]);
+    }
+
+    public function setAttribute($product)
+    {
+        DB::beginTransaction();
+        try {
+            $attribue = $product->attribute;
+            $productCatalogueId = (int)$product->product_catalogue_id;
+            $productCatalogue = $this->productCatalogueRepository->findById($productCatalogueId);
+
+            // dd(array_unique($attribue + $productCatalogue->attribute));
+            $payload = [
+                'attribute' => $attribue + ($productCatalogue->attribute ?? []),
+            ];
+
+            // dd($payload);
+            $this->productCatalogueRepository->update($productCatalogueId, $payload);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
+
+    public function getFilterList($attribute)
+    {
+        if (empty($attribute)) {
+            return [];
+        }
+
+        $attributeCatalogueId = array_keys($attribute);
+        $attributeId = array_unique(array_merge(...array_values($attribute)));
+
+        $attributeCatalogues = $this->attributeCatalogueRepository->findByWhere(
+            [
+                'publish' => ['=', config('apps.general.defaultPublish')]
+            ],
+            ['*'],
+            [
+                [
+                    'languages' => function ($q) {
+                        $q->where('language_id', session('currentLanguage', 1));
+                    }
+                ]
+            ],
+            true,
+            ['id' => 'asc'],
+            ['field' => 'id', 'value' => $attributeCatalogueId]
+        );
+
+        $attributes = $this->attributeRepository->findByWhere(
+            [
+                'publish' => ['=', config('apps.general.defaultPublish')]
+            ],
+            ['*'],
+            [
+                [
+                    'languages' => function ($q) {
+                        $q->where('language_id', session('currentLanguage', 1));
+                    }
+                ]
+            ],
+            true,
+            ['id' => 'asc'],
+            ['field' => 'id', 'value' => $attributeId]
+        );
+        // dd($attributeCatalogues);
+
+        // Index attributes by their catalogue ID for efficient lookup
+        $attributesByCatalogue = [];
+        foreach ($attributes as $attribute) {
+            $attributesByCatalogue[$attribute->attribute_catalogue_id][] = $attribute;
+        }
+
+
+        // Attach attributes to their respective catalogues
+        foreach ($attributeCatalogues as $catalogue) {
+            $catalogue->attributes = $attributesByCatalogue[$catalogue->id] ?? [];
+        }
+        return $attributeCatalogues;
     }
 }

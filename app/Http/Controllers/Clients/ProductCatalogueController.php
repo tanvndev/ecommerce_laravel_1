@@ -15,17 +15,24 @@ class ProductCatalogueController extends Controller
 {
     private $productCatalogueRepository;
     private $productService;
+    private $productCatalogueService;
     public function __construct(
         ProductCatalogueRepository $productCatalogueRepository,
-        ProductService $productService
+        ProductService $productService,
+        ProductCatalogueService $productCatalogueService
+
     ) {
         parent::__construct();
         $this->productCatalogueRepository = $productCatalogueRepository;
         $this->productService = $productService;
+        $this->productCatalogueService = $productCatalogueService;
     }
     public function index($id)
     {
         $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, session('currentLanguage', 1));
+
+        $filters = $this->productCatalogueService->getFilterList($productCatalogue->attribute);
+
         $breadcrumb = $this->productCatalogueRepository->breadcrumb($productCatalogue, session('currentLanguage', 1));
         $products = $this->productService->paginate($productCatalogue);
         $productId = $products->pluck('id')->toArray();
@@ -39,6 +46,7 @@ class ProductCatalogueController extends Controller
             'breadcrumb',
             'productCatalogue',
             'products',
+            'filters'
         ));
     }
 }

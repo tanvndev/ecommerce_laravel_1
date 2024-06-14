@@ -400,3 +400,12 @@ body {
         }
     }
 }
+
+.filter-star {
+    i {
+        color: #d6d6d6;
+    }
+    i.active {
+        color: #ffcc00;
+    }
+}

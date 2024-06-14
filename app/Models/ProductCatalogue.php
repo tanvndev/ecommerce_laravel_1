@@ -24,6 +24,11 @@ class ProductCatalogue extends Model
         'publish',
         'order',
         'user_id',
+        'attribute',
+    ];
+
+    protected $casts = [
+        'attribute' => 'json',
     ];
 
     public function languages()

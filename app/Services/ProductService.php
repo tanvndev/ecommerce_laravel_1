@@ -9,6 +9,7 @@ use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as Pr
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use App\Repositories\Interfaces\AttributeRepositoryInterface as AttributeRepository;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+use App\Services\Interfaces\ProductCatalogueServiceInterface as ProductCatalogueService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,6 +23,8 @@ class ProductService extends BaseService implements ProductServiceInterface
     protected $promotionRepository;
     protected $attributeCatalogueRepository;
     protected $attributeRepository;
+    protected $productCatalogueService;
+
 
     public function __construct(
         ProductRepository $productRepository,
@@ -30,6 +33,8 @@ class ProductService extends BaseService implements ProductServiceInterface
         PromotionRepository $promotionRepository,
         AttributeCatalogueRepository $attributeCatalogueRepository,
         AttributeRepository $attributeRepository,
+        ProductCatalogueService $productCatalogueService
+
     ) {
         parent::__construct();
         $this->productRepository = $productRepository;
@@ -39,6 +44,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         $this->attributeCatalogueRepository = $attributeCatalogueRepository;
         $this->attributeRepository = $attributeRepository;
         $this->controllerName = 'ProductController';
+        $this->productCatalogueService = $productCatalogueService;
     }
     public function paginate($productCatalogue = null)
     {
@@ -112,7 +118,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         return $rawConditions;
     }
 
-    function create()
+    public function create()
     {
 
         DB::beginTransaction();
@@ -133,13 +139,72 @@ class ProductService extends BaseService implements ProductServiceInterface
                 // Create pivot and sync
                 $this->createPivotAndSync($product, $payloadLanguage);
 
-
                 // create router
                 $this->createRouter($product);
+                $attribute = request('attribute') ?? '';
 
-                if (null !== request('attribute') && !empty(request('attribute'))) {
+                if (null !== $attribute && !empty($attribute)) {
                     // Tạo ra nhiều phiên bản
                     $this->createVariant($product);
+                    $this->productCatalogueService->setAttribute($product);
+                }
+            }
+
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo $e->getMessage();
+            die;
+            return false;
+        }
+    }
+
+
+
+
+    public function update($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            // Lấy ra dữ liệu của product hiện tại để xoá;
+            $product = $this->productRepository->findById($id);
+
+            // Lấy ra payload và format lai
+            $payload = request()->only($this->payload());
+
+
+            // $payload = $this->formatJson($payload, 'album');
+            $payload['price'] = convertPrice($payload['price'] ?? 0);
+            // Update product
+            $updateProduct = $this->productRepository->save($id, $payload);
+
+            if ($updateProduct) {
+                // Format lai payload language
+                $payloadLanguage = $this->formatPayloadLanguage($id);
+                // Xoá bản ghi cũa một pivot
+                $product->languages()->detach([$payloadLanguage['language_id'], $id]);
+                // Create pivot and sync
+                $this->createPivotAndSync($product, $payloadLanguage);
+
+                // update router
+                $this->updateRouter($product);
+
+
+                // Xoa cac bản ghi của của sản phẩm đó
+                $product->product_variants()->each(function ($variant) {
+                    $variant->attributes()->detach();
+                    $variant->languages()->detach();
+                    $variant->delete();
+                });
+
+                $attribute = request('attribute') ?? '';
+                if (null !== $attribute && !empty($attribute)) {
+                    // Tạo ra nhiều phiên bản
+                    $this->createVariant($product);
+                    $this->productCatalogueService->setAttribute($updateProduct);
                 }
             }
 
@@ -152,19 +217,12 @@ class ProductService extends BaseService implements ProductServiceInterface
             return false;
         }
     }
-    // private function formatPayloadtoJson($payload)
-    // {
-    //     $payload = $this->formatJson($payload, 'album');
-    //     $payload = $this->formatJson($payload, 'attributeCatalogue');
-    //     $payload = $this->formatJson($payload, 'attribute');
-    //     $payload = $this->formatJson($payload, 'variant');
-    //     return $payload;
-    // }
 
     private function createVariant($product)
     {
         $payload = request()->only(['variant', 'productVariant', 'attribute']);
         $variantPayload = $this->formatPayloadVariant($product, $payload);
+
 
         // Tạo ra bản ghi cho product_variant
         $variants = $product->product_variants()->createMany($variantPayload);
@@ -263,57 +321,6 @@ class ProductService extends BaseService implements ProductServiceInterface
         sort($numberArray, SORT_NUMERIC);
         $sortedNumbers = implode(", ", $numberArray);
         return $sortedNumbers;
-    }
-
-    public function update($id)
-    {
-
-        DB::beginTransaction();
-        try {
-            // Lấy ra dữ liệu của product hiện tại để xoá;
-            $product = $this->productRepository->findById($id);
-
-            // Lấy ra payload và format lai
-            $payload = request()->only($this->payload());
-            // $payload = $this->formatJson($payload, 'album');
-            $payload['price'] = convertPrice($payload['price'] ?? 0);
-            // Update product
-            $updateProduct = $this->productRepository->update($id, $payload);
-
-            if ($updateProduct) {
-                // Format lai payload language
-                $payloadLanguage = $this->formatPayloadLanguage($id);
-                // Xoá bản ghi cũa một pivot
-                $product->languages()->detach([$payloadLanguage['language_id'], $id]);
-                // Create pivot and sync
-                $this->createPivotAndSync($product, $payloadLanguage);
-
-                // update router
-                $this->updateRouter($product);
-
-
-                // Xoa cac bản ghi của của sản phẩm đó
-                $product->product_variants()->each(function ($variant) {
-                    $variant->attributes()->detach();
-                    $variant->languages()->detach();
-                    $variant->delete();
-                });
-
-
-                if (null !== request('attribute') && !empty(request('attribute'))) {
-                    // Tạo ra nhiều phiên bản
-                    $this->createVariant($product);
-                }
-            }
-
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo $e->getMessage();
-            die;
-            return false;
-        }
     }
 
     private function catalogue()

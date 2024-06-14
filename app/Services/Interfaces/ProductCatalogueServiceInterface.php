@@ -10,4 +10,6 @@ interface ProductCatalogueServiceInterface
     public function destroy($id);
     public function updateStatus();
     public function updateStatusAll();
+    public function setAttribute($product);
+    public function getFilterList($attribute);
 }

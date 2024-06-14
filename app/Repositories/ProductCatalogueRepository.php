@@ -26,6 +26,7 @@ class ProductCatalogueRepository extends BaseRepository implements ProductCatalo
             'product_catalogues.icon',
             'product_catalogues.album',
             'product_catalogues.follow',
+            'product_catalogues.attribute',
             'tb2.name',
             'tb2.description',
             'tb2.content',

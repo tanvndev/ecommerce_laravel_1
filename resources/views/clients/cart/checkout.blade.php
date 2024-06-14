@@ -38,7 +38,7 @@
             @endif --}}
             {!! Form::open(['route' => 'cart.store', 'method' => 'post']) !!}
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 ">
                     @include('clients.cart.blocks.infomation')
                 </div>
                 <div class="col-lg-6">

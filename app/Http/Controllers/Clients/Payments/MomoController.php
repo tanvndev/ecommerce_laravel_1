@@ -99,8 +99,6 @@ class MomoController extends Controller
                 $partnerSignature = hash_hmac("sha256", $rawHash, $secretKey);
 
                 $order = $this->orderRepository->findByWhere(['code' => ['=', $get["orderId"]]]);
-                dd($get);
-                dd($m2signature, $partnerSignature);
 
                 if ($m2signature == $partnerSignature) {
                     if ($get['resultCode'] == '0') {

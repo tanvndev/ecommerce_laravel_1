@@ -382,4 +382,11 @@ body::-webkit-scrollbar-thumb:hover {
 .order-complete .checkout-totals-2 tr:last-child th {
   border-bottom: none;
   padding-bottom: 0;
+}
+
+.filter-star i {
+  color: #d6d6d6;
+}
+.filter-star i.active {
+  color: #ffcc00;
 }/*# sourceMappingURL=custom.css.map */
