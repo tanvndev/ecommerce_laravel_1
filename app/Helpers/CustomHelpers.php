@@ -331,10 +331,10 @@ if (!function_exists('calculatePrice')) {
 }
 
 if (!function_exists('getReview')) {
-    function getReview($product)
+    function getReview($model)
     {
-        $number = rand(1, 5);
-        $filledStars = round($number);
+        $number = $rate ?? rand(1, 5);
+        $filledStars = round($number, 0);
         $starArray = array();
 
         for ($index = 0; $index < 5; $index++) {
@@ -346,10 +346,89 @@ if (!function_exists('getReview')) {
         }
         return [
             'star' => implode(' ', $starArray),
-            'count' => rand(1, 999)
+            'count' => $count ?? rand(1, 999)
         ];
     }
 }
+
+if (!function_exists('generateStar')) {
+    function generateStar($rate)
+    {
+        $filledStars = round($rate, 0);
+        $starArray = array();
+
+        for ($index = 0; $index < 5; $index++) {
+            if ($index < $filledStars) {
+                $starArray[] = '<i class="fas fa-star"></i>';
+            } else {
+                $starArray[] = '<i class="far fa-star"></i>';
+            }
+        }
+        return implode(' ', $starArray);
+    }
+}
+
+if (!function_exists('generateStarPercent')) {
+    function generateStarPercent($rate = 100)
+    {
+        $percent =  round(100 - ($rate / 5 * 100));
+
+        // Start building the HTML string
+        $html = '
+        <div class="stars-percent">
+        ';
+
+        // Generate 5 stars
+        for ($i = 0; $i < 5; $i++) {
+            $html .= '
+            <svg width="auto" height="auto" viewBox="0 0 940.688 940.688">
+                <path d="M885.344,319.071l-258-3.8l-102.7-264.399c-19.8-48.801-88.899-48.801-108.6,0l-102.7,264.399l-258,3.8 c-53.4,3.101-75.1,70.2-33.7,103.9l209.2,181.4l-71.3,247.7c-14,50.899,41.1,92.899,86.5,65.899l224.3-122.7l224.3,122.601 c45.4,27,100.5-15,86.5-65.9l-71.3-247.7l209.2-181.399C960.443,389.172,938.744,322.071,885.344,319.071z"/>
+            </svg>
+            ';
+        }
+
+        // Add overlay with dynamic width
+        $html .= '
+            <div class="overlay" style="width: ' . htmlspecialchars($percent) . '%;"></div>
+        </div>
+        ';
+
+        return $html;
+    }
+}
+
+if (!function_exists('renderProress')) {
+    function renderProress($rate = 100)
+    {
+        $percent =  round(100 - ($rate / 5 * 100));
+
+        // Start building the HTML string
+        $html = '
+        <div class="stars-percent">
+        ';
+
+        // Generate 5 stars
+        for ($i = 0; $i < 5; $i++) {
+            $html .= '
+            <svg width="auto" height="auto" viewBox="0 0 940.688 940.688">
+                <path d="M885.344,319.071l-258-3.8l-102.7-264.399c-19.8-48.801-88.899-48.801-108.6,0l-102.7,264.399l-258,3.8 c-53.4,3.101-75.1,70.2-33.7,103.9l209.2,181.4l-71.3,247.7c-14,50.899,41.1,92.899,86.5,65.899l224.3-122.7l224.3,122.601 c45.4,27,100.5-15,86.5-65.9l-71.3-247.7l209.2-181.399C960.443,389.172,938.744,322.071,885.344,319.071z"/>
+            </svg>
+            ';
+        }
+
+        // Add overlay with dynamic width
+        $html .= '
+            <div class="overlay" style="width: ' . htmlspecialchars($percent) . '%;"></div>
+        </div>
+        ';
+
+        return $html;
+    }
+}
+
+
+
+
 
 if (!function_exists('sortAttributeId')) {
     function sortAttributeId($attributeId)
@@ -401,5 +480,17 @@ if (!function_exists('convertVndTo')) {
 
         $result = number_format($amountVnd * $exchangeRates[$currency], 2, '.', '');
         return $result;
+    }
+}
+
+if (!function_exists('abbreviateName')) {
+    function abbreviateName($fullName)
+    {
+        $parts = explode(' ', $fullName);
+        $abbreviation = '';
+        foreach ($parts as $part) {
+            $abbreviation .= strtoupper(substr($part, 0, 1));
+        }
+        return $abbreviation;
     }
 }

@@ -66,6 +66,7 @@
             axilInit.dropdownMenuSlide();
             axilInit.addLazyLoad();
             axilInit.onlyNumbers();
+            axilInit.selectedStarComment();
         },
 
         w: function (e) {
@@ -73,6 +74,26 @@
         },
         addLazyLoad: function () {
             $("img").attr("loading", "lazy");
+        },
+
+        selectedStarComment: function () {
+            const $ratingWrapper = $(".rating-wrapper");
+            const $stars = $ratingWrapper.find(".star");
+            const $textElement = $ratingWrapper.find(".text");
+            const $currentRating = $("#currentRating");
+
+            $stars.hover(function () {
+                const $this = $(this);
+                const text = $this.data("text");
+                const rating = $this.data("rating");
+                $currentRating.val(rating);
+                if ($currentRating.val() != "") {
+                    $currentRating.removeClass("is-invalid");
+                }
+                $textElement.text(text);
+                $stars.removeClass("selected");
+                $this.addClass("selected").prevAll().addClass("selected");
+            });
         },
 
         onlyNumbers: function () {

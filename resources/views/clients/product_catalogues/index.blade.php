@@ -41,7 +41,7 @@
                     $canonical = write_url($product->languages->first()->pivot->canonical);
                     $image = $product->image;
                     $price = getPrice($product);
-                    $review = getReview($product);
+                    $review = getReview(5);
                     @endphp
                     <div class="col-xl-4 col-sm-6">
                         <div class="axil-product product-style-one mb--30">

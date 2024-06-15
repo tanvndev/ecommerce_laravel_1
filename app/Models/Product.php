@@ -88,4 +88,9 @@ class Product extends Model
             'option',
         );
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

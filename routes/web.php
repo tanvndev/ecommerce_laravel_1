@@ -11,6 +11,7 @@ use App\Http\Controllers\Ajax\{
     SourceController as AjaxSourceController,
     CartController as AjaxCartController,
     OrderController as AjaxOrderController,
+    CommentController as AjaxCommentController
 };
 use App\Http\Controllers\Servers\{
     AuthController,
@@ -93,6 +94,7 @@ Route::post('ajax/cart/create', [AjaxCartController::class, 'create'])->name('aj
 Route::put('ajax/cart/update', [AjaxCartController::class, 'update'])->name('ajax.cart.update');
 Route::delete('ajax/cart/destroy', [AjaxCartController::class, 'destroy'])->name('ajax.cart.destroy');
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
+Route::post('ajax/comment/store', [AjaxCommentController::class, 'store'])->name('ajax.comment.store');
 
 
 // SERVER ROUTES

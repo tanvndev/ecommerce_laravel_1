@@ -47,7 +47,6 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\MenuServiceInterface' => 'App\Services\MenuService',
         // Menu
         'App\Services\Interfaces\MenuCatalogueServiceInterface' => 'App\Services\MenuCatalogueService',
-
         // Slide
         'App\Services\Interfaces\SlideServiceInterface' => 'App\Services\SlideService',
         // Widget
@@ -64,6 +63,8 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\CartServiceInterface' => 'App\Services\CartService',
         // Order
         'App\Services\Interfaces\OrderServiceInterface' => 'App\Services\OrderService',
+        // Comment
+        'App\Services\Interfaces\CommentServiceInterface' => 'App\Services\CommentService',
     ];
     public function register(): void
     {

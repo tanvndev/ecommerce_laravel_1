@@ -13,7 +13,7 @@
                 $canonical = write_url($mostSoldProduct->languages->first()->pivot->canonical);
                 $image = $mostSoldProduct->image;
                 $price = getPrice($mostSoldProduct);
-                $review = getReview($mostSoldProduct);
+                $review = getReview(5);
                 @endphp
 
                 <div class="col">

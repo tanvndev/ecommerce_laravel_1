@@ -47,6 +47,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 'product_catalogues',
                 'product_variants.attributes.languages' => function ($query) use ($languageId) {
                     $query->where('language_id', $languageId);
+                },
+                'comments' => function ($query) {
+                    $query->where('publish', config('apps.general.defaultPublish'))
+                        ->orderBy('created_at', 'desc');
                 }
             ]) //Lấy từ product_variants.attributes.languages để lấy những attribute có trong product
             ->find($id);

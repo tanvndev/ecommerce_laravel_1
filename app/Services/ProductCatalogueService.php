@@ -72,7 +72,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
         return $productCatalogues;
     }
 
-    public  function create()
+    public function create()
     {
 
         DB::beginTransaction();

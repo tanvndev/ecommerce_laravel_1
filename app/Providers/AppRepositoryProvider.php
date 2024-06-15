@@ -67,6 +67,8 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\CustomerCatalogueRepositoryInterface' => 'App\Repositories\CustomerCatalogueRepository',
         // Order
         'App\Repositories\Interfaces\OrderRepositoryInterface' => 'App\Repositories\OrderRepository',
+        // Comment
+        'App\Repositories\Interfaces\CommentRepositoryInterface' => 'App\Repositories\CommentRepository',
     ];
 
     public function register(): void

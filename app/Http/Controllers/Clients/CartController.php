@@ -44,7 +44,7 @@ class CartController extends Controller
         // dd($cartPromotion);
 
         $provinces = $this->provinceRepository->all();
-        $user = Auth::user() ?? [];
+        $user = Auth::user() ?? null;
         $seo = [
             'meta_title' => 'Thanh toán',
             'meta_description' => '',
