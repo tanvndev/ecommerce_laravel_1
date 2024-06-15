@@ -29,8 +29,6 @@ class PermissionController extends Controller
     function index()
     {
         $this->authorize('modules', 'permission.index');
-
-
         $permissions = $this->permissionService->paginate();
         // dd($permissions);
         $config['seo'] = __('messages.permission')['index'];

@@ -27,6 +27,7 @@ use App\Http\Controllers\Servers\{
     ProductController,
     AttributeCatalogueController,
     AttributeController,
+    CommentController,
     SystemController,
     MenuController,
     SlideController,
@@ -211,6 +212,11 @@ Route::middleware(['admin', 'locale'])->group(function () {
         Route::get('/{id}/edit', [ProductController::class, 'edit'])->where(['id' => '[0-9]+'])->name('edit');
         Route::put('/{id}/update', [ProductController::class, 'update'])->where(['id' => '[0-9]+'])->name('update');
         Route::delete('destroy', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    // Routes for CommentController
+    Route::prefix('comment')->name('comment.')->group(function () {
+        Route::get('{commentable_id}/{commentable_type}/index', [CommentController::class, 'index'])->name('index');
     });
 
     // Routes for AttributeCatalogueController

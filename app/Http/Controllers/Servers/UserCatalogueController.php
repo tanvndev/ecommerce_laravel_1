@@ -135,7 +135,7 @@ class UserCatalogueController extends Controller
         $this->authorize('modules', 'user.catalogue.edit');
 
         $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
-        $permissions = $this->permissionRepository->all();
+        $permissions = $this->permissionRepository->all([], ['id', 'name', 'canonical'], ['id' => 'desc']);
 
         $config['seo'] = __('messages.userCatalogue')['permission'];
 

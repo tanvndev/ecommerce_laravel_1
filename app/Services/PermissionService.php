@@ -14,7 +14,7 @@ class PermissionService extends BaseService implements PermissionServiceInterfac
     {
         $this->permissionRepository = $permissionRepository;
     }
-    function paginate()
+    public function paginate()
     {
         $condition = [
             'keyword' => addslashes(request('keyword')),
@@ -32,7 +32,7 @@ class PermissionService extends BaseService implements PermissionServiceInterfac
         return $permissions;
     }
 
-    function create()
+    public function create()
     {
         DB::beginTransaction();
         try {

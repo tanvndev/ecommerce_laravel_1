@@ -5,14 +5,14 @@
                 <div class="form-check form-table-list-check">
                     {!! Form::checkbox('check-all', null, null, ['class' => 'form-check-input', 'id' => 'check-all'])
                     !!}
-
                 </div>
             </th>
-            <th style="width: 40%;">{{__('messages.product.table.name')}}</th>
+            <th style="width: 35%;">{{__('messages.product.table.name')}}</th>
             <th>Giá tiền</th>
             @include('servers.includes.languageTableTh')
             <th>{{__('messages.tableDisplayGroup')}}</th>
             <th style="width: 5%;">{{__('messages.tableOrder')}}</th>
+            <th>{{__('messages.rating')}}</th>
             <th>{{__('messages.tableStatus')}}</th>
             <th>{{__('messages.tableAction')}}</th>
         </tr>
@@ -45,6 +45,11 @@
             <td class="">
                 <input type="text" class="form-control sort-order" name="order" data-id="{{$product->id}}"
                     data-model="{{$modelName}}" value="{{$product->order}}" />
+            </td>
+            <td class="">
+                <a href="{{route('comment.index', ['commentable_id' => $product->id, 
+                'commentable_type' => " App\\Models\\$modelName "])}}" class="link-primary" target="_blank">Xem chi
+                    tiết</a>
             </td>
 
 

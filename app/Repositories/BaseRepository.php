@@ -18,12 +18,19 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    public function all($relation = [], $column = ['*'])
+    public function all($relation = [], $column = ['*'], $orderBy = null)
     {
         $query = $this->model->select($column);
+
+        if (!is_null($orderBy)) {
+            $query->customOrderBy($orderBy);
+        }
+
         if (!empty($relation)) {
             return $query->relation($relation)->get();
         }
+
+
         return $query->get();
     }
     public function findById($modelId, $column = ['*'], $relation = [])
@@ -69,6 +76,31 @@ class BaseRepository implements BaseRepositoryInterface
         });
 
         return $all ? $query->get() : $query->first();
+    }
+
+    public function pagination(
+        $column = ['*'],
+        $condition = [],
+        $perPage = 1,
+        $orderBy = ['id' => 'DESC'],
+        $join = [],
+        $relations = [],
+        $groupBy = [],
+        $rawQuery = [],
+    ) {
+        $query = $this->model->select($column);
+        $query->keyword($condition['keyword'] ?? null)
+            ->publish($condition['publish'] ?? null)
+            ->customWhere($condition['where'] ?? null)
+            ->customWhereRaw($rawQuery['whereRaw'] ?? null)
+            ->relation($relations ?? null)
+            ->relationCount($relations ?? null)
+            ->customJoin($join ?? null)
+            ->customGroupBy($groupBy ?? null)
+            ->customOrderBy($orderBy ?? null);
+
+        //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
+        return $query->paginate($perPage)->withQueryString();
     }
 
     public function create($payload = [])
@@ -145,30 +177,7 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
 
-    public function pagination(
-        $column = ['*'],
-        $condition = [],
-        $perPage = 1,
-        $orderBy = ['id' => 'DESC'],
-        $join = [],
-        $relations = [],
-        $groupBy = [],
-        $rawQuery = [],
-    ) {
-        $query = $this->model->select($column);
-        $query->keyword($condition['keyword'] ?? null)
-            ->publish($condition['publish'] ?? null)
-            ->customWhere($condition['where'] ?? null)
-            ->customWhereRaw($rawQuery['whereRaw'] ?? null)
-            ->relation($relations ?? null)
-            ->relationCount($relations ?? null)
-            ->customJoin($join ?? null)
-            ->customGroupBy($groupBy ?? null)
-            ->customOrderBy($orderBy ?? null);
 
-        //Phương thức withQueryString() trong Laravel được sử dụng để giữ nguyên các tham số truy vấn
-        return $query->paginate($perPage)->withQueryString();
-    }
 
     public function findWidgetItem($condition = [], $column = ['*'], $alias = '', $languageId = 1)
     {

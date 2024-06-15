@@ -591,7 +591,20 @@ return [
             'name' => 'Tên nguồn khách',
         ]
     ],
+    'comment' => [
+        'index' => [
+            'title' => 'Danh sách đánh giá',
+            'table' => 'Thông tin đánh giá',
+            'create' => 'Tạo mới đánh giá'
+        ],
+        'table' => [
+            'fullname' => 'Người đánh giá',
+            'created_at' => 'Ngày đánh giá',
+            'star' => 'Số sao'
+        ]
+    ],
     'code' => "Mã",
+    'rating' => "Đánh giá",
     'updateBtn' => "Cập nhập",
     'customerInfo' => "Khách hàng",
     'payment' => "Thanh toán",

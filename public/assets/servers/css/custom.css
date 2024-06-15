@@ -1530,4 +1530,22 @@ a.title.link:hover {
 }
 .order-status-info .method {
   font-size: 14px;
+}
+
+.stars-percent {
+  position: relative;
+  white-space: nowrap;
+}
+.stars-percent svg {
+  width: 16px;
+  fill: #ffcc00;
+}
+.stars-percent .overlay {
+  background: #fff;
+  height: 100%;
+  overflow: hidden;
+  mix-blend-mode: color;
+  position: absolute;
+  top: 0;
+  right: 0;
 }/*# sourceMappingURL=custom.css.map */

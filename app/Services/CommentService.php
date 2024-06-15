@@ -13,14 +13,45 @@ use Illuminate\Support\Facades\DB;
  */
 class CommentService extends BaseService implements CommentServiceInterface
 {
-    private $commentRepository;
+    protected $commentRepository;
     public function __construct(
         CommentRepository $commentRepository
     ) {
         $this->commentRepository = $commentRepository;
     }
 
+    public function paginate($commentable_id, $commentable_type)
+    {
+        $condition = [
+            'keyword' => addslashes(request('keyword') ?? ''),
+            'publish' => request('publish'),
+            'where' => [
+                'commentable_type' => ['=', trim($commentable_type)],
+                'commentable_id' => ['=', $commentable_id],
+            ]
+        ];
+        $select = [
+            'id',
+            'commentable_id',
+            'commentable_type',
+            'fullname',
+            'email',
+            'phone',
+            'description',
+            'rate',
+            'publish',
+            'created_at'
+        ];
 
+        //////////////////////////////////////////////////////////
+        $comments = $this->commentRepository->pagination(
+            $select,
+            $condition,
+            request('perpage'),
+        );
+
+        return $comments;
+    }
 
     public function create()
     {

@@ -1504,3 +1504,23 @@ a.title.link {
         font-size: 14px;
     }
 }
+
+.stars-percent {
+    position: relative;
+    white-space: nowrap;
+
+    svg {
+        width: 16px;
+        fill: #ffcc00;
+    }
+
+    .overlay {
+        background: #fff;
+        height: 100%;
+        overflow: hidden;
+        mix-blend-mode: color;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}

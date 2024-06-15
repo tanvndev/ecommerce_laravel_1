@@ -23,7 +23,7 @@ $totalRate = $comments->avg('rate');
                 @for ($i = 5; $i >= 1 ; $i--)
                 @php
                 $countStar = $comments->where('rate', $i)->count();
-                $percent = round($countStar / $totalComment * 100, 0);
+                $percent = $totalComment > 0 ? round($countStar / $totalComment * 100, 0) : 0;
                 @endphp
                 <div class="progress-block">
                     <div class="progress-block__line">
