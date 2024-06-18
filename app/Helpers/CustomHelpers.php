@@ -494,3 +494,22 @@ if (!function_exists('abbreviateName')) {
         return $abbreviation;
     }
 }
+
+
+if (!function_exists('renderRatingFilter')) {
+    function renderRatingFilter()
+    {
+        $html = '';
+        for ($i = 1; $i <= 5; $i++) {
+            $html .= '<div class="mb-3 ps-0 form-check filter-star">';
+            $html .= '<input type="checkbox" class="form-check-input filtering" name="rate[]" value="' . $i . '" id="rate_' . $i . '">';
+            $html .= '<label class="form-check-label" for="rate_' . $i . '">';
+            for ($j = 0; $j < 5; $j++) {
+                $html .= '<i class="flaticon-star me-1 ' . ($i > $j ? 'active' : '') . '"></i>';
+            }
+            $html .= '</label>';
+            $html .= '</div>';
+        }
+        return $html;
+    }
+}

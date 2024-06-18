@@ -32,7 +32,7 @@ class ProductCatalogueController extends Controller
         $productCatalogue = $this->productCatalogueRepository->getProductCatalogueLanguageById($id, session('currentLanguage', 1));
 
         $filters = $this->productCatalogueService->getFilterList($productCatalogue->attribute);
-
+        // dd($filters);
         $breadcrumb = $this->productCatalogueRepository->breadcrumb($productCatalogue, session('currentLanguage', 1));
         $products = $this->productService->paginate($productCatalogue);
         $productId = $products->pluck('id')->toArray();

@@ -216,15 +216,29 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
 
     public function setAttribute($product)
     {
+
         DB::beginTransaction();
         try {
-            $attribue = $product->attribute;
+            // dd($product);
+            $attribueNew = $product->attribute;
             $productCatalogueId = (int)$product->product_catalogue_id;
             $productCatalogue = $this->productCatalogueRepository->findById($productCatalogueId);
+            $attrbuteOld = $productCatalogue->attribute;
+
+
+            // Se lap qua attribue cu va se them cac attribute moi vao
+            foreach ($attribueNew as $keyAttrNew => $attrNew) {
+                if (isset($attrbuteOld[$keyAttrNew])) {
+                    $attrbuteOld[$keyAttrNew] = array_unique(array_merge($attrbuteOld[$keyAttrNew], $attrNew));
+                } else {
+                    $attrbuteOld[$keyAttrNew] = $attrNew;
+                }
+            }
+
 
             // dd(array_unique($attribue + $productCatalogue->attribute));
             $payload = [
-                'attribute' => $attribue + ($productCatalogue->attribute ?? []),
+                'attribute' => $attrbuteOld
             ];
 
             // dd($payload);

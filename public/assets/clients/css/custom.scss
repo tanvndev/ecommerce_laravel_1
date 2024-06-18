@@ -720,3 +720,28 @@ body {
         right: 0;
     }
 }
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+.product-price-range {
+    .ui-slider-handle {
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #e4e4e4 !important;
+        width: 17px !important;
+        height: 17px !important;
+        cursor: pointer;
+    }
+    .ui-slider-range {
+        background: var(--color-primary) !important;
+        border-radius: 0 !important;
+    }
+    .amount-range {
+        border: 1px solid #e4e4e4 !important;
+        padding: 8px !important;
+        text-align: center;
+    }
+}

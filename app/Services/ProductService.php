@@ -65,6 +65,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             'products.user_id',
             'products.order',
             'products.price',
+            'products.product_catalogue_id',
             'tb2.name',
             'tb2.canonical',
         ];
@@ -86,9 +87,6 @@ class ProductService extends BaseService implements ProductServiceInterface
             $this->whereRaw($productCatalogue)
 
         );
-
-
-
         // dd($products);
         return $products;
     }
@@ -160,9 +158,6 @@ class ProductService extends BaseService implements ProductServiceInterface
             return false;
         }
     }
-
-
-
 
     public function update($id)
     {
@@ -359,8 +354,6 @@ class ProductService extends BaseService implements ProductServiceInterface
         $product->product_catalogues()->sync($catalogue);
     }
 
-
-
     function destroy($id)
     {
         DB::beginTransaction();
@@ -435,5 +428,247 @@ class ProductService extends BaseService implements ProductServiceInterface
         $product->attributeCatalogues = $attributeCatalogues;
 
         return $product;
+    }
+
+    public function filter()
+    {
+        // Lam cau truy van loc theo gia tien
+        $params['priceQuery'] = $this->priceQuery(request()->input('price'));
+        // Lam cau truy van loc theo thuoc tinh
+        $params['attributeQuery'] = $this->attributeQuery(request()->input('attributes'));
+        // Lam cau truy van loc theo danh gia
+        $params['rateQuery'] = $this->rateQuery(request()->input('rate'));
+        // Lam cau truy van loc theo danh muc
+        $params['productCatalogueQuery'] = $this->productCatalogueQuery(request()->input('product_catalogue_id'));
+        // Ket hop tat ca cac cau truy van
+        $query = $this->compineFilterQuery($params);
+
+        $perpage = request('perpage', 18);
+        $products = $this->productRepository->filter($query, $perpage);
+        $paginate = $products->links('pagination::bootstrap-5')->render();
+
+        return [
+            'code' => empty($products) ? 400 : 200,
+            'message' => empty($products) ? 'Không tìm thấy sản phẩm' : 'OK',
+            'data' => $products ?? [],
+            'paginate' => $paginate ?? [],
+        ];
+    }
+
+
+    private function compineFilterQuery($params)
+    {
+        $query['groupBy'] = [
+            'products.id',
+            'products.price',
+            'products.image',
+        ];
+        foreach ($params  as $array) {
+            foreach ($array as $key => $value) {
+                if (!isset($query[$key])) {
+                    $query[$key] = [];
+                }
+                if (!is_null($value) && !empty($value)) {
+                    if (is_array($value)) {
+                        $query[$key] = array_merge($query[$key], $value);
+                    } else {
+                        $query[$key][] = $value;
+                    }
+                }
+            }
+        }
+
+        $where = [
+            'products.publish' => ['=', config('apps.general.defaultPublish')]
+        ];
+
+        $query['where'] += $where;
+
+        return $query;
+    }
+    private function productCatalogueQuery($catalogueId)
+    {
+        $query = [
+            'select' => null,
+            'join' => null,
+            'whereRaw' => null
+        ];
+        if ($catalogueId > 0) {
+            $query['join'] = [
+                'product_catalogue_product as pcp' => ['pcp.product_id', '=', 'products.id'],
+            ];
+            $query['whereRaw'] = [
+                [
+                    'pcp.product_catalogue_id IN (
+                        SELECT id 
+                        FROM product_catalogues
+                        WHERE `left` >= (SELECT `left` FROM product_catalogues as pc WHERE pc.id = ?)
+                        AND `right` <= (SELECT `right` FROM product_catalogues as pc WHERE pc.id = ?)
+                    )',
+                    [$catalogueId, $catalogueId]
+                ]
+            ];
+        }
+        return $query;
+    }
+
+    private function rateQuery($rates)
+    {
+        $query = [
+            'select' => null,
+            'join' => null,
+            'having' => null,
+            'where' => null
+        ];
+
+        if (!empty($rates)) {
+
+            $query['select'] = ['AVG(comments.rate) as avg_rate'];
+            $query['join'] = [
+                'comments' => ['comments.commentable_id', '=', 'products.id'],
+            ];
+
+
+            $rateCondition = [];
+            $bildings = [];
+
+            foreach ($rates as $key => $rate) {
+                if ($rate != 5) {
+                    $minRate = $rate . '.1';
+                    $maxRate = $rate . '.9';
+                    $rateCondition[] = '(AVG(comments.rate) BETWEEN ? AND ?)';
+                    $bildings[] = $minRate;
+                    $bildings[] = $maxRate;
+                } else {
+                    $rateCondition[] = 'AVG(comments.rate) = ?';
+                    $bildings[] = 5;
+                }
+            }
+
+            $query['where'] = function ($query) {
+                $query->where('comments.commentable_type', '=', 'App\Models\Product');
+            };
+
+            $query['having'] = function ($query) use ($rateCondition, $bildings) {
+                $query->havingRaw(implode(' OR ', $rateCondition), $bildings);
+            };
+        }
+        return $query;
+    }
+
+    private function attributeQuery($attributes)
+    {
+
+
+        $query = [
+            'select' => null,
+            'join' => null,
+            'where' => null,
+            'groupBy' => null
+        ];
+
+
+
+        if (!empty($attributes)) {
+
+            $query['groupBy'] = [
+                'pv.album',
+                'pv.code',
+                'pv.price',
+                'pl.name',
+                'pvl.name',
+                'pl.canonical',
+            ];
+            $query['select'] = [
+                'pv.code',
+                'pv.price as variant_price',
+                'pv.album as variant_album',
+                'pl.canonical',
+                "CONCAT(pl.name, ' - ', COALESCE(pvl.name)) as variant_name",
+            ];
+            $query['join'] = [
+                'product_language as pl' => ['pl.product_id', '=', 'products.id'],
+                'product_variants as pv' => ['pv.product_id', '=', 'products.id'],
+                'product_variant_language as pvl' => ['pv.id', '=', 'pvl.product_variant_id'],
+
+            ];
+            foreach ($attributes as $key => $attribute) {
+                foreach ($attributes as $key => $attribute) {
+                    $joinKey = "tbl$key";
+                    $query['join']["product_variant_attribute as {$joinKey}"] = ["$joinKey.product_variant_id", '=', 'pv.id'];
+
+                    $query['where'][] = function ($query) use ($attribute, $joinKey) {
+                        foreach ($attribute as $attr) {
+                            $query->orWhere("{$joinKey}.attribute_id", $attr);
+                        }
+                    };
+                }
+            }
+        }
+
+        return $query;
+    }
+
+    private function priceQuery($price)
+    {
+        $price = $this->formatPriceFilter($price);
+        $minPrice = $price['min'];
+        $maxPrice = $price['max'];
+
+        $query = [
+            'select' => null,
+            'join' => null,
+            'having' => null
+        ];
+
+        if ($maxPrice > $minPrice) {
+            $query['join'] = [
+                'promotion_product_variant as ppv' => ['ppv.product_id', '=', 'products.id'],
+                'promotions' => ['promotions.id', '=', 'ppv.promotion_id'],
+            ];
+
+            $query['select'] = "
+                (products.price - MAX(
+                    IF(promotions.max_discount != 0,
+                        LEAST(
+                            CASE
+                            WHEN promotions.discount_type = 'cast' THEN promotions.discount_value
+                            WHEN promotions.discount_type = 'percent' THEN promotions.discount_value * products.price / 100
+                            ELSE 0
+                            END,
+                            promotions.max_discount
+                        ),
+                        CASE 
+                            WHEN promotions.discount_type = 'cast' THEN promotions.discount_value
+                            WHEN promotions.discount_type = 'percent' THEN promotions.discount_value * products.price / 100
+                            ELSE 0
+                            END
+                        )
+                    )) as discounted_price
+                ";
+
+            $query['having'] = function ($query) use ($minPrice, $maxPrice) {
+                $query->havingBetween('discounted_price', [$minPrice, $maxPrice]);
+            };
+
+            return $query;
+        }
+    }
+
+    private function formatPriceFilter($price)
+    {
+        if (!is_array($price)) {
+            return [
+                'min' => 0,
+                'max' => 0
+            ];
+        }
+        foreach ($price as $key => $value) {
+            $cleanedString = str_replace("₫", "", $value);
+            $formattedAmount = convertPrice($cleanedString);
+            $price[$key] = $formattedAmount;
+        }
+
+        return $price;
     }
 }

@@ -12,4 +12,5 @@ interface ProductServiceInterface
     public function updateStatusAll();
     public function combineProductAndPromotion($productId = [],  $products = null, $flag = false);
     public function getAttribute($product);
+    public function filter();
 }

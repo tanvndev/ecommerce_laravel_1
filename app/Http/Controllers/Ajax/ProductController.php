@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
 use App\Repositories\Interfaces\ProductVariantRepositoryInterface as ProductVariantRepository;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+use App\Services\Interfaces\ProductServiceInterface as ProductService;
+
 
 use Illuminate\Http\Request;
 
@@ -14,16 +16,19 @@ class ProductController extends Controller
     protected $productVariantRepository;
     protected $attributeCatalogueRepository;
     protected $promotionRepository;
+    protected $productService;
 
     public function __construct(
         ProductVariantRepository $productVariantRepository,
         PromotionRepository $promotionRepository,
-        AttributeCatalogueRepository $attributeCatalogueRepository
+        AttributeCatalogueRepository $attributeCatalogueRepository,
+        ProductService $productService
     ) {
         parent::__construct();
         $this->productVariantRepository = $productVariantRepository;
         $this->promotionRepository = $promotionRepository;
         $this->attributeCatalogueRepository = $attributeCatalogueRepository;
+        $this->productService = $productService;
     }
 
 
@@ -84,5 +89,12 @@ class ProductController extends Controller
         $variant->promotion = $variantPrice ?? null;
 
         return response()->json($variant);
+    }
+
+    public function filter(Request $request)
+    {
+        $products = $this->productService->filter();
+
+        return response()->json($products);
     }
 }

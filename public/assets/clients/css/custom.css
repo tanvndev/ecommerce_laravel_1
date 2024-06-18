@@ -671,4 +671,29 @@ body::-webkit-scrollbar-thumb:hover {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.form-check-label {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.product-price-range .ui-slider-handle {
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e4e4e4 !important;
+  width: 17px !important;
+  height: 17px !important;
+  cursor: pointer;
+}
+.product-price-range .ui-slider-range {
+  background: var(--color-primary) !important;
+  border-radius: 0 !important;
+}
+.product-price-range .amount-range {
+  border: 1px solid #e4e4e4 !important;
+  padding: 8px !important;
+  text-align: center;
 }/*# sourceMappingURL=custom.css.map */

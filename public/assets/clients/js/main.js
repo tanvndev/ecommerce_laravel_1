@@ -22,7 +22,7 @@
             axilInit.mobileMenuActivation();
             axilInit.menuLinkActive();
             axilInit.headerIconToggle();
-            axilInit.priceRangeSlider();
+            // axilInit.priceRangeSlider();
             axilInit.quantityRanger();
             // axilInit.axilSlickActivation();
             // axilInit.countdownInit(".coming-countdown", "2023/10/01");

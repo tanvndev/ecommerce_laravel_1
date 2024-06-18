@@ -87,8 +87,62 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         $query->orderBy('products.id', 'DESC');
+
+        // return $query->paginate(10);
+    }
+
+    public function filter($params, $perPage = 18)
+    {
+        // dd($params);
+        $query = $this->model->newQuery();
+        $query->select(
+            'products.id',
+            'products.price',
+            'products.image',
+        );
+
+        if (isset($params['select']) && !empty($params['select'])) {
+            foreach ($params['select'] as $param) {
+                $query->selectRaw($param);
+            }
+        }
+        if (isset($params['join']) && !empty($params['join'])) {
+            foreach ($params['join'] as $table => $constraints) {
+                $query->leftJoin($table, ...$constraints);
+            }
+        }
+
+        if (isset($params['where']) && !empty($params['where'])) {
+            foreach ($params['where'] as $column => $value) {
+                // dd($column, ...$value);
+                if (is_array($value)) {
+                    $query->where($column, ...$value);
+                } else {
+                    $query->where($value);
+                }
+            }
+        }
+
+        if (isset($params['having']) && !empty($params['having'])) {
+            foreach ($params['having'] as $value) {
+                $query->having($value);
+            }
+        }
+
+        if (isset($params['whereRaw']) && !empty($params['whereRaw'])) {
+            $query->customWhereRaw($params['whereRaw'] ?? null);
+        }
+
+        if (isset($params['groupBy']) && !empty($params['groupBy'])) {
+            $query->customGroupBy($params['groupBy'] ?? null);
+        }
+
+        $query->with('languages', function ($query) {
+            $query->where('language_id', session('currentLanguage', 1));
+        });
+
         // dd($query->toSql());
 
-        return $query->paginate(10);
+        return $query->paginate($perPage);
     }
 }

@@ -1,5 +1,20 @@
 @extends('layouts.clientLayout')
 
+@section('style')
+<link href="{{asset('assets/servers/plugin/nice-select/nice-select.css')}}" rel="stylesheet" />
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/clients/js/library/productCatalogue.js') }}"></script>
+<script src="{{ asset('assets/servers/plugin/nice-select/jquery.nice-select.min.js') }}"></script>
+
+<script>
+    if ($(".init-nice-select").length > 0) {
+        $(".init-nice-select").niceSelect();
+    }
+</script>
+@endsection
+
 @section('content')
 {{-- Start Breadcrumb --}}
 @include('clients.includes.breadcrumb', ['model' => $productCatalogue, 'breadcrumb' => $breadcrumb])
@@ -16,13 +31,22 @@
                             <div
                                 class="category-select align-items-center justify-content-lg-end justify-content-between">
                                 <!-- Start Single Select  -->
-                                <span class="filter-results">Showing 1-12 of 84 results</span>
-                                <select class="single-select">
-                                    <option>Short by Latest</option>
-                                    <option>Short by Oldest</option>
-                                    <option>Short by Name</option>
-                                    <option>Short by Price</option>
-                                </select>
+                                <div class="me-3">
+                                    <select class="init-nice-select" id="sort">
+                                        <option value="">Short by Latest</option>
+                                        <option value="">Short by Oldest</option>
+                                        <option value="">Short by Name</option>
+                                        <option value="">Short by Price</option>
+                                    </select>
+                                </div>
+                                <div class="me-3">
+                                    <select class="init-nice-select" id="perpage">
+                                        <option value="">Short by Latest</option>
+                                        <option value="">Short by Oldest</option>
+                                        <option value="">Short by Name</option>
+                                        <option value="">Short by Price</option>
+                                    </select>
+                                </div>
                                 <!-- End Single Select  -->
                             </div>
                             <div class="d-lg-none">
@@ -33,7 +57,7 @@
                     </div>
                 </div>
                 <!-- End .row -->
-                <div class="row row--15">
+                <div class="row row--15 product-filter-list">
                     @if (!is_null($products) && count($products) > 0)
                     @foreach ($products as $product)
                     @php
@@ -74,6 +98,11 @@
                     <!-- End Single Product  -->
 
                     @endforeach
+                    @else
+                    <div class="text-center">
+                        <img src="/public/userfiles/image/other/icon-empty-cart.png" alt="not-cart">
+                        <p>Chưa có sản phẩm nào.</p>
+                    </div>
                     @endif
                 </div>
                 <div class="text-center pt--20 product-pagination">

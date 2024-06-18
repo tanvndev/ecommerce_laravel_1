@@ -90,6 +90,7 @@ Route::get('{canonical}', [RouterController::class, 'index'])
 
 // AJAX ROUTES
 Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.product.loadVariant');
+Route::get('ajax/product/filter', [AjaxProductController::class, 'filter'])->name('ajax.product.filter');
 Route::get('ajax/cart/getCart', [AjaxCartController::class, 'getCart'])->name('ajax.cart.getCart');
 Route::post('ajax/cart/create', [AjaxCartController::class, 'create'])->name('ajax.cart.create');
 Route::put('ajax/cart/update', [AjaxCartController::class, 'update'])->name('ajax.cart.update');
