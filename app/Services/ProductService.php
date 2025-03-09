@@ -102,9 +102,9 @@ class ProductService extends BaseService implements ProductServiceInterface
             $rawConditions['whereRaw'] = [
                 [
                     'tb3.product_catalogue_id IN (
-                        SELECT id 
+                        SELECT id
                         FROM product_catalogues
-                        INNER JOIN product_catalogue_language as pcl ON pcl.product_catalogue_id = product_catalogues.id 
+                        INNER JOIN product_catalogue_language as pcl ON pcl.product_catalogue_id = product_catalogues.id
                         WHERE `left` >= (SELECT `left` FROM product_catalogues as pc WHERE pc.id = ?)
                         AND `right` <= (SELECT `right` FROM product_catalogues as pc WHERE pc.id = ?)
                         AND pcl.language_id = ?
@@ -336,7 +336,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         //Đinh dạng slug
         $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
 
-        // Lấy ra product_id 
+        // Lấy ra product_id
         $payloadLanguage['product_id'] = $productId;
         // Lấy ra language_id mặc định
         $payloadLanguage['language_id'] = session('currentLanguage');
@@ -500,7 +500,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             $query['whereRaw'] = [
                 [
                     'pcp.product_catalogue_id IN (
-                        SELECT id 
+                        SELECT id
                         FROM product_catalogues
                         WHERE `left` >= (SELECT `left` FROM product_catalogues as pc WHERE pc.id = ?)
                         AND `right` <= (SELECT `right` FROM product_catalogues as pc WHERE pc.id = ?)
@@ -638,7 +638,7 @@ class ProductService extends BaseService implements ProductServiceInterface
                             END,
                             promotions.max_discount
                         ),
-                        CASE 
+                        CASE
                             WHEN promotions.discount_type = 'cast' THEN promotions.discount_value
                             WHEN promotions.discount_type = 'percent' THEN promotions.discount_value * products.price / 100
                             ELSE 0

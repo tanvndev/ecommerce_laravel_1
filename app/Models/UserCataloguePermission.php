@@ -15,7 +15,7 @@ class UserCataloguePermission extends Model
         return $this->belongsTo(Permission::class, 'permission_id', 'id');
     }
 
-    public function usr_catalogues()
+    public function user_catalogues()
     {
         return $this->belongsTo(UserCatalogue::class, 'user_catalogue_id', 'id');
     }

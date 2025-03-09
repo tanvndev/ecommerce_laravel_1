@@ -65,6 +65,12 @@ use App\Http\Controllers\Clients\Payments\{
 */
 
 
+// AUTH ROUTES
+Route::get('login', [AuthController::class, 'index'])->name('auth.login.index')->middleware('logged');
+Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('logged');
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
 // CLIENT ROUTES
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
@@ -345,11 +351,3 @@ Route::middleware(['admin', 'locale'])->group(function () {
     Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->name('ajax.source.getAllSource');
     Route::put('ajax/order/{id}/update', [AjaxOrderController::class, 'update'])->where(['id' => '[0-9]+'])->name('ajax.order.update');
 });
-
-
-
-
-
-Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('logged');
-Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');

@@ -21,6 +21,7 @@ class AuthController extends Controller
     function login(AuthRequest $request)
 
     {
+        dd(1);
         // Cai nay dung de kiem tra thong tin dang nhap voi database
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {

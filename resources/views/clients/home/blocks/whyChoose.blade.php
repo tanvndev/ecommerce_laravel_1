@@ -12,9 +12,9 @@
             <div class="col">
                 <div class="service-box">
                     <div class="icon">
-                        <img src="{{ $whyChoose['image'] }}" alt="{{ $whyChoose['alt'] }}">
+                        <img src="{{ $whyChoose['image'] ?? '' }}" alt="{{ $whyChoose['alt'] ?? '' }}">
                     </div>
-                    <h6 class="title">{{ $whyChoose['name'] }}</h6>
+                    <h6 class="title">{{ $whyChoose['name'] ?? '' }}</h6>
                 </div>
             </div>
             @endforeach

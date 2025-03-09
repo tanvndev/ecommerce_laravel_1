@@ -43,8 +43,8 @@
                     <div class="header-top-link">
                         <ul class="quick-link">
                             <li><a href="#">Help</a></li>
-                            <li><a href="sign-up.html">Join Us</a></li>
-                            <li><a href="sign-in.html">Sign In</a></li>
+                            <li><a href="{{ route('auth.login.index') }}">Join Us</a></li>
+                            <li><a href="{{ route('auth.login.index') }}">Sign In</a></li>
                         </ul>
                     </div>
                 </div>
