@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="{{ asset('assets/servers/bundles/apexcharts.bundle.js')}}"></script>
 <div class="card">
     <div class="card-header">
         <h4>Danh sách Thành viên đa cấp - <span class="text-primary fw-bold">{{ $user['fullname'] }}</span></h4>
@@ -50,6 +51,19 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="card">
+                <div
+                    class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                    <h6 class="m-0 fw-bold">Doanh thu bình quân</h6>
+                </div>
+                <div class="card-body">
+                    <div class="h2 mb-0">{{ number_format(collect($descendants)->average('total_sales'), 0, ',', '.')
+                        }}đ</div>
+                    <span class="text-muted small">Doanh thu bình quân của tất cả thành viên</span>
+                    <div id="apex-expense"></div>
+                </div>
+            </div>
         </div>
         @else
         <div class="alert alert-info">
@@ -58,4 +72,115 @@
         @endif
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function() {
+        var options = {
+            series: [{
+                name: 'Doanh số',
+                data: {!! json_encode(collect($descendants)->map(function($member) { return $member['total_sales']; })) !!}
+            }],
+            chart: {
+                height: 315,
+                type: 'bar',
+                toolbar: {
+                    show: false,
+                },
+            },
+            colors: ['#4CAF50'],
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        position: 'top',
+                    },
+                    columnWidth: '60%',
+                    borderRadius: 4,
+                    gradient: {
+                        type: "vertical",
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.9,
+                        colorStops: [
+                            {
+                                offset: 0,
+                                color: "#4CAF50",
+                                opacity: 1
+                            },
+                            {
+                                offset: 100,
+                                color: "#81C784",
+                                opacity: 1
+                            }
+                        ]
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                        maximumFractionDigits: 0
+                    }).format(val);
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ['#2E7D32'],
+                }
+            },
+            xaxis: {
+                categories: {!! json_encode(collect($descendants)->map(function($member) { return $member['name']; })) !!},
+                position: 'bottom',
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: true,
+                },
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '12px',
+                        colors: '#333333'
+                    }
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: true,
+                    style: {
+                        colors: '#333333'
+                    },
+                    formatter: function (val) {
+                        return new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND',
+                            maximumFractionDigits: 0
+                        }).format(val);
+                    }
+                }
+            },
+            theme: {
+                mode: 'light'
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#apex-expense"), options);
+        chart.render();
+    });
+
+
+</script>
 @endsection
