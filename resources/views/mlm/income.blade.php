@@ -12,7 +12,7 @@
                     <div class="col-md-6">
                         <div class="card bg-primary text-white">
                             <div class="card-body">
-                                <h5 class="card-title">Tổng Thu Nhập</h5>
+                                <h5 class="card-title">Tổng chi</h5>
                                 <h3 class="card-text">{{ number_format($income['total_commission'], 0, ',', '.') }} đ
                                 </h3>
                             </div>

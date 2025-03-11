@@ -4,12 +4,29 @@
 <script src="{{ asset('assets/servers/bundles/apexcharts.bundle.js')}}"></script>
 <div class="card">
     <div class="card-header">
-        <h4>Danh sách Thành viên đa cấp - <span class="text-primary fw-bold">{{ $user['fullname'] }}</span></h4>
+        <h4>Danh sách Thành viên đa cấp - <span class="text-primary fw-bold">{{ $user['fullname'] }}</span>
+            @if(collect($descendants)->sum('total_sales') >= 100000000)
+            <span class="badge bg-warning text-dark ms-2">
+                <i class="fas fa-crown"></i> Thành viên vàng
+            </span>
+            @endif
+        </h4>
         <a href="{{ route('mlm.income', request()->userId) }}">Thu nhập</a>
     </div>
     <div class="card-body">
         @if(count($descendants) > 0)
         <div class="table-responsive">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Tổng Doanh Số</h5>
+                            <h3 class="card-text">{{ number_format(collect($descendants)->sum('total_sales'), 0, ',',
+                                '.') }} đ</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
@@ -29,6 +46,11 @@
                             <i class="fas fa-arrow-from-left me-2"></i>
                             @endif
                             {{ $member['name'] }}
+                            {{-- @if($member['total_sales'] >= 100000000)
+                            <span class="badge bg-warning text-dark ms-2">
+                                <i class="fas fa-crown"></i> Thành viên vàng
+                            </span>
+                            @endif --}}
                         </td>
                         <td>
                             <span

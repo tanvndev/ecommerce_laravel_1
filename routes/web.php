@@ -68,7 +68,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('login-be', function () {
-    $user = User::query()->where('email', '=', 'user18@gmail.com')->first();
+    $user = User::query()->where('email', '=', 'user13@gmail.com')->first();
     Auth::login($user);
 
     return redirect()->route('home')->with('toast_success', 'You are now logged in');
