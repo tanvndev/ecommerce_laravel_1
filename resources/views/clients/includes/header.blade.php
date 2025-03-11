@@ -43,8 +43,35 @@
                     <div class="header-top-link">
                         <ul class="quick-link">
                             <li><a href="#">Help</a></li>
+                            @auth
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{ Auth::user()->fullname }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Tài khoản của tôi</a></li>
+                                    <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#"
+                                            onclick="copyReferralLink(event, '{{ route('auth.register.index', ['ref' => Auth::user()->referral_code]) }}')">
+                                            Mã giới thiệu
+                                            <span class="copy-status"
+                                                style="display: none; font-size: 0.8em; color: green;"> (Đã copy)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('auth.logout') }}" class="dropdown-item">Đăng xuất</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @else
                             <li><a href="{{ route('auth.login.index') }}">Join Us</a></li>
-                            <li><a href="{{ route('auth.login.index') }}">Sign In</a></li>
+                            <li><a href="{{ route('auth.login.index') }}">Đăng nhập</a></li>
+                            @endauth
                         </ul>
                     </div>
                 </div>
@@ -53,3 +80,39 @@
     </div>
     @include('clients.includes.navbar')
 </header>
+<script>
+    function copyToClipboard(button) {
+        const input = button.parentElement.previousElementSibling;
+        input.select();
+        document.execCommand('copy');
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+            button.textContent = 'Copy';
+        }, 2000);
+    }
+
+    function copyReferralLink(event, referralLink) {
+        event.preventDefault();
+
+        // Tạo một input tạm thời
+        const tempInput = document.createElement('input');
+        tempInput.value = referralLink;
+        document.body.appendChild(tempInput);
+
+        // Copy text
+        tempInput.select();
+        document.execCommand('copy');
+
+        // Xóa input tạm thời
+        document.body.removeChild(tempInput);
+
+        // Hiển thị thông báo
+        const statusSpan = event.target.querySelector('.copy-status');
+        statusSpan.style.display = 'inline';
+
+        // Ẩn thông báo sau 2 giây
+        setTimeout(() => {
+            statusSpan.style.display = 'none';
+        }, 2000);
+    }
+</script>

@@ -69,6 +69,8 @@ class AppRepositoryProvider extends ServiceProvider
         'App\Repositories\Interfaces\OrderRepositoryInterface' => 'App\Repositories\OrderRepository',
         // Comment
         'App\Repositories\Interfaces\CommentRepositoryInterface' => 'App\Repositories\CommentRepository',
+        // Commission
+        'App\Repositories\Interfaces\CommissionRepositoryInterface' => 'App\Repositories\CommissionRepository',
     ];
 
     public function register(): void

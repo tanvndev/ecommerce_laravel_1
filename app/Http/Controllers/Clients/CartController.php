@@ -70,7 +70,10 @@ class CartController extends Controller
             $request->session()->put('orderSuccess', $order);
 
             $response = $this->methodPayment($order);
-            if ($response['code'] == 00) {
+            if ($response == '') {
+                return redirect()->route('home')->with('toast_success', 'Đặt hàng thành công.');
+            }
+            if (isset($response['code']) && $response['code'] == 200) {
                 return redirect()->away($response['url']);
             }
 
@@ -95,7 +98,7 @@ class CartController extends Controller
                 break;
 
             default:
-                # code...
+                $response = '';
                 break;
         }
 

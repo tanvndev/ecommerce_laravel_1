@@ -10,6 +10,7 @@ use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionReposit
 use App\Services\Interfaces\ProductServiceInterface as ProductService;
 
 use App\Mail\OrderMail;
+use App\Services\Interfaces\MLMServiceInterface;
 use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,7 @@ class CartService implements CartServiceInterface
     private $promotionRepository;
     private $productService;
     private $orderRepository;
+    private $mlmService;
 
 
 
@@ -36,13 +38,15 @@ class CartService implements CartServiceInterface
         ProductVariantRepository $productVariantRepository,
         PromotionRepository $promotionRepository,
         ProductService $productService,
-        OrderRepository $orderRepository
+        OrderRepository $orderRepository,
+        MLMServiceInterface $mlmService
     ) {
         $this->productRepository = $productRepository;
         $this->productVariantRepository = $productVariantRepository;
         $this->promotionRepository = $promotionRepository;
         $this->productService = $productService;
         $this->orderRepository = $orderRepository;
+        $this->mlmService = $mlmService;
     }
 
 
@@ -293,6 +297,7 @@ class CartService implements CartServiceInterface
             $payload = $this->handlePayloadOrder();
 
             $order = $this->orderRepository->create($payload);
+            $this->mlmService->calculateCommission($order);
 
             if ($order->id == null || empty($order->id)) {
                 throw new \Exception('Error create order.');

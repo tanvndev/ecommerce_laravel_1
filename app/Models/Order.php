@@ -54,4 +54,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderPayment::class, 'order_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
 }

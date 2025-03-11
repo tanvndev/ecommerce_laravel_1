@@ -4,7 +4,7 @@
             <button class="sidebar-close filter-close-btn"><i class="fas fa-times"></i></button>
         </div>
         <input type="hidden" id="product_catalogue_id" name="product_catalogue_id"
-            value="{{$products->first()->product_catalogue_id}}">
+            value="{{$products->first()->product_catalogue_id ?? ''}}">
 
         {{-- <div class="toggle-list product-categories product-gender active">
             <h6 class="title">Tình trạng sản phẩm</h6>

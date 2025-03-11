@@ -41,6 +41,13 @@
                 @endif
             </li>
             @endforeach
+            <li>
+                <a class="m-link " href="{{ route('mlm.descendants',
+                 ['userId' => auth()->id()]) }}">
+                    <i class="icofont-handshake-deal fs-5"></i>
+                    <span>Danh sách hoa hồng</span>
+                </a>
+            </li>
         </ul>
 
         <!-- Menu: menu collepce btn -->

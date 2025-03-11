@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class OrderService implements OrderServiceInterface
 {
     protected $orderRepository;
+
     public function __construct(OrderRepository $orderRepository)
     {
         $this->orderRepository = $orderRepository;

@@ -7,6 +7,7 @@ use App\Repositories\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use Illuminate\Support\Str;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -219,8 +220,8 @@ class BaseRepository implements BaseRepositoryInterface
         // Truy vấn SQL
         $query = "
         WITH RECURSIVE category_tree AS (
-            SELECT id, parent_id, deleted_at 
-            FROM $table 
+            SELECT id, parent_id, deleted_at
+            FROM $table
             WHERE id IN ($placeholders) AND deleted_at IS NULL
             UNION ALL
             SELECT c.id, c.parent_id, c.deleted_at

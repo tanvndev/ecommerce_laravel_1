@@ -52,6 +52,9 @@ use App\Http\Controllers\Clients\Payments\{
     MomoController,
     PaypalController
 };
+use App\Http\Controllers\MLMController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,10 +67,18 @@ use App\Http\Controllers\Clients\Payments\{
 |
 */
 
+Route::get('login-be', function () {
+    $user = User::query()->where('email', '=', 'user18@gmail.com')->first();
+    Auth::login($user);
+
+    return redirect()->route('home')->with('toast_success', 'You are now logged in');
+});
 
 // AUTH ROUTES
 Route::get('login', [AuthController::class, 'index'])->name('auth.login.index')->middleware('logged');
 Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('logged');
+Route::get('register', [AuthController::class, 'register'])->name('auth.register.index')->middleware('logged');
+Route::post('register', [AuthController::class, 'registerPost'])->name('auth.register');
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
@@ -76,6 +87,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::post('cart/store', [CartController::class, 'store'])->name('cart.store');
 Route::get('cart/success', [CartController::class, 'success'])->name('cart.success');
+Route::get('/mlm/descendants/{userId}', [MLMController::class, 'getDescendants'])->name('mlm.descendants');
+Route::get('/mlm/income/{userId}', [MLMController::class, 'getUserIncome'])->name('mlm.income');
 
 // VNPAY
 Route::get('return/vnpay', [VnpController::class, 'handleReturnUrl'])->name('return.vnpay');

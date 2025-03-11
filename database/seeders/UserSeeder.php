@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,14 +16,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // DB::table('users')->insert([
-        //     'fullname' => 'Vu Ngoc Tan',
-        //     'email' => 'admin' . '@gmail.com',
-        //     'password' => Hash::make('123456'),
-        // ]);
 
-        User::factory()
-            ->count(10000)
-            ->create();
+        for ($i = 3; $i < 50; $i++) {
+            DB::table('users')->insert([
+                'fullname' => 'user' . $i,
+                'email' => 'user' . $i . '@gmail.com',
+                'password' => Hash::make('123456'),
+                'phone' => '091234567' . $i,
+            ]);
+        }
+
+
+        // User::factory()
+        //     ->count(10000)
+        //     ->create();
     }
 }

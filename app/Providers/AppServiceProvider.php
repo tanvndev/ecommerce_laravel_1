@@ -65,10 +65,13 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\OrderServiceInterface' => 'App\Services\OrderService',
         // Comment
         'App\Services\Interfaces\CommentServiceInterface' => 'App\Services\CommentService',
+        // MLM
+        'App\Services\Interfaces\MLMServiceInterface' => 'App\Services\MLMService',
+
     ];
     public function register(): void
     {
-        // 
+        //
         foreach ($this->serviceBindings as $key => $value) {
             $this->app->bind($key, $value);
         }

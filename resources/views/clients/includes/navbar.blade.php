@@ -4,10 +4,10 @@
     <div class="container">
         <div class="header-navbar">
             <div class="header-brand">
-                <a href="index.html" class="logo logo-dark">
+                <a href="{{ route('home') }}" class="logo logo-dark">
                     <img src="{{$systemSetting['homepage_logo']}}" alt="Site Logo">
                 </a>
-                <a href="index.html" class="logo logo-light">
+                <a href="{{ route('home') }}" class="logo logo-light">
                     <img src="{{$systemSetting['homepage_logo']}}" alt="Site Logo">
                 </a>
             </div>

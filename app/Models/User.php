@@ -8,7 +8,7 @@ use App\Traits\QueryScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -20,7 +20,7 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
-     * 
+     *
      */
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -39,6 +39,8 @@ class User extends Authenticatable
         'user_agent',
         'publish',
         'ip',
+        'referral_code',
+        'parent_id',
     ];
 
     /**
@@ -60,6 +62,45 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Tự động tạo referral_code khi tạo user mới
+        static::creating(function ($user) {
+            $user->referral_code = self::generateReferralCode();
+        });
+    }
+
+    public static function generateReferralCode()
+    {
+        do {
+            $code = strtoupper(Str::random(8));
+        } while (static::where('referral_code', $code)->exists());
+
+        return $code;
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(User::class, 'parent_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
 
     public function user_catalogues()
     {
