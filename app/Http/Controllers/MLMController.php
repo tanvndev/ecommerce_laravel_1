@@ -23,7 +23,7 @@ class MLMController extends Controller
     public function getDescendants($userId)
     {
         $descendants = $this->mlmService->getAllDescendants($userId);
-        $user = $this->userRepository->findById($userId);
+        $user = $this->getUser($userId);
 
         return view('mlm.descendants', compact(
             'descendants',
@@ -34,11 +34,16 @@ class MLMController extends Controller
     public function getUserIncome($userId)
     {
         $income = $this->mlmService->getUserIncome($userId);
-        $user = $this->userRepository->findById($userId);
+        $user = $this->getUser($userId);
 
         return view('mlm.income', compact(
             'income',
             'user'
         ));
+    }
+
+    private function getUser($userId)
+    {
+        return $this->userRepository->findById($userId);
     }
 }

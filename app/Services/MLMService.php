@@ -23,45 +23,35 @@ class MLMService implements MLMServiceInterface
         $this->commissionRepository = $commissionRepository;
         $this->userRepository = $userRepository;
     }
-    public function getAllDescendants($userId)
+    public function getAllDescendants($userId, $maxLevel = 3)
     {
         $user = $this->userRepository->findById($userId);
-        $result = [];
+        return $this->getDescendantsRecursive($user, 1, $maxLevel);
+    }
 
-        $level1 = $user->children()->with('orders')->get();
-        foreach ($level1 as $child) {
+    private function getDescendantsRecursive($user, $currentLevel, $maxLevel)
+    {
+        if ($currentLevel > $maxLevel) {
+            return [];
+        }
+
+        $result = [];
+        $children = $user->children()->with('orders')->get();
+
+        foreach ($children as $child) {
             $result[] = [
                 'id' => $child->id,
                 'name' => $child->fullname,
-                'level' => 1,
+                'level' => $currentLevel,
                 'total_sales' => $child->orders->sum(function ($order) {
                     return $order->cart['total'] ?? 0;
                 })
             ];
 
-            $level2 = $child->children()->with('orders')->get();
-            foreach ($level2 as $grandChild) {
-                $result[] = [
-                    'id' => $grandChild->id,
-                    'name' => $grandChild->fullname,
-                    'level' => 2,
-                    'total_sales' => $grandChild->orders->sum(function ($order) {
-                        return $order->cart['total'] ?? 0;
-                    })
-                ];
-
-                $level3 = $grandChild->children()->with('orders')->get();
-                foreach ($level3 as $greatGrandChild) {
-                    $result[] = [
-                        'id' => $greatGrandChild->id,
-                        'name' => $greatGrandChild->fullname,
-                        'level' => 3,
-                        'total_sales' => $greatGrandChild->orders->sum(function ($order) {
-                            return $order->cart['total'] ?? 0;
-                        })
-                    ];
-                }
-            }
+            $result = array_merge(
+                $result,
+                $this->getDescendantsRecursive($child, $currentLevel + 1, $maxLevel)
+            );
         }
 
         return $result;

@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h4>Danh sách Thành viên đa cấp - {{ $user['fullname'] }}</h4>
+        <h4>Danh sách Thành viên đa cấp - <span class="text-primary fw-bold">{{ $user['fullname'] }}</span></h4>
         <a href="{{ route('mlm.income', request()->userId) }}">Thu nhập</a>
     </div>
     <div class="card-body">
